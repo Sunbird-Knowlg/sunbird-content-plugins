@@ -355,6 +355,9 @@ angular.module('editorApp', ['ngSanitize'])
             else if(currentOption.trigger=='org.ekstep.questionbank:showpopup') {
                 ecEditor.dispatchEvent(currentOption.trigger, {'limit': currentOption.command})
             }
+            else if(currentOption.trigger==='org.ekstep.autocreation:add'){
+                ecEditor.dispatchEvent(currentOption.trigger, undefined)
+            }
         }
     
         
@@ -451,12 +454,12 @@ angular.module('editorApp', ['ngSanitize'])
 							options: [{
 								command: "PDF",
 								// msg: "pdf"
-								trigger: "org.ekstep.devconquestion:add"
+								trigger: "org.ekstep.autocreation:add"
 							},
 							{
 								command: "Image",
 								// msg: "image"
-								trigger: "org.ekstep.devconquestion:add"
+								trigger: "org.ekstep.autocreation:add"
 							}]
 						}]
 					}]

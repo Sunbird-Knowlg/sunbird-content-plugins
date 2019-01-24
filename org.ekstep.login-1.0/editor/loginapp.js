@@ -99,10 +99,9 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                             },
                             "edata": {}
                         }
-
+ 
                     ]
                 };
-
                 $.ajax({
                     method: 'POST',
                     url: 'https://dev.ekstep.in/api/devcon/v3/login',

@@ -1,6 +1,7 @@
 angular.module('timetableApp', ['angular-inview'])
     .controller('timetableCtrl', ['$scope', '$http', '$timeout', 'instance', function ($scope, $http, $timeout, instance) {
-
+  
+        $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
         $scope.isLoading = true;
         $scope.detailsView = [];
         $scope.userSearchBody = {
@@ -139,8 +140,54 @@ angular.module('timetableApp', ['angular-inview'])
          * It closes the popup
          */
         $scope.closePopup = function () {
+            window.context.dcUser;
+            $scope.createNewContent();
             $scope.closeThisDialog();
         };
+
+        $scope.createNewContent = function() {
+                // Create Content
+                var data = {
+                    request: {
+                        content: {
+                            "name": "Untitled Content",
+                            "code": UUID(),
+                            "mimeType": 'application/vnd.ekstep.ecml-archive',
+                            "createdBy": ecEditor.getContext('user').id,
+                            "createdFor": ['devcon'],
+                            "contentType": "Resource",
+                            "resourceType": "Learn",
+                            "creator": ecEditor.getContext('user').name,
+                            "framework": 'devcon-appu',
+                            "organisation": ['devcon']
+                        }
+                    }
+                }
+    
+                $scope.contentService.createContent(data, function(err, res) {
+                    if (err) {
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'Unable to create content!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });                   
+                    } else {
+                        var result = res.data.result;
+                        window.open('http://localhost:3000/app/?contentId=' + result.node_id, '_blank');
+                        //ecEditor.setContext('contentId', result.node_id);
+                        var resourceInfo = {
+                            "identifier": result.node_id,
+                            "mimeType": mimeType,
+                            "framework": ecEditor.getContext('framework'),
+                            "contentType": "Resource",
+                        }
+                        var creatorInfo = {
+                            "name": ecEditor.getContext('user').name,
+                            "id": ecEditor.getContext('user').id
+                        }
+                    }
+                });
+        }
 
         $scope.init();
     }]);

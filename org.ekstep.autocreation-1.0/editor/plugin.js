@@ -16,6 +16,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     *   load html template into the popup
     */
     loadBrowser: function (event, data) {
+        console.log("in the creation");
         currentInstance = this;
         ecEditor.getService('popup').open({
             template: 'partials/autocreation',
