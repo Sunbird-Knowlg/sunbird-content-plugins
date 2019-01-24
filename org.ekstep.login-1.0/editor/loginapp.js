@@ -63,10 +63,9 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                 }
                 var data = {
                     request: {
-                        type: 'sample',
-                        subType: 'test',
-                        action: 'create',
-                        rootOrgId: '1234567890',
+                        roleCode: 'teacher id',
+                        stallCode: 'STA1',
+                        ideaCode: 'Idea Code',
                         code: code
                     }
                 };
@@ -115,6 +114,7 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                     ecEditor.jQuery('.login-container').parents('#ngdialog1').addClass('hide');
                     $scope.fireEvent({ id: 'org.ekstep.timetable:add' });
                     if (data.result && data.result.Visitor) {
+                        telemetryData.visitorName = data.result.Visitor.name
                         ecEditor.dispatchEvent("org.ekstep.login:success",data.result);
                         $.ajax({
                             method: 'POST',
