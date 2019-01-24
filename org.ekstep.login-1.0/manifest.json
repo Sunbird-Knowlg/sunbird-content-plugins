@@ -1,0 +1,33 @@
+{
+    "id": "org.ekstep.login",
+    "ver": "1.0",
+    "author": "Rajeev Sathish",
+    "title": "Login plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+             {
+                "type": "css",
+                "src": "editor/login.css"
+            },
+            {
+                "type": "css",
+                "src": "editor/libs/iziToast.min.css"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/instascan.min.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/iziToast.min.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/jsQR.js"
+            }
+        ]
+    }
+}

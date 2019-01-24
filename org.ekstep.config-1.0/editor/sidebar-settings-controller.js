@@ -1,5 +1,5 @@
 angular.module('editorApp', ['ngSanitize'])
-    .controller('org.ekstep.config:configController', ['$scope', '$timeout', '$ocLazyLoad', function($scope, $timeout, $ocLazyLoad) {
+    .controller('org.ekstep.config:configController', ['$scope', '$timeout', '$ocLazyLoad','$injector', function($scope, $timeout, $ocLazyLoad, $injector) {
 
         var visibleActionsList = {
             "show": "Show",
@@ -382,12 +382,15 @@ angular.module('editorApp', ['ngSanitize'])
                 
         }
     
-        $scope.initAppu = function () {
+        $scope.initAppu = function (event,evData) {
+            $scope.appuActive = true;
+            $scope.sce = $injector.get('$sce');
             // $scope.appuPath =  ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/appu.png");
             // console.log('$scope.appuPath :',$scope.appuPath);
             $scope.showInput = true;
             $scope.appuVoice = false;
             $scope.showAppu = true;
+            $scope.loginData = evData.Visitor;
             $scope.data = {
 				msg :'For assistance click <b>Start</b> or type the command in the text box or press mic button and speak <br/> Ask <b>APPU </b> <ul><li>get images of crow</li><li>get audios of crow sound</li><li>get questions of sun topic</li></ul>',
 				options:
@@ -468,7 +471,8 @@ angular.module('editorApp', ['ngSanitize'])
             }, this);
             $scope.$safeApply();
         }
-        ecEditor.addEventListener("org.ekstep.appu:init", $scope.initAppu, $scope);
+        //ecEditor.addEventListener("org.ekstep.appu:init", $scope.initAppu, $scope);
+        ecEditor.addEventListener("org.ekstep.login:success",$scope.initAppu, $scope);
     
 
         org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);

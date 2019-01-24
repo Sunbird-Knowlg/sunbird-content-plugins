@@ -1,5 +1,5 @@
 {
-    "id": "org.ekstep.devconquestion",
+    "id": "org.ekstep.autocreation",
     "ver": "1.0",
     "author": "Vivek Kasture",
     "title": "Devcon Question plugin",
@@ -10,19 +10,19 @@
         "dependencies": [
             {
                 "type": "css",
-                "src": "editor/worksheet.css"
+                "src": "editor/autocreation.css"
             }
         ],
         "menu": [
             {
-                "id": "worksheet",
+                "id": "autocreation",
                 "category": "main",
                 "type": "icon",
-                "toolTip": "Create Question",
-                "title": "Create Question",
+                "toolTip": "Create slides",
+                "title": "Create slides",
                 "iconClass": "file pdf outline icon",
                 "onclick": {
-                    "id": "org.ekstep.devconquestion:add"
+                    "id": "org.ekstep.autocreation:add"
                 }
             }
         ]
