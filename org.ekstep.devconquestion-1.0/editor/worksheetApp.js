@@ -253,7 +253,11 @@ angular.module('worksheetApp', ['angular-inview'])
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
+
+               
+
                     $scope.closeThisDialog();
+
                     $scope.$safeApply();
                 },
                 error: function (e) {

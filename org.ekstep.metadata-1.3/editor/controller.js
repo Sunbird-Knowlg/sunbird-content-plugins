@@ -323,7 +323,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             } else {
                 var oraganizationDetails =  _.find($scope.ownership, ['value', object.target.contentMeta.ownedBy]);
                 form.metaData.ownershipType = ['createdFor'];
-                form.metaData.owner = oraganizationDetails.name;
+                form.metaData.owner = "DevCon Root Org";
             }
         }
         form.target = object.target;
@@ -522,7 +522,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if (topicSelector && topicSelector.required && !_.size(scope.contentMeta['topic'])) {
             isValid = false
         }
-        return (object.form.$valid && isValid) ? true : false
+        return (isValid) ? true : false
     };
 
     $scope.getScopeMeta = function(event, object) {

@@ -78,17 +78,17 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                             "did": deviceId,
                             "dimensions": {
                                 "visitorId": code,
-                                "stallId": "stallId",
-                                "ideaId": "ideaId",
-                                "visitorName": "Visitor Name",
+                                "stallId": "STA1",
+                                "ideaId": "IDE2",
+                                "visitorName": "",
                                 "studentId": "studentId",
                                 "studentName": "studentName",
-                                "teacherId": "teacherId",
-                                "teacherName": "teacherName",
+                                "teacherId": "TCH1",
+                                "teacherName": "Nirmala",
                                 "parentId": "parentId",
                                 "parentName": "parentName",
-                                "stallName": "stallName",
-                                "ideaName": "ideaName",
+                                "stallName": "Creation",
+                                "ideaName": "AI Assisted Content Creation",
                                 "classroomId": "classroomId",
                                 "school": "school",
                                 "district": "district",
@@ -116,6 +116,7 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                     $scope.fireEvent({ id: 'org.ekstep.timetable:add' });
                     if (data.result && data.result.Visitor) {
                         ecEditor.dispatchEvent("org.ekstep.login:success",data.result);
+                        telemetryData.visitorName = data.result.Visitor.name
                         $.ajax({
                             method: 'POST',
                             url: 'http://52.172.188.118:3000/v1/telemetry',
