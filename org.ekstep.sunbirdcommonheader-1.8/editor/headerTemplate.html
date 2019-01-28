@@ -105,9 +105,9 @@
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
-                        <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
+                        <!-- <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
                             <i class="add user icon custom-icon"></i>
-                        </div>
+                        </div> -->
                         <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" id="saveButton" ng-class="disableSaveBtn ? 'icon-box popup-item label-icon-box disabled' : 'icon-box popup-item label-icon-box'"
                             data-content="Save content" data-variation="tiny inverted" data-position="bottom center"
                             ng-click="saveContent(); generateTelemetry({ subtype: 'save', target: 'savebutton'});">
