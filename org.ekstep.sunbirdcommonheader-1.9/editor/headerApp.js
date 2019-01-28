@@ -84,12 +84,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    $scope.contentLock = ecEditor.getConfig('lock');
-    $scope.dataChanged = false;
-    $scope.lastContentLockSyncTime = new Date();
-    $scope.contentLockstatusMessage = "";
-    $scope.previewMode = false;
-    $scope.contentLockExpired = false;
+    // $scope.contentLock = ecEditor.getConfig('lock');
+    // $scope.dataChanged = false;
+    // $scope.lastContentLockSyncTime = new Date();
+    // $scope.contentLockstatusMessage = "";
+    // $scope.previewMode = false;
+    // $scope.contentLockExpired = false;
     /*
      * Update ownership list when adding and removing the content.
      */
@@ -447,11 +447,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.internetStatusFn = function (event) {
         $scope.$safeApply(function () {
             $scope.internetStatusObj.status = navigator.onLine;
-            if($scope.internetStatusObj.status === true){
-                $scope.setContentLockListener();
-            } else {
-                $scope.removeContentLockListener();
-            }
+            // if($scope.internetStatusObj.status === true){
+            //     $scope.setContentLockListener();
+            // } else {
+            //     $scope.removeContentLockListener();
+            // }
         });
     };
 
@@ -851,187 +851,187 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     }
 
-    $scope.setPreviewStatus = function (event, data) {
-        $scope.previewMode = true;
-        $scope.$safeApply();
-    }
+    // $scope.setPreviewStatus = function (event, data) {
+    //     $scope.previewMode = true;
+    //     $scope.$safeApply();
+    // }
 
-    $scope.revertPreviewStatus = function (event, data) {
-        $scope.previewMode = false;
-        $scope.$safeApply();
-    }
+    // $scope.revertPreviewStatus = function (event, data) {
+    //     $scope.previewMode = false;
+    //     $scope.$safeApply();
+    // }
 
-    $scope.removeContentLockListener = function () {
-        $interval.cancel($scope.contentLockListener);
-        $scope.$safeApply();
-    }
+    // $scope.removeContentLockListener = function () {
+    //     $interval.cancel($scope.contentLockListener);
+    //     $scope.$safeApply();
+    // }
 
-    $scope.contentDataChanged = function () {
-        $scope.dataChanged = true;
-    }
+    // $scope.contentDataChanged = function () {
+    //     $scope.dataChanged = true;
+    // }
 
-    $scope.refreshContentLock = function () {
-        if ($scope.internetStatusObj.status === true) {
-            var request = {
-                resourceId: ecEditor.getContext('contentId'),
-                resourceType: 'Content',
-                lockId: $scope.contentLock.lockKey
-            }
-            ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).refreshLock({
-                request: request
-            }, function (err, res) {
-                if (res && res.data && res.data.responseCode === 'OK' && res.data.result) {
-                    $scope.contentLock.lockKey = res.data.result.lockKey;
-                    $scope.contentLock.expiresIn = res.data.result.expiresIn;
-                    $scope.contentLock.expiresAt = new Date(res.data.result.expiresAt);
-                    $scope.contentLockExpired = false;
-                } else if (err && $scope.contentLockExpired === true) {
-                    $scope.handleError(err);
-                }
+    // $scope.refreshContentLock = function () {
+    //     if ($scope.internetStatusObj.status === true) {
+    //         var request = {
+    //             resourceId: ecEditor.getContext('contentId'),
+    //             resourceType: 'Content',
+    //             lockId: $scope.contentLock.lockKey
+    //         }
+    //         ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).refreshLock({
+    //             request: request
+    //         }, function (err, res) {
+    //             if (res && res.data && res.data.responseCode === 'OK' && res.data.result) {
+    //                 $scope.contentLock.lockKey = res.data.result.lockKey;
+    //                 $scope.contentLock.expiresIn = res.data.result.expiresIn;
+    //                 $scope.contentLock.expiresAt = new Date(res.data.result.expiresAt);
+    //                 $scope.contentLockExpired = false;
+    //             } else if (err && $scope.contentLockExpired === true) {
+    //                 $scope.handleError(err);
+    //             }
 
-            });
-        } else {
-            // $scope.showStatusPopup('INTERNET_DISCONNECTED',false);
-            $scope.removeContentLockListener();
-        }
-    }
+    //         });
+    //     } else {
+    //         // $scope.showStatusPopup('INTERNET_DISCONNECTED',false);
+    //         $scope.removeContentLockListener();
+    //     }
+    // }
 
-    $scope.handleError = function (err) {
-        switch (err.status) {
-            case 500:
-                $scope.showStatusPopup('LOCK_REFRESH_ERROR');
-                break;
-            case 403:
-                $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
-                break;
-            case 422:
-                $scope.showStatusPopup('INVALID_LOCK_ID');
-                break;
-            default:
-                $scope.showStatusPopup('LOCK_REFRESH_ERROR');
-                break;
-        }
-        $scope.removeContentLockListener();
-    }
+    // $scope.handleError = function (err) {
+    //     switch (err.status) {
+    //         case 500:
+    //             $scope.showStatusPopup('LOCK_REFRESH_ERROR');
+    //             break;
+    //         case 403:
+    //             $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
+    //             break;
+    //         case 422:
+    //             $scope.showStatusPopup('INVALID_LOCK_ID');
+    //             break;
+    //         default:
+    //             $scope.showStatusPopup('LOCK_REFRESH_ERROR');
+    //             break;
+    //     }
+    //     $scope.removeContentLockListener();
+    // }
 
-    $scope.showStatusPopup = function (type, message) {
-        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        // reset status flags
-        $scope.isIdle = false;
-        $scope.isResume = false;
-        $scope.isRefresh = false;
-        $scope.isClose = false;
-        if (meta) {
-            switch (type) {
-                case 'LOCK_REFRESH_ERROR':
-                    $scope.contentLockstatusMessage = 'Error Occured. Try again after sometime.';
-                    $scope.isClose = true;
-                    $scope.isRefresh = true;
-                    break;
-                case 'IDLE_TIMEOUT':
-                    $scope.contentLockstatusMessage = 'You have been inactive.';
-                    $scope.isIdle = true;
-                    break;
-                case 'LOCK_NOT_AVAILABLE':
-                    $scope.contentLockstatusMessage = 'Someone is currently working on ' + meta.name + '. Try again later.';
-                    $scope.isClose = true;
-                    break;
-                case 'INVALID_LOCK_ID':
-                    $scope.contentLockstatusMessage = 'Close and Re-open content to resume editing';
-                    $scope.isClose = true;
-                    break;
-                case 'SESSION_TIMEOUT':
-                    $scope.contentLockstatusMessage = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
-                    $scope.isClose = true;
-                    $scope.isResume = true;
-                    break;
-            }
-            $scope.$safeApply(function () {
-                ecEditor.jQuery('#errorLockContentModal').modal({
-                    inverted: true,
-                    closable: false,
-                    onVisible: function () {
-                        ecEditor.jQuery(document).mousemove(function () {
-                            if ($scope.isIdle) {
-                                ecEditor.jQuery('#errorLockContentModal').modal('hide');
-                            }
-                        });
-                    },
-                    onDeny: function () {
-                        $scope.closeEditor();
-                    },
-                    onApprove: function () {
-                        $scope.contentDataChanged();
-                        $scope.validateContentLock();
-                    }
-                }).modal('show');
-            });
-        }
-    }
+    // $scope.showStatusPopup = function (type, message) {
+    //     var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+    //     // reset status flags
+    //     $scope.isIdle = false;
+    //     $scope.isResume = false;
+    //     $scope.isRefresh = false;
+    //     $scope.isClose = false;
+    //     if (meta) {
+    //         switch (type) {
+    //             case 'LOCK_REFRESH_ERROR':
+    //                 $scope.contentLockstatusMessage = 'Error Occured. Try again after sometime.';
+    //                 $scope.isClose = true;
+    //                 $scope.isRefresh = true;
+    //                 break;
+    //             case 'IDLE_TIMEOUT':
+    //                 $scope.contentLockstatusMessage = 'You have been inactive.';
+    //                 $scope.isIdle = true;
+    //                 break;
+    //             case 'LOCK_NOT_AVAILABLE':
+    //                 $scope.contentLockstatusMessage = 'Someone is currently working on ' + meta.name + '. Try again later.';
+    //                 $scope.isClose = true;
+    //                 break;
+    //             case 'INVALID_LOCK_ID':
+    //                 $scope.contentLockstatusMessage = 'Close and Re-open content to resume editing';
+    //                 $scope.isClose = true;
+    //                 break;
+    //             case 'SESSION_TIMEOUT':
+    //                 $scope.contentLockstatusMessage = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
+    //                 $scope.isClose = true;
+    //                 $scope.isResume = true;
+    //                 break;
+    //         }
+    //         $scope.$safeApply(function () {
+    //             ecEditor.jQuery('#errorLockContentModal').modal({
+    //                 inverted: true,
+    //                 closable: false,
+    //                 onVisible: function () {
+    //                     ecEditor.jQuery(document).mousemove(function () {
+    //                         if ($scope.isIdle) {
+    //                             ecEditor.jQuery('#errorLockContentModal').modal('hide');
+    //                         }
+    //                     });
+    //                 },
+    //                 onDeny: function () {
+    //                     $scope.closeEditor();
+    //                 },
+    //                 onApprove: function () {
+    //                     $scope.contentDataChanged();
+    //                     $scope.validateContentLock();
+    //                 }
+    //             }).modal('show');
+    //         });
+    //     }
+    // }
 
-    $scope.refreshLock = function () {
-        $scope.refreshContentLock();
-        $scope.setContentLockListener();
-    }
+    // $scope.refreshLock = function () {
+    //     $scope.refreshContentLock();
+    //     $scope.setContentLockListener();
+    // }
 
-    $scope.validateContentLock = function () {
-        //console.log("called ", $scope.contentLockListener);
-        var lastSyncTime = $scope.lastContentLockSyncTime.getTime();
-        var currentTime = (new Date()).getTime();
-        var timeDiff = currentTime - lastSyncTime;
-        $scope.idleTimer += $scope.contentLockRefershInterval;
-        // if screen is active(not idle)then refresh the lock regularly
-        if ($scope.dataChanged === true || $scope.previewMode === true) {
-            try {
-                $scope.refreshContentLock();
-            } catch (e) {
-                console.log("err ", e)
-            }
-            $scope.dataChanged = false;
-            $scope.idleTimer = 0;
-            $scope.lastContentLockSyncTime = new Date();
-            return;
-        }
-        // if lock expires then show resume/close message
-        if (Math.floor(timeDiff / 1000) >= $scope.contentLockExpiresIn) {
-            try {
-                $scope.showStatusPopup('SESSION_TIMEOUT');
-                $scope.contentLockExpired = true;
-            } catch (e) {
-                console.log("err ", e)
-            }
-            $scope.idleTimer = 0;
-            $scope.lastContentLockSyncTime = new Date();
-            return;
-        }
+    // $scope.validateContentLock = function () {
+    //     //console.log("called ", $scope.contentLockListener);
+    //     var lastSyncTime = $scope.lastContentLockSyncTime.getTime();
+    //     var currentTime = (new Date()).getTime();
+    //     var timeDiff = currentTime - lastSyncTime;
+    //     $scope.idleTimer += $scope.contentLockRefershInterval;
+    //     // if screen is active(not idle)then refresh the lock regularly
+    //     if ($scope.dataChanged === true || $scope.previewMode === true) {
+    //         try {
+    //             $scope.refreshContentLock();
+    //         } catch (e) {
+    //             console.log("err ", e)
+    //         }
+    //         $scope.dataChanged = false;
+    //         $scope.idleTimer = 0;
+    //         $scope.lastContentLockSyncTime = new Date();
+    //         return;
+    //     }
+    //     // if lock expires then show resume/close message
+    //     if (Math.floor(timeDiff / 1000) >= $scope.contentLockExpiresIn) {
+    //         try {
+    //             $scope.showStatusPopup('SESSION_TIMEOUT');
+    //             $scope.contentLockExpired = true;
+    //         } catch (e) {
+    //             console.log("err ", e)
+    //         }
+    //         $scope.idleTimer = 0;
+    //         $scope.lastContentLockSyncTime = new Date();
+    //         return;
+    //     }
 
-        // if user is idle and lock not expired then show idle screen
-        if ($scope.idleTimer >= $scope.contentLockIdleTimeOut && $scope.contentLockExpired === false) {
-            // save content if any changes before showing idle screen
-            if ($scope.disableSaveBtn === false) {
-                $scope.saveContent(function (err, res) {});
-            }
-            $scope.idleTimer = 0;
-            $scope.showStatusPopup('IDLE_TIMEOUT');
-            return;
-        }
-    }
+    //     // if user is idle and lock not expired then show idle screen
+    //     if ($scope.idleTimer >= $scope.contentLockIdleTimeOut && $scope.contentLockExpired === false) {
+    //         // save content if any changes before showing idle screen
+    //         if ($scope.disableSaveBtn === false) {
+    //             $scope.saveContent(function (err, res) {});
+    //         }
+    //         $scope.idleTimer = 0;
+    //         $scope.showStatusPopup('IDLE_TIMEOUT');
+    //         return;
+    //     }
+    // }
 
-    $scope.setContentLockListener = function (event) {
-        if ($scope.contentLockListener) {
-            $scope.removeContentLockListener()
-        }
-        //convert to seconds
-        if($scope.contentLock && $scope.contentLock.lockKey){
-            $scope.contentLockExpiresIn = $scope.contentLock.expiresIn * 60;
-            //idle timeout and refresh intervals should be a fraction of content lock expiry mins
-            $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn / 3);
-            $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut / 5);
-            $scope.idleTimer = 0;
-            // set lock refresh interval
-            $scope.contentLockListener = $interval($scope.validateContentLock, $scope.contentLockRefershInterval * 1000);
-        }
-    }
+    // $scope.setContentLockListener = function (event) {
+    //     if ($scope.contentLockListener) {
+    //         $scope.removeContentLockListener()
+    //     }
+    //     //convert to seconds
+    //     if($scope.contentLock && $scope.contentLock.lockKey){
+    //         $scope.contentLockExpiresIn = $scope.contentLock.expiresIn * 60;
+    //         //idle timeout and refresh intervals should be a fraction of content lock expiry mins
+    //         $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn / 3);
+    //         $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut / 5);
+    //         $scope.idleTimer = 0;
+    //         // set lock refresh interval
+    //         $scope.contentLockListener = $interval($scope.validateContentLock, $scope.contentLockRefershInterval * 1000);
+    //     }
+    // }
 
     /**
      * @description - on init of checklist pop-up
@@ -1136,15 +1136,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     //others
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
-    ecEditor.addEventListener('org.ekstep.contenteditor:preview', $scope.setPreviewStatus,$scope);
-    ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.revertPreviewStatus,$scope);
-    ecEditor.addEventListener('org.ekstep.editor:keepalive', $scope.contentDataChanged,$scope);
-    $scope.$watch('disableSaveBtn', function() {
-        if($scope.disableSaveBtn === false){
-            $scope.contentDataChanged();
-        }
-    });
+    // ecEditor.addEventListener('org.ekstep.contenteditor:preview', $scope.setPreviewStatus,$scope);
+    // ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.revertPreviewStatus,$scope);
+    // ecEditor.addEventListener('org.ekstep.editor:keepalive', $scope.contentDataChanged,$scope);
+    // $scope.$watch('disableSaveBtn', function() {
+    //     if($scope.disableSaveBtn === false){
+    //         $scope.contentDataChanged();
+    //     }
+    // });
     // if content lock is present initiate lock listener else display error
-    $scope.setContentLockListener();
+    // $scope.setContentLockListener();
 }]);
 //# sourceURL=sunbirdheaderapp.js
