@@ -75,3 +75,17 @@ background: #eeeeee;
     color: #fff;
     padding: 5px 6px 6px;
 }
+.sampleupdatecsv {
+	padding-top: 5px; 
+	padding-bottom: 10px;
+}
+
+.sampleuploadcsv {
+	padding-top: 5px; 
+	padding-bottom: 10px; 
+	display:inline-block
+}
+
+.csvdescription{
+	display:inline-block;
+}
