@@ -2318,7 +2318,7 @@
 		return {
 			// tabindex="-1" means that it can receive focus by code.
 			tabindex: -1,
-			contenteditable: 'false',
+			contenteditable: 'true',
 			'data-cke-widget-wrapper': 1,
 			'data-cke-filter': 'off',
 			// Class cke_widget_new marks widgets which haven't been initialized yet.
