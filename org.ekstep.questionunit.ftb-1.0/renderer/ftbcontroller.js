@@ -14,7 +14,7 @@ FTBController.textboxtarget = {};
 FTBController.question = undefined;
 
 FTBController.getQuestionTemplate = function () {
-  return '<div id="ftb-template" class="plugin-content-container">\
+  return '<div id="ftb-template" class="common-qs-title plugin-content-container" >\
     <div class="qs-ftb-container">\
       <div class="qs-ftb-content">\
           <div class="qs-ftb-question" id="qs-ftb-question">\
