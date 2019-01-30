@@ -88,11 +88,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (options.contentMeta) {
             contentMeta = options.contentMeta;
         }
-        contentMeta.stageIcons = JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons());
 
         org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
         // TODO: Show saving dialog
         var contentBody = org.ekstep.contenteditor.stageManager.toECML();
+        contentMeta.stageIcons = JSON.stringify(org.ekstep.contenteditor.stageManager.updateStageIcons());
         // Get and set assessment summary
         var summary = org.ekstep.contenteditor.stageManager.getSummary();
         if (summary){
@@ -236,7 +236,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.popupService.open({
             template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/partials/conflictDialog.html"),
             controller: ['$scope', function($scope) {
-                //Platform copy 
+                //Platform copy
                 $scope.showPlatformPreview = false;
                 if (instance.conflictdialogOptions.showPlatformPreview) $scope.showPlatformPreview = true;
 
@@ -481,7 +481,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.storeDialCodes(res.data.result.identifiers[key], value);
             }else{
                 instance.storeDialCodes(key, value);
-                org.ekstep.services.collectionService.highlightNode(key); 
+                org.ekstep.services.collectionService.highlightNode(key);
            }
         });
         ecEditor._.forEach(org.ekstep.services.stateService.state.dialCodeMap, function(value, key) {
@@ -535,7 +535,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         title: 'DIAL code(s) updating failed!',
                         position: 'topCenter',
                         icon: 'fa fa-warning'
-                    });   
+                    });
                 }
             });
         }else if(!ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
@@ -548,7 +548,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     storeDialCodes: function(nodeId, dialCode){
         var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        if(node && node.data) 
+        if(node && node.data)
             node.data.metadata["dialcodes"] = dialCode;
     },
     hightlightNode: function(invalidNodes) {
