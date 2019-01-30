@@ -8,7 +8,7 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "plugin": "org.ekstep.metadata", "ver": "1.0", "type": "plugin" },
+            { "plugin": "org.ekstep.metadata", "ver": "1.3", "type": "plugin" },
             { "type": "js", "src": "editor/services/service.js" }
         ]
     }
