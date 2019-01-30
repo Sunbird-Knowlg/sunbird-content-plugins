@@ -75,19 +75,18 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       };
       telemetryAnsArr.push(ansObj);
     });
-    //compare two array
-    /*istanbul ignore else*/
-    if (_.isEqual(answerArray, this._question.data.answer)) { // eslint-disable-line no-undef
-      correctAnswer = true;
-    }
-    // Calculate partial score
+    //compare two array and compute partial score
     var correctAnswersCount = 0;
-    _.each(this._question.data.answer, function (ans, index) { // eslint-disable-line no-undef
-      /*istanbul ignore else*/
-      if (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) {
-        correctAnswersCount++;
-      }
-    });
+    if (this._question.config.evalUnordered) {
+      correctAnswer = (_.isEqual(answerArray, _.intersection(answerArray, this._question.data.answer)));
+      correctAnswersCount = _.intersection(answerArray, this._question.data.answer).length;
+    }
+    else { // eslint-disable-line no-undef
+      correctAnswer = (_.isEqual(answerArray, this._question.data.answer));
+      correctAnswersCount = _.reduce(_.map(this._question.data.answer, function(ans, index){
+        return (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) ? 1 : 0;
+      }), function (score, s) { return score + s; }, 0);
+    }
 
     var questionScore;
     if(this._question.config.partial_scoring){

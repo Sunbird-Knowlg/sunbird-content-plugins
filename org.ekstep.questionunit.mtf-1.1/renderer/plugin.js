@@ -42,7 +42,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       this._question.data.option.optionsRHS = this.shuffleOptions(this._question.data.option.optionsRHS);
     } else {
       //BASED on the rearranged order update in seqeuence
-      var renderedOptions = this._question.state.val.rhs_rendered;
+      var renderedOptions = this._question.state.rhs_rendered;
       var reorderedOptionsIndexes = this._question.state.val.rhs_rearranged;
       var newOrderedOptions = [];
       var optionsLength = renderedOptions.length;
@@ -100,9 +100,9 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       eval: correctAnswer,
       state: {
         val: {
-          "rhs_rendered": instance._question.data.option.optionsRHS,
-          "rhs_rearranged": rhs_rearranged
-        }
+          rhs_rearranged: rhs_rearranged
+        },
+        rhs_rendered: instance._question.data.option.optionsRHS,
       },
       score: questionScore,
       max_score: this._question.config.max_score,
