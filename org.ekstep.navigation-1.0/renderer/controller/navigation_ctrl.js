@@ -144,7 +144,8 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
 
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.navigation");
 
-    EventBus.addEventListener("sceneEnter", function (data) {
+    EkstepRendererAPI.addEventListener("sceneEnter", function (data) {
+      $scope.pluginInstance._customNavigationPlugins = [];
       $timeout(function () {
         $scope.showCustomNavigation();
       }, 0);
