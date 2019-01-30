@@ -40,7 +40,7 @@
         },{
         "type": "plugin",
         "plugin": "org.ekstep.metadata",
-        "ver": "1.2"
+        "ver": "1.3"
       }]
     }
 }
