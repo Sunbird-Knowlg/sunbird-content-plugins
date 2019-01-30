@@ -45,7 +45,7 @@ MTFController.getHorizontalLayout = function(){
               <% if(val.audio){ %> \
                 <img onclick=MTFController.pluginInstance.playAudio({src:"<%= val.audio %>"}) class="audio-image" src="<%= MTFController.pluginInstance.getAudioIcon("renderer/assets/audio2.png") %>" />\
               <% } %>\
-              <span class="option-text common-option-text"><%= val.text %></span>\
+              <span class="option-text"><%= val.text %></span>\
             </div>\
         <% });%>\
     </div>\
@@ -56,7 +56,7 @@ MTFController.getHorizontalLayout = function(){
                 <% if(val.audio){ %> \
                   <img onclick=MTFController.pluginInstance.playAudio({src:"<%= val.audio %>"}) class="audio-image" src="<%= MTFController.pluginInstance.getAudioIcon("renderer/assets/audio2.png") %>" />\
                 <% } %>\
-                <span class="option-text common-option-text"  ><%= val.text %></span>\
+                <span class="option-text"><%= val.text %></span>\
             </div>\
         <% });%>\
     </div>\
@@ -71,7 +71,7 @@ MTFController.getVerticalLayout = function () {
       <% _.each(question.data.option.optionsLHS,function(val,key){ %>\
         <div class="lhs-rhs-block lhs-block">\
             <img class="background-image" src="<%= MTFController.pluginInstance.getAudioIcon("renderer/assets/shape1.png") %>" />\
-            <span class="common-option-text" ><%= val.text %></span>\
+            <span><%= val.text %></span>\
             <% if(val.image){ %> \
               <img onclick="org.ekstep.questionunit.baseComponent.showImageModel(event, \'<%= MTFController.pluginInstance.getAssetUrl(val.image) %>\')" class="option-image" src="<%= MTFController.pluginInstance.getAssetUrl(val.image) %>" />\
             <% } %>\
@@ -85,7 +85,7 @@ MTFController.getVerticalLayout = function () {
       <% _.each(question.data.option.optionsRHS,function(val,key){ %>\
         <div data-mapindex=<%= val.mapIndex %> class="lhs-rhs-block rhs-block">\
         <img class="background-image" src="<%= MTFController.pluginInstance.getAudioIcon("renderer/assets/shape2.png") %>" />\
-        <span class="common-option-text" ><%= val.text %></span>\
+        <span><%= val.text %></span>\
         <% if(val.image){ %> \
           <img onclick="org.ekstep.questionunit.baseComponent.showImageModel(event, \'<%= MTFController.pluginInstance.getAssetUrl(val.image) %>\')" class="option-image" src="<%= MTFController.pluginInstance.getAssetUrl(val.image) %>" />\
         <% } %>\
