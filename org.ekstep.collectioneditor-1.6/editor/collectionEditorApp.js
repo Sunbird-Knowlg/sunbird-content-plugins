@@ -23,7 +23,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         tocUploadBtnUpload: 'Upload',
         tocUploadBtnClose: 'Use Editor' ,
         tocUploadSampleCsvFile: 'Sample upload csv file',
-        tocUploadSampleCsvFileLink: 'https://www.w3schools.com'
+        tocUploadSampleCsvFileLink: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(manifest.id, manifest.ver, 'assets/uploadsamplecsvfile.csv')
     }
     $scope.mode = ecEditor.getConfig('editorConfig').mode; 
     $scope.collectionTreeHeight = ($scope.mode == "Edit") ? "collection-tree-height-with-footer" : "collection-tree-height-without-footer"; 

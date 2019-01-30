@@ -84,7 +84,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close',
         tocUpdateSampleCsvFile: 'Sample update csv file',
-        tocUpdateSampleCsvFileLink: 'https://stackoverflow.com'
+        tocUpdateSampleCsvFileLink: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/updatesamplecsvfile.csv')
     }
     // $scope.contentLock = ecEditor.getConfig('lock');
     // $scope.dataChanged = false;
