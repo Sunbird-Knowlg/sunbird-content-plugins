@@ -37,14 +37,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
                         $("#orLabel").show();
                     }
                 },
-                onSubmit: function (id, name, responseJSON) {
-                    $('#qq-upload-actions').hide();
-                    $("#url-upload").hide();
-                    $("#orLabel").hide();
-                    $scope.showLoader(true);
-                    $scope.uploadBtn = false;
-                    $scope.uploadFile($scope.callback);
-                },
                 onError: function (id, name, errorReason, xhrOrXdr) {
                     $scope.uploadBtn = true;
                     console.error("Unable to upload due to:", errorReason);
@@ -71,7 +63,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
             if (err) {
                 $scope.showLoader(false);
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Unable to upload content!',
+                    message: 'Unable to upload file!',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
@@ -98,8 +90,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
                         $scope.textbookService.uploadFile(ecEditor.getContext('contentId'), fileUrl, function(err, res) {
                             if (err) {
                                 const errTitle = 'CSV update error';
-                                const errMessage = err.responseJSON.params.errmsg;
-                                console.log('Error message: ', err.responseJSON.params.errmsg);
+                                const errMessage = (err.responseJSON && err.responseJSON.params && err.responseJSON.params.errmsg) ? err.responseJSON.params.errmsg : 'Unable to upload file!'
                                 $scope.closeThisDialog();
                                 instance.callback(errMessage, errTitle);
                                 $scope.showLoader(false);
@@ -129,6 +120,13 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
             });
             $scope.showLoader(false);
             return;
+        } else {
+            $('#qq-upload-actions').hide();
+            $("#url-upload").hide();
+            $("#orLabel").hide();
+            $scope.showLoader(true);
+            $scope.uploadBtn = false;
+            $scope.uploadFile($scope.callback);
         }
     }
 
