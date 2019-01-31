@@ -62,6 +62,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.disableQRGenerateBtn = true;
     $scope.disableQRDownloadBtn = false;
     $scope.disableReviewBtn = false;
+    $scope.hideCollaboratorBtn = false;
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
@@ -468,6 +469,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
+        $scope.hideCollaboratorBtn = (status === 'Draft')  ? true : false;
         $scope.resolveReviewBtnStatus();
         $scope.getQRCodeRequestCount();
         $scope.resolveQRDownloadBtn();
