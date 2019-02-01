@@ -21,9 +21,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
         tocUploadDescription: 'Please upload the CSV file in the required format',
         tocUploadBtnUpload: 'Upload',
-        tocUploadBtnClose: 'Use Editor' ,
-        tocUploadSampleCsvFile: 'Sample upload csv file',
-        tocUploadSampleCsvFileLink: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(manifest.id, manifest.ver, 'assets/uploadsamplecsvfile.csv')
+        tocUploadBtnClose: 'Use Editor' 
     }
     $scope.mode = ecEditor.getConfig('editorConfig').mode; 
     $scope.collectionTreeHeight = ($scope.mode == "Edit") ? "collection-tree-height-with-footer" : "collection-tree-height-without-footer"; 
@@ -289,8 +287,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                     ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
                         headerTitle: $scope.CONSTANTS.tocUploadHeader,
                         description: $scope.CONSTANTS.tocUploadDescription,
-                        sampleUploadCsvFile: $scope.CONSTANTS.tocUploadSampleCsvFile,
-                        sampleUploadCsvFileLink: $scope.CONSTANTS.tocUploadSampleCsvFileLink,
                         validation: {
                             'allowedExtension': ['csv']
                         },

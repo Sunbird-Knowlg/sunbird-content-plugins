@@ -82,9 +82,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
         tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close',
-        tocUpdateSampleCsvFile: 'Sample update csv file',
-        tocUpdateSampleCsvFileLink: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/updatesamplecsvfile.csv')
+        tocUpdateBtnClose: 'Close'
     }
     // $scope.contentLock = ecEditor.getConfig('lock');
     // $scope.dataChanged = false;
@@ -830,8 +828,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
-            sampleUpdateCsvFile: $scope.CONSTANTS.tocUpdateSampleCsvFile,
-            sampleUpdateCsvFileLink: $scope.CONSTANTS.tocUpdateSampleCsvFileLink,
             validation: {
                 'allowedExtension': ['csv']
             },
