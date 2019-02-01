@@ -12,7 +12,7 @@
             <div class="ui action right icon">
                 {{dialcodes}}
                 <i ng-show="status" style="font-size:17px" class="small green check icon"></i>
-                <i ng-show="!status" style="font-size:17px" class="small red remove icon"></i><span style="color: #d61011;" ng-show="!status">Invalid DIAL code</span>
+                <i ng-show="!status" style="font-size:17px" class="small red remove icon"></i><span style="color: #d61011;" ng-show="!status">Invalid QR code</span>
             </div>
         </div>
         <div ng-show="dialcodes.length == maxChar && !editFlag" ng-click="clearDialCode()" style="cursor:pointer">
