@@ -110,7 +110,7 @@
           </div>
           <div class="seven wide column qb-question-container" ng-show="isQuestionSetConfig">
               <span class="ui label">Total Question in Question Set : {{selectedQuestions.length}}</span>
-            <div class="column qb-list-container" ng-show="isQuestionSetConfig">
+            <div class="column qb-question-list-container" ng-show="isQuestionSetConfig">
               <div class="ui large divided items">
                 <div class="item select list-items ui grid" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">
