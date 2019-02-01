@@ -125,10 +125,12 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         var domainList = $scope.getWhitelistedDomains();
         var isWhitelistedURL = false;
         var hostName = $scope.getHostName(url);
-        for (let domain of domainList){
-            if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){ //the whitelisted domain can be either youtube.com or www.youtube.com 
-                isWhitelistedURL = true;
-                break;
+        if (hostName) {
+            for (let domain of domainList){
+                if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){ //the whitelisted domain can be either youtube.com or www.youtube.com 
+                    isWhitelistedURL = true;
+                    break;
+                }
             }
         }
         return isWhitelistedURL;
@@ -152,9 +154,8 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     }
     
     $scope.validateYoutubeURL = function(fileName) {
-        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-        var match = fileName.match(regExp);
-        if (match && match[2].length == 11) {
+        var hostName = $scope.getHostName(fileName);
+        if (hostName && hostName[2] === 'youtube.com' || hostName[2] === 'youtu.be') {
             return true;
         }
         return false;
@@ -186,7 +187,35 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             });
             $scope.showLoader(false);
             return;
+        } else if(mimeType === 'video/x-youtube') {
+            var requestObj = {
+                "request" : {
+                    "asset" : {
+                        "provider": "youtube",
+                        "url": $scope.contentURL
+                    }
+                }
+            }
+            var fields = 'license';
+            org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, fields, function (err, res) {
+                if (err) {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: (err.responseJSON && err.responseJSON.params && err.responseJSON.params.errmsg) ? err.responseJSON.params.errmsg : 'Please provide valid YouTube URL',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                    $scope.showLoader(false);
+                    return;
+                } else {
+                    $scope.createNewContent(fileUpload, mimeType);
+                }
+            });
+        } else {
+            $scope.createNewContent(fileUpload, mimeType);
         }
+    }
+
+    $scope.createNewContent = function(fileUpload, mimeType) {
         if ($scope.newContent) {
             // Create Content
             var data = {
