@@ -845,11 +845,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.errMessage = data;
                 ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
                     template: 'updateTocError',
-                    controller: 'headerController',
-                    controllerAs: '$ctrl',
+                    controller: ['$scope', 'mainCtrl', function($scope, mainCtrl) {
+                        $scope.errTitle = mainCtrl.errTitle;
+                        $scope.errMessage = mainCtrl.errMessage;
+                        $scope.closePopup = function() {
+                            $scope.closeThisDialog()
+                            mainCtrl.updateToc();
+                        }
+                    }],
+                    resolve: {
+                        mainCtrl: function() {
+                            return $scope;
+                        }
+                    },
                     showClose: false,
-                    scope: $scope,
-                    className: 'ngdialog-theme-default'
+                    closeByEscape: false
                 });
             }
         });
