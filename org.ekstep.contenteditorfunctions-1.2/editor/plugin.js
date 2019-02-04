@@ -92,7 +92,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
         // TODO: Show saving dialog
         var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-        contentMeta.stageIcons = JSON.stringify(org.ekstep.contenteditor.stageManager.updateStageIcons());
+        if (typeof org.ekstep.contenteditor.stageManager.updateStageIcons === "function") { // safe to use the function
+            contentMeta.stageIcons = JSON.stringify(org.ekstep.contenteditor.stageManager.updateStageIcons());
+        }
+        else{
+            contentMeta.stageIcons = JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons());
+        }
 
         // Get and set assessment summary
         var summary = org.ekstep.contenteditor.stageManager.getSummary();
