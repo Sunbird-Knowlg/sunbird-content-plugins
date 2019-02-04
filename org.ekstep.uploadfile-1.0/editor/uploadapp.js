@@ -12,6 +12,25 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
     $scope.configData = instance.configData;
     $scope.callback = instance.callback;
     $scope.$on('ngDialog.opened', function () {
+        qq(document.getElementById("uploadTocFile")).attach("click", function() {
+            $scope.showLoader(true);
+            if ($scope.uploader.getFile(0) == null) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'File is required to upload',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+                $scope.showLoader(false);
+                return;
+            } else {
+                $('#qq-upload-actions').hide();
+                $("#url-upload").hide();
+                $("#orLabel").hide();
+                $scope.showLoader(true);
+                $scope.uploadBtn = false;
+                $scope.uploadFile($scope.callback);
+            }
+        });
         $scope.uploader = new qq.FineUploader({
             element: document.getElementById("upload-csv-div"),
             template: 'qq-template-validation',
@@ -110,25 +129,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
         }, 'hierarchy');
     }
 
-    $scope.upload = function () {
-        $scope.showLoader(true);
-        if ($scope.uploader.getFile(0) == null) {
-            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'File is required to upload',
-                position: 'topCenter',
-                icon: 'fa fa-warning'
-            });
-            $scope.showLoader(false);
-            return;
-        } else {
-            $('#qq-upload-actions').hide();
-            $("#url-upload").hide();
-            $("#orLabel").hide();
-            $scope.showLoader(true);
-            $scope.uploadBtn = false;
-            $scope.uploadFile($scope.callback);
-        }
-    }
 
     $scope.showLoader = function (flag) {
         $scope.showLoaderIcon = flag;

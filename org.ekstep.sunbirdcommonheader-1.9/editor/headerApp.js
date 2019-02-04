@@ -854,7 +854,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                             return $scope;
                         }
                     },
-                    showClose: false
+                    showClose: false,
+                    closeByEscape: false
                 });
             }
         });
