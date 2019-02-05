@@ -204,11 +204,11 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     //check form valid and lhs should be more than 3
     formValid = $scope.mtfForm.$valid && $scope.mtfFormData.option.optionsLHS.length > 2;
     $scope.mtfFormData.question.text=_.isUndefined($scope.mtfFormData.question.text)?"":$scope.mtfFormData.question.text;
-     if(!($scope.mtfFormData.question.text.length || $scope.mtfFormData.question.image.length || $scope.mtfFormData.question.audio.length)){
-        $('.questionTextBox').addClass("ck-error");
-      }else{
-        $('.questionTextBox').removeClass("ck-error");
-      }
+    if(!($scope.mtfFormData.question.text.length || $scope.mtfFormData.question.image.length || $scope.mtfFormData.question.audio.length)){
+      $('.questionTextBox').addClass("ck-error");
+    }else{
+      $('.questionTextBox').removeClass("ck-error");
+    }
     $scope.submitted = true;
     _.isEmpty($scope.questionMedia.image) ? 0 : tempArray.push($scope.questionMedia.image);
     _.isEmpty($scope.questionMedia.audio) ? 0 : tempArray.push($scope.questionMedia.audio);
@@ -255,7 +255,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
 
   /**
    * invokes the asset browser to pick an image to add to either the question or the options
-   * @param {string} type if `q` for Question, `LHS` for LHS option, `RHS` for RHS option 
+   * @param {string} type if `q` for Question, `LHS` for LHS option, `RHS` for RHS option
    * @param {string} index if `type` is not `q`, then it denotes the index of either 'LHS' or 'RHS' option
    * @param {string} mediaType `image` or `audio`
    */
@@ -279,7 +279,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
         telemetryObject.target.id = 'questionunit-mtf-add-' + data.assetMedia.type;
         $scope.mtfFormData.question[data.assetMedia.type] = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
         $scope.mtfFormData.question.audioName = data.assetMedia.type == 'audio' ? data.assetMedia.name : '';
-          $scope.questionMedia[data.assetMedia.type] = media;
+        $scope.questionMedia[data.assetMedia.type] = media;
       } else if (type == 'LHS') {
         telemetryObject.target.id = 'questionunit-mtf-lhs-add-' + data.assetMedia.type;
         $scope.mtfFormData.option.optionsLHS[index][data.assetMedia.type] = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
@@ -301,9 +301,9 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
 
   /**
    * Deletes the selected media from the question element (question, LHS or RHS options)
-   * @param {string} type 
-   * @param {Integer} index 
-   * @param {string} mediaType 
+   * @param {string} type
+   * @param {Integer} index
+   * @param {string} mediaType
    */
   $scope.deleteMedia = function (type, index, mediaType) {
     var telemetryObject = { type: 'TOUCH', id: 'button', target: { id: '', ver: '', type: 'button' } };
@@ -349,13 +349,15 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
 
   $scope.ckEditorEventHandler = function (index) {
     index = index*2;
+    // set input options for both LHS and RHS
     $scope.setEditorInputOptions(index);
     $scope.setEditorInputOptions(index+1);
-    
+
   }
 
   $scope.setEditorInputOptions = function(index){
     var optionelement = $(".mtfoption-text-ck")[index];
+    // if index value is even number then LHS else RHS
     var optionSide = (index%2 == 0)?'optionsLHS':'optionsRHS';
     $scope.ckConfig.title = "Set Answer";
     $scope.ckConfig.wordcount = {
@@ -364,16 +366,9 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
       showCharCount: true,
       maxCharCount: 25
     }
-  
-    $scope.ckConfig.toolbar = 'MtfToolBar';
-    $scope.ckConfig.toolbar_MtfToolBar = [
-      ['Bold','Italic'],
-      ['Styles','Format','Font','FontSize'],
-      ['Undo','Redo','-','SelectAll','RemoveFormat'],
-      ['TextColor','BGColor']];
 
     var optionInput = CKEDITOR.inline(optionelement.id, $scope.ckConfig);
-    //assign value to input box
+    //assign value to LHS or RHS input box based on index
     CKEDITOR.instances[optionelement.id].setData($scope.mtfFormData.option[optionSide][parseInt(index/2)].text);
     optionInput.on('change', function () {
       //on changes get index id and assign to model
@@ -391,7 +386,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     optionInput.focus();
   }
 
-   /**
+  /**
    * destroy ckeditor apart from question
    * on click delete option we need to destroy all ckeditor option
    * we are not destroy question ckedit
