@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mtfQuestionFormController
  * Sachin<sachin.kumar@goodworklabs.com>
  */
-angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) {
+angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormController', ['$scope', '$rootScope', 'questionServices','$timeout', function ($scope, $rootScope, questionServices,$timeout) {
   $scope.mtfConfiguartion = {
     'questionConfig': {
       'isText': true,
@@ -94,14 +94,14 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     'image': [],
     'audio': []
   }
-
+  $scope.ckConfig = { // eslint-disable-line no-undef
+    customConfig: ecEditor.resolvePluginResource('org.ekstep.questionunit', '1.0', "editor/ckeditor-config.js"),
+    skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/", // eslint-disable-line no-undef
+    contentsCss: CKEDITOR.basePath + "contents.css" // eslint-disable-line no-undef
+  };
   $scope.mtfFormData.media = [];
   $scope.editMedia = [];
-  var questionInput = CKEDITOR.replace('mtfQuestion', {// eslint-disable-line no-undef
-    customConfig: ecEditor.resolvePluginResource('org.ekstep.questionunit', '1.0', "editor/ckeditor-config.js"),
-    skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",// eslint-disable-line no-undef
-    contentsCss: CKEDITOR.basePath + "contents.css"// eslint-disable-line no-undef
-  });
+  var questionInput = CKEDITOR.replace('mtfQuestion', $scope.ckConfig);
   questionInput.on('change', function () {
     $scope.mtfFormData.question.text = this.getData();
   });
@@ -147,6 +147,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     EventBus.listeners['org.ekstep.questionunit.mtf:editquestion'] = [];
     ecEditor.addEventListener('org.ekstep.questionunit.mtf:editquestion', $scope.editMtfQuestion, $scope);
     ecEditor.dispatchEvent("org.ekstep.questionunit:ready");
+    $scope.BindCkeditor();
   }
   /**
    * for edit flow
@@ -185,6 +186,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
       $scope.mtfFormData.option.optionsLHS.push(optionLHS);
       $scope.mtfFormData.option.optionsRHS.push(optionRHS);
     }
+    $scope.BindCkeditor();
   }
   /**
    * check form validation
@@ -344,5 +346,82 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
       questionServices.generateTelemetry(data);
     }
   }
+
+  $scope.ckEditorEventHandler = function (index) {
+    index = index*2;
+    $scope.setEditorInputOptions(index);
+    $scope.setEditorInputOptions(index+1);
+    
+  }
+
+  $scope.setEditorInputOptions = function(index){
+    var optionelement = $(".mtfoption-text-ck")[index];
+    var optionSide = (index%2 == 0)?'optionsLHS':'optionsRHS';
+    $scope.ckConfig.title = "Set Answer";
+    $scope.ckConfig.wordcount = {
+      showParagraphs: false,
+      showWordCount: false,
+      showCharCount: true,
+      maxCharCount: 25
+    }
+  
+    $scope.ckConfig.toolbar = 'MtfToolBar';
+    $scope.ckConfig.toolbar_MtfToolBar = [
+      ['Bold','Italic'],
+      ['Styles','Format','Font','FontSize'],
+      ['Undo','Redo','-','SelectAll','RemoveFormat'],
+      ['TextColor','BGColor']];
+
+    var optionInput = CKEDITOR.inline(optionelement.id, $scope.ckConfig);
+    //assign value to input box
+    CKEDITOR.instances[optionelement.id].setData($scope.mtfFormData.option[optionSide][parseInt(index/2)].text);
+    optionInput.on('change', function () {
+      //on changes get index id and assign to model
+      var optionSide = (this.name.indexOf('LHS')>=0)?'optionsLHS':'optionsRHS';
+      var idx = this.name.split('_')[2];
+      $scope.mtfFormData.option[optionSide][idx].text = CKEDITOR.instances[this.name].getData();
+      $scope.$safeApply();
+    });
+    optionInput.on('blur', function () {
+      ecEditor.jQuery('.cke_float').hide();
+    });
+    $(".innerScroll").scroll(function () {
+      ecEditor.jQuery('.cke_float').hide();
+    });
+    optionInput.focus();
+  }
+
+   /**
+   * destroy ckeditor apart from question
+   * on click delete option we need to destroy all ckeditor option
+   * we are not destroy question ckedit
+   */
+  $scope.destroyCkEditor = function () {
+    for (var name in CKEDITOR.instances) {
+      if (name != "mtfQuestion") {
+        CKEDITOR.instances[name].destroy(true);
+      }
+    }
+  }
+
+  $scope.deleteAnswer = function (id) {
+    if (id >= 0) $scope.mtfFormData.option.splice(id, 1);
+    if (parseInt($scope.selectedOption) == id) {
+      $scope.selectedOption = undefined;
+    }
+    $scope.BindCkeditor();
+  }
+  /**
+   * bind ckeditor in all option
+   */
+  $scope.BindCkeditor = function () {
+    $timeout(function () {
+      $scope.destroyCkEditor();
+      for (var index = 0; index < $(".mtfoption-text-ck-lhs").length; index++) {
+        $scope.ckEditorEventHandler(index);
+      }
+    }, 0);
+  }
+
 }]);
 //# sourceURL=mtf-controller.js
