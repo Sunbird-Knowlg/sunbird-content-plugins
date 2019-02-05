@@ -19,6 +19,7 @@
     org.ekstep.service.controller.loadNgModules(this._templatePath, this.controllerPath);
 
     EkstepRendererAPI.addEventListener("renderer:overlay:show", instance.showOrHideOverlay, instance);        
+    EkstepRendererAPI.addEventListener("renderer:stage:reset", instance.resetNavigation, instance);
     EkstepRendererAPI.addEventListener("renderer:content:start", instance.showOrHideOverlay, instance);
 
     //Register plugin for custom navigation
@@ -76,6 +77,9 @@
   },
   initPlugin: function (data) {
       // Plugin actions are handled in the angularJS controller.
+  },
+  resetNavigation: function(){
+    this._customNavigationPlugins = [];
   },
   showOrHideOverlay: function(){
     this.customNavigationVisible = true;
