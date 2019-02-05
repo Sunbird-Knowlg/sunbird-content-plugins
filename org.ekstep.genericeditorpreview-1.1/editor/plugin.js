@@ -41,32 +41,34 @@ org.ekstep.genericeditor.basePlugin.extend({
         var instance = this;
         var contentService = ecEditor.getService('content');
         var defaultPreviewConfig = {showEndpage:true};
-        var previewContentIframe = angular.element('#previewContentIframe')[0];
-        previewContentIframe.src = instance.previewURL;
-        previewContentIframe.onload = function() {
-            var configuration = {};
-            var userData = {};
-            userData.etags = ecEditor.getContext('etags') || [];
-            configuration.context = {
-                'mode':'edit',
-                'contentId': ecEditor.getContext('contentId'),
-                'sid': ecEditor.getContext('sid'),
-                'uid': ecEditor.getContext('uid'),
-                'channel': ecEditor.getContext('channel') || "in.ekstep",
-                'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"},
-                'app': userData.etags.app || [],
-                'dims': userData.etags.dims || [],
-                'partner': userData.etags.partner || []
+        angular.element(document).ready(function () {
+            var previewContentIframe = angular.element('#previewContentIframe')[0];
+            previewContentIframe.src = instance.previewURL;
+            previewContentIframe.onload = function() {
+                var configuration = {};
+                var userData = {};
+                userData.etags = ecEditor.getContext('etags') || [];
+                configuration.context = {
+                    'mode':'edit',
+                    'contentId': ecEditor.getContext('contentId'),
+                    'sid': ecEditor.getContext('sid'),
+                    'uid': ecEditor.getContext('uid'),
+                    'channel': ecEditor.getContext('channel') || "in.ekstep",
+                    'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"},
+                    'app': userData.etags.app || [],
+                    'dims': userData.etags.dims || [],
+                    'partner': userData.etags.partner || []
+                };
+                if (ecEditor.getConfig('previewConfig')) {
+                    configuration.config = ecEditor.getConfig('previewConfig');
+                } else {
+                    configuration.config = defaultPreviewConfig;
+                }
+                configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+                configuration.data = {};
+                previewContentIframe.contentWindow.initializePreview(configuration);
             };
-            if (ecEditor.getConfig('previewConfig')) {
-                configuration.config = ecEditor.getConfig('previewConfig');
-            } else {
-                configuration.config = defaultPreviewConfig;
-            }
-            configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-            configuration.data = {};
-            previewContentIframe.contentWindow.initializePreview(configuration);
-        };
+        });
     }
 });
 
