@@ -501,6 +501,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor._.forIn(nodesModified, function(node) {
             if(node.metadata.dialcodes && !dialcodesUpdated){
                 dialcodesUpdated = true;
+            }else{
+                var dialObj =  _.find(mapArr,function(Obj){
+                    return Obj.identifier === res.data.result.content_id
+                })
+                if(!_.isUndefined(dialObj)){
+                    dialcodesUpdated = true;
+                }
             }
         });
         if(dialcodesUpdated){
