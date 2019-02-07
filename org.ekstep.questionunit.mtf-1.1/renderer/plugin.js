@@ -18,7 +18,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     vertial: "Vertical"
   },
   setQuestionTemplate: function () {
-    MTFController.initTemplate(this); // eslint-disable-line no-undef
+    MTFController.initTemplate(this);// eslint-disable-line no-undef
   },
 
   preQuestionShow: function (event) {
@@ -118,10 +118,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     }
   },
   logTelemetryItemResponse: function (data) {
-    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {
-      "type": "INPUT",
-      "values": data
-    });
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
   },
   /**
    * shuffles the options array
@@ -140,8 +137,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
    * Sattolo's algorithm [https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#Sattolo's_algorithm]
    */
   derange: function (array) {
-    var m = array.length,
-      t, i;
+    var m = array.length, t, i;
     _.each(_.range(0, m - 1), function (i, k) {
       var j = _.random(i + 1, m - 1); // note: i+1
       t = array[i];
