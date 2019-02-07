@@ -141,6 +141,7 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
     EkstepRendererAPI.addEventListener("renderer:content:start", $scope.showCustomNavigation);
     EkstepRendererAPI.addEventListener("renderer:overlay:show", $scope.showCustomNavigation);
     EkstepRendererAPI.addEventListener("renderer:overlay:hide", $scope.hideCustomNavigation);
+    EkstepRendererAPI.addEventListener("renderer:stage:reset", $scope.resetNavigation);
 
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.navigation");
 
@@ -168,6 +169,10 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
     $scope.hideDefaultNavigation();
     $scope.safeApply();
   };
+
+  $scope.resetNavigation = function(){
+    $scope.pluginInstance._customNavigationPlugins = [];
+  }
 
   $scope.hideDefaultNavigation = function () {
     $timeout(function () {
