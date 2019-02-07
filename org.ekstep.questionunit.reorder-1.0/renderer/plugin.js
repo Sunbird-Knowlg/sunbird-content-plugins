@@ -101,6 +101,10 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       numOfCorrectAns = 1;
     }
 
+    this._question.data.sentence.tabs.forEach(element => {
+      telemetryAnsArr.push(element.text)
+    })
+
     var result = {
       eval: correctAnswer,
       state: {
