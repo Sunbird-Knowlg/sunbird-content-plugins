@@ -370,6 +370,17 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     var optionInput = CKEDITOR.inline(optionelement.id, $scope.ckConfig);
     //assign value to LHS or RHS input box based on index
     CKEDITOR.instances[optionelement.id].setData($scope.mtfFormData.option[optionSide][parseInt(index/2)].text);
+    //if RHS adjust the position of ckeditor to left side
+    if(optionSide == 'optionsRHS'){
+      optionInput.on('focus', function () {
+        var popUpWidth = parseInt($($('.cke_float')[index]).css("width"));
+        var inputWidth = parseInt($($('.mtfoption-text-ck')[index]).css('width'));
+        if(popUpWidth > inputWidth){
+          var popupPosition = inputWidth - popUpWidth;
+          $($('.cke_float')[index]).css('margin-left',popupPosition+'px');
+        }
+      });
+    }
     optionInput.on('change', function () {
       //on changes get index id and assign to model
       var optionSide = (this.name.indexOf('LHS')>=0)?'optionsLHS':'optionsRHS';
