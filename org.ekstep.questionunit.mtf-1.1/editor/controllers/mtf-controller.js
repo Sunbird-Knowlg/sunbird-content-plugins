@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mtfQuestionFormController
  * Sachin<sachin.kumar@goodworklabs.com>
  */
-angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormController', ['$scope', '$rootScope', 'questionServices','$timeout', function ($scope, $rootScope, questionServices,$timeout) {
+angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) {
   $scope.mtfConfiguartion = {
     'questionConfig': {
       'isText': true,
@@ -421,12 +421,12 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
    * bind ckeditor in all option
    */
   $scope.BindCkeditor = function () {
-    $timeout(function () {
+    angular.element(document).ready(function () {
       $scope.destroyCkEditor();
       for (var index = 0; index < $(".mtfoption-text-ck-lhs").length; index++) {
         $scope.ckEditorEventHandler(index);
       }
-    }, 0);
+    });
   }
 
 }]);
