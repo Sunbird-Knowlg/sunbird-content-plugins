@@ -90,6 +90,12 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       if (telObj.RHS[0].hasOwnProperty('$$hashKey')) {
         delete telObj.RHS[0].$$hashKey;
       }
+      if (telObj.LHS[0].hasOwnProperty('hint')) {
+        delete telObj.LHS[0].hint;
+      }
+      if (telObj.RHS[0].hasOwnProperty('hint')) {
+        delete telObj.RHS[0].hint;
+      }
       telemetryValues.push(telObj);
       if (elemMappedIndex == elemIndex) {
         correctAnswersCount++;
