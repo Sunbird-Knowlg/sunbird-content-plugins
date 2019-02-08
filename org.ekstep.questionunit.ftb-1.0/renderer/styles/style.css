@@ -1,7 +1,6 @@
 #ftb-template {
   position: relative;
   margin: auto;
-  text-align: center;
   line-height: 2em;
   width: 80%;
   margin-top: 2%;
@@ -92,7 +91,6 @@
 }
 
 .ftb-question-text {
-  text-align:left;
   line-height: 40px;
   width: 80%;
 }
@@ -132,4 +130,17 @@ input.ans-field.highlightInput {
   position: fixed;
   left: 0;
   top: 0;
+}
+
+.urdu-support{
+  font-family: NotoNastaliqUrdu;
+  direction: rtl;
+  text-align: right;
+  font-size:12px;
+  position: absolute;
+  right : 0;
+}
+
+.urdu-support p{
+  line-height: 3em !important; /* overriding default line height applied in FTB input text in CK editor for urdu support */
 }
