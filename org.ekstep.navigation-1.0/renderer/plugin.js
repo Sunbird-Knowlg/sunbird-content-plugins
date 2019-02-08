@@ -20,7 +20,6 @@
 
     EkstepRendererAPI.addEventListener("renderer:overlay:show", instance.showOrHideOverlay, instance);        
     EkstepRendererAPI.addEventListener("renderer:content:start", instance.showOrHideOverlay, instance);
-
     //Register plugin for custom navigation
     EkstepRendererAPI.addEventListener("renderer:navigation:register",function(event, data){
       instance._customNavigationPlugins.push(event.target);
