@@ -31,6 +31,7 @@ CKEDITOR.editorConfig = function (config) {
     // { name: 'others' },
     '/',
     {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+    // {name: 'paragraph', groups: ['list', 'align']},	
     {name: 'styles'},
     {name: 'colors'},
     {name: 'input'}
@@ -40,7 +41,6 @@ CKEDITOR.editorConfig = function (config) {
 
   // config.fontSize_defaultLabel = '18';
 
-  
   config.removePlugins = 'stylescombo, magicline';
 
   // Remove some buttons provided by the standard plugins, which are
