@@ -15,3 +15,17 @@
     -o-flex-flow: column;
     flex-flow: column;
 }
+
+.qs-scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
+  
+.qs-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #c9c9c9;
+}
+
+.qs-scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
