@@ -78,9 +78,18 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       rhs_rearranged[elemIndex] = elemMappedIndex + 1;
       telObj['LHS'][0] = instance._question.data.option.optionsLHS[elemIndex];
       telObj['RHS'][0] = instance._question.data.option.optionsRHS[elemMappedIndex];
-      delete telObj.LHS[0].audioName;
-      delete telObj.LHS[0].hint;
-      delete telObj.LHS[0].$$hashKey;
+      if (telObj.LHS[0].hasOwnProperty('audioName')) {
+        delete telObj.LHS[0].audioName;
+      }
+      if (telObj.LHS[0].hasOwnProperty('$$hashKey')) {
+        delete telObj.LHS[0].$$hashKey;
+      }
+      if (telObj.RHS[0].hasOwnProperty('audioName')) {
+        delete telObj.RHS[0].audioName;
+      }
+      if (telObj.RHS[0].hasOwnProperty('$$hashKey')) {
+        delete telObj.RHS[0].$$hashKey;
+      }
       telemetryValues.push(telObj);
       if (elemMappedIndex == elemIndex) {
         correctAnswersCount++;
