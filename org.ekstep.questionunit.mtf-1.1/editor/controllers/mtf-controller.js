@@ -94,14 +94,14 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     'image': [],
     'audio': []
   }
-
+  $scope.ckConfig = { // eslint-disable-line no-undef
+    customConfig: ecEditor.resolvePluginResource('org.ekstep.questionunit', '1.0', "editor/ckeditor-config.js"),
+    skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/", // eslint-disable-line no-undef
+    contentsCss: CKEDITOR.basePath + "contents.css" // eslint-disable-line no-undef
+  };
   $scope.mtfFormData.media = [];
   $scope.editMedia = [];
-  var questionInput = CKEDITOR.replace('mtfQuestion', {// eslint-disable-line no-undef
-    customConfig: ecEditor.resolvePluginResource('org.ekstep.questionunit', '1.0', "editor/ckeditor-config.js"),
-    skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",// eslint-disable-line no-undef
-    contentsCss: CKEDITOR.basePath + "contents.css"// eslint-disable-line no-undef
-  });
+  var questionInput = CKEDITOR.replace('mtfQuestion', $scope.ckConfig);
   questionInput.on('change', function () {
     $scope.mtfFormData.question.text = this.getData();
   });
@@ -147,6 +147,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     EventBus.listeners['org.ekstep.questionunit.mtf:editquestion'] = [];
     ecEditor.addEventListener('org.ekstep.questionunit.mtf:editquestion', $scope.editMtfQuestion, $scope);
     ecEditor.dispatchEvent("org.ekstep.questionunit:ready");
+    $scope.BindCkeditor();
   }
   /**
    * for edit flow
@@ -185,6 +186,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
       $scope.mtfFormData.option.optionsLHS.push(optionLHS);
       $scope.mtfFormData.option.optionsRHS.push(optionRHS);
     }
+    $scope.BindCkeditor();
   }
   /**
    * check form validation
@@ -202,11 +204,11 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
     //check form valid and lhs should be more than 3
     formValid = $scope.mtfForm.$valid && $scope.mtfFormData.option.optionsLHS.length > 2;
     $scope.mtfFormData.question.text=_.isUndefined($scope.mtfFormData.question.text)?"":$scope.mtfFormData.question.text;
-     if(!($scope.mtfFormData.question.text.length || $scope.mtfFormData.question.image.length || $scope.mtfFormData.question.audio.length)){
-        $('.questionTextBox').addClass("ck-error");
-      }else{
-        $('.questionTextBox').removeClass("ck-error");
-      }
+    if(!($scope.mtfFormData.question.text.length || $scope.mtfFormData.question.image.length || $scope.mtfFormData.question.audio.length)){
+      $('.questionTextBox').addClass("ck-error");
+    }else{
+      $('.questionTextBox').removeClass("ck-error");
+    }
     $scope.submitted = true;
     _.isEmpty($scope.questionMedia.image) ? 0 : tempArray.push($scope.questionMedia.image);
     _.isEmpty($scope.questionMedia.audio) ? 0 : tempArray.push($scope.questionMedia.audio);
@@ -253,7 +255,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
 
   /**
    * invokes the asset browser to pick an image to add to either the question or the options
-   * @param {string} type if `q` for Question, `LHS` for LHS option, `RHS` for RHS option 
+   * @param {string} type if `q` for Question, `LHS` for LHS option, `RHS` for RHS option
    * @param {string} index if `type` is not `q`, then it denotes the index of either 'LHS' or 'RHS' option
    * @param {string} mediaType `image` or `audio`
    */
@@ -277,7 +279,7 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
         telemetryObject.target.id = 'questionunit-mtf-add-' + data.assetMedia.type;
         $scope.mtfFormData.question[data.assetMedia.type] = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
         $scope.mtfFormData.question.audioName = data.assetMedia.type == 'audio' ? data.assetMedia.name : '';
-          $scope.questionMedia[data.assetMedia.type] = media;
+        $scope.questionMedia[data.assetMedia.type] = media;
       } else if (type == 'LHS') {
         telemetryObject.target.id = 'questionunit-mtf-lhs-add-' + data.assetMedia.type;
         $scope.mtfFormData.option.optionsLHS[index][data.assetMedia.type] = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
@@ -299,9 +301,9 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
 
   /**
    * Deletes the selected media from the question element (question, LHS or RHS options)
-   * @param {string} type 
-   * @param {Integer} index 
-   * @param {string} mediaType 
+   * @param {string} type
+   * @param {Integer} index
+   * @param {string} mediaType
    */
   $scope.deleteMedia = function (type, index, mediaType) {
     var telemetryObject = { type: 'TOUCH', id: 'button', target: { id: '', ver: '', type: 'button' } };
@@ -344,5 +346,88 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
       questionServices.generateTelemetry(data);
     }
   }
+
+  $scope.ckEditorEventHandler = function (index) {
+    index = index*2;
+    // set input options for both LHS and RHS
+    $scope.setEditorInputOptions(index);
+    $scope.setEditorInputOptions(index+1);
+
+  }
+
+  $scope.setEditorInputOptions = function(index){
+    var optionelement = $(".mtfoption-text-ck")[index];
+    // if index value is even number then LHS else RHS
+    var optionSide = (index%2 == 0)?'optionsLHS':'optionsRHS';
+    $scope.ckConfig.title = "Set Answer";
+    $scope.ckConfig.wordcount = {
+      showParagraphs: false,
+      showWordCount: false,
+      showCharCount: true,
+      maxCharCount: 25
+    }
+
+    var optionInput = CKEDITOR.inline(optionelement.id, $scope.ckConfig);
+    //assign value to LHS or RHS input box based on index
+    CKEDITOR.instances[optionelement.id].setData($scope.mtfFormData.option[optionSide][parseInt(index/2)].text);
+    //if RHS adjust the position of ckeditor to left side
+    if(optionSide == 'optionsRHS'){
+      optionInput.on('focus', function () {
+        var popUpWidth = parseInt($($('.cke_float')[index]).css("width"));
+        var inputWidth = parseInt($($('.mtfoption-text-ck')[index]).css('width'));
+        if(popUpWidth > inputWidth){
+          var popupPosition = inputWidth - popUpWidth;
+          $($('.cke_float')[index]).css('margin-left',popupPosition+'px');
+        }
+      });
+    }
+    optionInput.on('change', function () {
+      //on changes get index id and assign to model
+      var optionSide = (this.name.indexOf('LHS')>=0)?'optionsLHS':'optionsRHS';
+      var idx = this.name.split('_')[2];
+      $scope.mtfFormData.option[optionSide][idx].text = CKEDITOR.instances[this.name].getData();
+      $scope.$safeApply();
+    });
+    optionInput.on('blur', function () {
+      ecEditor.jQuery('.cke_float').hide();
+    });
+    $(".innerScroll").scroll(function () {
+      ecEditor.jQuery('.cke_float').hide();
+    });
+    optionInput.focus();
+  }
+
+  /**
+   * destroy ckeditor apart from question
+   * on click delete option we need to destroy all ckeditor option
+   * we are not destroy question ckedit
+   */
+  $scope.destroyCkEditor = function () {
+    for (var name in CKEDITOR.instances) {
+      if (name != "mtfQuestion") {
+        CKEDITOR.instances[name].destroy(true);
+      }
+    }
+  }
+
+  $scope.deleteAnswer = function (id) {
+    if (id >= 0) $scope.mtfFormData.option.splice(id, 1);
+    if (parseInt($scope.selectedOption) == id) {
+      $scope.selectedOption = undefined;
+    }
+    $scope.BindCkeditor();
+  }
+  /**
+   * bind ckeditor in all option
+   */
+  $scope.BindCkeditor = function () {
+    angular.element(document).ready(function () {
+      $scope.destroyCkEditor();
+      for (var index = 0; index < $(".mtfoption-text-ck-lhs").length; index++) {
+        $scope.ckEditorEventHandler(index);
+      }
+    });
+  }
+
 }]);
 //# sourceURL=mtf-controller.js
