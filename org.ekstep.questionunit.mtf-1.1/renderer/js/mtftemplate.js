@@ -56,7 +56,7 @@ MTFController.getHorizontalLayout = function(){
                 <% if(val.audio){ %> \
                   <img onclick=MTFController.pluginInstance.playAudio({src:"<%= val.audio %>"}) class="audio-image" src="<%= MTFController.pluginInstance.getAudioIcon("renderer/assets/audio2.png") %>" />\
                 <% } %>\
-                <span class="option-text"  ><%= val.text %></span>\
+                <span class="option-text"><%= val.text %></span>\
             </div>\
         <% });%>\
     </div>\
