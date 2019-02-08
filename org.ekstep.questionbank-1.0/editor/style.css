@@ -69,6 +69,7 @@
     min-width: 24.5%;
     font-size: 14px !important;
     padding-top: 2.3% !important;
+    background: none !important;
 }
 
 .qb-question-bank .content.wizard {

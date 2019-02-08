@@ -55,15 +55,13 @@
                                             <div class="ui segment mtf-options">
                                                 <div class="ui grid">
                                                     <div class="twelve wide column">
-                                                        <div class="form-group segment textBoxDiv">
-                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsLHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsLHS_' + $index].$error.required}"
+                                                        <div class="form-group one column row">
+                                                            <div class="form-control contenteditable  mtfoption-text-ck mtfoption-text-ck-lhs qc-mtf-textbox" ng-class="{'has-success':mtfForm['option.optionsLHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsLHS_' + $index].$error.required,'qc-mtf-option-placeholder':mtfFormData.option.optionsLHS[$index].text.length==0}"
                                                                 placeholder="Enter answer" name="option.optionsLHS_{{$index}}"
-                                                                id="mtf-optionLHS" ng-model="mtfFormData.option.optionsLHS[$index].text"
-                                                                maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mtf-lhs-answer', ver: '', type: 'input'}})"
-                                                                ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsLHS[$index].text.length||mtfFormData.option.optionsLHS[$index].image.length||mtfFormData.option.optionsLHS[$index].audio.length)"
-                                                            />
-                                                            <span class="MTFmaxLengthText">{{mtfFormData.option.optionsLHS[$index].text.length}}
-                                                                <span class="length-divider">/</span>25</span>
+                                                                id="cke_mtfoptionsLHS_{{$index}}" ng-model="mtfFormData.option.optionsLHS[$index].text"  
+                                                                ng-required="!(mtfFormData.option.optionsLHS[$index].text.length||mtfFormData.option.optionsLHS[$index].image.length||mtfFormData.option.optionsLHS[$index].audio.length)" contenteditable="true">
+                                                            </div>
+                                                           
                                                         </div>
                                                     </div>
                                                     <div class="twelve wide column">
@@ -102,15 +100,11 @@
                                             <div class="ui segment mtf-options">
                                                 <div class="ui grid">
                                                     <div class="twelve wide column">
-                                                        <div class="form-group segment textBoxDiv">
-                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsRHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}"
+                                                        <div class="form-group one column row">
+                                                            <div  class="form-control contenteditable mtfoption-text-ck qc-mtf-textbox" ng-class="{'has-success':mtfForm['option.optionsRHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsRHS_' + $index].$error.required,'qc-mtf-option-placeholder':mtfFormData.option.optionsRHS[$index].text.length==0}"
                                                                 placeholder="Enter answer" name="option.optionsRHS_{{$index}}"
-                                                                ng-model="mtfFormData.option.optionsRHS[$index].text" maxlength="25"
-                                                                ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mtf-rhs-answer', ver: '', type: 'input'}})"
-                                                                id="mtf-optionRHS-input" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsRHS[$index].text.length||mtfFormData.option.optionsRHS[$index].image.length||mtfFormData.option.optionsRHS[$index].audio.length)"
-                                                            />
-                                                            <span class="MTFmaxLengthText">{{mtfFormData.option.optionsRHS[$index].text.length}}
-                                                                <span class="length-divider">/</span>25</span>
+                                                                ng-model="mtfFormData.option.optionsRHS[$index].text" id="cke_mtfoptionsRHS_{{$index}}" ng-required="!(mtfFormData.option.optionsRHS[$index].text.length||mtfFormData.option.optionsRHS[$index].image.length||mtfFormData.option.optionsRHS[$index].audio.length)" contenteditable="true">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="twelve wide column">
