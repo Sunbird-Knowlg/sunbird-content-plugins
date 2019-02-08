@@ -74,7 +74,7 @@
           <div class="seven wide column qb-question-container" ng-show="!isQuestionSetConfig">
               <span class="ui label">Total Question : {{questions.length}}</span>
               <span class="ui label qc-selected-quescount">Selected Question : {{selectedQuestions.length}}</span>
-            <div class="row qb-question-list-container">
+            <div class="row qb-question-list-container qs-scrollbar">
               <div class="ui large divided items">
                  
                 <div class="item select list-items ui grid" ng-repeat="question in questions" ng-class="{quesSelector: $index === selectedQueIndex}">
