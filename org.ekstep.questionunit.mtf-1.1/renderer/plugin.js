@@ -78,24 +78,8 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       rhs_rearranged[elemIndex] = elemMappedIndex + 1;
       telObj['LHS'][0] = instance._question.data.option.optionsLHS[elemIndex];
       telObj['RHS'][0] = instance._question.data.option.optionsRHS[elemMappedIndex];
-      if (telObj.LHS[0].hasOwnProperty('audioName')) {
-        delete telObj.LHS[0].audioName;
-      }
-      if (telObj.LHS[0].hasOwnProperty('$$hashKey')) {
-        delete telObj.LHS[0].$$hashKey;
-      }
-      if (telObj.RHS[0].hasOwnProperty('audioName')) {
-        delete telObj.RHS[0].audioName;
-      }
-      if (telObj.RHS[0].hasOwnProperty('$$hashKey')) {
-        delete telObj.RHS[0].$$hashKey;
-      }
-      if (telObj.LHS[0].hasOwnProperty('hint')) {
-        delete telObj.LHS[0].hint;
-      }
-      if (telObj.RHS[0].hasOwnProperty('hint')) {
-        delete telObj.RHS[0].hint;
-      }
+      instance.removeOptionProperty(telObj.LHS[0]);
+      instance.removeOptionProperty(telObj.RHS[0]);
       telemetryValues.push(telObj);
       if (elemMappedIndex == elemIndex) {
         correctAnswersCount++;
@@ -160,7 +144,19 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       array[j] = t;
     });
     return array;
-  }
+  },
 
+  removeOptionProperty: function (values) {
+    if (values.hasOwnProperty('audioName')) {
+      delete values.audioName;
+    }
+    if (values.hasOwnProperty('$$hashKey')) {
+      delete values.$$hashKey;
+    }
+    if (values.hasOwnProperty('hint')) {
+      delete values.hint;
+    }
+  }
+  
 });
 //# sourceURL=questionunitMTFPlugin.js
