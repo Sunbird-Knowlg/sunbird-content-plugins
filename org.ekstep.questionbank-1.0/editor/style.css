@@ -102,7 +102,7 @@
 
 .qb-list-container {
     max-height: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .list-items {
@@ -113,7 +113,7 @@
 .qb-question-list-container {
     height: 67vh;
     padding-bottom: 15%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .quesSelector {
