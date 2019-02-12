@@ -1,3 +1,22 @@
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+	border: 2px solid #555555;
+}
+
+
 #keyboardDiv {
   position: absolute;
   top: 45%;
@@ -16,8 +35,10 @@
 
 #keyboardInput {
   background-color: #ebebeb;
-  height: 43px;
+  height: 36px;
   margin-top: 0;
+  width: 100%;
+  margin-left: 0px;
 }
 
 .qBoxArea {
@@ -34,11 +55,16 @@
 
 .textBoxArea {
   position: absolute;
-  margin-top: 0%;
+  /* margin-top: 0%; */
   z-index: 20;
-  width: 80%;
-  margin-left: 10%;
-  background: white;
+  width: 50%;
+  /* margin-left: -1%; */
+  background: #447dc1;
+  margin: 0 auto;
+  margin-top: -45px;
+  left: 0px;
+  right: 0px;
+  top: 32%;
 }
 
 .question {
@@ -50,13 +76,14 @@
 .parentDivMainKeyboard,
 #parentDivNumericKeyboard {
   width: 100%;
-  height: 100%;
-  top: 62%;
+  /* bottom: 0; */
+  bottom: 0%;
   position: fixed;
   left: 0%;
   font-size: 2.5vw;
   z-index: 10;
-  background-color: #ebebeb;
+  padding: 5px 5px 0px 5px;
+  background-color: #65a0e6;
 }
 
 #parentDivNumericKeyboard {
@@ -74,7 +101,9 @@
   margin: 2px;
   vertical-align: middle;
   text-align: center;
-  width: 5.5%;
+  min-width: 5.5%;    background: rgb(255, 255, 255);
+  border-radius: 6px;
+  padding: 5px 6px;
 }
 
 .key_barakhadi,
@@ -82,9 +111,20 @@
   float: left;
   vertical-align: middle;
   text-align: center;
-  padding-top: 0.5%;
+  flex-grow: inherit;
+  min-width: 7%; 
+    background: #ffffff;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-right: 3px;
+    width: auto;
+    padding: 5px 6px;
+    cursor: pointer;
 }
-
+.key_barakhadi:hover,
+.key_barakhadi_numeric:hover {
+  background: #d1e6ff;
+}
 .key_barakhadi_last_key {
   position: relative;
   clear: left;
@@ -99,47 +139,68 @@
   float: left;
   border: none;
   margin: 2px;
-  width: 60%;
-  background: #D7D7D7;
+  width: 50%;
+  background: #084690;
   border-radius: 3px;
   height: 30px;
   display: inline-block;
+  cursor: pointer;
 }
 
 #firstRowAlpha {
-  width: 92%;
-  top: 6%;
-  left: 9%;
-  height: 11%;
+  width: 100%;
+  height: auto;
   position: relative;
+  display: flex;
+  flex-wrap: wrap;    
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 34px;    
+  max-height: 65px;
+  height: 65px;
 }
 
 #secondRowAlpha {
   width: 92%;
-  top: 4%;
-  left: 7%;
+  top: 3%;
+  left: 2%;
   height: 12%;
   position: relative;
+  display : flex;
+  flex-wrap : wrap;
 }
 
 #thirdRowAlpha {
-  width: 85%;
-  top: 2%;
-  left: 6%;
-  height: 11%;
-  position: relative;
-  text-align: center;
+  width: 80%;
+  /* top: 14%; */
+  left: 0px;
+  right: 0px;
+  position: fixed;
+  /* text-align: center; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin: 0 auto;
+  align-items: center;
+  bottom: 0px;
+  /* background: #f0f0f0; */
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  background: rgba(101, 160, 230, 0.5);
+
 }
 
 #firstRowNum {
-  width: 80%;
-  top: 6%;
-  left: 9%;
-  height: 11%;
+  width: 100%;
+  height: auto;
   position: relative;
+  display: flex;
+  flex-wrap: wrap;    
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 34px;    
+  max-height: 65px;
+  height: 65px;
 }
 
 #secondRowNum {
@@ -158,16 +219,21 @@
   left: 10%;
 }
 
-.erasedDivParent,
+.erasedDivParent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .hideKeyboard {
-  float: right;
-  margin-top: -4.3%;
-  position: relative;
-  margin-right: -2%;
+  display: flex;
+  align-items: center;
 }
 
 .hideKeyboard {
-  margin-right: 4%;
+  /* margin-right: 4%;
+  top: 66%; */
+  /* margin-right: 0%;
+  top: 12%; */
 }
 
 #erasedDiv {
@@ -196,6 +262,7 @@
 
 .special_keys {
   display: inline-block;
+  cursor: pointer;
 }
 
 .special_keys>span {
@@ -212,7 +279,7 @@ img.qc-language-icon {
 }
 
 #firstRowNum .key_barakhadi_numeric {
-  width: 9%;
+  width: 6%;
 }
 
 #secondRowNum .key_barakhadi_numeric {
@@ -221,14 +288,21 @@ img.qc-language-icon {
 
 .third-row-numeric {
   width: 80%;
-  top: 2%;
-  left: 10%;
-  height: 11%;
-  position: relative;
-  text-align: center;
+  top: 87%;
+  left: 0px;
+  right: 0px;
+  position: fixed;
+  /* text-align: center; */
   display: flex;
   flex-wrap: wrap;
-  justify-content: center
+  justify-content: center;
+  margin: 0 auto;
+  align-items: center;
+  bottom: 0px;
+  /* background: #f0f0f0; */
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  background: rgba(101, 160, 230, 1);
 }
 
 .qc-keyboard-bottom {
