@@ -73,7 +73,7 @@
 }
 
 .qb-question-bank .content.wizard {
-    height: 80vh;
+    height: 82vh;
     padding: 0;
     overflow-y: auto;
 }
@@ -102,7 +102,7 @@
 
 .qb-list-container {
     max-height: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .list-items {
@@ -111,11 +111,16 @@
 }
 
 .qb-question-list-container {
-    height: 67vh;
-    padding-bottom: 15%;
-    overflow-y: scroll;
+    height: calc(81vh - 185px);
+    padding-bottom: 10px;
+    overflow-y: auto;
 }
 
+.qb-selected-question-list-container {
+    height: calc(81vh - 140px);
+    padding-bottom: 10px;
+    overflow-y: auto;
+}
 .quesSelector {
     border: 1px solid #2e9fd9 !important;
     border-radius: 4px !important;
