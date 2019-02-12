@@ -73,8 +73,9 @@
 }
 
 .qb-question-bank .content.wizard {
-    height: 90vh;
+    height: 82vh;
     padding: 0;
+    overflow-y: auto;
 }
 
 .qb-questions-list {
@@ -110,13 +111,13 @@
 }
 
 .qb-question-list-container {
-    height: calc(90vh - 135px);
+    height: calc(81vh - 185px);
     padding-bottom: 10px;
     overflow-y: auto;
 }
 
 .qb-selected-question-list-container {
-    height: calc(90vh - 190px);
+    height: calc(81vh - 140px);
     padding-bottom: 10px;
     overflow-y: auto;
 }
