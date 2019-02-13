@@ -76,8 +76,10 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       };
       var elemMappedIndex = parseInt($(elem).data('mapindex')) - 1;
       rhs_rearranged[elemIndex] = elemMappedIndex + 1;
-      telObj['LHS'][elemIndex] = instance._question.data.option.optionsLHS[elemIndex];
-      telObj['RHS'][elemMappedIndex] = instance._question.data.option.optionsRHS[elemMappedIndex];
+      telObj['LHS'][0] = instance._question.data.option.optionsLHS[elemIndex];
+      telObj['RHS'][0] = instance._question.data.option.optionsRHS[elemMappedIndex];
+      instance.removeOptionProperty(telObj.LHS[0]);
+      instance.removeOptionProperty(telObj.RHS[0]);
       telemetryValues.push(telObj);
       if (elemMappedIndex == elemIndex) {
         correctAnswersCount++;
@@ -142,7 +144,19 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       array[j] = t;
     });
     return array;
-  }
+  },
 
+  removeOptionProperty: function (values) {
+    if (values.hasOwnProperty('audioName')) {
+      delete values.audioName;
+    }
+    if (values.hasOwnProperty('$$hashKey')) {
+      delete values.$$hashKey;
+    }
+    if (values.hasOwnProperty('hint')) {
+      delete values.hint;
+    }
+  }
+  
 });
 //# sourceURL=questionunitMTFPlugin.js
