@@ -19,6 +19,13 @@ angular.module('keyBoardApp', [])
       if (!_.isUndefined(scope.data) && !_.isUndefined(scope.data.keyboardType) && scope.data.keyboardType == 'Custom'){
         scope.customTag = true;
         scope.keys = scope.data.customKeys;
+        var keys = scope.keys.split(',');
+        var editorKeywords = _.uniq(keys);
+        scope.editorKeys = [];
+        _.each(editorKeywords,function(item){
+          if(item)
+            scope.editorKeys.push(item);
+        });
       }
       else{
         scope.customTag = false;
@@ -35,13 +42,13 @@ angular.module('keyBoardApp', [])
         scope.data.customKeys = event.target.value;
       };
       scope.updateKeys = function () {
-        scope.editorKeys = []
+        scope.editorKeys = [];
         var splitWords = scope.keys.split(',');
         var editorKeywords = _.uniq(splitWords);
         _.each(editorKeywords,function(item){
           if(item)
             scope.editorKeys.push(item);
-        })
+        });
       };
     }
   };

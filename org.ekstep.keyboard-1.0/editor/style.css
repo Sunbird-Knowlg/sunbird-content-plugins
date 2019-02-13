@@ -9,7 +9,7 @@
     transition:all linear 0.5s;
   }
 
-  .keys {
+  .editorKeys {
     width: 100%;
     display: -webkit-flex;
     -webkit-flex-wrap: wrap;
