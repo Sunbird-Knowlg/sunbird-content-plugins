@@ -14,8 +14,11 @@
     </div>
     <div class="four wide column">
       <div class="ui input" style="width: 100%">
-        <input class="form-control" type="text" ng-class="{'has-success':keyboardForm.keys.$valid, 'has-error': keyboardForm.keys.$error.required != true}" ng-model="keys" ng-blur="tokenizeTags($event)" placeholder="Add keys seprated by comma(,)." required>
+        <input class="form-control" type="text" ng-change='updateKeys()' ng-class="{'has-success':keyboardForm.keys.$valid, 'has-error': keyboardForm.keys.$error.required != true}" ng-model="keys" ng-blur="tokenizeTags($event)" placeholder="Add keys seprated by comma(,)." required>
       </div>
     </div>
+  </div>
+  <div class="outer-segment keys">
+    <span class="editorKeywords" ng-repeat="key in editorKeys">{{key}}</span>
   </div>
 </form>

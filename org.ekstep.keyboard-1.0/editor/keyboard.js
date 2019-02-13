@@ -34,6 +34,15 @@ angular.module('keyBoardApp', [])
       scope.tokenizeTags = function(event) {
         scope.data.customKeys = event.target.value;
       };
+      scope.updateKeys = function () {
+        scope.editorKeys = []
+        var splitWords = scope.keys.split(',');
+        var editorKeywords = _.uniq(splitWords);
+        _.each(editorKeywords,function(item){
+          if(item)
+            scope.editorKeys.push(item);
+        })
+      };
     }
   };
 });

@@ -16,7 +16,6 @@
 	border: 2px solid #555555;
 }
 
-
 #keyboardDiv {
   position: absolute;
   top: 45%;
@@ -41,24 +40,10 @@
   margin-left: 0px;
 }
 
-.qBoxArea {
-  font-weight: bold;
-  background-color: white;
-  /* height: 40%; */
-  position: absolute;
-  z-index: 10;
-  text-align: center;
-  margin-left: 0%;
-  margin-top: 0;
-  width: 100%;
-}
-
 .textBoxArea {
   position: absolute;
-  /* margin-top: 0%; */
   z-index: 20;
   width: 50%;
-  /* margin-left: -1%; */
   background: #447dc1;
   margin: 0 auto;
   margin-top: -45px;
@@ -67,16 +52,9 @@
   top: 32%;
 }
 
-.question {
-  margin-top: 7%;
-  font-weight: bold;
-}
-
-
 .parentDivMainKeyboard,
 #parentDivNumericKeyboard {
   width: 100%;
-  /* bottom: 0; */
   bottom: 0%;
   position: fixed;
   left: 0%;
@@ -84,6 +62,7 @@
   z-index: 10;
   padding: 5px 5px 0px 5px;
   background-color: #65a0e6;
+  top: 62%;
 }
 
 #parentDivNumericKeyboard {
@@ -160,30 +139,17 @@
   height: 65px;
 }
 
-#secondRowAlpha {
-  width: 92%;
-  top: 3%;
-  left: 2%;
-  height: 12%;
-  position: relative;
-  display : flex;
-  flex-wrap : wrap;
-}
-
 #thirdRowAlpha {
   width: 80%;
-  /* top: 14%; */
   left: 0px;
   right: 0px;
   position: fixed;
-  /* text-align: center; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
   align-items: center;
   bottom: 0px;
-  /* background: #f0f0f0; */
   border-top-left-radius:5px;
   border-top-right-radius:5px;
   background: rgba(101, 160, 230, 0.5);
@@ -203,14 +169,6 @@
   height: 65px;
 }
 
-#secondRowNum {
-  width: 88%;
-  top: 4%;
-  left: 7%;
-  height: 12%;
-  position: relative;
-}
-
 #parentDivEraser {
   width: 80%;
   height: 100%;
@@ -227,13 +185,6 @@
 .hideKeyboard {
   display: flex;
   align-items: center;
-}
-
-.hideKeyboard {
-  /* margin-right: 4%;
-  top: 66%; */
-  /* margin-right: 0%;
-  top: 12%; */
 }
 
 #erasedDiv {
@@ -282,29 +233,19 @@ img.qc-language-icon {
   width: 6%;
 }
 
-#secondRowNum .key_barakhadi_numeric {
-  width: 7.5%;
-}
-
 .third-row-numeric {
   width: 80%;
   top: 87%;
   left: 0px;
   right: 0px;
   position: fixed;
-  /* text-align: center; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
   align-items: center;
   bottom: 0px;
-  /* background: #f0f0f0; */
   border-top-left-radius:5px;
   border-top-right-radius:5px;
   background: rgba(101, 160, 230, 1);
-}
-
-.qc-keyboard-bottom {
-  /* top: 60%; */
 }

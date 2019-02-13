@@ -1,7 +1,7 @@
 var Keyboard = {
   keyboardVisible: false,
   targetInput: '',
-  buttons: {},
+  buttons: [],
   keyWidth: 0,
   keyboardCallback: undefined,
   inputValue: '',
@@ -65,11 +65,11 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>÷</span></div>\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>×</span></div>\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>=</span></div>\
-            </div>\
-            <div class="third-row-numeric">\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id="<_btn"><span>&lt;</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
-                <div style="margin-left: 3%;">\
+            </div>\
+            <div class="third-row-numeric">\
+                <div style=margin-right: -9%;">\
                     <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="qc-language-icon" onclick="Keyboard.changeToAlphabet()" /> </div>\
                 <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
@@ -89,11 +89,10 @@ Keyboard.createKeyboard = function(customButtons) {
   customButtons = customButtons.replace(/ /g, '');
   customButtons = customButtons.split(',');
   customButtons = _.uniq(customButtons);
-  Keyboard.buttons = customButtons.splice(0, customButtons.length);
-  // var splitButtonto = parseInt(Keyboard.buttons.length / 2);
-  // Keyboard.buttons.firstRow = Keyboard.buttons.slice(0, splitButtonto);
-  // Keyboard.buttons.secondRow = Keyboard.buttons.slice(splitButtonto, Keyboard.buttons.length);
-  // Keyboard.keyWidth = parseInt(100 / Keyboard.buttons.secondRow.length);
+  _.each(customButtons,function(item){
+    if(item)
+      Keyboard.buttons.push(item);
+  });
 };
 
 Keyboard.changeToNumeric = function() {
