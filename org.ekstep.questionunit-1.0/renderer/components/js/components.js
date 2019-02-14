@@ -91,12 +91,15 @@ org.ekstep.questionunit.questionComponent = {
             $('.hiding-container').css('height', '87%');
             $('.hiding-container').css('box-shadow', 'none');
             $('.hiding-container').removeClass('expanded')
+            $('.hiding-container').css('overflow-y', '');
             $(".expand-button img").toggleClass('flip');
             $('.hiding-container').css('padding-bottom', '0px');
             $('.expand-button').css('bottom', '5%');
         } else {
             var expandButtonBottom = parseFloat($('.expand-button').css('bottom'));
             $('.hiding-container').addClass('expanded')
+            $('.hiding-container').css('overflow-y', 'auto');
+            $('.hiding-container').css('max-height', '170px');
             $('.hiding-container').css('height', 'auto');
             $('.hiding-container').css('box-shadow', '0 2px 4px 0 rgba(0, 0, 0, 0.15)');
             $(".expand-button img").toggleClass('flip');

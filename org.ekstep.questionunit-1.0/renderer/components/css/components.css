@@ -8,6 +8,19 @@ body {
     margin: 0.5em 0 !important;
 }
 
+::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #65A0E6;
+    outline: 1px solid slategrey;
+}
+
 /*end */
 
 /* From here image model popup style */
@@ -132,7 +145,7 @@ body {
 }
 
 .question-container .hiding-container .expand-container {
-    max-height: 70vh;
+    max-height: 180vh;
     width: 100%;
     overflow: scroll;
     overflow-x: hidden;
@@ -170,6 +183,7 @@ body {
     z-index: 2;
     cursor: pointer;
     display: none;
+    margin-right: 10px;
 }
 
 .question-container .expand-button img {
