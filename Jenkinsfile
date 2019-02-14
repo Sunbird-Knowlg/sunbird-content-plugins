@@ -28,21 +28,26 @@ node() {
                     sh """
                         export framework_version_number=${artifact_version}
                         export editorType="contentEditor"
-                        export editor_version_number=1.35
+                        export editor_version_number=1.14.0
+                        export CHROME_BIN=google-chrome
                         rm -rf ansible/content-editor.zip
                         rm -rf content-editor
+                        node -v
                         npm install
                         cd app
                         bower cache clean
                         bower prune -f 
                         bower install --force -V
                         cd ..
-                        grunt jsdoc
                         #grunt compress
                         zip -r ce-docs.zip docs
                         gulp packageCorePlugins
-                        npm run plugin-build
+                        #npm install 
+                        npm run build-plugins
+                        #cd ..
                         npm run build
+                        #npm run test
+
                     """
                 }
                 
