@@ -1,9 +1,8 @@
 describe("Math text Editor template controller", function() {
-    var $controller, $scope, ctrl, $rootScope, plugin, $timeout;
+    var $controller, $scope, ctrl, $rootScope, plugin, $timeout, instance;
      var latexSpan,hiddenSpanArea;
      beforeAll(function(done){
         ContentEditorTestFramework.init(function() {
-          manifest = {};
           jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
           ecEditor.instantiatePlugin("org.ekstep.stage");
           ecEditor.instantiatePlugin("org.ekstep.config");
@@ -12,7 +11,8 @@ describe("Math text Editor template controller", function() {
       })
     beforeEach(module('org.ekstep.mathtext'));
     beforeEach(function(done) {
-        plugin = org.ekstep.mathtext.EditorPlugin({}, {}, {});
+        plugin = {};
+        plugin.manifest = {'id': "org.ekstep.mathtext"};
       setTimeout(function() {
         inject(function(_$rootScope_, _$controller_, _$timeout_) {
           $rootScope = _$rootScope_;
@@ -37,9 +37,9 @@ describe("Math text Editor template controller", function() {
     describe("Math text  Creation", function() {
         beforeEach(function() {
             ctrl = $controller('mathTextController', {
-            $scope: $scope,
-            instance: plugin,
-            $timeout: $timeout
+                $scope: $scope,
+                instance: plugin,
+                $timeout: $timeout
             });
         });
         it("Should load mathtextcontroller and check distance formula", function(done) {
