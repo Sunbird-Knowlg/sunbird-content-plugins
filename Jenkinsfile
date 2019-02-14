@@ -1,4 +1,3 @@
-package build
 node() {
     try {
         String ANSI_GREEN = "\u001B[32m"
@@ -14,17 +13,16 @@ node() {
                     checkout scm
                     commit_hash = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                     branch_name = sh(script: 'git name-rev --name-only HEAD | rev | cut -d "/" -f1| rev', returnStdout: true).trim()
-                    build_tag = branch_name + "_" + commit_hash
-                    println(ANSI_BOLD + ANSI_YELLOW + "Tag not specified, using the latest commit hash: " + commit_hash + ANSI_NORMAL)
-       
+                    artifact_version = branch_name + "_" + commit_hash
+                    println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag not specified, using the latest commit hash: " + commit_hash + ANSI_NORMAL)
                 } else {
                     def scmVars = checkout scm
                     checkout scm: [$class: 'GitSCM', branches: [[name: "refs/tags/${params.github_release_tag}"]], userRemoteConfigs: [[url: scmVars.GIT_URL]]]
-                    build_tag = params.github_release_tag
-                    println(ANSI_BOLD + ANSI_YELLOW + "Tag specified, building from tag: " + params.github_release_tag + ANSI_NORMAL)
-        
+                    artifact_version = params.github_release_tag
+                    println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag specified, building from github_release_tag: " + params.github_release_tag + ANSI_NORMAL)
+                    
                 }
-                echo "build_tag: " + build_tag
+                echo "artifact_version: " + artifact_version
 
                 stage('Build') {
                     sh """
@@ -44,7 +42,7 @@ node() {
                         zip -r ce-docs.zip docs
                         gulp packageCorePlugins
                         npm run plugin-build
-                        npm run build                      
+                        npm run build
                     """
                 }
                 
@@ -53,8 +51,10 @@ node() {
             }
                 
                 stage('ArchiveArtifacts') {
-                    archiveArtifacts "ce-docs.zip"
-                    currentBuild.description = "${build_tag}"
+                    archiveArtifacts "ce-docs.zip:${artifact_version}"
+                    sh """echo {\\"artifact_name\\" : \\"ce-docs.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
+                    archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
+                    currentBuild.description = "${artifact_version}"
                 }
             }
         }
