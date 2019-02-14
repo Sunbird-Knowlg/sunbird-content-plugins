@@ -32,6 +32,11 @@
   margin:5px;
 }
 
+.qs-ftb-content .urdu-text{ /*overrides default line-height of urdu-text */
+  line-height: 3;
+}
+
+
 .qs-ftb-question {
   font-size: 16px;
   width: 100%;
@@ -91,8 +96,7 @@
 }
 
 .ftb-question-text {
-  line-height: 40px;
-  width: 80%;
+  width: 97%;
 }
 
 .align-question {
@@ -130,17 +134,4 @@ input.ans-field.highlightInput {
   position: fixed;
   left: 0;
   top: 0;
-}
-
-.urdu-support{
-  font-family: NotoNastaliqUrdu;
-  direction: rtl;
-  text-align: right;
-  font-size:12px;
-  position: absolute;
-  right : 0;
-}
-
-.urdu-support p{
-  line-height: 3em !important; /* overriding default line height applied in FTB input text in CK editor for urdu support */
 }

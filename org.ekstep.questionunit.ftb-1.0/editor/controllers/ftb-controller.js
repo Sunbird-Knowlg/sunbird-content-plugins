@@ -25,7 +25,6 @@ angular.module('ftbApp', ['org.ekstep.question']).controller('ftbQuestionFormCon
       image: '',
       audio: '',
       audioName: '',
-      isUrdu: false,
       keyboardConfig: $scope.keyboardConfig
     },
     answer: [],
@@ -38,7 +37,6 @@ angular.module('ftbApp', ['org.ekstep.question']).controller('ftbQuestionFormCon
   });
   questionInput.on('change', function () {
     $scope.ftbFormData.question.text = this.getData();
-    $scope.ftbFormData.question.isUrdu = isUrdu($scope.ftbFormData.question.text);
   });
   questionInput.on('focus', function () {
     $scope.generateTelemetry({
@@ -250,21 +248,5 @@ angular.module('ftbApp', ['org.ekstep.question']).controller('ftbQuestionFormCon
     addMedia: $scope.addMedia,
     qtype: 'ftb'
   }
-
-
-  /**
-   * Checks whether the CK Editor input is right to left
-   * Example // '<p dir='rtl'>رنررن نھص نھص </p>'
-   */
-   function isUrdu(inputTextAsElement){
-    var inputTextAsElement = new DOMParser().parseFromString(inputTextAsElement, 'text/html').body.firstElementChild;
-    if(inputTextAsElement ){
-      if(inputTextAsElement.getAttribute('dir') == 'rtl'){
-        return true;
-      }
-    }
-    return false;
-  }
-
 }]);
 //# sourceURL=horizontalFTB.js

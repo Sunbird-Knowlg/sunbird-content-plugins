@@ -33,11 +33,11 @@
             }
 
             function addUrduStyle(element) {
-                element.setAttribute('style', 'font-family:NotoNastaliqUrdu;font-size:12px;padding:3px;line-height:1.95em');
+                element.setAttribute('class', 'urdu-text');
             }
 
             function removeUrduStyle(element) {
-                element.removeAttribute('style');
+                element.classList.remove('urdu-text');
             }
 
         }
