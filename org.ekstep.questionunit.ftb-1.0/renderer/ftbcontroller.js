@@ -15,7 +15,7 @@ FTBController.question = undefined;
 
 FTBController.getQuestionTemplate = function () {
   return '<div id="ftb-template" class="plugin-content-container">\
-    <div class="qs-ftb-container" >\
+    <div class="qs-ftb-container">\
       <div class="qs-ftb-content">\
           <div class="qs-ftb-question" id="qs-ftb-question">\
           <% if ( question.data.question.image.length > 0 ){ %> \

@@ -248,5 +248,6 @@ angular.module('ftbApp', ['org.ekstep.question']).controller('ftbQuestionFormCon
     addMedia: $scope.addMedia,
     qtype: 'ftb'
   }
+  
 }]);
 //# sourceURL=horizontalFTB.js
