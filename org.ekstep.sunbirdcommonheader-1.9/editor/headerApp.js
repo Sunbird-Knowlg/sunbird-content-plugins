@@ -82,7 +82,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
         tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close'
+        tocUpdateBtnClose: 'Close',
+        tocUpdateSampleCsvFile: 'Sample update csv file',
+        tocUpdateSampleCsvFileLink: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/updatesamplecsvfile.csv')
     }
     // $scope.contentLock = ecEditor.getConfig('lock');
     // $scope.dataChanged = false;
@@ -828,6 +830,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
+            sampleUpdateCsvFile: $scope.CONSTANTS.tocUpdateSampleCsvFile,
+            sampleUpdateCsvFileLink: $scope.CONSTANTS.tocUpdateSampleCsvFileLink,
             validation: {
                 'allowedExtension': ['csv']
             },
@@ -841,11 +845,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.errMessage = data;
                 ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
                     template: 'updateTocError',
-                    controller: 'headerController',
-                    controllerAs: '$ctrl',
+                    controller: ['$scope', 'mainCtrl', function($scope, mainCtrl) {
+                        $scope.errTitle = mainCtrl.errTitle;
+                        $scope.errMessage = mainCtrl.errMessage;
+                        $scope.closePopup = function() {
+                            $scope.closeThisDialog()
+                            mainCtrl.updateToc();
+                        }
+                    }],
+                    resolve: {
+                        mainCtrl: function() {
+                            return $scope;
+                        }
+                    },
                     showClose: false,
-                    scope: $scope,
-                    className: 'ngdialog-theme-default'
+                    closeByEscape: false
                 });
             }
         });

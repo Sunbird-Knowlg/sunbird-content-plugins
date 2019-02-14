@@ -1,4 +1,4 @@
-<script type="text/ng-template" ng-app="org.ekstep.uploadfile-1.0" ng-controller="uploadfileController as $ctrl" id="partials_org.ekstep.uploadfile.html">
+<script type="text/ng-template" ng-app="org.ekstep.uploadcontent-1.4" ng-controller="uploadController as $ctrl" id="partials_org.ekstep.uploadcontent.html">
 <div type="text/template" id="qq-template-validation" style="display: none">
     <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:250px;">
 
@@ -26,7 +26,7 @@
             </li>
         </ul>
         <div id="qq-upload-actions">
-            <div style="position: absolute;bottom: 46%;left: 43.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
+            <div style="position: absolute;bottom: 45%;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
                 <i class="upload huge icon" style="font-size: 3em"></i><br>
                 <strong>Drag &amp; Drop</strong><br>
                 <span>your files here, or</span>
@@ -35,6 +35,14 @@
                 <div>Browse</div>
             </div>
         </div>
+
+        <!-- <dialog class="qq-alert-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">Close</button>
+            </div>
+        </dialog> -->
+
         <dialog class="qq-confirm-dialog-selector">
             <div class="qq-dialog-message-selector"></div>
             <div class="qq-dialog-buttons">
@@ -53,42 +61,38 @@
         </dialog>
     </div>
 </div>
-<div class="ui modal active upload-csv-modal">
+<div class="ui modal active" style="top: 10% !important">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
-                <div class="left floated twelve wide column">
+                <div class="left floated three wide column">
                     <i class="upload icon"></i>
-                    <label>{{configData.headerTitle}}</label>
-                </div>                
+                    <label>Upload Content</label>
+                </div>
             </div>
         </div>
     </div>
     <div class="content">
-        <div ng-if="configData.sampleUploadCsvFileLink">
-            <div class="csvdescription">{{configData.description}}</div>
-            <div class="sampleuploadcsv"><a href={{configData.sampleUploadCsvFileLink}}>{{configData.sampleUploadCsvFile}}</a></div>
-        </div>
-        <div ng-if="configData.sampleUpdateCsvFileLink">
-            <div>{{configData.description}}</div>
-            <div class="sampleupdatecsv"><a href={{configData.sampleUpdateCsvFileLink}}>{{configData.sampleUpdateCsvFile}}</a></div>
-        </div>
-    <div class="content padding-top-0">
-        <div id="upload-csv-div"></div>
-        <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left: 46%;
-         position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
-         <div class="ui message">
-                <ul class="list">
-                    <li>File accepted - csv</li>
-                </ul>
+        <div class="field" id='url-upload'>
+            <label>URL</label>
+            <div class="ui fluid transparent input">
+                <input type="text" placeholder="https://" ng-model="contentURL">
             </div>
-    </div>
+        </div>
+        <div id="upload-content-div" style="margin-top: 15px"></div>
+        <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
+        <div class="ui message">
+            <ul class="list">
+                <li>File accepted - pdf, mp4, webm, epub, youtube, h5p and html zip</li>
+                <li>Max file size - 50 Mb</li>
+            </ul>
+        </div>
     </div>
     <div class="actions">
         <div class="ui buttons">
-            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="configData.buttonText.exitBtn"></button>
+            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="uploadCancelLabel"></button>
             <div class="or"></div>
-            <button class="ui blue button" id="uploadTocFile" ng-click="generateTelemetry({subtype:'upload',target:'uploadButton'})" ng-disabled="showLoaderIcon">{{configData.buttonText.primaryBtn}}</button>
+            <button class="ui blue button" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">Upload</button>
         </div>
     </div>
 </div>

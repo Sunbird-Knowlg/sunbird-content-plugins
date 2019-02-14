@@ -262,11 +262,11 @@ color: white;
 .preview-heading {
     padding: 0;
     width: 480px;
-    text-align: center;
+    text-align: left;
 }
 
 .formDiv{
-    overflow: auto;
+    margin-bottom: 70px !important;
 }
 
 .activetemplate{

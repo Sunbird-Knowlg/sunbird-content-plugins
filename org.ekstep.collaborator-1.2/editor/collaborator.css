@@ -74,6 +74,15 @@
     background: #D8DEE2;
 }
 
+.search-reset-keyword-field {
+    margin-left: -7%;
+    margin-right: 7%;
+    border: 1px solid #e0e0e0;
+    border-radius: 30px;
+    width: 300px;
+    height: 36px;
+}
+
 .search-reset-keyword-field .ui.basic.button {
     -webkit-box-shadow: none;
     box-shadow: none;
