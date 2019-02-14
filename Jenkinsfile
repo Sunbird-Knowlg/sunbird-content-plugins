@@ -26,38 +26,15 @@ node() {
 
                 stage('Build') {
                     sh """
-                        export framework_version_number=${artifact_version}
-                        export editorType="contentEditor"
-                        export editor_version_number=1.14.0
-                        export CHROME_BIN=google-chrome
-                        rm -rf ansible/content-editor.zip
-                        rm -rf content-editor
-                        node -v
-                        npm install
-                        cd app
-                        bower cache clean
-                        bower prune -f 
-                        bower install --force -V
-                        cd ..
-                        #grunt compress
-                        zip -r ce-docs.zip docs
-                        gulp packageCorePlugins
-                        #npm install 
-                        npm run build-plugins
-                        #cd ..
-                        npm run build
-                        #npm run test
-
+                        rm -rf content-plugins.zip
+                        zip -r content-plugins.zip content-plugins                     
                     """
                 }
                 
-                stage('Publish_test_results') {
-               cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'coverage/PhantomJS*/cobertura-coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false 
-            }
                 
                 stage('ArchiveArtifacts') {
-                    archiveArtifacts "ce-docs.zip:${artifact_version}"
-                    sh """echo {\\"artifact_name\\" : \\"ce-docs.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
+                    archiveArtifacts "content-plugins.zip:${artifact_version}"
+                    sh """echo {\\"artifact_name\\" : \\"content-plugins.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
                     archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
                     currentBuild.description = "${artifact_version}"
                 }
