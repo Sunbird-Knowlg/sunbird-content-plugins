@@ -2,6 +2,14 @@ describe("Collaborator plugin", function () {
     var manifest, path, ctrl, $scope, pluginInstance, contentData, $timeout, userSearchData;
 
     beforeAll(function (done) {
+        ContentEditorTestFramework.init(function () {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+            ecEditor.instantiatePlugin("org.ekstep.stage");
+            ecEditor.instantiatePlugin("org.ekstep.config");
+            done();
+        });
+    });
+    beforeEach(function (done) {
         manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.collaborator");
         console.log('manifest', manifest);
         path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/collaboratorApp.js");
