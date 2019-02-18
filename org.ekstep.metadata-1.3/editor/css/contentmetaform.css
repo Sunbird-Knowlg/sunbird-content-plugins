@@ -4,7 +4,7 @@ currently editor semantic ui is using 12 gird layout
 and collection is using 16 grid layout so
 **/
 
-#metadataForm .ui.form .ten.wide.field , 
+#metadataForm .ui.form .ten.wide.field ,
 #metadataForm .readMode .ten.wide.field{
     width: 82.5%!important;
 }
@@ -190,7 +190,7 @@ form .ui.grid.form-bottom-allign{
 
 
 /*Unit meta form*/
-#unit-meta-form input,
+/* #unit-meta-form input,
 #unit-meta-form input:focus,
 #unit-meta-form textarea,
 #unit-meta-form textarea:focus {
@@ -242,4 +242,4 @@ form .ui.grid.form-bottom-allign{
 
 #unit-meta-form .error label {
     color: #8c0615;
-}
+} */
