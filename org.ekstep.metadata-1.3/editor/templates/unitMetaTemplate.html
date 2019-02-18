@@ -1,7 +1,7 @@
 <div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="unitMetaTemplate" ng-init="init()">
     <div class="ui active" id="meta-modal">
         <div class="">
-            <form id="unit-meta-form" class="ui form segment" novalidate name="metaForm" ng-if="$parent.$parent.mode === 'Edit'">
+            <form id="content-meta-form" class="ui form segment" id="contents-data-form" novalidate name="metaForm" ng-if="$parent.$parent.mode === 'Edit'">
                 <div class="fields">
                     <div class="field form-fields-except-image">
                         <div ng-class="(dynamicField.inputType == 'textarea')? 'ten wide column': 'six wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations ">
