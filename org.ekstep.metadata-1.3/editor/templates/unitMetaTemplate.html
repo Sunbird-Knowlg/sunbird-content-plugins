@@ -1,7 +1,7 @@
- <div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="unitMetaTemplate" ng-init="init()">
+<div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="unitMetaTemplate" ng-init="init()">
     <div class="ui active" id="meta-modal">
         <div class="">
-            <form id="content-meta-form" class="ui form segment" novalidate name="metaForm" ng-if="$parent.$parent.mode === 'Edit'">
+            <form id="unit-meta-form" class="ui form segment" novalidate name="metaForm" ng-if="$parent.$parent.mode === 'Edit'">
                 <div class="fields">
                     <div class="field form-fields-except-image">
                         <div ng-class="(dynamicField.inputType == 'textarea')? 'ten wide column': 'six wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations ">
@@ -26,7 +26,7 @@
                                 <label>{{dynamicField.label | uppercase}}</label>
                                 <div class=" ui input " ng-class="{ 'disabled':!dynamicField.editable } ">
                                     <textarea id="{{dynamicField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{dynamicField.renderingHints.rows}} " name="{{dynamicField.code}} " ng-required="{{dynamicField.required}}" ng-pattern="dynamicField.validation.regex['value']"
-                                        ng-maxlength="{{dynamicField.validation.max['value']}}" ng-keyup="onConfigChange({target: '#unitMetaTemplate', form:metaForm}); $parent.$parent.updateNode(contentMeta);" ng-click="onConfigChange({target: '#unitMetaTemplate', field:dynamicField,form:metaForm}); $parent.$parent.updateNode(contentMeta);" ng-disabled="{{!dynamicField.editable}}"></textarea>
+                                        ng-maxlength="{{dynamicField.validation.max['value']}}" ng-keyup="onConfigChange({form:metaForm}); $parent.$parent.updateNode(contentMeta);" ng-click="onConfigChange({field:dynamicField,form:metaForm}); $parent.$parent.updateNode(contentMeta);" ng-disabled="{{!dynamicField.editable}}"></textarea>
                                 </div>
                                 <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                     {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -43,13 +43,13 @@
                                 name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
                                             && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
                                 <label>{{dynamicField.label | uppercase}}</label>
-                                <keywords config=dynamicField ng-click="onConfigChange({target: '#unitMetaTemplate', field:dynamicField,form:metaForm})"></keywords>
+                                <keywords config=dynamicField ng-click="onConfigChange({field:dynamicField,form:metaForm})"></keywords>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-            <div class="ui basic segment" ng-if="$parent.$parent.mode !== 'Edit'">
+            <div class="ui basic segment" ng-if="$parent.$parent.mode !== 'Edit'">       
                 <table class="ui very basic table contentDetails">
                     <tbody ng-repeat="dynamicField in dynamicLayoutConfigurations">
                         <tr class="top aligned" ng-if="(dynamicField.inputType==='text')">
@@ -74,10 +74,10 @@
                             <td class="one wide column"><b>{{dynamicField.label | uppercase}}</b></td>
                             <td>:</td>
                             <td class="eleven wide">{{contentMeta[dynamicField.code].join(', ') || '--'}}</td>
-                        </tr>
+                        </tr>   
                     </tbody>
                 </table>
-            </div>
+            </div> 
         </div>
     </div>
 </div>
