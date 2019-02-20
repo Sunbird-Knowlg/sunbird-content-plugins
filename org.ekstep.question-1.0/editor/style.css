@@ -119,9 +119,6 @@ margin: 0;
 }
 
 .QuestionMetaForm {
-    overflow-y: auto;
-    max-height: 60vh;
-    overflow-x: hidden;
     margin-top: 6%;
     margin-left: 2%;
     margin-bottom: 7%;
@@ -269,7 +266,9 @@ color: white;
 }
 
 .formDiv{
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 60vh;
 }
 
 .activetemplate{
