@@ -32,11 +32,11 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
       var template = _.template(Keyboard.htmlLayout); // eslint-disable-line no-undef
       if ($(Keyboard.constant.keyboardElement).length <= 0) { // eslint-disable-line no-undef
         $("#gameArea").append(template({ inputValue: Keyboard.targetInput.value.trim() })); // eslint-disable-line no-undef
-        $("#firstRowAlpha").ready(function() {
-          if($("#firstRowAlpha").height() > 90)
-          EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"info",message:"Please reduce number of keys and check preview again."});
-        });
       }
+      $("#firstRowAlpha").ready(function() {
+        if($("#firstRowAlpha").height() > 90)
+        EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"info",message:"Please reduce number of keys and check preview again."});
+      });
     }
   },
   hideKeyboard: function() {
