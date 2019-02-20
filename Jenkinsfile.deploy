@@ -1,0 +1,36 @@
+package Deploy
+node() {
+    try {
+        String ANSI_GREEN = "\u001B[32m"
+        String ANSI_NORMAL = "\u001B[0m"
+        String ANSI_BOLD = "\u001B[1m"
+        String ANSI_RED = "\u001B[31m"
+        String ANSI_YELLOW = "\u001B[33m"
+
+            ansiColor('xterm') {
+                stage('deploy artifact') {
+                    cleanWs()
+                    copyArtifacts projectName: params.absolute_job_path, fingerprintArtifacts: true, flatten: true
+                    artifact_name = sh(returnStdout: true, script: 'jq -r .artifact_name metadata.json').trim()
+                    artifact_version = sh(returnStdout: true, script: 'jq -r .artifact_version metadata.json').trim()
+                    artifact = artifact_name + ":" + artifact_version
+                    withCredentials([usernamePassword(credentialsId: 'c355944d-b149-42d5-b913-10627dfc9765', passwordVariable: 'azure_account_key', usernameVariable: 'azure_account_name')]) {
+                    sh """
+                       unzip ${artifact}
+                       unzip -o content-plugins.zip -d content-plugins
+                       sed -i -e 's/,"Bearer eyJhbGsg"//g' content-plugins/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js
+                       sed -i -e 's/,"Bearer eysg"//g' content-plugins/org.ekstep.assetbrowser-1.0/editor/plugin.js
+                       chmod a+x content-plugins/az_copy.sh
+                       content-plugins/az_copy.sh dev
+                    """
+                   }
+                    
+                    currentBuild.description = "${artifact_version}"
+                }
+            }
+    }
+    catch (err) {
+        currentBuild.result = "FAILURE"
+        throw err
+    }
+}
