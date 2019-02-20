@@ -65,7 +65,14 @@
         </div>
     </div>
     <div class="content">
-    <p>{{configData.description}}</p>
+        <div ng-if="configData.sampleUploadCsvFileLink">
+            <div class="csvdescription">{{configData.description}}</div>
+            <div class="sampleuploadcsv"><a href={{configData.sampleUploadCsvFileLink}}>{{configData.sampleUploadCsvFile}}</a></div>
+        </div>
+        <div ng-if="configData.sampleUpdateCsvFileLink">
+            <div>{{configData.description}}</div>
+            <div class="sampleupdatecsv"><a href={{configData.sampleUpdateCsvFileLink}}>{{configData.sampleUpdateCsvFile}}</a></div>
+        </div>
     <div class="content padding-top-0">
         <div id="upload-csv-div"></div>
         <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left: 46%;
