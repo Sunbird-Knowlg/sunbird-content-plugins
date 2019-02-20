@@ -65,8 +65,8 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>÷</span></div>\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>×</span></div>\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>=</span></div>\
-                <div class="special_keys" onclick="Keyboard.addLetter(event);" id="<_btn"><span>&lt;</span></div>\
-                <div class="special_keys" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
+                <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);" id="<_btn"><span>&lt;</span></div>\
+                <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
             </div>\
             <div class="third-row-numeric">\
                 <div style="margin-right: -9%;">\
