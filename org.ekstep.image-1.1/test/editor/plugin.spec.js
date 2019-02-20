@@ -1,16 +1,20 @@
 'use strict'
-
+/**
+ * @author < Bhabaranjan.Panigrahi@stackroute.in >
+ */
 describe('Image Plugin', function () {
 
-    var pluginInstance, imagePluginInstance;
+    var pluginInstance, ImageInstance, stage;
 
     beforeAll(function () {
         pluginInstance = ecEditor.instantiatePlugin("org.ekstep.assetbrowser");
+        stage = ecEditor.instantiatePlugin('org.ekstep.stage');
+        console.log(stage, "this is the stage instance");
+        console.log(pluginInstance, "this is the plugin instance of assetBorwser");
     })
 
     it('should NOT instantiate  itself directly', function () {
         /*
-        *
         * Image can be added to the stage, 
         * Only After choosing it through the assetbrowser.
         *  
@@ -22,7 +26,6 @@ describe('Image Plugin', function () {
     })
 
     it('should be able to initialize after instantiating', function () {
-
         spyOn(pluginInstance, "initialize").and.callThrough();
         pluginInstance.initialize();
         expect(pluginInstance.initialize).toHaveBeenCalled();
@@ -37,25 +40,48 @@ describe('Image Plugin', function () {
 
     })
 
-    it('should add image to the stage successfully', function () {
-
-        expect(function(){
-            ecEditor.dispatchEvent('org.ekstep.image:create',
-            {
-                "asset": "do_1121907048923545601138",
-                "assetMedia": { "id": "do_1121907048923545601138", "src": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1121907048923545601138/artifact/profile-_1488123156828.png", "type": "image" }, "x": 20, "y": 20, "w": 50, "h": 50, "from": "plugin"
-            }
-        )
-        }).not.toThrow();
-    })
-
-
-    it('should thorw error with out exact image data', function(){
-        expect(function(){
-            ecEditor.dispatchEvent("org.ekstep.image:create",{
+    it('should thorw error with out exact image data', function () {
+        expect(function () {
+            ecEditor.dispatchEvent("org.ekstep.image:create", {
                 "assetMedia": { "id": "do_1121907048923545601138", "src": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1121907048923545601138/artifact/profile-_1488123156828.png", "type": "image" }, "x": 20, "y": 20, "w": 50, "h": 50, "from": "plugin"
             })
         }).toThrow()
+    })
+
+
+    it('should call the calback funtion', function (done) {
+        ecEditor.dispatchEvent('org.ekstep.image:assetbrowser:open')
+
+        pluginInstance.cb({
+            "asset": "do_1126964504967577601106",
+            "assetMedia": { "id": "do_1126964504967577601106", "src": "https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1126964504967577601106/artifact/images-9_1548236433043.thumb_1549859679975.jpg", "type": "image" }, "x": 20, "y": 20, "w": 50, "h": 50, "from": "plugin"
+        });
+        /**
+         * stage takes time to render the image
+         * stage.children will be empty without setTimeout
+         */
+        setTimeout(() => {
+            done()
+        }, 1000);
+    })
+
+    it("testing onConfigChange", function () {
+        ImageInstance = stage.children[0];
+
+        spyOn(ImageInstance, "getDisplayName");
+        spyOn(ImageInstance, "onConfigChange");
+        spyOn(ImageInstance, "getCopy");
+        ImageInstance.getDisplayName();
+        expect(ImageInstance.getDisplayName).toHaveBeenCalled();
+
+        ImageInstance.onConfigChange("browser", {
+            "asset": "do_1126964504967577601106",
+            "assetMedia": { "id": "do_1126964504967577601106", "src": "https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1126964504967577601106/artifact/images-9_1548236433043.thumb_1549859679975.jpg", "type": "image" }, "x": 20, "y": 200, "w": 50, "h": 50, "from": "plugin"
+        });
+        expect(ImageInstance.onConfigChange).toHaveBeenCalled();
+
+        ImageInstance.getCopy();
+        expect(ImageInstance.getCopy).toHaveBeenCalled();
     })
 
 })
