@@ -31,15 +31,19 @@ node() {
 
                 stage('Build') {
                     sh """
-                        rm -rf content-plugins.zip
                         zip -r content-plugins.zip content-plugins                     
                     """
                 }
                 
                 
                 stage('ArchiveArtifacts') {
-                    archiveArtifacts "content-plugins.zip:${artifact_version}"
-                    sh """echo {\\"artifact_name\\" : \\"content-plugins.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
+                    sh """
+                        mkdir content-plugins-artifacts
+                        cp content-plugins.zip content-plugins-artifacts
+                        zip -j  content-plugins-artifacts.zip:${artifact_version}  content-plugins-artifacts/*                      
+                    """
+                    archiveArtifacts "content-plugins-artifacts.zip:${artifact_version}"
+                    sh """echo {\\"artifact_name\\" : \\"content-plugins-artifacts.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
                     archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
                     currentBuild.description = "${artifact_version}"
                 }
