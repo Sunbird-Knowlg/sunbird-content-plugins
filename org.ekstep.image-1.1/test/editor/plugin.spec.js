@@ -6,11 +6,9 @@ describe('Image Plugin', function () {
 
     var pluginInstance, ImageInstance, stage;
 
-    beforeAll(function () {
+    beforeAll(function () {        
         pluginInstance = ecEditor.instantiatePlugin("org.ekstep.assetbrowser");
         stage = ecEditor.instantiatePlugin('org.ekstep.stage');
-        console.log(stage, "this is the stage instance");
-        console.log(pluginInstance, "this is the plugin instance of assetBorwser");
     })
 
     it('should NOT instantiate  itself directly', function () {
