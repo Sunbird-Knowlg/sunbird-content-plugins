@@ -564,6 +564,9 @@ angular.module('createquestionapp', [])
       var assessmentId = undefined;
       var questionBody = JSON.parse(qData.body);
       if (qData.framework != ecEditor.getContext('framework')) {
+        qData.identifier = "";
+        qData.name = "Copy of - " + qData.name;
+        qData.title = "Copy of - " + qData.title;
         ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", qData);
       } else {
         questionBody.data.config.metadata.title = "Copy of - " + questionBody.data.config.metadata.title;
