@@ -41,7 +41,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 	$scope.questionMetaData = {};
   $scope.previewMessage = 'Please check preview before saving';
   $scope.formulaLimitMsg = 'Preview the question and split long formulae to ensure they are displayed correctly.';
-  $scope.formulaCount = 0;
+  $scope.isFormulaAdded = false;
 	$scope.init = function () {
 		ecEditor.addEventListener('editor:template:loaded', function (event, object) {
 			if(object.formAction == 'question-meta-save') {
@@ -463,7 +463,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	})
   }
   $scope.showEquationMessage = function(event, object){
-    $scope.formulaCount++;
+    $scope.isFormulaAdded = true;
   }
   ecEditor.addEventListener('org.ekstep.mathtext:addEquation', $scope.showEquationMessage, $scope); 
   $scope.init();
