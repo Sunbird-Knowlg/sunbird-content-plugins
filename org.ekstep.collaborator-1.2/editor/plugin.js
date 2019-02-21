@@ -29,7 +29,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             width: 851,
             showClose: false,
             closeByDocument: false,
-            closeByEscape: false,
+            closeByEscape: true,
             className: 'ngdialog-theme-plain'
         }, function () { });
 
