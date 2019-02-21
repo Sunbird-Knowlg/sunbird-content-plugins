@@ -97,7 +97,7 @@
           <span class="has-success-text" ng-show="mcqFormData.options.length<2">Minimum two answer will be required</span>
           <div class="one column row">
             <div class="column addAns">
-              <button class="ui primary basic button large" id="mcq-add-ans-button" ng-click="addAnswerField();generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mcq-add-answer', ver: '', type: 'button'}});">Add answer</button>
+              <button class="ui primary basic button large" id="mcq-add-ans-button" ng-click="addAnswerField();generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mcq-add-answer', ver: '', type: 'button'}});" ng-if="mcqFormData.options.length < 8">Add answer </button>
             </div>
           </div>
         </div>
