@@ -25,7 +25,6 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
             }
         })
     }
-    $scope.setToolTip();
 
     $scope.previewContent = function (fromBeginning) {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
@@ -132,6 +131,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
 
 
     $scope.init = function () {
+        $scope.setToolTip();
         setTimeout(function () {
             // Show the preview dropdown on hovering over dropdown icon beside preview icon
             org.ekstep.contenteditor.api.jQuery('#previewDropdown').dropdown({ on: 'hover' });
