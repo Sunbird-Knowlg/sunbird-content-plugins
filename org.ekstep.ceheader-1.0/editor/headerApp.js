@@ -1,4 +1,4 @@
-angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).controller('headerController', ['$scope', '$window', function($scope,$window) {
+angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).controller('headerController', ['$scope', '$window', function ($scope, $window) {
 
     $scope.manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.ceheader");
     $scope.reportIssueLink = (($window.context && $window.context.reportIssueLink) ? $window.context.reportIssueLink : "");
@@ -14,27 +14,39 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
         'status': navigator.onLine,
         'text': 'Internet Connection not available'
     };
+    $scope.toolTip = "Add Collaborator"
 
-    $scope.previewContent = function(fromBeginning) {
+    $scope.setToolTip = function () {
+        $scope.contentService.getContent(ecEditor.getContext('contentId'), function (err, res) {
+            if (err) {
+                console.log("some error while making the api call");
+            } else {
+                $scope.toolTip = (res.createdBy === ecEditor.getContext('uid')) ? "Add Collaborator" : "View Collaborator";
+            }
+        })
+    }
+    $scope.setToolTip();
+
+    $scope.previewContent = function (fromBeginning) {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
     }
 
-    $scope.saveContent = function() {
+    $scope.saveContent = function () {
         $scope.saveBtnEnabled = false;
         ecEditor.dispatchEvent('org.ekstep.contenteditor:save', {});
     }
 
-    $scope.onSave = function() {
+    $scope.onSave = function () {
         $scope.pendingChanges = false;
         $scope.lastSaved = Date.now();
         $scope.$safeApply();
     }
 
-    $scope.routeToContentMeta = function(save) {
+    $scope.routeToContentMeta = function (save) {
         if (save) {
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save', {
-                callback: function(err, res) {
+                callback: function (err, res) {
                     if (res) window.location.assign(window.context.editMetaLink);
                 }
             });
@@ -43,21 +55,21 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
         }
     };
 
-    $scope.editContentMeta = function() {
+    $scope.editContentMeta = function () {
         var config = {
             template: ecEditor.resolvePluginResource($scope.manifest.id, $scope.manifest.ver, "editor/partials/editContentMetaDialog.html"),
-            controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
-                $scope.routeToContentMeta = function(save) {
+            controller: ['$scope', 'mainCtrlScope', function ($scope, mainCtrlScope) {
+                $scope.routeToContentMeta = function (save) {
                     $scope.closeThisDialog();
                     mainCtrlScope.routeToContentMeta(save);
                 }
 
-                $scope.fireTelemetry = function(data) {
+                $scope.fireTelemetry = function (data) {
                     mainCtrlScope.telemetryService.interact({ "type": "click", "subtype": data.subtype, "target": data.target, "pluginid": $scope.manifest.id, 'pluginver': $scope.manifest.ver, "objectid": data.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
                 }
             }],
             resolve: {
-                mainCtrlScope: function() {
+                mainCtrlScope: function () {
                     return $scope;
                 }
             },
@@ -67,27 +79,27 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
         org.ekstep.contenteditor.api.getService('popup').open(config);
     }
 
-    $scope.fireEvent = function(event) {
+    $scope.fireEvent = function (event) {
         if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
     };
 
-    $scope.fireTelemetry = function(menu, menuType) {
+    $scope.fireTelemetry = function (menu, menuType) {
         $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": $scope.manifest.id, 'pluginver': $scope.manifest.ver, "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
     };
 
-    $scope.internetStatusFn = function(event) {
-        $scope.$safeApply(function() {
+    $scope.internetStatusFn = function (event) {
+        $scope.$safeApply(function () {
             $scope.internetStatusObj.status = navigator.onLine;
         })
     };
 
-    $scope.setSaveStatus = function(event, data) {
+    $scope.setSaveStatus = function (event, data) {
         $scope.pendingChanges = true;
         $scope.saveBtnEnabled = true;
         $scope.$safeApply();
     }
 
-    window.onbeforeunload = function(e) {
+    window.onbeforeunload = function (e) {
         if ($scope.pendingChanges === true) {
             return "You have unsaved unsaved changes";
         }
@@ -102,7 +114,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     ecEditor.addEventListener('stage:reorder', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('object:removed', $scope.setSaveStatus, $scope);
 
-    ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);    
+    ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
     ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
     org.ekstep.contenteditor.api.jQuery('.browse.item.at').popup({ on: 'click', setFluidWidth: false, position: 'bottom right' });
 
@@ -112,15 +124,15 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     $scope.previousversion = store.get('previousversion') || 0;
     $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
 
-    $scope.displayWhatsNew = function() {
+    $scope.displayWhatsNew = function () {
         $scope.fireEvent({ id: 'org.ekstep.whatsnew:showpopup' });
         store.set('previousversion', $scope.nextversion);
         $scope.whatsNewBadge = false;
     };
 
 
-    $scope.init = function() {
-        setTimeout(function() {
+    $scope.init = function () {
+        setTimeout(function () {
             // Show the preview dropdown on hovering over dropdown icon beside preview icon
             org.ekstep.contenteditor.api.jQuery('#previewDropdown').dropdown({ on: 'hover' });
 
