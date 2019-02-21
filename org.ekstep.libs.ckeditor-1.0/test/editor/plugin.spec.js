@@ -1,7 +1,7 @@
 
 
 describe("CKEditorPlugin", function () {
-  var plugin, popupService, $compile, $rootScope;
+  var plugin;
   beforeAll(function (done) {
     ContentEditorTestFramework.init(function () {
 
@@ -31,7 +31,7 @@ describe("CKEditorPlugin", function () {
         var inputText, inputTextAsElement;
         expect(true).toBeTrue();
         expect(event.editor.plugins.urdu).toBeObject();
-        event.editor.setData('<p>رنرونورن </p>');
+        event.editor.setData('<p>رنرونورن </p>')  ;
         event.editor.commands.urduSupport.exec();
         inputText = event.editor.getData();
         inputTextAsElement = new DOMParser().parseFromString(inputText, 'text/html').body.firstElementChild;
