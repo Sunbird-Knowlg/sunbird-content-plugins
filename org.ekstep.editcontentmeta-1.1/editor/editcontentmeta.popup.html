@@ -1,6 +1,11 @@
+
+
+
+
 <script type="text/ng-template" ng-app="org.ekstep.editcontentmeta" ng-controller="editcontentmetaController as $ctrl" id="partials_org.ekstep.editcontentmeta.popup.html">
+    <div class="sb-modal">
     <div class="ui modal active" id="meta-modal">
-        <div class="header">
+        <div class="sb-modal-header">
             <div class="ui two column grid">
                 <div class="row">
                     <div class="column">
@@ -12,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="content">
+        <div class="sb-modal-content">
             <div class="ui fluid grid container">
                 <div class="row">
                     <div class="column content-meta" id="content-meta">
@@ -111,14 +116,14 @@
                 </div>
             </div>
         </div>
-        <div class="actions">
+        <div class="sb-modal-actions">
             <div class="twelve wide column right aligned">
                 <div class="ui buttons">
-                    <button id="closePopUp" class="ui orange button" type="button" ng-click="$ctrl.cancel(); generateTelemetry({type: 'click', subtype: 'button', target: 'closePopUp'})">Cancel</button>
-                    <div class="or"></div>
-                    <button class="ui blue button" type="button" ng-click="$ctrl.saveMeta(contentMetaForm.$valid); generateTelemetry({type: 'click', subtype: 'button', target: 'save'})">Save</button>
+                    <button id="closePopUp" class="sb-btn sb-btn-normal sb-btn-outline-primary" type="button" ng-click="$ctrl.cancel(); generateTelemetry({type: 'click', subtype: 'button', target: 'closePopUp'})">Cancel</button>
+                    <button class="sb-btn sb-btn-normal sb-btn-primary" type="button" ng-click="$ctrl.saveMeta(contentMetaForm.$valid); generateTelemetry({type: 'click', subtype: 'button', target: 'save'})">Save</button>
                 </div>
             </div>
         </div>
     </div>
 </script>
+
