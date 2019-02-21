@@ -1,3 +1,11 @@
+/*
+ * Custom CK-Editor Plugin for urdu language support
+ * Sivashanmugam Kannan<sivashanmugam.kannan@funtoot.com>
+ * @example 
+ * Add urdu as part of extra Plugins in ck-editor config
+ * config.extraPlugins = 'urdu'
+ */
+
 (function () {
     CKEDITOR.plugins.add('urdu', {
         init: function (editor) {
@@ -6,6 +14,12 @@
             editor.on('contentDom', function () {
                 this.editable().attachListener(editor.document, 'input', checkAddUrduSupport);
             })
+
+            editor.addCommand( 'urduSupport', {
+                exec: function() {
+                    checkAddUrduSupport();
+                }
+            });
 
             function checkAddUrduSupport() {
                 var inputText = editor.getData();
