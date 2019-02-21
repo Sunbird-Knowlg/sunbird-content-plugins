@@ -100,6 +100,10 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       correctAnswer = true;
       numOfCorrectAns = 1;
     }
+    var tempObj = {
+      "key": userText
+    }
+    telemetryAnsArr.push(tempObj);
 
     var result = {
       eval: correctAnswer,
