@@ -26,18 +26,18 @@
             </div>
         </div>
         <div class="nine wide column editor-body">
-            <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" data-attr="{{page.objectType[0]}}" ng-include="page.identifier || page.templateURL"></div>
+            <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" data-attr="{{page.objectType[0]}}" ng-include="page.templateURL"></div>
             <div class="ui grid no-margin" ng-show="!isNewCollection">
                 <div class="padded ui eight" ng-class="(showsuggestedContent && mode === 'Edit') ? 'wide column' : 'twelve wide column'" id="contents-pane">
                     <div class="content-manifest">
-                        <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" data-attr="{{page.objectType[0]}}" ng-include="page.identifier || page.templateURL"></div>
+                        <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" data-attr="{{page.objectType[0]}}" ng-include="page.templateURL"></div>
                     </div>
                     <div class="ui grid padded">
                         <div class="row">
                             <div class="twelve wide column list-container" ng-show="!isContent">
-                                <div class="list-header">
+                                <div class="list-header d-flex">
                                     <div class="ui label list-leftheader">RESOURCES</div>
-                                    <button class="ui blueBackGround whiteColor button list-addResource" ng-click="addResource()" ng-show="!isCollection && mode === 'Edit'">ADD RESOURCE</button>
+                                    <button class="sb-btn sb-btn-normal sb-btn-primary ml-auto" ng-click="addResource()" ng-show="!isCollection && mode === 'Edit'">ADD RESOURCE</button>
                                 </div>
                                 <div class="ui" id="content-list">
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">

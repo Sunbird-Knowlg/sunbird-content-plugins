@@ -1,5 +1,5 @@
 <script type="text/ng-template" ng-app="org.ekstep.uploadfile-1.0" ng-controller="uploadfileController as $ctrl" id="partials_org.ekstep.uploadfile.html">
-<div type="text/template" id="qq-template-validation" style="display: none">
+    <div type="text/template" id="qq-template-validation" style="display: none">
     <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:250px;">
 
         <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
@@ -53,7 +53,7 @@
         </dialog>
     </div>
 </div>
-<div class="ui modal active upload-csv-modal">
+<!-- <div class="ui modal active upload-csv-modal">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
@@ -89,6 +89,41 @@
             <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="configData.buttonText.exitBtn"></button>
             <div class="or"></div>
             <button class="ui blue button" id="uploadTocFile" ng-click="generateTelemetry({subtype:'upload',target:'uploadButton'})" ng-disabled="showLoaderIcon">{{configData.buttonText.primaryBtn}}</button>
+        </div>
+    </div>
+</div> -->
+<div class="sb-modal">
+    <div class="ui modal active normal">
+        <div class="sb-modal-header">
+            <label>{{configData.headerTitle}}</label>
+            <i class="close icon" id="resourceCloseBtn" ng-click="uploadFormClose()"></i>
+        </div>
+        <div class="sb-modal-content">
+            <div ng-if="configData.sampleUploadCsvFileLink">
+                <div class="csvdescription">{{configData.description}}</div>
+                <div class="sampleuploadcsv"><a href={{configData.sampleUploadCsvFileLink}}>{{configData.sampleUploadCsvFile}}</a></div>
+            </div>
+            <div ng-if="configData.sampleUpdateCsvFileLink">
+                <div>{{configData.description}}</div>
+                <div class="sampleupdatecsv"><a href={{configData.sampleUpdateCsvFileLink}}>{{configData.sampleUpdateCsvFile}}</a></div>
+            </div>
+            <div class="content padding-top-0">
+                <div id="upload-csv-div"></div>
+                <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left: 46%;
+                            position:absolute; padding:2px;"><img
+                        ng-src="{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
+                <div class="ui message">
+                    <ul class="list">
+                        <li>File accepted - csv</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="sb-modal-actions">
+            <button class="sb-btn sb-btn-normal sb-btn-primary" id="uploadTocFile" ng-click="generateTelemetry({subtype:'upload',target:'uploadButton'})"
+            ng-disabled="showLoaderIcon">{{configData.buttonText.primaryBtn}}</button>
+            <button class="sb-btn sb-btn-normal sb-btn-outline-primary" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})"
+            ng-disabled="showLoaderIcon" ng-bind="configData.buttonText.exitBtn"></button>
         </div>
     </div>
 </div>

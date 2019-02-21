@@ -1,6 +1,6 @@
 <!-- footer template -->
 <div class="footerElement">
-    <div class=" ui clearing segment">
+    <!-- <div class=" ui clearing segment">
         <div class="ui grid">
             <div class="four wide column">
                 <button ng-disabled="mainTemplate == 'facetsItemView' ? (true) : (mainTemplate == 'cardDetailsView' ? (false) : ((mainTemplate == 'selectedResult' && !$ctrl.facetsResponse.result.response.sections.length) ? (true) : (false))) " class="ui left floated tiny button btnAttribute blueColor whiteBackGround" ng-click="backToPrevious()">
@@ -16,5 +16,16 @@
                 <button class="ui right floated whiteColor blueBackGround tiny button proceed-btn" ng-click="returnSelectedLessons(mainTemplate, lessonSelection)" ng-disabled="!lessonSelection.length"> PROCEED </button>
             </div>
         </div>
+    </div> -->
+    <div class="sb-modal-actions">
+        <button class="sb-btn sb-btn-normal sb-btn-primary" ng-click="returnSelectedLessons(mainTemplate, lessonSelection)" ng-disabled="!lessonSelection.length"> PROCEED </button>
+        <button ng-disabled="mainTemplate == 'facetsItemView' ? (true) : (mainTemplate == 'cardDetailsView' ? (false) : ((mainTemplate == 'selectedResult' && !$ctrl.facetsResponse.result.response.sections.length) ? (true) : (false)))" class="sb-btn sb-btn-normal sb-btn-outline-primary" ng-click="backToPrevious()"> BACK </button>
+        <div class="selectedItems mr-auto ml-auto">
+            <span class="" ng-show="(mainTemplate == 'selectedResult'|| mainTemplate == 'cardDetailsView')">{{lessonSelection.length}} Selected
+                <a class="blueColor" ng-style="lessonSelection.length && {'cursor':'pointer'}  || !lessonSelection.length && {'cursor':'not-allowed'}"
+                ng-click="lessonSelection.length ? SelectedItems() : 'null'">View</a>
+            </span>
+        </div>
+        
     </div>
 </div>

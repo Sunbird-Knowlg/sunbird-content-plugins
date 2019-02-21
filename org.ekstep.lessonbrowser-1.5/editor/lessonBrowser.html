@@ -1,8 +1,8 @@
 <script type="text/ng-template" ng-app="org.ekstep.lessonbrowserapp" ng-controller="lessonController as $ctrl" id="partials/lessonbrowser.html">
-    <div class="ui active fullscreen modal fullScreeenModal">
-        <!-- lessonbrowser header -->
+    <!-- <div class="ui active fullscreen modal fullScreeenModal">
+        <!-- lessonbrowser header ->
         <div ng-include="headerTemplate"></div>
-        <!-- MainTemplate html-->
+        <!-- MainTemplate html->
         <div class="bodyContainer">
             <div class="ui active inverted dimmer" ng-if="isLoading">
                 <div class="ui large text loader">Loading</div>
@@ -39,7 +39,53 @@
                 </div>
             </div>
         </div>
-        <!-- lessonbrowser footer -->
+        <!-- lessonbrowser footer ->
         <div ng-include="footerTemplate"></div>
+    </div> -->
+    <div class="sb-modal">
+        <div class="ui active modal sb-modal-fullscreen">
+            <!-- lessonbrowser header -->
+            <div ng-include="headerTemplate" class="sb-modal-header"></div>
+            <!-- MainTemplate html-->
+            <div class="">
+                <div class="ui active inverted dimmer" ng-if="isLoading">
+                    <div class="ui large text loader">Loading</div>
+                </div>
+                <div ng-if="mainTemplate == 'selectedResult'" class="pt-20">
+                    <div class="ui grid">
+                        <div class="two wide column rightBorder">
+                            <div ng-include="filterForm"></div>
+                        </div>
+                        <div class="ten wide column">
+                            <div ng-include="cardTemplate"></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="mainTemplate == 'addedItemsView'">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <div class="addedItems" ng-include="cardTemplate"></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="mainTemplate == 'facetsItemView'">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <div ng-include="facetsTemplate"></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="mainTemplate == 'cardDetailsView'" class="fullHeight">
+                    <div class="ui grid fullHeight">
+                        <div class="twelve wide column">
+                            <div class="addedItems fullHeight" ng-include="cardDetailsTemplate"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- lessonbrowser footer -->
+            <div ng-include="footerTemplate"></div>
+
+        </div>
     </div>
 </script>
