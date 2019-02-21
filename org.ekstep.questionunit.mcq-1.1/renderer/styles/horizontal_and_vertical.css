@@ -260,6 +260,10 @@
     padding-right: 8%;
 }
 
+.mcq-content-container .option-container.horizontal .option-block-container .option-block .option-text-container.with-audio .urdu-text{
+    margin-right:-9%; /* to override padding-right of the parent element*/
+}
+
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-text-container.with-audio.with-image {
     margin-left: 15%;
 }
