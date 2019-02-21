@@ -17,7 +17,7 @@ node() {
                     withCredentials([usernamePassword(credentialsId: 'c355944d-b149-42d5-b913-10627dfc9765', passwordVariable: 'azure_account_key', usernameVariable: 'azure_account_name')]) {
                     sh """
                        unzip ${artifact}
-                       unzip -o content-plugins.zip -d content-plugins
+                       unzip content-plugins.zip
                        sed -i -e 's/,"Bearer eyJhbGsg"//g' content-plugins/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js
                        sed -i -e 's/,"Bearer eysg"//g' content-plugins/org.ekstep.assetbrowser-1.0/editor/plugin.js
                        chmod a+x content-plugins/az_copy.sh
