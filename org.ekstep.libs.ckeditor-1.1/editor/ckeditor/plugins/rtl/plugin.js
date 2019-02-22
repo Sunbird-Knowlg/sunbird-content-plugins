@@ -62,16 +62,18 @@
                 var inputTextAsElement = new DOMParser().parseFromString(inputText, 'text/html').body.firstElementChild;
                 if (inputTextAsElement) {
                     var rtlLang = RTL.isTRUE(inputText);
+                    var elementDir = "dir";
+                    var elementRtl = "rtl";
                     if (rtlLang) {
-                        if (inputTextAsElement.getAttribute('dir') != 'rtl') {
-                            inputTextAsElement.setAttribute("dir", "rtl");
+                        if (inputTextAsElement.getAttribute(elementDir) != elementRtl) {
+                            inputTextAsElement.setAttribute(elementDir, elementRtl);
                             rtlLang.addStyle(inputTextAsElement)
                             editor.setData(inputTextAsElement.outerHTML);
                         }
                     } else {
-                        if (inputTextAsElement.getAttribute('dir') == 'rtl') {
+                        if (inputTextAsElement.getAttribute(elementDir) == elementRtl) {
                             RTL.removeStyle(inputTextAsElement);
-                            inputTextAsElement.removeAttribute("dir");
+                            inputTextAsElement.removeAttribute(elementDir);
                             editor.setData(inputTextAsElement.outerHTML);
                         }
                     }
