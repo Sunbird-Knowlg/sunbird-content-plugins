@@ -72,7 +72,7 @@
     },
     {
       "plugin": "org.ekstep.keyboard",
-      "ver": "1.0",
+      "ver": "1.1",
       "type": "plugin",
       "scope": "renderer"
     }
