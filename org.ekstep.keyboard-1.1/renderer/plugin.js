@@ -33,6 +33,13 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
       if ($(Keyboard.constant.keyboardElement).length <= 0) { // eslint-disable-line no-undef
         $("#gameArea").append(template({ inputValue: Keyboard.targetInput.value.trim() })); // eslint-disable-line no-undef
       }
+      $("#firstRowAlpha").ready(function() {
+        var childs = $("#firstRow").children();
+        var position = $(childs[childs.length-1]).position();
+        var parentHeight = $("#firstRow").height();
+        if(position.top > parentHeight)
+          EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"info",message:"Please reduce number of keys and check preview again."});
+      });
     }
   },
   hideKeyboard: function() {
