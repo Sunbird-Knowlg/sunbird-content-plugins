@@ -30,11 +30,12 @@ CKEDITOR.editorConfig = function (config) {
     // { name: 'document',     groups: [ 'mode', 'document', 'doctools' ] },
     // { name: 'others' },
     '/',
-    {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+    {name: 'basicstyles', groups: ['basicstyles']},
     // {name: 'paragraph', groups: ['list', 'align']},
     {name: 'styles'},
     {name: 'colors'},
-    {name: 'input'}
+    {name: 'input'},
+    {name: 'cleanup'}
   ];
   // Font pixel to wm conversion done based on taking 14px = 1em;
   config.fontSize_sizes = '18/1.285714285em;20/1.428571428em;22/1.571428571em;24/1.714285714em;26/1.857142857em;28/2em;';
@@ -45,7 +46,7 @@ CKEDITOR.editorConfig = function (config) {
 
   // Remove some buttons provided by the standard plugins, which are
   // not needed in the Standard(s) toolbar.
-  config.removeButtons = 'Subscript,Superscript,Font,Format';
+  config.removeButtons = 'Subscript,Superscript,Font,Format,Strike';
 
   // Set the most common block elemnts.
   // config.format_tags = 'p;h1;h2;h3';

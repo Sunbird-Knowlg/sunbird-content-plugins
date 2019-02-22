@@ -70,7 +70,12 @@
       });
 
       editor.on('afterPaste', function (e) {
-        CKEDITOR.instances[e.editor.name].setData(e.editor.getData())
+        CKEDITOR.instances[e.editor.name].setData(e.editor.getData(),function(){
+          var editor = e.editor;
+          var range = editor.createRange();
+          range.moveToElementEditablePosition( editor.editable(), true );
+          editor.getSelection().selectRanges( [ range ] );  
+        });
       });
 
       // Disallow links to be pasted in content.

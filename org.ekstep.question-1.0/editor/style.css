@@ -155,10 +155,12 @@ color: white;
     margin-top: 1%;
     margin-right: 2%;
 }
-
 .ui.grid .column.previewArea {
     margin-top: -14px;
     background-color: #F0F0F0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: calc(100vh - 130px);
 }
 
 .previewAreaHead {
@@ -262,11 +264,13 @@ color: white;
 .preview-heading {
     padding: 0;
     width: 480px;
-    text-align: center;
+    text-align: left;
 }
 
 .formDiv{
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: calc(100vh - 144px);
 }
 
 .activetemplate{
