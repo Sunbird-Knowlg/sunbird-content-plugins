@@ -1,27 +1,11 @@
-::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
-}
 
-::-webkit-scrollbar
-{
-	width: 10px;
-	background-color: #F5F5F5;
-}
-
-::-webkit-scrollbar-thumb
-{
-	background-color: #000000;
-	border: 2px solid #555555;
-}
 
 #keyboardDiv {
   position: absolute;
-  top: 45%;
   left: 0;
   right: 0;
   bottom: 0;
+  height: 50%;
 }
 
 .ansField {
@@ -41,27 +25,23 @@
 }
 
 .textBoxArea {
-  position: absolute;
+  position: relative;
   z-index: 20;
   width: 50%;
   background: #447dc1;
   margin: 0 auto;
-  margin-top: -45px;
-  left: 0px;
-  right: 0px;
-  top: 28%;
+  top: -4%;
 }
 
 .parentDivMainKeyboard,
 #parentDivNumericKeyboard {
-  width: 100%;
-  bottom: 0%;
-  position: fixed;
-  left: 0%;
-  font-size: 2.5vw;
-  z-index: 10;
-  background-color: #65a0e6;
-  top: 58%;
+    width: 100%;
+    height: 80%;
+    position: relative;
+    padding-top: 2%;
+    font-size: 2.5vw;
+    z-index: 10;
+    background-color: #65a0e6;
 }
 
 #parentDivNumericKeyboard {
@@ -71,7 +51,6 @@
 .key_barakhadi:active,
 .key_barakhadi_numeric:active {
   background-color: rgb(215, 215, 215);
-  height: 70%;
 }
 
 .special_keys {
@@ -113,65 +92,55 @@
   height: 38px;
 }
 
-.spaceBar {
-  float: left;
+.spaceBar { 
   border: none;
-  margin: 2px;
   width: 50%;
-  background: #084690;
   border-radius: 3px;
   height: 30px;
-  display: inline-block;
-  cursor: pointer;
 }
 
-#firstRowAlpha {
+#firstRow {
   width: 100%;
-  top: 4%;
-  position: relative;
   display: flex;
-  flex-wrap: wrap;    
+  flex-wrap: wrap;
+  overflow-y: hidden;
   align-items: center;
   justify-content: center;
+  height: 66%;
 }
 
-#thirdRowAlpha {
-  height: 17%;
-  width: 80%;
-  left: 0px;
-  right: 0px;
-  top: 85%;
-  position: fixed;
+#thirdRow {
+  height: 34%;
+  width: 100%;
+  padding-left: 8%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
   align-items: center;
-  bottom: 0px;
   background: rgb(101, 160, 230);
 
 }
 
 #firstRowNum {
-  top: 5%;
   width: 100%;
-  height: auto;
-  position: relative;
   display: flex;
-  flex-wrap: wrap;    
+  flex-wrap: wrap;
+  overflow-y: hidden;
   align-items: center;
   justify-content: center;
-  margin-bottom: 34px;    
-  max-height: 65px;
-  height: 65px;
+  height: 66%;
 }
 
 #parentDivEraser {
-  width: 80%;
-  height: 100%;
-  top: 55%;
-  position: absolute;
-  left: 10%;
+  float: left; 
+  text-align: center;
+  min-width: 6%;
+  margin-bottom: 2%;
+  margin-right: 1%;
+  width: auto;
+  padding: 1% 1%;
+  cursor: pointer;
 }
 
 .erasedDivParent{
@@ -231,18 +200,22 @@ img.qc-language-icon {
 }
 
 .third-row-numeric {
-  width: 80%;
-  top: 88%;
-  left: 0px;
-  right: 0px;
-  position: fixed;
+  height: 34%;
+  width: 100%;
+  padding-left: 8%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
   align-items: center;
-  bottom: 0px;
-  border-top-left-radius:5px;
-  border-top-right-radius:5px;
-  background: rgba(101, 160, 230, 1);
+  background: rgb(101, 160, 230);
+}
+
+.erase-icon{
+  text-align: center;
+  flex-grow: inherit;
+  min-width: 6%;
+  margin-bottom: 2%;
+  margin-right: 1%;
+  width: auto;
 }

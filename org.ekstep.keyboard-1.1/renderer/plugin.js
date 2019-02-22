@@ -34,8 +34,11 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
         $("#gameArea").append(template({ inputValue: Keyboard.targetInput.value.trim() })); // eslint-disable-line no-undef
       }
       $("#firstRowAlpha").ready(function() {
-        if($("#firstRowAlpha").height() > 90)
-        EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"info",message:"Please reduce number of keys and check preview again."});
+        var childs = $("#firstRow").children();
+        var position = $(childs[childs.length-1]).position();
+        var parentHeight = $("#firstRow").height();
+        if(position.top > parentHeight)
+          EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"info",message:"Please reduce number of keys and check preview again."});
       });
     }
   },
