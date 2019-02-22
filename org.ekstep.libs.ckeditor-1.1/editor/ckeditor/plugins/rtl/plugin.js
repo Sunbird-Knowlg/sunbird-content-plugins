@@ -10,13 +10,15 @@
     CKEDITOR.plugins.add('rtl', {
         init: function (editor) {
 
-            function RTLLang(language, unicodes, cssClass) {
+            function RTL(language, unicodes, cssClass) {
                 this.language = language;
                 this.unicodes = unicodes;
                 this.cssClass = cssClass
             }
-            RTLLang.list = [];
-            RTLLang.isRTL = function(string) {
+
+            RTL.list = [];
+
+            RTL.isTRUE = function(string) {
                 var returnVal;
                 this.list.forEach(function (lang) {
                     if(lang.containsLangText(string)){
@@ -26,13 +28,13 @@
                 return returnVal;
             }
 
-            RTLLang.removeStyle = function(element){
+            RTL.removeStyle = function(element){
                 this.list.forEach(function (lang) {
                     element.classList.remove(lang.cssClass);
                 })
             }
 
-            RTLLang.prototype = {
+            RTL.prototype = {
                 containsLangText: function (string) {
                     return this.unicodes.test(string)
                 },
@@ -42,7 +44,7 @@
             }
 
             // Push the RTL support required languages list here
-            RTLLang.list.push(new RTLLang('urdu', /[\u0600-\u06FF]/, 'urdu-text'));
+            RTL.list.push(new RTL('urdu', /[\u0600-\u06FF]/, 'urdu-text'));
 
             editor.on('afterPaste', addRTLSupport)
             editor.on('contentDom', function () {
@@ -59,7 +61,7 @@
                 var inputText = editor.getData();
                 var inputTextAsElement = new DOMParser().parseFromString(inputText, 'text/html').body.firstElementChild;
                 if (inputTextAsElement) {
-                    var rtlLang = RTLLang.isRTL(inputText);
+                    var rtlLang = RTL.isTRUE(inputText);
                     if (rtlLang) {
                         if (inputTextAsElement.getAttribute('dir') != 'rtl') {
                             inputTextAsElement.setAttribute("dir", "rtl");
@@ -68,7 +70,7 @@
                         }
                     } else {
                         if (inputTextAsElement.getAttribute('dir') == 'rtl') {
-                            RTLLang.removeStyle(inputTextAsElement);
+                            RTL.removeStyle(inputTextAsElement);
                             inputTextAsElement.removeAttribute("dir");
                             editor.setData(inputTextAsElement.outerHTML);
                         }
