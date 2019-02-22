@@ -4,7 +4,7 @@
  */
 CKEDITOR.editorConfig = function (config) {
 
-  config.extraPlugins = 'notification,font,justify,colorbutton,mathtext,wordcount,pastefromword,clipboard';
+  config.extraPlugins = 'rtl,notification,font,justify,colorbutton,mathtext,wordcount,pastefromword,clipboard';
 
   // Mathtext related config
   config.katexCSS = CKEDITOR.basePath + 'plugins/mathtext/libs/katex/katex.min.css';
