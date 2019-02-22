@@ -4,7 +4,7 @@
  */
 CKEDITOR.editorConfig = function (config) {
 
-  config.extraPlugins = 'notification,font,justify,colorbutton,mathtext,wordcount,pastefromword,clipboard';
+  config.extraPlugins = 'rtl,notification,font,justify,colorbutton,mathtext,wordcount,pastefromword,clipboard';
 
   // Mathtext related config
   config.katexCSS = CKEDITOR.basePath + 'plugins/mathtext/libs/katex/katex.min.css';
@@ -12,7 +12,7 @@ CKEDITOR.editorConfig = function (config) {
 
   // Set the filter file (this is the default)
   config.pasteFromWordCleanupFile = CKEDITOR.basePath + 'plugins/pastefromword/filter/default.js';
-  config.customConfig = ecEditor.resolvePluginResource('org.ekstep.libs.ckeditor', '1.0', 'editor/ckeditor/plugins/clipboard/dialogs/paste.js');
+  config.customConfig = ecEditor.resolvePluginResource('org.ekstep.libs.ckeditor', '1.1', 'editor/ckeditor/plugins/clipboard/dialogs/paste.js');
   config.allowedContent = true;
   config.language = 'en';
 
