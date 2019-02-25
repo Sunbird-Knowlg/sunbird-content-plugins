@@ -94,7 +94,7 @@ var textEditor = (function() {
         }
 
         if (!$doneBtn.length) {
-            $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
+            $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'sb-btn sb-btn-normal sb-btn-primary'})
                 .click(function() {
                     generateTelemetry({type: 'click', subtype: 'done', target: 'addString'});
                     _commonBtnClickAction();
@@ -114,7 +114,7 @@ var textEditor = (function() {
         }
 
         if (!$cancelBtn.length) {
-            $cancelBtn = ecEditor.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
+            $cancelBtn = ecEditor.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'sb-btn sb-btn-normal sb-btn-outline-primary'})
                 .click(function() {
                     generateTelemetry({type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
                     _commonBtnClickAction();
@@ -127,7 +127,6 @@ var textEditor = (function() {
             $cancelBtn.show();
         }
         $buttonGrp.append($cancelBtn);
-        $buttonGrp.append($orBtn);
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
