@@ -18,9 +18,10 @@
 
 #keyboardInput {
   background-color: #ebebeb;
-  height: 36px;
+  height: 100%;
   width: 100%;
   margin-left: 0px;
+  padding: 4% 1%;
 }
 
 .textBoxArea {
