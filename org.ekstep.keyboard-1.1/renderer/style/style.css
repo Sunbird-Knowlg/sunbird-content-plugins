@@ -78,6 +78,7 @@
   height: calc(100% - 63%);
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .key_barakhadi:hover,
 .key_barakhadi_numeric:hover {
