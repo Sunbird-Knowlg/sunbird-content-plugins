@@ -13,29 +13,29 @@ Keyboard.constant = {
 };
 
 Keyboard.htmlLayout = '<div id = "keyboardDiv">\
-    <div id="keyboard" class="keyboardArea" style="height: 100%;">\
     <div class="textBoxArea">\
-        <input type="text" id="keyboardInput" class="ansField" placeholder="Enter answer"  onclick="Keyboard.logTelemetryInteract(event);" disabled autofocus />\
-      </div>\
+      <input type="text" id="keyboardInput" class="ansField" placeholder="Enter answer"  onclick="Keyboard.logTelemetryInteract(event);" disabled autofocus />\
+    </div>\
+    <div id="keyboard" class="keyboardArea" style="height: 100%;">\
         <div class="parentDivMainKeyboard qc-keyboard-bottom">\
           <% if(Keyboard.buttons.length >0) { %> \
             <div id="firstRow">\
-              <% _.each(Keyboard.buttons, function(but) { %> \
+              <% _.each(Keyboard.buttons, function(btn) { %> \
                 <div onclick="Keyboard.addLetter(event);" class="key_barakhadi">\
-                  <span><%= but %>\</span>\
+                  <span><%= btn %>\</span>\
                 </div>\
               <% }); %>\
             </div>\
             <div id="thirdRow">\
                 <div class="key_barakhadi" onclick="Keyboard.changeToNumeric()"><span>123</span></div>\
-                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);"><span> </span></div>\
+                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);"><span>&nbsp </span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
                 <div class="erase-icon">\
-                  <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="" onclick="Keyboard.deleteText();" style="width: 43%;" />\
+                  <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="" onclick="Keyboard.deleteText();" style="width: 50%; height=100%;" />\
                 </div>\
                 <div class="erase-icon">\
-                  <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
+                  <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;"/>\
                 </div>\
             </div>\
           <% } %> \
@@ -69,17 +69,17 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
             </div>\
             <div class="third-row-numeric">\
-                <div style="width: 7%; padding:1%">\
-                  <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="" onclick="Keyboard.changeToAlphabet()" style="width: 100%;" />\
+                <div style="width: 10%; padding:1%">\
+                  <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="" onclick="Keyboard.changeToAlphabet()" style="width: 50%; height=100%;"/>\
                 </div>\
-                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);" ><span> </span></div>\
+                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);" ><span>&nbsp</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
                 <div class="erase-icon">\
-                <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="" onclick="Keyboard.deleteText();" style="width: 43%;"/>\
+                <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="" onclick="Keyboard.deleteText();" style="width: 50%; height=100%;"/>\
               </div>\
             <div class="erase-icon">\
-              <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
+              <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;" />\
             </div>\
             </div>\
         </div>\
