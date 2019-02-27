@@ -38,7 +38,7 @@ angular.module('org.ekstep.mathtext', [])
       },
       {
         "title": "Distance between two points",
-        "latex": "d=\\sqrt{(x_2-x_1)^2-(y_2-y_1)^2}"
+        "latex": "d=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}"
       },
       {
         "title": "Volume of a sphere",
