@@ -39,8 +39,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   });
 	$scope.questionData.templateType = $scope.templatesType[0];
 	$scope.questionMetaData = {};
-  $scope.previewMessage = 'Please check preview before saving';
+  $scope.previewMessage = 'Please check preview before saving.';
   $scope.formulaLimitMsg = 'Preview the question and split long formulae to ensure they are displayed correctly.';
+  $scope.layoutChangeMsg = 'Please check preview before saving. Entire question might not fit in the layout selected.';
   $scope.isFormulaAdded = false;
 	$scope.init = function () {
 		ecEditor.addEventListener('editor:template:loaded', function (event, object) {
@@ -430,10 +431,16 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       $scope.questionData.templateType = templateType;
       $scope.showPreview();
       $scope.templateChanged = true;
-      $('.template-warning-Message').fadeIn(1000);
-      $('.template-warning-Message').delay(5000).fadeOut(5000);
+      $scope.showToaster($scope.layoutChangeMsg);
     }
   }
+
+  $scope.showToaster = function(msg){
+    $scope.editorToastMessage = msg;
+    $('.template-warning-Message').fadeIn(1000);
+    $('.template-warning-Message').delay(5000).fadeOut(5000);
+  }
+
   $scope.extractHTML = function(htmlElement) {
   	var divElement= document.createElement('div');
   	divElement.innerHTML= htmlElement;
@@ -469,6 +476,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   }
   $scope.showEquationMessage = function(event, object){
     $scope.isFormulaAdded = true;
+    $scope.showToaster($scope.formulaLimitMsg);
   }
   ecEditor.addEventListener('org.ekstep.mathtext:addEquation', $scope.showEquationMessage, $scope); 
   $scope.init();
