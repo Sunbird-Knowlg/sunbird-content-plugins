@@ -239,6 +239,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                     $scope.pendingChanges = false;
                     $scope.disableQRGenerateBtn = true;
+                    $scope.hideCollaboratorBtn = true;
                 } else {
                     $scope.disableSaveBtn = false;
                     $scope.disableQRGenerateBtn = false;
