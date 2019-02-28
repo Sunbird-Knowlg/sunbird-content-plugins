@@ -311,6 +311,7 @@ color: white;
     width: 98%;
     font-size: 11px;
     margin-bottom: 15px;
+    display:none;
 }
 .qc-show-preview{
     margin-top: 15px;

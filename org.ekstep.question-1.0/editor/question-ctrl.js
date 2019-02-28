@@ -43,7 +43,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     formulaLimitMsg: 'Preview the question and split long formulae to ensure they are displayed correctly.',
     layoutChangeMsg: 'Please check preview before saving. Entire question might not fit in the layout selected.'
   };
-  $scope.displayToaster = false;
 	$scope.init = function () {
 		ecEditor.addEventListener('editor:template:loaded', function (event, object) {
 			if(object.formAction == 'question-meta-save') {
@@ -437,7 +436,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   }
 
   $scope.showToaster = function(msg){
-    $scope.displayToaster = true;
     $scope.editorToastMessage = msg;
     $('.template-warning-Message').fadeIn(1000);
     $('.template-warning-Message').delay(5000).fadeOut(5000);
