@@ -55,7 +55,7 @@
             <div class="two column row">
                 <div class="seven wide column formDiv qs-scrollbar">                       
                     <div class="templateHead">
-                        <div class="template-warning-Message" ng-show="templateChanged || isFormulaAdded">
+                        <div class="template-warning-Message" ng-show="displayToaster">
                             <div class="ui yellow message">
                                 <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{editorToastMessage}}</p>
                             </div>
@@ -79,7 +79,7 @@
                             <h3 class="ui left floated previewHeading">Preview</h3>
                             <button class="ui right floated blue button" ng-click="showPreview();generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-preview', ver: '', type: 'button'}})">Refresh</button>
                             <div class="ui small blue message">
-                                {{previewMessage}}
+                                {{messages.previewMessage}}
                             </div>
                         </div>
                         
