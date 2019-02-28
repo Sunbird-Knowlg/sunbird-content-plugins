@@ -92,6 +92,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.contentLockstatusMessage = "";
     $scope.previewMode = false;
     $scope.contentLockExpired = false;
+    $scope.hideCollaboratorBtn = false;
+    $scope.collaboratorTooltip = 'Add Collaborator';
     /*
      * Update ownership list when adding and removing the content.
      */
@@ -141,15 +143,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     /*
-     * This method is used to display tooltip acording to content creator or collaborator.
-     */
-    $scope.addCollaboratoTooltip = function() {
-        var contentCreator = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        var currentUser = ecEditor.getContext('uid');
-        $scope.collaboratorTooltip = currentUser === contentCreator.createdBy ? 'Add Collaborator' : 'View Collaborator';
-    };
-
-    /*
     * This method is used for download Table of contents which is created by Textbook creator.
     */
     $scope.downloadToc = function() {
@@ -190,6 +183,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.isReviewCommentsPresent = true;
             $scope.$safeApply();
         }
+        $scope.collaboratorTooltip = (ecEditor.getContext('uid') === meta.createdBy) ? 'Add Collaborator' : 'View Collaborator';
+        $scope.hideCollaboratorBtn = (meta.status === 'Draft')  ? true : false;
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
@@ -482,7 +477,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.resolveReviewBtnStatus();
         $scope.getQRCodeRequestCount();
         $scope.resolveQRDownloadBtn();
-        $scope.addCollaboratoTooltip();
         $scope.$safeApply();
     };
     $scope.resolveQRDownloadBtn = function () {
