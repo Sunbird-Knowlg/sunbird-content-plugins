@@ -14,6 +14,7 @@ node() {
 
             ansiColor('xterm') {
                 values = lp_dp_params()
+                values.put('module', 'Core')
                 stage('get artifact') {
                     currentWs = sh(returnStdout: true, script: 'pwd').trim()
                     artifact = values.artifact_name + ":" + values.artifact_version
