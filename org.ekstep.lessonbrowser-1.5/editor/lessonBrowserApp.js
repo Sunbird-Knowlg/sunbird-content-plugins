@@ -444,12 +444,18 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                                 $scope.isLoading = false;
                                 $timeout(function() {
                                     ecEditor.jQuery('#noLessonMsg').hide();
+                                    ecEditor.jQuery('.special.cards .image').dimmer({
+                                        on: 'hover'
+                                    });
                                 }, 0);
                             });
                         } else {
                             $scope.isLoading = false;
                             $timeout(function() {
                                 ecEditor.jQuery('#noLessonMsg').show();
+                                ecEditor.jQuery('.special.cards .image').dimmer({
+                                    on: 'hover'
+                                });
                             }, 0);
                         }
                     } else {
