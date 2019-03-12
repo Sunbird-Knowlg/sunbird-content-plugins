@@ -390,7 +390,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	$scope.questionData.templateType = questionData1.data.config.layout;
   	$scope.questionData.isPartialScore = questionData1.data.config.partial_scoring;
   	$scope.questionData.isShuffleOption = questionData1.data.config.isShuffleOption;
-  	$scope.questionData.evalUnordered = questionData1.data.config.evalUnordered;
+  	$scope.questionData.evalUnordered = questionData1.data.config.evalUnordered || false;
   	$scope.category = questionData.category;
   	if (questionData1.data.config.metadata.concepts) {
   		$scope.Totalconcepts = questionData1.data.config.metadata.concepts.length;
