@@ -11,6 +11,7 @@ angular.module('org.ekstep.mathtext', [])
     $scope.latexValue = ''; 
     $scope.cursorPosition = undefined;
     $scope.text_hint = true;
+    $scope.pluginLoadStartTime = new Date();
     $scope.libraryEquations = [
       {
         "title": "Area of circle",
@@ -565,6 +566,19 @@ angular.module('org.ekstep.mathtext', [])
       $scope.advancedImageArray.push(url);
     })
 
+    $scope.generateImpression = function(data) {
+      if (data){
+        ecEditor.getService('telemetry').impression({
+          "type": data.type,
+          "subtype": data.subtype || "",
+          "pageid": data.pageid || "",
+          "uri": window.location.href,
+          "visits": [],
+          "duration": (new Date()) - $scope.pluginLoadStartTime
+        });
+      }
+    }
+
     $scope.mergeAllSymbols = function () {
       return _.union($scope.symbols.greek, $scope.symbols.binary, $scope.symbols.arrow, $scope.symbols.misc);
     };
@@ -602,7 +616,7 @@ angular.module('org.ekstep.mathtext', [])
           MQ.StaticMath(element);
         });
       }, 1000);
-
+      $scope.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'MathText' })
     });
 
     $timeout(function () {
