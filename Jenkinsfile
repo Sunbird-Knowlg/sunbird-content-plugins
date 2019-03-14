@@ -10,31 +10,40 @@ node() {
             stage('Checkout') {
                 cleanWs()
                 if (params.github_release_tag == "") {
+                    dir('content-plugins') {
                     checkout scm
                     commit_hash = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                     branch_name = sh(script: 'git name-rev --name-only HEAD | rev | cut -d "/" -f1| rev', returnStdout: true).trim()
                     artifact_version = branch_name + "_" + commit_hash
                     println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag not specified, using the latest commit hash: " + commit_hash + ANSI_NORMAL)
-                } else {
+                } 
+                }else {
+                    dir('content-plugins') {
                     def scmVars = checkout scm
                     checkout scm: [$class: 'GitSCM', branches: [[name: "refs/tags/${params.github_release_tag}"]], userRemoteConfigs: [[url: scmVars.GIT_URL]]]
                     artifact_version = params.github_release_tag
                     println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag specified, building from github_release_tag: " + params.github_release_tag + ANSI_NORMAL)
-                    
+                    }
                 }
+        
+
                 echo "artifact_version: " + artifact_version
 
                 stage('Build') {
                     sh """
-                        rm -rf content-plugins.zip
                         zip -r content-plugins.zip content-plugins                     
                     """
                 }
                 
                 
                 stage('ArchiveArtifacts') {
-                    archiveArtifacts "content-plugins.zip:${artifact_version}"
-                    sh """echo {\\"artifact_name\\" : \\"content-plugins.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
+                    sh """
+                        mkdir content-plugins-artifacts
+                        cp content-plugins.zip content-plugins-artifacts
+                        zip -j  content-plugins-artifacts.zip:${artifact_version}  content-plugins-artifacts/*                      
+                    """
+                    archiveArtifacts "content-plugins-artifacts.zip:${artifact_version}"
+                    sh """echo {\\"artifact_name\\" : \\"content-plugins-artifacts.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
                     archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
                     currentBuild.description = "${artifact_version}"
                 }

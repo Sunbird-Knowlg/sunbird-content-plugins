@@ -92,6 +92,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.contentLockstatusMessage = "";
     $scope.previewMode = false;
     $scope.contentLockExpired = false;
+    $scope.hideCollaboratorBtn = false;
+    $scope.collaboratorTooltip = 'Add Collaborator';
     /*
      * Update ownership list when adding and removing the content.
      */
@@ -181,6 +183,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.isReviewCommentsPresent = true;
             $scope.$safeApply();
         }
+        $scope.collaboratorTooltip = (ecEditor.getContext('uid') === meta.createdBy) ? 'Add Collaborator' : 'View Collaborator';
+        $scope.hideCollaboratorBtn = (meta.status === 'Draft')  ? true : false;
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
@@ -235,6 +239,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                     $scope.pendingChanges = false;
                     $scope.disableQRGenerateBtn = true;
+                    $scope.hideCollaboratorBtn = true;
                 } else {
                     $scope.disableSaveBtn = false;
                     $scope.disableQRGenerateBtn = false;

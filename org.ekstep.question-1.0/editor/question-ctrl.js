@@ -11,7 +11,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 	$scope.templatesNotFound = '';
 	$scope.selectedTemplatePluginData = {};
   $scope.savingQuestion = false;
-  $scope.templateChanged = false;
 	$scope.templatesType = ['Horizontal', 'Vertical', 'Grid', 'Grid2', 'Vertical2'];
 	$scope._constants = {
     formName: 'questionForm',
@@ -39,7 +38,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   });
 	$scope.questionData.templateType = $scope.templatesType[0];
 	$scope.questionMetaData = {};
-
+  $scope.messages = {
+    previewMessage: 'Please check preview before saving.',
+    formulaLimitMsg: 'Preview the question and split long formulae to ensure they are displayed correctly.',
+    layoutChangeMsg: 'Please check preview before saving. Entire question might not fit in the layout selected.'
+  };
 	$scope.init = function () {
 		ecEditor.addEventListener('editor:template:loaded', function (event, object) {
 			if(object.formAction == 'question-meta-save') {
@@ -65,6 +68,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       }
     });
     ecEditor.addEventListener($scope._constants.EVENT_FORM_SUCCESS, $scope.saveMetaData, $scope);  
+    ecEditor.addEventListener('org.ekstep.mathtext:addEquation', $scope.showEquationMessage, $scope);
 	}
 	$scope.showTemplates = function() {
     $scope.templatesScreen = true;
@@ -427,11 +431,17 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     if($scope.questionData.templateType != templateType){
       $scope.questionData.templateType = templateType;
       $scope.showPreview();
-      $scope.templateChanged = true;
-      $('.template-warning-Message').fadeIn(1000);
-      $('.template-warning-Message').delay(5000).fadeOut(5000);
+      $scope.showToaster($scope.messages.layoutChangeMsg);
     }
   }
+
+  $scope.showToaster = function(msg){
+    $scope.editorToastMessage = msg;
+    $('.template-warning-Message').fadeIn(1000);
+    $('.template-warning-Message').delay(5000).fadeOut(5000);
+    $scope.$safeApply();
+  }
+
   $scope.extractHTML = function(htmlElement) {
   	var divElement= document.createElement('div');
   	divElement.innerHTML= htmlElement;
@@ -465,6 +475,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   		}
   	})
   }
+  $scope.showEquationMessage = function(event, object){
+    $scope.showToaster($scope.messages.formulaLimitMsg);
+  } 
   $scope.init();
 }]);
 
