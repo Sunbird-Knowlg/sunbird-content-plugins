@@ -260,16 +260,21 @@
     padding-right: 8%;
 }
 
+.mcq-content-container .option-container.horizontal .option-block-container .option-block .option-text-container.with-audio .urdu-text{
+    margin-right:-9%; /* to override padding-right of the parent element*/
+}
+
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-text-container.with-audio.with-image {
     margin-left: 15%;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-text-container>span {
+    width:92%;
     height: auto;
     position: relative;
     top: 0;
     bottom: 0;
-    display: table-cell;
+    display: block;
     align-items: center;
     vertical-align: middle;
 }

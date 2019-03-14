@@ -63,7 +63,8 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       };
       var selectedSeqOrder = parseInt($(elem).data('seqorder')) - 1;
       seq_rearranged[actualSeqMapIndex] = selectedSeqOrder + 1;
-      telObj['SEQ'][actualSeqMapIndex] = instance._question.data.options[actualSeqMapIndex];
+      telObj['SEQ'][0] = instance._question.data.options[actualSeqMapIndex];
+      instance.removeOptionProperty(telObj['SEQ'][0]);
       telemetryValues.push(telObj);
 
       if (selectedSeqOrder == actualSeqMapIndex) {
@@ -105,6 +106,17 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       "type": "INPUT",
       "values": data
     });
+  },
+  removeOptionProperty : function (values){
+    if (values.hasOwnProperty('audioName')) {
+      delete values.audioName;
+    }
+    if (values.hasOwnProperty('$$hashKey')) {
+      delete values.$$hashKey;
+    }
+    if (values.hasOwnProperty('hint')) {
+      delete values.hint;
+    }
   }
 });
 //# sourceURL=questionunit.sequence.renderer.plugin.js

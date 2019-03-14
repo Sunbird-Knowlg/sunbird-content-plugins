@@ -150,6 +150,9 @@ angular.module('collaboratorApp', ['angular-inview'])
                         /*istanbul ignore else */
                         if (res && res.data && res.data.result && res.data.result.response && res.data.result.response.content) {
                             $scope.users = res.data.result.response.content;
+                            
+                            /** remove current user from users list */
+                            $scope.users = _.filter($scope.users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
                             $scope.users.count = res.data.result.response.content.length;
                         }
                     }
@@ -217,6 +220,8 @@ angular.module('collaboratorApp', ['angular-inview'])
                 });
             }
 
+            /** remove current user from users list */
+            users = _.filter(users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
             return users;
         }
 
