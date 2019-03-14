@@ -4,7 +4,7 @@
  * @module          - 'org.ekstep.metadataform'
  */
 
-angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope', function($scope) {
+angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope','instance', function($scope,instance) {
 
 
     /**
@@ -119,6 +119,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(object) {
+        
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
@@ -395,6 +396,21 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         }, 0)
     }
 
+    /**
+     * @description          - Fires ImpressionEvent right after popoup loads 
+     *  
+     */    
+    $scope.generateImpression = function(data) {
+        console.log(data, "this is the activity browser data");
+        if (data) ecEditor.getService('telemetry').impression({
+            "type": data.type,
+            "subtype": data.subtype || "",
+            "pageid": data.pageid || "",
+            "uri": window.location.href,
+            "duration": data.duration,
+            "visits": []
+             });
+        }
 
     /**
      * 
@@ -441,6 +457,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
+        console.log(instance, "meta data instances");
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
@@ -500,6 +517,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.mapMasterCategoryList($scope.fields);
         }
         ecEditor.dispatchEvent("editor:form:getconfig", callbackFn);
+        $scope.generateImpression({type:"view",subtype:"popup-open", pageid:"metaData", duration: (new Date() - instance.startLoadTime).toString()});
     };
 
     $scope.getFixedFieldCode = function(tempalteName) {
