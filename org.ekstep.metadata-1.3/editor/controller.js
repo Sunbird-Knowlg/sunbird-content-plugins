@@ -401,7 +401,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *  
      */    
     $scope.generateImpression = function(data) {
-        console.log(data, "this is the activity browser data");
         if (data) ecEditor.getService('telemetry').impression({
             "type": data.type,
             "subtype": data.subtype || "",
@@ -457,7 +456,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
-        console.log(instance, "meta data instances");
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
