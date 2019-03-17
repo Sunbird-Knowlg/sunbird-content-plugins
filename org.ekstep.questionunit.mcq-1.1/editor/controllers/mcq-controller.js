@@ -355,6 +355,18 @@ angular.module('mcqApp', ['org.ekstep.question']).controller('mcqQuestionFormCon
     optionInput.on('blur', function () {
       ecEditor.jQuery('.cke_float').hide();
     });
+    optionInput.on('focus', function () {
+      $scope.generateTelemetry({
+        type: 'TOUCH',
+        id: 'input',
+        pageid: 'question-creation-mcq-form',
+        target: {
+          id: 'questionunit-mcq-question-option',
+          ver: '',
+          type: 'input'
+        }
+      })
+    });
     $(".innerScroll").scroll(function () {
       ecEditor.jQuery('.cke_float').hide();
     });

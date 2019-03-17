@@ -149,6 +149,7 @@ angular.module('activityBrowserApp', ['angular-inview'])
         ctrl.generateTelemetry = function(data) {
             if (data) {
                 org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                    "id": data.id,
                     "type": data.type,
                     "subtype": data.subtype,
                     "target": data.target,
@@ -176,7 +177,7 @@ angular.module('activityBrowserApp', ['angular-inview'])
         $scope.closePopup = function() {
             ctrl.generateImpression({ type: 'view', subtype: 'popup-exit', pageid: 'ActivityBrowser' });
             ctrl.inViewLogs = [];
-            ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'});
+            ctrl.generateTelemetry({id:'button', type: 'click', subtype: 'close', target: 'closeButton'});
             $scope.closeThisDialog();
         };
 
