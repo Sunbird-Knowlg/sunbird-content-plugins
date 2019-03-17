@@ -68,6 +68,16 @@
             {
                 "type": "js",
                 "src": "renderer/template/template_controller.js"
+            },
+            {
+                "type": "image",
+                "src":"renderer/assets/expand-icon.png",
+                "assetId":"org.ekstep.questionunit.mcq.expand-icon.png"
+            },
+            {
+                "type": "image",
+                "src":"renderer/assets/audio-icon.png",
+                "assetId":"org.ekstep.questionunit.mcq.audio-icon.png"
             }
         ]
     },
