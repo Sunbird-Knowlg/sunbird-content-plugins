@@ -91,6 +91,7 @@ angular.module('activityBrowserApp', ['angular-inview'])
             ecEditor.getService('search').pluginsSearch(url, data, function(err, resp) {
                 ctrl.loading = false;
                 $scope.$safeApply();
+                ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'ActivityBrowser', duration: (new Date()) - ctrl.pluginLoadStartTime});
                 if (err) {
                     ctrl.errorLoadingActivities = true;
                     return;
@@ -117,6 +118,7 @@ angular.module('activityBrowserApp', ['angular-inview'])
             ctrl.inViewLogs = [];
             $scope.closeThisDialog();
         }
+        ctrl.pluginLoadStartTime = new Date();
         ctrl.getActivities();
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'activityConceptSelector',
@@ -165,7 +167,8 @@ angular.module('activityBrowserApp', ['angular-inview'])
                 "subtype": data.subtype || "",
                 "pageid": data.pageid || "",
                 "uri": window.location.href,
-                "visits": ctrl.inViewLogs
+                "visits": ctrl.inViewLogs,
+                "duration": data.duration
                  });
             }
 

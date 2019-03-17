@@ -359,6 +359,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     position: 'bottom center',
                 });
         });
+        ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'AssetsBrowser', duration: (new Date()) - ctrl.pluginLoadStartTime });
     };
 
     ctrl.convertToBytes = function(bytes) {
@@ -643,7 +644,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             "subtype": data.subtype || "",
             "pageid": data.pageid || "",
             "uri": window.location.href,
-            "visits": ctrl.inViewLogs
+            "visits": ctrl.inViewLogs,
+            "duration": data.duration
         });
     }
 
@@ -725,6 +727,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     setTimeout(function() {
+        ctrl.pluginLoadStartTime = new Date();        
         ctrl.myTabScrollElement = (instance.mediaType === "image") ?  "my-image-tab" : "my-audio-tab";
         ctrl.allTabScrollElement = (instance.mediaType === "image") ?  "all-image-tab" : "all-audio-tab";
         

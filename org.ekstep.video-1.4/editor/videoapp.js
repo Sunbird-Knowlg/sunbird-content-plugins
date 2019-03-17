@@ -259,6 +259,19 @@ angular.module('videoApp', [])
                 });
             
         }
+
+                
+    // Generate Impression telemetry
+        ctrl.generateImpression = function(data) {
+            if (data) ecEditor.getService('telemetry').impression({
+                "type": data.type,
+                "subtype": data.subtype || "",
+                "pageid": data.pageid || "",
+                "uri": window.location.href,
+                "visits": ctrl.inViewLogs,
+                "duration": data.duration
+            });
+        }
         ctrl.previewVideo = function () {            
             ctrl.messageDiv = true;
             ctrl.show = 'loader';
@@ -279,6 +292,7 @@ angular.module('videoApp', [])
             })
         };
         setTimeout(function () {
+            ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'VideoBrowser', duration: (new Date()) - instance.pluginLoadStartTime });
             ctrl.videoLibraryTabElement = "video-library-tab";
             ecEditor.jQuery('.video-modal .menu .item').tab();
             ctrl.bindScroll = function (data) {
