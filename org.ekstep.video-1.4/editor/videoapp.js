@@ -241,7 +241,7 @@ angular.module('videoApp', [])
                             org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({
                                 "err": err.code || '',
                                 "errtype": 'CONTENT',
-                                "stacktrace": err.toString(),
+                                "stacktrace": err.message.toString() || err.toString(),
                                 "pageid": ecEditor.getCurrentStage().id,
                                 "object": object,
                                 "plugin": {
