@@ -11,7 +11,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.cardDetailsTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/cardDetailsTemplate.html");
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
         ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default_image.png");
-
+        
         //Response variable
         ctrl.res = { count: 0, content: [], total_items: 0 };
         ctrl.err = null;
@@ -94,7 +94,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 "subtype": data.subtype || "",
                 "pageid": data.pageid || "",
                 "uri": window.location.href,
-                "visits": inViewLogs
+                "visits": inViewLogs,
+                'duration': data.duration || ""
             });
         }
 
@@ -165,12 +166,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // show card details
         $scope.showCardDetails = function(lesson) {
+            $scope.startLoadTime = new Date();
             $scope.previousPage = $scope.mainTemplate;
             if ($scope.mainTemplate == 'selectedResult') {
                 $scope.defaultResources = ctrl.res.content;
             }
             $scope.mainTemplate = 'cardDetailsView';
             $scope.lessonView = lesson;
+            ctrl.generateImpression({type:'view', subtype:'view-details', pageid:'lessonbrowserplugin',duration: (new Date() - $scope.startLoadTime).toString()});
         }
 
         // apply all jquery after dom render
@@ -331,6 +334,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     metadata: $scope.filterSelection
                 });
                 $scope.isLoading = false;
+                ctrl.generateImpression({type:'view-resource', subtype:'popup-open', pageid:'lessonbrowserplugin',duration: (new Date() - instance.startLoadTime).toString()});
             }, 800);
         }
 
