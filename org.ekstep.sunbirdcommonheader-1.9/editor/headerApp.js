@@ -526,7 +526,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$apply();
     }
     /**
-     * @description  - will be called by immediately invoked function in this controller
+     * @description  -Will be called by immediately invoked function in this controller
      */
     $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
@@ -539,7 +539,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     };
     /**
-     * @description - will be called when user clicks on the upload file button
+     * @description -Opens uploadcontent form popup
      */
     $scope.upload = function () {
         $scope.uploadFormStart = new Date();
