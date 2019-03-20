@@ -4,7 +4,7 @@
  * @module          - 'org.ekstep.metadataform'
  */
 
-angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope','instance', function($scope,instance) {
+angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope', function($scope) {
 
 
     /**
@@ -406,7 +406,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             "subtype": data.subtype || "",
             "pageid": data.pageid || "",
             "uri": window.location.href,
-            "duration": data.duration,
+            "duration": data.duration || 0,
             "visits": []
              });
         }
@@ -515,7 +515,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.mapMasterCategoryList($scope.fields);
         }
         ecEditor.dispatchEvent("editor:form:getconfig", callbackFn);
-        $scope.generateImpression({type:"view",subtype:"popup-open", pageid:"metaData", duration: (new Date() - instance.startLoadTime).toString()});
+        $scope.generateImpression({type:"view",subtype:"popup-open", pageid:"metaData"});
     };
 
     $scope.getFixedFieldCode = function(tempalteName) {

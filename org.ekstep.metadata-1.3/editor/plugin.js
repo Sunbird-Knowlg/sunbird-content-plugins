@@ -49,11 +49,6 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'metadataTemplate',
             controller: 'metadataForm',
-            resolve: {
-                'instance': function() {
-                  return instance;
-                }
-              },
             controllerAs: '$ctrl',
             width: 900,
             showClose: false
