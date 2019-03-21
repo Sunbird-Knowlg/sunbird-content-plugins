@@ -520,6 +520,9 @@ angular.module('org.ekstep.mathtext', [])
         customImage: 'assets/equilibrium.png'
       },
       {
+        latexText: "\\leftrightarrows"
+      },
+      {
         latexText: "\\widetilde{a}"
       }];
     $scope.equationGroup = 'all';
