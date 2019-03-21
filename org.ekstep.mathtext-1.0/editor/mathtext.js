@@ -465,6 +465,10 @@ angular.module('org.ekstep.mathtext', [])
         {
           latex: "\\sqrt[4]{}",
           latexDisplay: "\\sqrt[4]{a}"
+        },
+        {
+          latexCmd: "\\overgroup{AB}",
+          latexDisplay: "\\overgroup{AB}"
         }
       ],
       frac: [
