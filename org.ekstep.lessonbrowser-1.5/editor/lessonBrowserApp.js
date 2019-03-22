@@ -503,7 +503,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 $scope.sortOption = query.request.sort_by;
                 searchBody.request.sort_by = query.request.sort_by;
             } else {
-                searchBody.request.sort_by = {"lastUpdatedOn":"desc"};
+                delete searchBody.request.sort_by;
             }
 
             ecEditor._.forEach($scope.filterSelection, function(value, key) {
