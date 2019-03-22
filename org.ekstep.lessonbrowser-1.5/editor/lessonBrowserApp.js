@@ -447,14 +447,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                                 $scope.isLoading = false;
                                 $timeout(function() {
                                     ecEditor.jQuery('#noLessonMsg').hide();
-                                    ctrl.dropdownAndCardsConfig();
                                 }, 0);
                             });
                         } else {
                             $scope.isLoading = false;
                             $timeout(function() {
                                 ecEditor.jQuery('#noLessonMsg').show();
-                                ctrl.dropdownAndCardsConfig();
                             }, 0);
                         }
                     } else {
