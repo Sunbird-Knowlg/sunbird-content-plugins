@@ -243,7 +243,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         "objectType": ["Content"],
                         "status": ["Live"]
                     },
-                    "query": ""
+                    "query": "",
+                    "sort_by":{"lastUpdatedOn":"desc"}
                 }
             };
             $scope.getFiltersValue(); /** Get filters values**/
