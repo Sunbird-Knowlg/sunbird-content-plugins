@@ -4,9 +4,10 @@
 org.ekstep.contenteditor.basePlugin.extend({
     screenShot: undefined,
     initialize: function() {
-        ecEditor.addEventListener(this.manifest.id + ":showpopup", this.loadBrowser, this);
+        // ecEditor.addEventListener(this.manifest.id + ":assetbrowser:open", this.loadBrowser, this);
+        ecEditor.addEventListener(this.manifest.id + ":assetbrowser:open", this.openBrowser, this);
         var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/video.html");
-        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js"); 
+        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js");
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     newInstance: function() {
@@ -14,7 +15,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var _parent = this.parent;
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
-        this.editorObj = undefined;        
+        this.editorObj = undefined;
         //var imageURL = "/assets/public/content/do_1122156236916490241183/artifact/maxresdefault_387_1491164926_1491165001510.png";
         // TODO: Comment out the above line and uncomment the below line before upload to dev
         var imageURL = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'assets/maxresdefault.png');
@@ -24,6 +25,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             instance.parent = _parent;
             instance.postInit();
         }, props);
+    },
+    openBrowser: function(){
+        var instance = this;
+        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
+            type: 'video',
+            search_filter: {},
+            callback: function(data){
+                ecEditor.dispatchEvent(instance.manifest.id + ':create', data)
+            }
+        })
     },
     loadBrowser: function() {
         currentInstance = this;

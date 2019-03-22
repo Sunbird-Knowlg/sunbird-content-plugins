@@ -82,16 +82,28 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.loadMoreAssetSpinner = false;
     ctrl.showLoadMoreWarningMsg = false;
     ctrl.plugin = instance.mediaType;
-    ctrl.upload = (instance.mediaType == 'image') ? true : false;
-    ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
-    ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
+    // ctrl.upload = (instance.mediaType == 'image' ||  instance.mediaType == 'video') ? true : false;
+    // ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
+    // ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
     if (instance.mediaType == 'image') {
+        ctrl.upload = true;
         ctrl.allowedFileSize = (1 * 1024 * 1024);
         ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        ctrl.fileSize = '1 MB';
+        ctrl.fileTypes = "jpeg, jpg, png";
     } else if (instance.mediaType == 'audio') {
+        ctrl.upload = false;
         ctrl.allowedFileSize = (6 * 1024 * 1024);
         ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
+        ctrl.fileSize = '6 MB';
+        ctrl.fileTypes = "mp3, mp4, mpeg, ogg, wav, webm";
+    } else if(instance.mediaType == 'video'){
+        ctrl.upload = false;
+        ctrl.allowedFileSize = (50 * 1024 * 1024);
+        ctrl.allowedMimeTypes = ['video/mp4', 'video/webm'];
+        ctrl.fileSize = '50 MB';
+        ctrl.fileTypes = "mp4, webm";
     }
 
     function imageAssetCb(err, res) {
@@ -114,7 +126,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         $scope.$safeApply();
     };
 
-    
+
     function audioAssetCb(err, res) {
 
         if (res && res.data.result.content) {
@@ -637,7 +649,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             })
         }
     }
-        
+
     // Generate Impression telemetry
     ctrl.generateImpression = function(data) {
         if (data) ecEditor.getService('telemetry').impression({
@@ -656,8 +668,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.inViewLogs = [];
         ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'close', target: 'closeAssetBrowser'});
         $scope.closeThisDialog();
-    };    
-    
+    };
+
 
     ctrl.loadMoreAsset = function(data) {
         /**Check for max limit and Increment offset by 50**/
@@ -670,7 +682,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.offset = ctrl.offset+50;
             ctrl.showLoadMoreWarningMsg = false;
         }
-        
+
         var callback,
             searchText = ctrl.query;
 
@@ -701,9 +713,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     }
                 });
                 ctrl.initPopup(res.data.result.content);
-                ecEditor.jQuery("#"+data.target.id).bind('scroll',ctrl.bindScroll); 
+                ecEditor.jQuery("#"+data.target.id).bind('scroll',ctrl.bindScroll);
             } else {
-               ecEditor.jQuery("#"+data.target.id).unbind('scroll'); 
+               ecEditor.jQuery("#"+data.target.id).unbind('scroll');
             };
 
             // Hide loader
@@ -728,10 +740,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     setTimeout(function() {
-        ctrl.pluginLoadStartTime = new Date();        
+        ctrl.pluginLoadStartTime = new Date();
         ctrl.myTabScrollElement = (instance.mediaType === "image") ?  "my-image-tab" : "my-audio-tab";
         ctrl.allTabScrollElement = (instance.mediaType === "image") ?  "all-image-tab" : "all-audio-tab";
-        
+
         ecEditor.jQuery('.assetbrowser .menu .item').tab();
         ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
         ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
@@ -742,6 +754,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.uploadBtnDisabled = false;
             ctrl.assetNameError=true;
             ctrl.assetFileError=true;
+
+
+            var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
             ecEditor.ngSafeApply(ecEditor.getAngularScope());
         });
 
@@ -771,16 +786,20 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         });
         ecEditor.jQuery(document).on('change', '#assetfile', function() {
             ctrl.preFillForm(this.files[0]);
+
+            if(ctrl.assetMeta.name != ""  && ecEditor.jQuery('#assetfile').val() != ""){
+
+            }
         });
 
-        
+
         ctrl.bindScroll = function(data){
             var a = ecEditor.jQuery("#"+data.target.id);
-            var b = ecEditor.jQuery("#"+data.target.id)[0];   
+            var b = ecEditor.jQuery("#"+data.target.id)[0];
             if(a.scrollTop() + a.height() + 40 >= b.scrollHeight) {
                ecEditor.jQuery("#"+data.target.id).unbind('scroll');
                ctrl.loadMoreAsset(data);
-            }   
+            }
         };
 
         ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);

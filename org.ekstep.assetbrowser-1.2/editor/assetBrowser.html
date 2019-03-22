@@ -226,10 +226,12 @@
    			  	<div class="column">
    					<span ng-hide="$ctrl.uploadView">
    						<span ng-switch-when="image"><i class="image icon"></i> Select Image</span>
-   						<span ng-switch-when="audio"><i class="file audio outline icon"></i> Select Audio</span>
+							 <span ng-switch-when="audio"><i class="file audio outline icon"></i> Select Audio</span>
+							 <span ng-switch-when="video"><i class="file video outline icon"></i> Select Video</span>
    					</span>
    					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'image'"><i class="upload icon"></i> Upload and use</span>
-   					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
+						 <span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
+						 <span ng-if="$ctrl.uploadView && $ctrl.plugin == 'video'"><i class="upload icon"></i> Upload and use</span>
    				</div>
    				<div class="column right aligned">
    					<i class="close link icon" ng-click="closePopup()"></i>
@@ -242,7 +244,9 @@
    		    <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id: 'myAssetsTab', type: 'click', subtype: 'select', target: 'myImageTab'})">My images</a>
    		    <a id="allImagesTab" ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'myAssetsTab', type: 'click', subtype: 'select', target: 'allImageTab'})">All image</a>
    		    <a id="myAudioTab" ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id: 'myAudioTab', type: 'click', subtype: 'select', target: 'myAudioTab'})">My audio</a>
-   			<a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'allAudioTab', type: 'click', subtype: 'select', target: 'allAudioTab'})">All audio</a>
+				 <a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'allAudioTab', type: 'click', subtype: 'select', target: 'allAudioTab'})">All audio</a>
+				 <a ng-if="$ctrl.plugin == 'video'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'myVideoTab'})">My video</a>
+   			<a id="allVideoTab" ng-if="$ctrl.plugin == 'video'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'allVideoTab'})">All Videos</a>
    		</div>
    		<div class="uploadingAsset ui tab active" data-tab="first" >
    			<div class="content" ng-if="$ctrl.plugin == 'image'">
@@ -289,7 +293,77 @@
 						</div>
    					</div>
    				</div>
-   			</div>
+				 </div>
+
+
+				 <div class="content" ng-if="$ctrl.plugin =='video'">
+					<div class="ui big loader {{$ctrl.loading}}"></div>
+					<div class="ui grid">
+						<div class="ten wide column">
+							<div class="ui icon input assetbrowser_searchBox">
+								<input id="searchMyVideoAssets" ng-model="$ctrl.query" placeholder="Search Video..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null"
+									type="text" />
+								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchVideoAsset'})"></i>
+							</div>
+						</div>
+						<div class="two wide right aligned column">
+							<div id="videoDropDown" class="ui floating labeled icon dropdown button video">
+								<i class="filter icon"></i>
+								<span class="text">All</span>
+								<div class="menu">
+									<div class="item" data-value='all'>
+										<span class="text">All</span>
+									</div>
+									<div class="divider"></div>
+									<div class="item" data-value="video">
+										<span class="text">Video</span>
+									</div>
+									<div class="item" data-value="youtube">
+										<span class="text">Youtube</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix">&nbsp;</div>
+					<div class="asset_item_container" id="my-video-tab">
+						<div class="ui grid">
+							<div class="three wide column" ng-show="$ctrl.videoList.length > 0" ng-repeat="video in $ctrl.videoList track by $index"
+								in-view="lineInView($index, $inview, video, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
+								<div class="videoitem infopopover" ng-click="$ctrl.videoSource(video, $index); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectVideoAsset'});"
+									id="{{video.identifier}}" src="{{video.downloadUrl}}" data-html="<b>{{video.name}}</b> <br/> License: {{video.license}}">
+									<!-- <audio controls id="audio-{{$index}}" preload="none" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio> -->
+									<div class="video-tag">{{video.name}}</div>
+									<div class="videoOverlay" ng-show="$ctrl.selected_videos[$index].selected">
+										<div class="checkContainer">
+											<i class="ui icon check circle big checkIcon" aria-hidden="true"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="twelve wide column" ng-show="$ctrl.videoList.length == 0">
+								<span>No result found. <a href="#" onclick="$('#allVideoTab').trigger('click'); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'noResultFoundSwitchToAllVideoTab'});">Click
+										here</a> to search in All audios</span>
+							</div>
+							<div class="twelve wide column">
+								<div class="load-more-assets-spinner" ng-show="$ctrl.loadMoreAssetSpinner">
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+									<div class="bounce3"></div>
+								</div>
+								<div class="load-more-assets-warning-msg" ng-show="$ctrl.showLoadMoreWarningMsg">
+									<img class="ui centered tiny image" ng-src="{{$ctrl.contentNotFoundImage}}">
+									<p>Didn’t find what you were looking for? Try <a href="#" ng-click="$ctrl.searchTextClicked();">search</a>
+										for something more specific
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
    			<div class="content" ng-if="$ctrl.plugin =='audio'">
    				<div class="ui big loader {{$ctrl.loading}}"></div>
    				<div class="ui grid">
@@ -350,7 +424,12 @@
    					</div>
    				</div>
    			</div>
-   		</div>
+			 </div>
+
+
+<!-- Second Tab starts here -->
+
+
    		<div class="ui tab" data-tab="second" >
    			<div class="content" ng-if="$ctrl.plugin == 'image'">
    				<div class="ui big loader {{$ctrl.loading}}"></div>
@@ -395,7 +474,56 @@
 					  </div>
 					</div>
    				</div>
-   			</div>
+				 </div>
+				 <div class="content" ng-if="$ctrl.plugin == 'video'">
+					<div class="ui big loader {{$ctrl.loading}}"></div>
+					<div class="column">
+						<div class="column">
+							<div class="ui icon input assetbrowser_searchBox">
+								<input id="searchAllVideoAssets" ng-model="$ctrl.query" placeholder="Search Video..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null"
+									type="text" />
+								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchVideoAsset'});"></i>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix">&nbsp;</div>
+					<div class="ui grid asset_item_container" id="all-video-tab">
+						<div ng-show="$ctrl.videoList.length > 0" ng-repeat="video in $ctrl.videoList track by $index" in-view="lineInView($index, $inview, video, 'AssetsBrowser', $index)"
+							in-view-options="{ throttle: 1000 }">
+							<div class="column templatebrowser_thumbnail">
+								<div class="ui small videos templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.VideoSource($event, $index); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectVideoAsset'});"
+									data-html="<b>{{video.name}}</b> <br/> License:{{video.license}} ">
+									<a class="item" ng-show="$ctrl.selected_videos[$index].selected">
+										<div class="floating ui blue label">
+											<span><i class="ui icon check" aria-hidden="true"></i></span>
+										</div>
+									</a>
+									<div class="ui video">
+										<img class="asset_thumbnail" data_id="{{video.identifier}}" ng-src="{{video.downloadUrl}}">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="twelve wide column" ng-show="$ctrl.videoList.length ==0">
+							<span>No result found. </span>
+						</div>
+						<div class="twelve wide column">
+							<div class="load-more-assets-spinner" ng-show="$ctrl.loadMoreAssetSpinner">
+								<div class="bounce1"></div>
+								<div class="bounce2"></div>
+								<div class="bounce3"></div>
+							</div>
+							<div class="load-more-assets-warning-msg" ng-show="$ctrl.showLoadMoreWarningMsg">
+								<img class="ui centered tiny video" ng-src="{{$ctrl.contentNotFoundVideo}}">
+								<p>Didn’t find what you were looking for? Try <a href="#" ng-click="$ctrl.searchTextClicked();">search</a>
+									for something more specific
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
    			<div class="content" ng-if="$ctrl.plugin =='audio'">
    				<div class="ui big loader {{$ctrl.loading}}"></div>
    				<div class="ui grid">
@@ -439,12 +567,16 @@
    				</div>
    			</div>
    		</div>
-      </div>
+			</div>
+
+
+		<!-- Upload and Use Section -->
+
       <div class="actions" ng-hide="$ctrl.uploadView" ng-switch="$ctrl.buttonToShow">
    		<div class="ui grid">
    			<div class="three wide column left aligned">
    				<button class="ui blue button" ng-click="$ctrl.switchToUpload(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'open', target: 'openUpladForm'})" type="button">
-   				{{$ctrl.plugin=='image' ? 'Upload and use': 'Upload/ Record'}}</button>
+   				{{$ctrl.plugin=='image' || 'video' ? 'Upload and use': 'Upload/ Record'}}</button>
    			</div>
    			<div class="nine wide column right aligned">
    				<div class="ui buttons" style="margin:0;">
@@ -459,7 +591,7 @@
    		<div class="ui two column divided grid">
    			<div class="row ui form">
    				<div class="column">
-   					<div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
+   					<div class="ui two column divided grid" ng-if="$ctrl.plugin == 'audio' || $ctrl.plugin == 'video'" ng-hide="$ctrl.upload || $ctrl.record">
    					  	 <div class="row center aligned">
    						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'upload', target: 'uploadAsset'});">
    						  		<p><i class="huge upload icon"></i></p>
