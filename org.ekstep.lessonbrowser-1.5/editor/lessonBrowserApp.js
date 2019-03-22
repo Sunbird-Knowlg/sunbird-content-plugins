@@ -53,7 +53,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 "filters": {
                     "objectType": ["Content"],
                     "status": ["Live"]
-                }
+                },
+                "sort_by":{"lastUpdatedOn":"desc"}
             }
         };
 
@@ -281,7 +282,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         "objectType": ["Content"],
                         "status": ["Live"]
                     },
-                    "query": ecEditor.jQuery('#resourceSearch').val()
+                    "query": ecEditor.jQuery('#resourceSearch').val(),
+                    "sort_by":{"lastUpdatedOn":"desc"}
                 }
             };
             $scope.filterSelection = {};
@@ -445,12 +447,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                                 $scope.isLoading = false;
                                 $timeout(function() {
                                     ecEditor.jQuery('#noLessonMsg').hide();
+                                    ctrl.dropdownAndCardsConfig();
                                 }, 0);
                             });
                         } else {
                             $scope.isLoading = false;
                             $timeout(function() {
                                 ecEditor.jQuery('#noLessonMsg').show();
+                                ctrl.dropdownAndCardsConfig();
                             }, 0);
                         }
                     } else {
@@ -501,7 +505,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 $scope.sortOption = query.request.sort_by;
                 searchBody.request.sort_by = query.request.sort_by;
             } else {
-                delete searchBody.request.sort_by;
+                searchBody.request.sort_by = {"lastUpdatedOn":"desc"};
             }
 
             ecEditor._.forEach($scope.filterSelection, function(value, key) {
