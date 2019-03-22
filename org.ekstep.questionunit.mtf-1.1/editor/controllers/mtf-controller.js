@@ -241,7 +241,8 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
   $scope.deletePair = function (id) {
     $scope.mtfFormData.option.optionsLHS.splice(id, 1);
     $scope.mtfFormData.option.optionsRHS.splice(id, 1);
-    $scope.updatedMapIndex()
+    $scope.updatedMapIndex();
+    $scope.BindCkeditor();
   }
 
   $scope.updatedMapIndex = function(){
