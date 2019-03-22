@@ -60,6 +60,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     });
                     $scope.generateError({ status: '', error: err });
                     $scope.closePopup();
+
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
@@ -68,6 +69,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     } else {
                         $scope.fetchCollaborators();
                     }
+                    $scope.generateImpression({type:'view', subtype:'popup-open', pageid:'collaboratorPlugin',duration: (new Date() - instance.startLoadTime).toString()});
                 }
             });
         }
@@ -150,6 +152,9 @@ angular.module('collaboratorApp', ['angular-inview'])
                         /*istanbul ignore else */
                         if (res && res.data && res.data.result && res.data.result.response && res.data.result.response.content) {
                             $scope.users = res.data.result.response.content;
+                            
+                            /** remove current user from users list */
+                            $scope.users = _.filter($scope.users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
                             $scope.users.count = res.data.result.response.content.length;
                         }
                     }
@@ -217,6 +222,8 @@ angular.module('collaboratorApp', ['angular-inview'])
                 });
             }
 
+            /** remove current user from users list */
+            users = _.filter(users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
             return users;
         }
 
@@ -416,6 +423,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     "subtype": data.subtype || "",
                     "pageid": data.pageid || "",
                     "uri": window.location.href,
+                    "duration": data.duration,
                     "visits": $scope.inViewLogs
                 });
             }

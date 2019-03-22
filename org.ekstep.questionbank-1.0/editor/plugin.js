@@ -23,6 +23,7 @@ org.ekstep.questionbank.EditorPlugin = org.ekstep.contenteditor.basePlugin.exten
     var instance = this;
     instance.callback = dataObj.callback;
     instance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : '';
+    instance.pluginLoadStartTime = new Date();
     ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
       template: 'QuestionFormTemplate',
       controller: 'QuestionFormController',

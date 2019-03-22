@@ -286,32 +286,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
-                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-                        headerTitle: $scope.CONSTANTS.tocUploadHeader,
-                        description: $scope.CONSTANTS.tocUploadDescription,
-                        sampleUploadCsvFile: $scope.CONSTANTS.tocUploadSampleCsvFile,
-                        sampleUploadCsvFileLink: $scope.CONSTANTS.tocUploadSampleCsvFileLink,
-                        validation: {
-                            'allowedExtension': ['csv']
-                        },
-                        buttonText: {
-                            'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
-                            'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
-                        },
-                        callback: function (data, errTitle) {
-                            console.log('response err', data);
-                            $scope.errTitle = errTitle;
-                            $scope.errMessage = data;
-                            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                                template: 'updateTocError',
-                                controller: 'headerController',
-                                controllerAs: '$ctrl',
-                                showClose: false,
-                                scope: $scope,
-                                className: 'ngdialog-theme-default'
-                            });                   
-                        }
-                    });
+                    $scope.createToc();
                 }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
@@ -321,6 +296,44 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             }
         });
     };
+
+    $scope.createToc = function() {
+        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+            headerTitle: $scope.CONSTANTS.tocUploadHeader,
+            description: $scope.CONSTANTS.tocUploadDescription,
+            sampleUploadCsvFile: $scope.CONSTANTS.tocUploadSampleCsvFile,
+            sampleUploadCsvFileLink: $scope.CONSTANTS.tocUploadSampleCsvFileLink,
+            validation: {
+                'allowedExtension': ['csv']
+            },
+            buttonText: {
+                'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
+                'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
+            },
+            callback: function (data, errTitle) {
+                $scope.errTitle = errTitle;
+                $scope.errMessage = data;
+                ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                    template: 'updateTocError',
+                    controller: ['$scope', 'mainCtrl', function($scope, mainCtrl) {
+                        $scope.errTitle = mainCtrl.errTitle;
+                        $scope.errMessage = mainCtrl.errMessage;
+                        $scope.closePopup = function() {
+                            $scope.closeThisDialog()
+                            mainCtrl.createToc();
+                        }
+                    }],
+                    resolve: {
+                        mainCtrl: function() {
+                            return $scope;
+                        }
+                    },
+                    showClose: false,
+                    closeByEscape: false
+                });
+            }
+        });
+    }
 
     $scope.expandNode = function() {
         ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll($scope.expandNodeFlag);

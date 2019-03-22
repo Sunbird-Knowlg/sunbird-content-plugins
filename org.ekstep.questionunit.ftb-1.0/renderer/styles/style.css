@@ -1,7 +1,6 @@
 #ftb-template {
   position: relative;
   margin: auto;
-  text-align: center;
   line-height: 2em;
   width: 80%;
   margin-top: 2%;
@@ -29,6 +28,11 @@
 }
 
 .qs-ftb-content {
+  line-height: 3;
+  margin:5px;
+}
+
+.qs-ftb-content .urdu-text{ /*overrides default line-height of urdu-text */
   line-height: 3;
 }
 
@@ -91,9 +95,7 @@
 }
 
 .ftb-question-text {
-  text-align:left;
-  line-height: 40px;
-  width: 80%;
+  width: 97%;
 }
 
 .align-question {
