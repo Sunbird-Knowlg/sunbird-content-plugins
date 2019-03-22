@@ -45,8 +45,8 @@
                     </div>
                     <div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
                         <label>Keywords</label>
-                        <tags-input ng-model="unit.keywords" display-property="lemma" placeholder="Enter Keywords"
-                            replace-spaces-with-dashes="false" ng-class="mode == 'Edit' ? '' : 'remove-delete'">
+                        <tags-input text="textVar" ng-blur="textVar=''" ng-focus="keywordFocus()" ng-model="unit.keywords" display-property="lemma" placeholder="Enter Keywords"
+                            replace-spaces-with-dashes="false" on-tag-adding="onKeywordAdding($tag)" ng-class="mode == 'Edit' ? '' : 'remove-delete'">
                             <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true"
                                 load-on-empty="true" max-results-to-show="100" template="my-custom-template"></auto-complete>
                         </tags-input>
