@@ -231,6 +231,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 }
                 return true;
             });
+            
             users.count = UserCount;
             return users;
         }
