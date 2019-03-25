@@ -8,6 +8,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.defaultLimit = 200;
         $scope.isContentOwner = false;
         $scope.users = [];
+        $scope.totalUsers = undefined;
         $scope.collaborators = [];
         $scope.currentCollaborators = []; //existingCollaborators
         let meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -154,6 +155,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                             /** remove current user from users list */
                             $scope.users = _.filter($scope.users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
                             $scope.users.count = $scope.users.length;
+                            $scope.totalUsers = res.data.result.response.content.length;
                         }
                     }
 
@@ -208,7 +210,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          * @returns Users list with excluding existing collaborators
          */
         $scope.excludeCollaborators = function (users) {
-            users.count = users.length;
+            $scope.totalUsers = users.length;
 
             /*istanbul ignore else */
             if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
