@@ -77,9 +77,23 @@ SEQController.touchConvertInit = function() {
 SEQController.onDomReady = function () {
   $(document).ready(function () {
     SEQController.touchConvertInit();
-    $(".option-block-container").sortable();
+    $(".option-block-container").sortable({
+      start: function(evt,ui){
+
+      },
+      stop: function(evt,ui){
+        SEQController.logTelemetryInteract(evt);
+      }
+    });
     $(".option-block-container").disableSelection();
-  })
-}
+  });
+};
+
+SEQController.logTelemetryInteract = function (event) {
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, {
+    type: QSTelemetryLogger.EVENT_TYPES.TOUCH,
+    id: event.target.id
+  }); // eslint-disable-line no-undef
+};
 
 //# sourceURL=questionunit.seq.renderer.seq-template-controller.js
