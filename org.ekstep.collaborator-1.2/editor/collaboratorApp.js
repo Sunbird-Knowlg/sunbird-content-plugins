@@ -211,6 +211,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.excludeCollaborators = function (users) {
             $scope.totalUsers = users.length;
+            $scope.count = users.length;
 
             /*istanbul ignore else */
             if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
