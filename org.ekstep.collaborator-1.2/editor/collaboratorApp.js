@@ -211,26 +211,27 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.excludeCollaborators = function (users) {
             $scope.totalUsers = users.length;
-            $scope.count = users.length;
+            var UserCount = users.length;
 
             /*istanbul ignore else */
             if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
                 _.find(users, function (val, index) {
                     if (_.indexOf($scope.currentCollaborators, val.identifier) >= 0) {
                         users[index].isCollaborator = true;
-                        users.count -= 1;
+                        UserCount -= 1;
                     }
                 });
             }
 
             /** remove current user from users list */
             users = _.filter(users, function(user){ 
-                if(user.identifier !== ecEditor.getContext('user').id){
-                    users.count -= 1;
-                    return true;
+                if(user.identifier == ecEditor.getContext('user').id){
+                    UserCount -= 1;
+                    return false;
                 }
-                return false;
+                return true;
             });
+            users.count = UserCount;
             return users;
         }
 
