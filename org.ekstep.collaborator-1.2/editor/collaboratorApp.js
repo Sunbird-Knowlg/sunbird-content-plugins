@@ -221,7 +221,13 @@ angular.module('collaboratorApp', ['angular-inview'])
             }
 
             /** remove current user from users list */
-            users = _.filter(users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
+            users = _.filter(users, function(user){ 
+                if(user.identifier !== ecEditor.getContext('user').id){
+                    users.count -= 1;
+                    return true;
+                }
+                return false;
+            });
             return users;
         }
 
