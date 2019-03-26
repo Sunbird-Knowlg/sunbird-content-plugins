@@ -53,7 +53,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 "filters": {
                     "objectType": ["Content"],
                     "status": ["Live"]
-                }
+                },
+                "sort_by":{"lastUpdatedOn":"desc"}
             }
         };
 
@@ -243,7 +244,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         "objectType": ["Content"],
                         "status": ["Live"]
                     },
-                    "query": ""
+                    "query": "",
+                    "sort_by":{"lastUpdatedOn":"desc"}
                 }
             };
             $scope.getFiltersValue(); /** Get filters values**/
@@ -280,7 +282,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         "objectType": ["Content"],
                         "status": ["Live"]
                     },
-                    "query": ecEditor.jQuery('#resourceSearch').val()
+                    "query": ecEditor.jQuery('#resourceSearch').val(),
+                    "sort_by":{"lastUpdatedOn":"desc"}
                 }
             };
             $scope.filterSelection = {};
