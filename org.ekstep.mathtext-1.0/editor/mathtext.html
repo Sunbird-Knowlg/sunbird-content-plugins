@@ -154,7 +154,7 @@
         </div>
 
         <div class="ui nine wide column math-formula" ng-show="advanceField">
-          <input id="advInput" type="textarea" class="latex-field" ng-model="latexValue" ng-click="getCursorPosition($event)">
+          <input id="advInput" type="textarea" class="latex-field" ng-model="latexValue" ng-keydown="getCursorPosition($event)">
         </div>
 
         <div class="ui three wide column right aligned math-add-button-div">
