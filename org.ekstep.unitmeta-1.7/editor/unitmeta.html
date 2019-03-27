@@ -57,6 +57,13 @@
                     </script>
                     </div>
                     <dial-code></dial-code>
+                    <div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
+                        <label>Purpose of Content to be linked</label>
+                        <div class="ui input">
+                            <textarea placeholder="Purpose of Content to be linked" ng-model="unit.purpose" name="purpose"
+                                rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'purpose'})"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -96,6 +103,11 @@
                         <td class="one wide"><b>QR code</b></td>
                         <td class="">:</td>
                         <td class="eleven wide">{{unit.dialcodes.join(', ') || '--'}}</td>
+                    </tr>
+                    <tr class="top aligned">
+                        <td class="one wide"><b>Purpose of Content to be linked</b></td>
+                        <td class="">:</td>
+                        <td class="eleven wide">{{unit.purpose || "--"}}</td>
                     </tr>
                 </tbody>
             </table>
