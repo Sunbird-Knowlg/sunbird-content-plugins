@@ -78,9 +78,6 @@ SEQController.onDomReady = function () {
   $(document).ready(function () {
     SEQController.touchConvertInit();
     $(".option-block-container").sortable({
-      start: function(evt,ui){
-
-      },
       stop: function(evt,ui){
         SEQController.logTelemetryInteract(evt);
       }
@@ -91,7 +88,7 @@ SEQController.onDomReady = function () {
 
 SEQController.logTelemetryInteract = function (event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, {
-    type: QSTelemetryLogger.EVENT_TYPES.TOUCH,
+    type: QSTelemetryLogger.EVENT_TYPES.DRAG,
     id: event.target.id
   }); // eslint-disable-line no-undef
 };
