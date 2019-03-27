@@ -87,7 +87,7 @@ SEQController.onDomReady = function () {
 };
 
 SEQController.logTelemetryInteract = function (event) {
-  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, {
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.DRAG, {
     type: QSTelemetryLogger.EVENT_TYPES.DRAG,
     id: event.target.id
   }); // eslint-disable-line no-undef
