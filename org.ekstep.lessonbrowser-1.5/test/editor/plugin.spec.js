@@ -448,5 +448,22 @@ describe("lesson browser plugin", function() {
                 expect($('#noLessonMsg').is(':visible')).toEqual(false);
             });
         });
+
+        describe("Telemetry Generation", function(){
+            it("should generate telemetry for user interaction", function() {
+                spyOn(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE), 'impression');
+                var data = {type: "view-resource", subtype: "popup-open", pageid: "lessonbrowserplugin", duration: "5371271"};
+                spyOn(ctrl, 'generateImpression').and.callThrough();
+                ctrl.generateImpression(data);
+                expect(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).impression).toHaveBeenCalledWith({
+                    "type": data.type,
+                    "subtype": data.subtype || "",
+                    "pageid": data.pageid || "",
+                    "uri": window.location.href,
+                    "visits": inViewLogs,
+                    'duration': data.duration || ""
+                });
+            });
+        });
     });
 });
