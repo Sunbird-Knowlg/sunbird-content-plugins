@@ -4,6 +4,16 @@ angular.module('richtexteditorapp', [])
     .controller('richtexteditorcontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         var ctrl = this;
         ctrl.text = '';
+        ctrl.pluginLoadStartTime = new Date();
+        ctrl.generateImpression = function(data) {
+            if (data) ecEditor.getService('telemetry').impression({
+                "type": data.type,
+                "subtype": data.subtype || "",
+                "pageid": data.pageid || "",
+                "uri": window.location.href,
+                "duration": data.duration
+            });
+        }
         $scope.$on('ngDialog.opened', function (e, $dialog) {
             var richTextElement = document.getElementsByClassName('richtextEditor_1');
             richTextElement = richTextElement[0];
@@ -25,6 +35,7 @@ angular.module('richtexteditorapp', [])
                 ctrl.selectedText = true;
                 CKEDITOR.instances.editor1.setData(textObj.config.text);
             }
+            ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'RichTextEditor', duration: (new Date()) - ctrl.pluginLoadStartTime });
         });
         ctrl.generateTelemetry = function(data) {
             if (data) {

@@ -241,7 +241,8 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
   $scope.deletePair = function (id) {
     $scope.mtfFormData.option.optionsLHS.splice(id, 1);
     $scope.mtfFormData.option.optionsRHS.splice(id, 1);
-    $scope.updatedMapIndex()
+    $scope.updatedMapIndex();
+    $scope.BindCkeditor();
   }
 
   $scope.updatedMapIndex = function(){
@@ -379,6 +380,15 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
           var popupPosition = inputWidth - popUpWidth;
           $($('.cke_float')[index]).css('margin-left',popupPosition+'px');
         }
+        $scope.generateTelemetry({
+          type: 'TOUCH',
+          id: 'input',
+          target: {
+            id: 'questionunit-mtf-question-' + optionSide,
+            ver: '',
+            type: 'input'
+          }
+        })
       });
     }
     optionInput.on('change', function () {

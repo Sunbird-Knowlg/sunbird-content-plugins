@@ -45,8 +45,8 @@
                     </div>
                     <div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
                         <label>Keywords</label>
-                        <tags-input ng-model="unit.keywords" display-property="lemma" placeholder="Enter Keywords"
-                            replace-spaces-with-dashes="false" ng-class="mode == 'Edit' ? '' : 'remove-delete'">
+                        <tags-input text="textVar" ng-blur="textVar=''" ng-focus="keywordFocus()" ng-model="unit.keywords" display-property="lemma" placeholder="Enter Keywords"
+                            replace-spaces-with-dashes="false" on-tag-adding="onKeywordAdding($tag)" ng-class="mode == 'Edit' ? '' : 'remove-delete'">
                             <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true"
                                 load-on-empty="true" max-results-to-show="100" template="my-custom-template"></auto-complete>
                         </tags-input>
@@ -57,6 +57,13 @@
                     </script>
                     </div>
                     <dial-code></dial-code>
+                    <div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
+                        <label>Purpose of Content to be linked</label>
+                        <div class="ui input">
+                            <textarea placeholder="Purpose of Content to be linked" ng-model="unit.purpose" name="purpose"
+                                rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'purpose'})"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -96,6 +103,11 @@
                         <td class="one wide"><b>QR code</b></td>
                         <td class="">:</td>
                         <td class="eleven wide">{{unit.dialcodes.join(', ') || '--'}}</td>
+                    </tr>
+                    <tr class="top aligned">
+                        <td class="one wide"><b>Purpose of Content to be linked</b></td>
+                        <td class="">:</td>
+                        <td class="eleven wide">{{unit.purpose || "--"}}</td>
                     </tr>
                 </tbody>
             </table>

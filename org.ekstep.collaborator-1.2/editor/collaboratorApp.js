@@ -60,6 +60,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     });
                     $scope.generateError({ status: '', error: err });
                     $scope.closePopup();
+
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
@@ -68,6 +69,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     } else {
                         $scope.fetchCollaborators();
                     }
+                    $scope.generateImpression({type:'view', subtype:'popup-open', pageid:'collaboratorPlugin',duration: (new Date() - instance.startLoadTime).toString()});
                 }
             });
         }
@@ -153,7 +155,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                             
                             /** remove current user from users list */
                             $scope.users = _.filter($scope.users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
-                            $scope.users.count = res.data.result.response.content.length;
+                            $scope.users.count = $scope.users.length;
                         }
                     }
 
@@ -208,20 +210,27 @@ angular.module('collaboratorApp', ['angular-inview'])
          * @returns Users list with excluding existing collaborators
          */
         $scope.excludeCollaborators = function (users) {
-            users.count = users.length;
+            var userCount = users.length;
 
             /*istanbul ignore else */
             if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
                 _.find(users, function (val, index) {
                     if (_.indexOf($scope.currentCollaborators, val.identifier) >= 0) {
                         users[index].isCollaborator = true;
-                        users.count -= 1;
+                        userCount -= 1;
                     }
                 });
             }
 
             /** remove current user from users list */
-            users = _.filter(users, function(user){ return user.identifier !== ecEditor.getContext('user').id });
+            users = _.filter(users, function(user){ 
+                if(user.identifier == ecEditor.getContext('user').id){
+                    userCount -= 1;
+                    return false;
+                }
+                return true;
+            });
+            users.count = userCount;
             return users;
         }
 
@@ -421,6 +430,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     "subtype": data.subtype || "",
                     "pageid": data.pageid || "",
                     "uri": window.location.href,
+                    "duration": data.duration,
                     "visits": $scope.inViewLogs
                 });
             }

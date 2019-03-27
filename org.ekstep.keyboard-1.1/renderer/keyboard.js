@@ -18,7 +18,6 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
     </div>\
     <div id="keyboard" class="keyboardArea" style="height: 100%;">\
         <div class="parentDivMainKeyboard qc-keyboard-bottom">\
-          <% if(Keyboard.buttons.length >0) { %> \
             <div id="firstRow">\
               <% _.each(Keyboard.buttons, function(btn) { %> \
                 <div onclick="Keyboard.addLetter(event);" class="key_barakhadi">\
@@ -38,7 +37,6 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                   <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;"/>\
                 </div>\
             </div>\
-          <% } %> \
         </div>\
         <div id="parentDivNumericKeyboard">\
             <div id="firstRowNum">\

@@ -61,6 +61,7 @@ var textEditor = (function() {
     function generateTelemetry(data) {
         if(data){
             ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                "id": data.id,
                 "type": data.type, "subtype": data.subtype, "target": data.target,
                 "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "",
                 "stage": ecEditor.getCurrentStage().id
@@ -96,7 +97,7 @@ var textEditor = (function() {
         if (!$doneBtn.length) {
             $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
-                    generateTelemetry({type: 'click', subtype: 'done', target: 'addString'});
+                    generateTelemetry({id: 'button', type: 'click', subtype: 'done', target: 'addString'});
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
                         ecEditor.getPluginInstance(pluginId).editorObj.text = $editor.val();
@@ -116,7 +117,7 @@ var textEditor = (function() {
         if (!$cancelBtn.length) {
             $cancelBtn = ecEditor.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
                 .click(function() {
-                    generateTelemetry({type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
+                    generateTelemetry({id: 'button', type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
                     _commonBtnClickAction();
                     /* istanbul ignore next*/
                     if (!editorText.trim().length) {
