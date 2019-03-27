@@ -167,6 +167,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
 
     $scope.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
+            "id": data.id,
             "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
