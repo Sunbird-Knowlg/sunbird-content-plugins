@@ -176,7 +176,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             }
             $scope.mainTemplate = 'cardDetailsView';
             $scope.lessonView = lesson;
-            ctrl.generateImpression({type:'view', subtype:'view-details', pageid:'lessonbrowserplugin',duration: (new Date() - $scope.startLoadTime).toString()});
+            ctrl.generateImpression({ id: 'button', type:'view', subtype:'view-details', pageid:'lessonbrowserplugin',duration: (new Date() - $scope.startLoadTime).toString()});
         }
 
         // apply all jquery after dom render
@@ -339,7 +339,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     metadata: $scope.filterSelection
                 });
                 $scope.isLoading = false;
-                ctrl.generateImpression({type:'view-resource', subtype:'popup-open', pageid:'lessonbrowserplugin',duration: (new Date() - instance.startLoadTime).toString()});
+                ctrl.generateImpression({ id: 'button', type:'view-resource', subtype:'popup-open', pageid:'lessonbrowserplugin',duration: (new Date() - instance.startLoadTime).toString()});
             }, 800);
         }
 
