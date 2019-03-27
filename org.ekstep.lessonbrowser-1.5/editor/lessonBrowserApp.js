@@ -77,6 +77,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Generate interact telemetry
         ctrl.generateTelemetry = function(data) {
             if (data) ecEditor.getService('telemetry').interact({
+                "id": data.id,
                 "type": data.type,
                 "subtype": data.subtype,
                 "target": data.target,
@@ -91,6 +92,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Generate Impression telemetry
         ctrl.generateImpression = function(data) {
             if (data) ecEditor.getService('telemetry').impression({
+                "id": data.id,
                 "type": data.type,
                 "subtype": data.subtype || "",
                 "pageid": data.pageid || "",
@@ -240,7 +242,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // Sidebar - filters
         $scope.applyFilters = function() {
-            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'filter', targetid: 'button-filter-apply' });
+            ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'submit', target: 'filter', targetid: 'button-filter-apply' });
             searchBody = {
                 "request": {
                     "filters": {
@@ -267,18 +269,18 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Close the popup
         $scope.closePopup = function(pageId) {
             if (pageId == "facetsItemView") {
-                ctrl.generateImpression({ type: 'click', subtype: 'close', pageid: 'FacetList' });
+                ctrl.generateImpression({ id: 'button', type: 'click', subtype: 'close', pageid: 'FacetList' });
             } else {
-                ctrl.generateImpression({ type: 'click', subtype: 'close', pageid: 'LessonBrowser' });
+                ctrl.generateImpression({ id: 'button', type: 'click', subtype: 'close', pageid: 'LessonBrowser' });
             }
             inViewLogs = [];
-            ctrl.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'addlesson', targetid: 'button-cancel' });
+            ctrl.generateTelemetry({ id: 'button', type: 'click', subtype: 'cancel', target: 'addlesson', targetid: 'button-cancel' });
             $scope.closeThisDialog();
         };
 
         // Sidebar filters - Reset
         $scope.resetFilters = function() {
-            ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'filter', targetid: 'button-filter-reset' });
+            ctrl.generateTelemetry({ id: 'button', type: 'click', subtype: 'reset', target: 'filter', targetid: 'button-filter-reset' });
             searchBody = {
                 "request": {
                     "filters": {
@@ -345,14 +347,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.toggleSelectionLesson = function(lesson) {
             var idx = $scope.selectedResources.indexOf(lesson.identifier);
             if (idx > -1) {
-                ctrl.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'lesson', targetid: lesson.identifier });
+                ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'uncheck', target: 'lesson', targetid: lesson.identifier });
                 if ($scope.mainTemplate != 'addedItemsView') {
                     ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', false);
                 }
                 $scope.lessonSelection.splice(idx, 1); // is currently selected, remove from selection list
                 $scope.selectedResources.splice(idx, 1);
             } else {
-                ctrl.generateTelemetry({ type: 'click', subtype: 'check', target: 'lesson', targetid: lesson.identifier });
+                ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'check', target: 'lesson', targetid: lesson.identifier });
                 if ($scope.mainTemplate != 'addedItemsView') {
                     ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', true);
                 }
@@ -366,7 +368,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ecEditor.jQuery('.searchLoader').addClass('active');
             $scope.searchStatus = "start";
             var searchQuery = this.searchKeyword;
-            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
+            ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
             searchBody.request.filters.name = { "value": this.searchKeyword };
             if (!searchBody.request.filters.contentType) {
                 searchBody.request.filters.contentType = collectionService.getObjectTypeByAddType('Browser');
@@ -482,7 +484,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // view all the items for a specific resource
         $scope.viewAll = function(query, sectionIndex) {
-            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
+            ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
                 query = JSON.parse(query);
             }
@@ -596,16 +598,16 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Get and return the selected lessons
         $scope.returnSelectedLessons = function(pageId, selectedLessons) {
             // Geenerate interact telemetry
-            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'addlesson', targetid: 'button-add' });
+            ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'submit', target: 'addlesson', targetid: 'button-add' });
             // return selected lessons to the lesson browser caller
             var err = null;
             var res = selectedLessons;
             callback(err, res);
             // generate impression
             if (pageId == "facetsItemView") {
-                ctrl.generateImpression({ type: 'click', subtype: 'submit', pageid: 'FacetList' });
+                ctrl.generateImpression({ id:'button', type: 'click', subtype: 'submit', pageid: 'FacetList' });
             } else {
-                ctrl.generateImpression({ type: 'click', subtype: 'submit', pageid: 'LessonBrowser' });
+                ctrl.generateImpression({ id:'button', type: 'click', subtype: 'submit', pageid: 'LessonBrowser' });
 
             }
             inViewLogs = [];

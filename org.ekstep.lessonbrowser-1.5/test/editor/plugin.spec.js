@@ -188,9 +188,10 @@ describe("lesson browser plugin", function() {
 
     it('mock controller', function(done) {
         angular.mock.module('oc.lazyLoad');
-        // angular.mock.module('Scope.safeApply');
-        inject(function($ocLazyLoad, _$rootScope_, _$controller_) {
+        angular.mock.module('Scope.safeApply');
+        inject(function($ocLazyLoad, _$rootScope_, _$controller_,  _$timeout_) {
             var $controller = _$controller_;
+            $timeout = _$timeout_;
             $scope = _$rootScope_.$new();
 
             $ocLazyLoad.load([
@@ -202,7 +203,7 @@ describe("lesson browser plugin", function() {
             }, function(error) {
                 done();
             });
-            setInterval(function() {
+            setTimeout(function() {
                 _$rootScope_.$digest();
             }, 10);
         });
@@ -452,15 +453,18 @@ describe("lesson browser plugin", function() {
         describe("Telemetry Generation", function(){
             it("should generate telemetry for user interaction", function() {
                 spyOn(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE), 'impression');
-                var data = {type: "view-resource", subtype: "popup-open", pageid: "lessonbrowserplugin", duration: "5371271"};
+                var data = {id:'button', type:'view-resource',subtype:'popup-open',pageid:'lessonbrowserplugin',uri:'http://localhost:9876/context.html',visits:[Object({objid:'do_1126972437930229761372',objtype:'Collection',section:'LessonBrowser',index:0})],duration:'5371271'};
+                org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).impression(data);
                 spyOn(ctrl, 'generateImpression').and.callThrough();
                 ctrl.generateImpression(data);
+                 expect(ctrl.generateImpression).toHaveBeenCalled();
                 expect(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).impression).toHaveBeenCalledWith({
+                    "id": data.id,
                     "type": data.type,
                     "subtype": data.subtype || "",
                     "pageid": data.pageid || "",
-                    "uri": window.location.href,
-                    "visits": inViewLogs,
+                    "uri": data.uri,
+                    "visits": data.visits,
                     'duration': data.duration || ""
                 });
             });
