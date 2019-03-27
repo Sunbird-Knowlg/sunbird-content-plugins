@@ -152,7 +152,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     },0);
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "id": "button", "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "id": data.id, "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 
     $scope.loadKeywords = function($query) {
