@@ -1,18 +1,19 @@
 angular.module('org.ekstep.genericeditorpreview', []).controller('previewController', ['$scope', function($scope) {
 	$scope.showPreview = false;
-	$scope.showPreviewFrame = function(){
+	
+	var metadata= ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+	if(metadata){
+		$scope.showPdfWarningMsg = (metadata.mimeType == 'application/pdf') ? true : false;
 		$scope.showPreview = true;
-		if(!$scope.metadata){
-			$scope.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-		}
-		$scope.showPdfWarningMsg = ($scope.metadata.mimeType == 'application/pdf') ? true : false;
 		$scope.$safeApply();
 	}
-	ecEditor.addEventListener("atpreview:show", $scope.showPreviewFrame);
-	$scope.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-	if($scope.metadata){
-		$scope.showPreviewFrame();
-	}
+
+	ecEditor.addEventListener("atpreview:show", function(){
+		var metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+		$scope.showPdfWarningMsg = (metadata.mimeType == 'application/pdf') ? true : false;
+		$scope.showPreview = true;
+		$scope.$safeApply();
+	});
 
 	$scope.hidePdfWarningMsg = function(){
 		$scope.showPdfWarningMsg = false;
