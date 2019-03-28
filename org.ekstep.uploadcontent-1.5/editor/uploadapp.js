@@ -162,7 +162,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     }
 
     $scope.upload = function() {
-        $scope.generateTelemetry({subtype:"upload",target:"browseButton",objecttype:'content'})
+        $scope.generateTelemetry({id:"button", type:"click", subtype:"upload",target:"browseButton",objecttype:'content'})
         $scope.showLoader(true);
         if ($scope.uploader.getFile(0) == null && !$scope.contentURL) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -387,6 +387,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
 
     $scope.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
+            "id": data.id,
             "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",

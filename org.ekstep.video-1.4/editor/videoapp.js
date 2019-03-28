@@ -241,7 +241,7 @@ angular.module('videoApp', [])
                             org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({
                                 "err": err.code || '',
                                 "errtype": 'CONTENT',
-                                "stacktrace": err.toString(),
+                                "stacktrace": err.message.toString() || err.toString(),
                                 "pageid": ecEditor.getCurrentStage().id,
                                 "object": object,
                                 "plugin": {
@@ -344,6 +344,7 @@ angular.module('videoApp', [])
 
         ctrl.generateTelemetry = function (data) {
             if (data) org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                "id": data.id,
                 "type": data.type,
                 "subtype": data.subtype,
                 "target": data.target,
