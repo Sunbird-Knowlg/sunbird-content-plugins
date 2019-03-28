@@ -203,7 +203,7 @@ describe("lesson browser plugin", function() {
             }, function(error) {
                 done();
             });
-            setTimeout(function() {
+            setInterval(function() {
                 _$rootScope_.$digest();
             }, 10);
         });
