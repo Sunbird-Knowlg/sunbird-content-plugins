@@ -211,11 +211,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.saveContent = function (cb) {
+        $scope.saveInitiated = Date.now();
+        $scope.generateTelemetry({id:"button",subtype:'save_initiated'})
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
             showNotification: true,
             callback: function (err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
+                    $scope.generateTelemetry({id:'button',subtype:'save_successful',duration:(Date.now() - $scope.saveInitiated).toString()})
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
                         var contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
@@ -590,9 +593,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.generateTelemetry = function (data) {
         if (data) ecEditor.getService('telemetry').interact({
+            "id": data.id || "" ,
             "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
+            'duration': data.duration ||"",
             "pluginid": plugin.id,
             "pluginver": plugin.ver,
             "objectid": "",
