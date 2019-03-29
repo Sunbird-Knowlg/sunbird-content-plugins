@@ -206,20 +206,36 @@ describe("EditorPlugin", function() {
       plugin.editorObj = { "_objects": [{ "type": "image", "originX": "left", "originY": "top", "left": -392.5, "top": -256.5, "width": 785, "height": 513, "fill": "rgb(0,0,0)", "stroke": null, "strokeWidth": 0, "strokeDashArray": null, "strokeLineCap": "butt", "strokeLineJoin": "miter", "strokeMiterLimit": 10, "scaleX": 1, "scaleY": 1, "angle": 0, "flipX": false, "flipY": false, "opacity": 1, "shadow": null, "visible": true, "clipTo": null, "backgroundColor": "", "fillRule": "nonzero", "globalCompositeOperation": "source-over", "transformMatrix": null, "skewX": 0, "skewY": 0, "src": "http://localhost:3000/plugins/org.ekstep.questionset-1.0/editor/assets/quizimage.png", "filters": [], "resizeFilters": [] }, { "type": "group", "originX": "left", "originY": "top", "left": -359.5, "top": -235.65, "width": 125.66, "height": 31.56, "fill": "rgb(0,0,0)", "stroke": null, "strokeWidth": 0, "strokeDashArray": null, "strokeLineCap": "butt", "strokeLineJoin": "miter", "strokeMiterLimit": 10, "scaleX": 1, "scaleY": 1, "angle": 0, "flipX": false, "flipY": false, "opacity": 1, "shadow": null, "visible": true, "clipTo": null, "backgroundColor": "", "fillRule": "nonzero", "globalCompositeOperation": "source-over", "transformMatrix": null, "skewX": 0, "skewY": 0, "_objects": [{ "type": "text", "originX": "left", "originY": "top", "left": -62.83, "top": -15.78, "width": 10.83, "height": 16.95, "fill": "black", "stroke": null, "strokeWidth": 1, "strokeDashArray": null, "strokeLineCap": "butt", "strokeLineJoin": "miter", "strokeMiterLimit": 10, "scaleX": 1, "scaleY": 1, "angle": 0, "flipX": false, "flipY": false, "opacity": 1, "shadow": null, "visible": true, "clipTo": null, "backgroundColor": "", "fillRule": "nonzero", "globalCompositeOperation": "source-over", "transformMatrix": null, "skewX": 0, "skewY": 0 }, { "type": "text", "originX": "left", "originY": "top", "left": -62.83, "top": 1.22, "width": 72.33, "height": 13.56, "fill": "black", "stroke": null, "strokeWidth": 1, "strokeDashArray": null, "strokeLineCap": "butt", "strokeLineJoin": "miter", "strokeMiterLimit": 10, "scaleX": 1, "scaleY": 1, "angle": 0, "flipX": false, "flipY": false, "opacity": 1, "shadow": null, "visible": true, "clipTo": null, "backgroundColor": "", "fillRule": "nonzero", "globalCompositeOperation": "source-over", "transformMatrix": null, "skewX": 0, "skewY": 0 }, { "type": "text", "originX": "left", "originY": "top", "left": 22.17, "top": 1.22, "width": 39.66, "height": 13.56, "fill": "black", "stroke": null, "strokeWidth": 1, "strokeDashArray": null, "strokeLineCap": "butt", "strokeLineJoin": "miter", "strokeMiterLimit": 10, "scaleX": 1, "scaleY": 1, "angle": 0, "flipX": false, "flipY": false, "opacity": 1, "shadow": null, "visible": true, "clipTo": null, "backgroundColor": "", "fillRule": "nonzero", "globalCompositeOperation": "source-over", "transformMatrix": null, "skewX": 0, "skewY": 0 }] }] };
     });
 
-    it('should set question title to question set', function() {
+    it('should set question title to Newtest', function() {
       plugin.editorObj._objects[1]._objects[0].setText = jasmine.createSpy('setText');
       plugin.onConfigChange("title", "question set");
       expect(plugin.config.title).toEqual("question set");
+      });
+ 
+    it('should set total_items to 1', function(done) {
+      var callback = {data: multiData, callBack: undefined }
+      ecEditor.dispatchEvent("org.ekstep.questionset:addQS", callback);
+      setTimeout(function _expect(){ 
+      var instance = stage.children[stage.children.length-1];
+      config.initialize()
+      var modData = {"newValue":{"title":"Newtest","max_score":2,"allow_skip":true,"show_feedback":true,"shuffle_questions":true,"shuffle_options":false,"total_items":1,"btn_edit":"Edit"},"oldValue":{"title":"test","max_score":2,"allow_skip":true,"show_feedback":true,"shuffle_questions":false,"shuffle_options":false,"total_items":2,"btn_edit":"Edit"}};
+      ecEditor.dispatchEvent('config:updateValue',modData,instance);
+      expect(plugin.config.total_items).toEqual(1);
+        done();
+        }, 500);
     });
-    it('should set total_items to 2', function() {
-      plugin.editorObj._objects[1]._objects[1].setText = jasmine.createSpy('setText');
-      plugin.onConfigChange("total_items", 2);
-      expect(plugin.config.total_items).toEqual(2);
-    });
-    it('should  set max_score to 2', function() {
-      plugin.editorObj._objects[1]._objects[2].setText = jasmine.createSpy('setText');
-      plugin.onConfigChange("max_score", 2);
-      expect(plugin.config.max_score).toEqual(2);
+
+    it('should  set max_score to 1', function(done) {
+      var callback = {data: multiData, callBack: undefined }
+      ecEditor.dispatchEvent("org.ekstep.questionset:addQS", callback);
+      setTimeout(function _expect(){ 
+      var instance = stage.children[stage.children.length-1];
+      config.initialize()
+      var modData = {"newValue":{"title":"Newtest","max_score":1,"allow_skip":true,"show_feedback":true,"shuffle_questions":true,"shuffle_options":false,"total_items":2,"btn_edit":"Edit"},"oldValue":{"title":"test","max_score":2,"allow_skip":true,"show_feedback":true,"shuffle_questions":false,"shuffle_options":false,"total_items":2,"btn_edit":"Edit"}};
+      ecEditor.dispatchEvent('config:updateValue',modData,instance);
+      expect(plugin.config.max_score).toEqual(1);
+        done();
+        }, 500);
     });
     it('should call render', function() {
       plugin.onConfigChange("shuffle_questions", false);
@@ -233,13 +249,15 @@ describe("EditorPlugin", function() {
       plugin.onConfigChange("show_feedback", false);
       expect(plugin.config.show_feedback).toBeFalsy();
     });
-    it('should set optionShuffle to be false', function() {
+    it('should set optionShuffle to be true', function() {
       plugin.onConfigChange("optionShuffle", true);
       expect(plugin.config.optionShuffle).toBeTruthy();
+
     });
     it('should set shuffle_questions to be false', function() {
       plugin.onConfigChange("btn_edit", "Edit");
       expect(ecEditor.dispatchEvent).toHaveBeenCalledWith('delete:invoke');
+      
     });
   });
 
