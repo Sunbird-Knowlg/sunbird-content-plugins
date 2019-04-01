@@ -60,6 +60,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     });
                     $scope.generateError({ status: '', error: err });
                     $scope.closePopup();
+
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
@@ -68,6 +69,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     } else {
                         $scope.fetchCollaborators();
                     }
+                    $scope.generateImpression({type:'view', subtype:'popup-open', pageid:'collaboratorPlugin',duration: (new Date() - instance.startLoadTime).toString()});
                 }
             });
         }
@@ -78,7 +80,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.selectTab = function (event) {
             if (event.currentTarget.dataset.tab === 'userListTab') {
-                $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
+                $scope.generateTelemetry({id:'button', type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
                 $scope.isAddCollaboratorTab = false;
 
 
@@ -88,7 +90,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.fetchCollaborators();
                 }
             } else {
-                $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'addCollaborator', targetid: 'addCollaboratorTab' });
+                $scope.generateTelemetry({id:'button',  type: 'click', subtype: 'changeTab', target: 'addCollaborator', targetid: 'addCollaboratorTab' });
                 $scope.isLoading = false;
                 $scope.isAddCollaboratorTab = true;
             }
@@ -237,7 +239,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.closePopup = function () {
             $scope.inViewLogs = [];
-            $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
+            $scope.generateTelemetry({id:'button',  type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
         };
 
@@ -249,11 +251,11 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.toggleSelectionUser = function (user, index, list) {
             if ($scope[list][index].isSelected) {
-                $scope.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'user', targetid: user.identifier });
+                $scope.generateTelemetry({id:'input',  type: 'click', subtype: 'uncheck', target: 'user', targetid: user.identifier });
                 $scope[list][index].isSelected = false;
                 $scope[list].selectedCount -= 1;
             } else {
-                $scope.generateTelemetry({ type: 'click', subtype: 'check', target: 'user', targetid: user.identifier });
+                $scope.generateTelemetry({id:'input',  type: 'click', subtype: 'check', target: 'user', targetid: user.identifier });
                 $scope[list][index].isSelected = true;
                 $scope[list].selectedCount += 1;
             }
@@ -341,7 +343,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.$safeApply();
                 }
             });
-            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
+            $scope.generateTelemetry({id: 'input', type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
         }
 
         $scope.filterSearch = function (user) {
@@ -352,7 +354,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          * Shows Search Results in large screen
          */
         $scope.viewAllResults = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "view-all-results" });
+            $scope.generateTelemetry({id: 'button', type: 'click', subtype: 'submit', target: 'viewAll', targetid: "view-all-results" });
             $scope.users = $scope.searchRes.content;
             $timeout(function () {
                 ecEditor.jQuery('.profile-avatar').initial();
@@ -360,7 +362,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         $scope.refreshSearch = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'refresh', target: 'refreshSearch', targetid: "refresh-button" });
+            $scope.generateTelemetry({id: 'button', type: 'click', subtype: 'refresh', target: 'refreshSearch', targetid: "refresh-button" });
             this.searchKeyword = '';
         }
 
@@ -407,6 +409,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.generateTelemetry = function (data) {
             if (data) {
                 ecEditor.getService('telemetry').interact({
+                    "id": data.id,
                     "type": data.type,
                     "subtype": data.subtype,
                     "target": data.target,
@@ -428,6 +431,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     "subtype": data.subtype || "",
                     "pageid": data.pageid || "",
                     "uri": window.location.href,
+                    "duration": data.duration,
                     "visits": $scope.inViewLogs
                 });
             }

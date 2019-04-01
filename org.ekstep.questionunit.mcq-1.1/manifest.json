@@ -72,17 +72,17 @@
             },
             {
                 "type": "image",
-                "src":"/renderer/assets/tick_icon.png",
+                "src":"renderer/assets/tick_icon.png",
                 "assetId":"org.ekstep.questionunit.mcq.tick_icon.png"
             },
             {
                 "type": "image",
-                "src":"/renderer/assets/audio-icon2.png",
+                "src":"renderer/assets/audio-icon2.png",
                 "assetId":"org.ekstep.questionunit.mcq.audio-icon2.png"
             },
             {
                 "type": "image",
-                "src":"/renderer/assets/music-blue.png",
+                "src":"renderer/assets/music-blue.png",
                 "assetId":"org.ekstep.questionunit.music-blue.png"
             }
         ]

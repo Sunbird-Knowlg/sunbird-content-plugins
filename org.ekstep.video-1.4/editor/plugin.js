@@ -27,6 +27,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     loadBrowser: function() {
         currentInstance = this;
+        currentInstance.pluginLoadStartTime = new Date();
         ecEditor.getService('popup').open({
             template: 'videoPreviewDialog',
             controller: 'videoCtrl',

@@ -11,6 +11,7 @@ angular.module('org.ekstep.mathtext', [])
     $scope.latexValue = ''; 
     $scope.cursorPosition = undefined;
     $scope.text_hint = true;
+    $scope.pluginLoadStartTime = new Date();
     $scope.libraryEquations = [
       {
         "title": "Area of circle",
@@ -49,7 +50,7 @@ angular.module('org.ekstep.mathtext', [])
         "latex": "a^n\\times a^m=a^{n+m}"
       }
     ];
-    $scope.activeTab = "library"
+    $scope.activeTab = "library";
     // Each object definition is:
     // {
     //   latex: <string>, // Latex string to enter into math-field on click
@@ -62,103 +63,103 @@ angular.module('org.ekstep.mathtext', [])
     $scope.symbols = {
       greek: [
         {
-          latex: "\\alpha",
+          latex: "\\alpha"
         },
         {
-          latex: "\\beta",
+          latex: "\\beta"
         },
         {
-          latex: "\\delta",
+          latex: "\\delta"
         },
         {
-          latex: "\\epsilon",
+          latex: "\\epsilon"
         },
         {
-          latex: "\\eta",
+          latex: "\\eta"
         },
         {
-          latex: "\\gamma",
+          latex: "\\gamma"
         },
         {
-          latex: "\\iota",
+          latex: "\\iota"
         },
         {
-          latex: "\\kappa",
+          latex: "\\kappa"
         },
         {
-          latex: "\\lambda",
+          latex: "\\lambda"
         },
         {
-          latex: "\\mu",
+          latex: "\\mu"
         },
         {
-          latex: "\\nu",
+          latex: "\\nu"
         },
         {
-          latex: "o",
+          latex: "o"
         },
         {
-          latex: "\\omega",
+          latex: "\\omega"
         },
         {
-          latex: "\\phi",
+          latex: "\\phi"
         },
         {
-          latex: "\\pi",
+          latex: "\\pi"
         },
         {
-          latex: "\\psi",
+          latex: "\\psi"
         },
         {
-          latex: "\\rho",
+          latex: "\\rho"
         },
         {
-          latex: "\\sigma",
+          latex: "\\sigma"
         },
         {
-          latex: "\\tau",
+          latex: "\\tau"
         },
         {
-          latex: "\\theta",
+          latex: "\\theta"
         },
         {
-          latex: "\\upsilon",
+          latex: "\\upsilon"
         },
         {
-          latex: "\\xi",
+          latex: "\\xi"
         },
         {
-          latex: "\\zeta",
+          latex: "\\zeta"
         },
         {
-          latex: "\\Delta",
+          latex: "\\Delta"
         },
         {
-          latex: "\\Gamma",
+          latex: "\\Gamma"
         },
         {
-          latex: "\\Lambda",
+          latex: "\\Lambda"
         },
         {
-          latex: "\\Omega",
+          latex: "\\Omega"
         },
         {
-          latex: "\\Phi",
+          latex: "\\Phi"
         },
         {
-          latex: "\\Pi",
+          latex: "\\Pi"
         },
         {
-          latex: "\\Psi",
+          latex: "\\Psi"
         },
         {
-          latex: "\\Sigma",
+          latex: "\\Sigma"
         },
         {
-          latex: "\\Theta",
+          latex: "\\Theta"
         },
         {
-          latex: "\\Upsilon",
+          latex: "\\Upsilon"
         }],
       binary: [
         {
@@ -464,6 +465,10 @@ angular.module('org.ekstep.mathtext', [])
         {
           latex: "\\sqrt[4]{}",
           latexDisplay: "\\sqrt[4]{a}"
+        },
+        {
+          latexCmd: "\\overgroup{AB}",
+          latexDisplay: "\\overgroup{AB}"
         }
       ],
       frac: [
@@ -520,8 +525,10 @@ angular.module('org.ekstep.mathtext', [])
       },
       {
         latexText: "\\leftrightarrows"
-      }
-    ]
+      },
+      {
+        latexText: "\\widetilde{a}"
+      }];
     $scope.equationGroup = 'all';
     $scope.advanceField = false;
     $scope.advancedImageArray = [];
@@ -565,6 +572,19 @@ angular.module('org.ekstep.mathtext', [])
       $scope.advancedImageArray.push(url);
     })
 
+    $scope.generateImpression = function(data) {
+      if (data){
+        ecEditor.getService('telemetry').impression({
+          "type": data.type,
+          "subtype": data.subtype || "",
+          "pageid": data.pageid || "",
+          "uri": window.location.href,
+          "visits": [],
+          "duration": (new Date()) - $scope.pluginLoadStartTime
+        });
+      }
+    }
+
     $scope.mergeAllSymbols = function () {
       return _.union($scope.symbols.greek, $scope.symbols.binary, $scope.symbols.arrow, $scope.symbols.misc);
     };
@@ -602,7 +622,7 @@ angular.module('org.ekstep.mathtext', [])
           MQ.StaticMath(element);
         });
       }, 1000);
-
+      $scope.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'MathText' });
     });
 
     $timeout(function () {
@@ -735,9 +755,13 @@ angular.module('org.ekstep.mathtext', [])
     }
 
     $scope.getCursorPosition = function(e){
-      var currentPosition = e.target.selectionStart;
-      $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
-    }
+      var currentPosition = e.target.selectionEnd;
+      if(e.which == 8){
+        $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
+      }else{
+        $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition;
+      } 
+    };
 
     $scope.addToStage = function (activeTab) {
       var equation,advance;
