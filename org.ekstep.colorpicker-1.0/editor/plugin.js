@@ -45,7 +45,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 showButtons: true,
                 change: function(color) { 
                     data.callback(data.id, color.toHexString());
-                    ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ "type": "click", "subtype": "change", "target": 'colorpicker', "pluginid": instance.manifest.id, 'pluginver': instance.manifest.ver, "objectid": data.id, "stage": ecEditor.getCurrentStage().id });
+                    ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({"id": "button", "type": "click", "subtype": "change", "target": 'colorpicker', "pluginid": instance.manifest.id, 'pluginver': instance.manifest.ver, "objectid": data.id, "stage": ecEditor.getCurrentStage().id });
                 },
                 showPaletteOnly: true,
                 togglePaletteOnly: true,

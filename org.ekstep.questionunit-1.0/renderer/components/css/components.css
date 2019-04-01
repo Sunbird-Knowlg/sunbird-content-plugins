@@ -5,7 +5,7 @@ body {
 
 /* overiding katex css */
 .math-text .katex-display {
-    margin: 0.5em 0 !important;
+    margin: 0.2em 0 !important;
 }
 
 /*end */
@@ -215,4 +215,11 @@ body {
 
 .plugin-content-container em {
     font-style: italic;
+}
+
+.urdu-text{
+    font-family: NotoNastaliqUrdu;
+    font-size: 12px;
+    padding: 3px;
+    line-height: 1.95em
 }

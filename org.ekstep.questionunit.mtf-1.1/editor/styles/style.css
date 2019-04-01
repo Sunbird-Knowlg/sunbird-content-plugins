@@ -42,6 +42,27 @@
   text-align: center;
 }
 
+.cke_float {
+  z-index: 9999999 !important;
+}
+.qc-mtf-textbox{
+    color: inherit;
+    text-align: center;
+  border-bottom: 1px solid #d8d8d8;
+}
+/*css for mathtext size decrease*/
+.qc-mtf-textbox span.math-text {
+    font-size: small;
+}
+.qc-mtf-option-placeholder::before{
+ content: 'Enter answer';
+ color: #aaa;
+ display: block;
+ position: absolute;
+ left: 33%;
+} 
+
+
 .has-error {
   border-bottom-color: #ea7575;
   /*border-bottom-width: 1.5px;*/

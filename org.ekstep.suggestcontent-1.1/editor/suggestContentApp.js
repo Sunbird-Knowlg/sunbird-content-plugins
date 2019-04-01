@@ -43,6 +43,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
     $scope.generateTelemetry = function (data) {
         if (data) org.ekstep.services.telemetryService.interact({
+            "id": data.id,
             "type": data.type,
             "subtype": data.subtype,
             "target": data.target,

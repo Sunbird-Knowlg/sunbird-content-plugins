@@ -337,7 +337,7 @@ angular.module('assessmentbrowserapp', [])
             ctrl.searchQuestions();
         });
         ctrl.generateTelemetry = function(data) {
-          if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
+          if (data) ecEditor.getService('telemetry').interact({ "id":data.id, "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
     }]);
 //# sourceURL=assessmentbrowserapp.js

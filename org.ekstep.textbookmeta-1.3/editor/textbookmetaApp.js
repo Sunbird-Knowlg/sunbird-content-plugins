@@ -301,6 +301,7 @@ textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter
 
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({
+            "id": data.id,
             "type": data.type,
             "subtype": data.subtype,
             "target": data.target,

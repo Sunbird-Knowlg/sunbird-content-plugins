@@ -16,11 +16,11 @@
           </div>
         </div>
         <div class="column right aligned">
-          <i class="cursor-pointer close link icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
+          <i class="cursor-pointer close link icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'close', target: 'closeButton'})"></i>
         </div>
       </div>
     </div>
-    <div class="content wizard">
+    <div class="content wizard qs-scrollbar">
       <div class="qb-filters-container" ng-show="!isQuestionSetConfig">
         <div ng-include="filterForm"></div>
       </div>
@@ -74,7 +74,7 @@
           <div class="seven wide column qb-question-container" ng-show="!isQuestionSetConfig">
               <span class="ui label">Total Question : {{questions.length}}</span>
               <span class="ui label qc-selected-quescount">Selected Question : {{selectedQuestions.length}}</span>
-            <div class="row qb-question-list-container">
+            <div class="row qb-question-list-container qs-scrollbar">
               <div class="ui large divided items">
                  
                 <div class="item select list-items ui grid" ng-repeat="question in questions" ng-class="{quesSelector: $index === selectedQueIndex}">
@@ -110,7 +110,7 @@
           </div>
           <div class="seven wide column qb-question-container" ng-show="isQuestionSetConfig">
               <span class="ui label">Total Question in Question Set : {{selectedQuestions.length}}</span>
-              <div class="column qb-selected-question-list-container" ng-show="isQuestionSetConfig">
+            <div class="column qb-selected-question-list-container qs-scrollbar" ng-show="isQuestionSetConfig">
               <div class="ui large divided items">
                 <div class="item select list-items ui grid" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">

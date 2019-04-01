@@ -239,10 +239,10 @@
    	</div>
    	<div class="content" ng-hide="$ctrl.uploadView">
    		<div class="ui pointing secondary menu">
-   		    <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'myImageTab'})">My images</a>
-   		    <a id="allImagesTab" ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'allImageTab'})">All image</a>
-   		    <a ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'myAudioTab'})">My audio</a>
-   			<a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'allAudioTab'})">All audio</a>
+   		    <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id: 'myAssetsTab', type: 'click', subtype: 'select', target: 'myImageTab'})">My images</a>
+   		    <a id="allImagesTab" ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'myAssetsTab', type: 'click', subtype: 'select', target: 'allImageTab'})">All image</a>
+   		    <a id="myAudioTab" ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id: 'myAudioTab', type: 'click', subtype: 'select', target: 'myAudioTab'})">My audio</a>
+   			<a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'allAudioTab', type: 'click', subtype: 'select', target: 'allAudioTab'})">All audio</a>
    		</div>
    		<div class="uploadingAsset ui tab active" data-tab="first" >
    			<div class="content" ng-if="$ctrl.plugin == 'image'">
@@ -402,7 +402,7 @@
    					<div class="column">
    						<div class="ui icon input assetbrowser_searchBox">
    							<input id="searchAllAudioAssets" ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-   							<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchAudioAsset'});"></i>
+   							<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({id: 'searchAllAudioAssets' type: 'click', subtype: 'search', target: 'searchAudioAsset'});"></i>
    						</div>
    					</div>
    				</div>
@@ -443,14 +443,14 @@
       <div class="actions" ng-hide="$ctrl.uploadView" ng-switch="$ctrl.buttonToShow">
    		<div class="ui grid">
    			<div class="three wide column left aligned">
-   				<button class="ui blue button" ng-click="$ctrl.switchToUpload(); $ctrl.generateTelemetry({type: 'click', subtype: 'open', target: 'openUpladForm'})" type="button">
+   				<button class="ui blue button" ng-click="$ctrl.switchToUpload(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'open', target: 'openUpladForm'})" type="button">
    				{{$ctrl.plugin=='image' ? 'Upload and use': 'Upload/ Record'}}</button>
    			</div>
    			<div class="nine wide column right aligned">
    				<div class="ui buttons" style="margin:0;">
-   					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
+   					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
    					<div class="or"></div>
-   					<button ng-switch-when="select" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectAndUseAsset'})" type="button">Select</button>
+   					<button ng-switch-when="select" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'selectAndUseAsset'})" type="button">Select</button>
    				</div>
    			</div>
    		</div>
@@ -461,12 +461,12 @@
    				<div class="column">
    					<div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
    					  	 <div class="row center aligned">
-   						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({type: 'click', subtype: 'upload', target: 'uploadAsset'});">
+   						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'upload', target: 'uploadAsset'});">
    						  		<p><i class="huge upload icon"></i></p>
    						  		UPLOAD
    						  	</div>
    						  	<div class="ui vertical divider"></div>
-   							<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true; $ctrl.uploadButton(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'recordAudio'});">
+   							<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'recordAudio'});">
    								<p><i class="huge unmute icon"></i></p>
    								RECORD
    						  	</div>
@@ -495,7 +495,7 @@
    									<div class="row playContainer">
    										<div class="twelve wide column center-aligned" ng-hide="recorder.status.isRecording || !recorder.audioModel">
    											<i class="ui icon circle {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} huge blue cursor-pointer"
-   											ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume(); $ctrl.generateTelemetry({type: 'click', subtype: 'play', target: 'playPauseRecoredAudio'});"></i>
+   											ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'play', target: 'playPauseRecoredAudio'});"></i>
    										</div>
    									</div>
 
@@ -504,12 +504,12 @@
    									<div class="ui grid">
    										<div class="row">
    											<div class="twelve center aligned  wide column" ng-hide="recorder.status.isRecording">
-   												<div id="replaceRecord" class="cursor-pointer" ng-click="recorder.startRecord(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'startRecording'});">
+   												<div id="replaceRecord" class="cursor-pointer" ng-click="recorder.startRecord(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'startRecording'});">
    													<i class="ui icon selected radio huge blue"></i>
    													<p><b>START RECORDING</b></p>
    												</div>
 
-   												<div id="replaceRecordDiv" class="cursor-pointer hide" ng-click="recorder.startRecord(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'replaceRecording'});">
+   												<div id="replaceRecordDiv" class="cursor-pointer hide" ng-click="recorder.startRecord(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'replaceRecording'});">
    													<i class="ui icon retweet"></i><b>REPLACE</b>
    												</div>
    											</div>
@@ -554,13 +554,13 @@
    						<div class="field">
    							<div class="ui radio checkbox">
    								<input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">
-   								<label for="ccByContribution1" ng-click="$ctrl.setPublic(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectCCBYproperty'});">Yes, make it available to everyone</label>
+   								<label for="ccByContribution1" ng-click="$ctrl.setPublic(); $ctrl.generateTelemetry({id: 'ccByContribution1', type: 'click', subtype: 'select', target: 'selectCCBYproperty'});">Yes, make it available to everyone</label>
    							</div>
    						</div>
    						<div class="field">
    							<div class="ui radio checkbox">
    								<input id="ccByContribution2" name="ccByContribution" type="radio" ng-click="$ctrl.setPrivate()" value="">
-   								<label for="ccByContribution2"  ng-click="$ctrl.setPrivate(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'unselectCCBYproperty'});">No, don't share with anyone</label>
+   								<label for="ccByContribution2"  ng-click="$ctrl.setPrivate(); $ctrl.generateTelemetry({id: 'ccByContribution2', type: 'click', subtype: 'select', target: 'unselectCCBYproperty'});">No, don't share with anyone</label>
    							</div>
    						</div>
    					</div>
@@ -612,14 +612,14 @@
    	<div class="actions" ng-show="$ctrl.uploadView">
    		<div class="ui grid">
    			<div class="three wide column left aligned">
-   				<button class="ui grey button" ng-click="$ctrl.uploadView=false; $ctrl.plugin=='image' ? '' : $ctrl.upload = false; $ctrl.record=false; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'backUploadBtn'})">Back</button>
+   				<button class="ui grey button" ng-click="$ctrl.uploadView=false; $ctrl.plugin=='image' ? '' : $ctrl.upload = false; $ctrl.record=false; $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'backUploadBtn'})">Back</button>
    			</div>
    			<div class="nine wide column right aligned">
    				<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
    				<div class="ui buttons">
-   					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
+   					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
    					<div class="or"></div>
-   					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload($event); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'uploadAndUseAssetBrowserButton'})" type="button">Upload and Use</button>
+   					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload($event); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'uploadAndUseAssetBrowserButton'})" type="button">Upload and Use</button>
    				</div>
    			</div>
    		</div>

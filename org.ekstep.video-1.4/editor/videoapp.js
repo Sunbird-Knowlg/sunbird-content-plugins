@@ -241,7 +241,7 @@ angular.module('videoApp', [])
                             org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({
                                 "err": err.code || '',
                                 "errtype": 'CONTENT',
-                                "stacktrace": err.toString(),
+                                "stacktrace": err.message.toString() || err.toString(),
                                 "pageid": ecEditor.getCurrentStage().id,
                                 "object": object,
                                 "plugin": {
@@ -258,6 +258,19 @@ angular.module('videoApp', [])
 
                 });
             
+        }
+
+                
+    // Generate Impression telemetry
+        ctrl.generateImpression = function(data) {
+            if (data) ecEditor.getService('telemetry').impression({
+                "type": data.type,
+                "subtype": data.subtype || "",
+                "pageid": data.pageid || "",
+                "uri": window.location.href,
+                "visits": ctrl.inViewLogs,
+                "duration": data.duration
+            });
         }
         ctrl.previewVideo = function () {            
             ctrl.messageDiv = true;
@@ -279,6 +292,7 @@ angular.module('videoApp', [])
             })
         };
         setTimeout(function () {
+            ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'VideoBrowser', duration: (new Date()) - instance.pluginLoadStartTime });
             ctrl.videoLibraryTabElement = "video-library-tab";
             ecEditor.jQuery('.video-modal .menu .item').tab();
             ctrl.bindScroll = function (data) {
@@ -330,6 +344,7 @@ angular.module('videoApp', [])
 
         ctrl.generateTelemetry = function (data) {
             if (data) org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                "id": data.id,
                 "type": data.type,
                 "subtype": data.subtype,
                 "target": data.target,
