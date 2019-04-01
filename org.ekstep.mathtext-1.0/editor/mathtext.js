@@ -465,10 +465,6 @@ angular.module('org.ekstep.mathtext', [])
         {
           latex: "\\sqrt[4]{}",
           latexDisplay: "\\sqrt[4]{a}"
-        },
-        {
-          latexCmd: "\\overgroup{AB}",
-          latexDisplay: "\\overgroup{AB}"
         }
       ],
       frac: [
@@ -528,6 +524,10 @@ angular.module('org.ekstep.mathtext', [])
       },
       {
         latexText: "\\widetilde{a}"
+      },
+      {
+        latexText: "\\overgroup{AB}",
+        customImage: 'assets/arc.png'
       }];
     $scope.equationGroup = 'all';
     $scope.advanceField = false;
