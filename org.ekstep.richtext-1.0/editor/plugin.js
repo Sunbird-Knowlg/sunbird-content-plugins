@@ -138,7 +138,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         div.setAttribute("id", instance.data.id);
         div.style.position = 'absolute';
         div.style.fontSize = '14px';
-        div.style.fontFamily = 'NotoSans';
         div.style.width = instance.data.editorObj.width ? instance.data.editorObj.width + 1 + 'px' : "auto";
         div.style.height = instance.data.editorObj.height ? instance.data.editorObj.height + 1 + 'px' : "auto";
         div.style.pointerEvents = "none";

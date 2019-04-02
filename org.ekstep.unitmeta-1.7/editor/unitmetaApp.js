@@ -90,6 +90,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     }
 
     $scope.onNodeSelect = function(event, data){
+        $scope.isTabSwitched = true;
         var selectedTopics = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
@@ -151,7 +152,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     },0);
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "id": data.id, "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 
     $scope.loadKeywords = function($query) {
@@ -181,7 +182,15 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             }
         }, true);
     }
-
+    $scope.onKeywordAdding = function(tag){
+        if($scope.isTabSwitched){
+            return false
+        }
+        return true
+    }
+    $scope.keywordFocus = function(){
+        $scope.isTabSwitched =  false
+    }
     $scope.changeTitle = function(){
         $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
