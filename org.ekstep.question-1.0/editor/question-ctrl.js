@@ -376,16 +376,18 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	$scope.assessmentId = questionData.identifier;
   	$scope.questionData = questionData1;
   	$scope.questionCreationFormData = questionData1.data.data;
-  	$scope.questionData.medium = questionData1.data.config.metadata.medium;
   	$scope.questionData.questionTitle = questionData.title;
   	$scope.questionData.qlevel = questionData.qlevel || questionData.level;
-      $scope.questionData.subject = questionData1.data.config.metadata.subject;
       if(!questionData.identifier){
         $scope.questionData.board = "";
         $scope.questionData.gradeLevel = "";
+        $scope.questionData.subject = "";
+        $scope.questionData.medium = "";
       }else{
         $scope.questionData.board = questionData1.data.config.metadata.board;
         $scope.questionData.gradeLevel = questionData1.data.config.metadata.gradeLevel;
+        $scope.questionData.medium = questionData1.data.config.metadata.medium;
+        $scope.questionData.subject = questionData1.data.config.metadata.subject;
       }
   	$scope.questionData.templateType = questionData1.data.config.layout;
   	$scope.questionData.isPartialScore = questionData1.data.config.partial_scoring;

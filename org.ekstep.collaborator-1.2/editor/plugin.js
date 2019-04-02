@@ -17,6 +17,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     */
     loadBrowser: function (event, data) {
         currentInstance = this;
+        currentInstance.startLoadTime = new Date();
         ecEditor.getService('popup').open({
             template: 'partials/collaborator',
             controller: 'collaboratorCtrl',

@@ -344,6 +344,7 @@ angular.module('createquestionapp', [])
         } else {
           console.log(error);
         }
+        $scope.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'QuestionBrowser' })
       });
     }
 
@@ -759,6 +760,19 @@ angular.module('createquestionapp', [])
         });
       } else {
         $scope.showPreview(question);
+      }
+    }
+
+    $scope.generateImpression = function(data) {
+      if (data){
+        ecEditor.getService('telemetry').impression({
+          "type": data.type,
+          "subtype": data.subtype || "",
+          "pageid": data.pageid || "",
+          "uri": window.location.href,
+          "visits": [],
+          "duration": (new Date()) - pluginInstance.pluginLoadStartTime
+        });
       }
     }
 

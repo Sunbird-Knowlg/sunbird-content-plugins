@@ -379,6 +379,15 @@ angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormCon
           var popupPosition = inputWidth - popUpWidth;
           $($('.cke_float')[index]).css('margin-left',popupPosition+'px');
         }
+        $scope.generateTelemetry({
+          type: 'TOUCH',
+          id: 'input',
+          target: {
+            id: 'questionunit-mtf-question-' + optionSide,
+            ver: '',
+            type: 'input'
+          }
+        })
       });
     }
     optionInput.on('change', function () {

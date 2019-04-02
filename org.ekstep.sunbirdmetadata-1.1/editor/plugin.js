@@ -51,7 +51,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @description    - Initialization of the plugin.
      */
-    initialize: function() {
+    initialize: function () {
         var instance = this
         ecEditor.addEventListener('editor:form:cancel', this.cancelAction, this)
         ecEditor.addEventListener('editor:form:success', this.successAction, this)
@@ -65,12 +65,13 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @description   - to render metadata form
      */
-    invoke: function(event, config) {
+    invoke: function (event, config) {
         var instance = this;
         instance.model = config.metadata;
         instance.editMode = config.editMode;
+        instance.startLoadTime = new Date();
         if (!this.isConfigurationsExists(config.subType, config.action)) {
-            this.getConfigurations(config, function(error, res) {
+            this.getConfigurations(config, function (error, res) {
                 if (res) {
                     instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
                     instance.renderForm(config.popup, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
@@ -90,7 +91,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @description         - When field value changes. Currenlty, Event is dispatching
      *                        only when drop down value changes
      */
-    onConfigChange: function(event, object) {},
+    onConfigChange: function (event, object) { },
 
     /**
      * @event           -'editor:form:success'
@@ -98,12 +99,12 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @description     - Which is used to perform the save/review actions when form is submitted.
      *                    Which is currently handles 'review` and `save' action
      */
-    successAction: function(event, data) {
+    successAction: function (event, data) {
         var instance = this
         if (data.isValid) {
             if (data.formData.metaData.mimeType === 'application/vnd.ekstep.content-collection') this.updateState(data.formData)
-                // Callback function
-            var callbackFn = function(err, res) {
+            // Callback function
+            var callbackFn = function (err, res) {
                 if (res && res.data && res.data.responseCode == 'OK') {
                     data.callback && data.callback(undefined, res)
                 } else {
@@ -132,9 +133,9 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @param {Fn} callbackFn       - Callback function
      */
-    reviewContent: function(data, callbackFn) {
+    reviewContent: function (data, callbackFn) {
         var instance = this
-        var saveCallBackFn = function(err, res) {
+        var saveCallBackFn = function (err, res) {
             if (!err) {
                 ecEditor.dispatchEvent(instance.eventMap[instance.config.action], reviewCallBackFn)
             } else {
@@ -142,7 +143,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 callbackFn(err)
             }
         }
-        var reviewCallBackFn = function(err, res) {
+        var reviewCallBackFn = function (err, res) {
             if (!err) {
                 ecEditor.dispatchEvent(instance.eventMap['close']);
             }
@@ -158,7 +159,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @param {Fn} callbackFn       - Callback function
      */
-    saveMeta: function(contentMeta, callbackFn) {
+    saveMeta: function (contentMeta, callbackFn) {
         this.options.contentMeta = contentMeta
         this.options.callback = callbackFn
         ecEditor.dispatchEvent(this.eventMap['savemeta'], this.options)
@@ -167,7 +168,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @description     - save meta data
      */
-    saveContent: function(contentMeta, callbackFn) {
+    saveContent: function (contentMeta, callbackFn) {
         switch (contentMeta.mimeType) {
             case 'application/vnd.ekstep.content-collection':
             case 'application/vnd.ekstep.ecml-archive':
@@ -189,7 +190,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @param {Object} data      - Which contains a callback method and other options
      */
-    cancelAction: function(event, data) {
+    cancelAction: function (event, data) {
         data.callback && data.callback()
     },
 
@@ -197,31 +198,31 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @description             - Which get the form configurations, framework and resource bundle data
      *                            Which makes async parallel call.
      */
-    getConfigurations: function(request, callback) {
+    getConfigurations: function (request, callback) {
         var instance = this
         async.parallel({
-            config: function(callback) {
+            config: function (callback) {
                 // get the formConfigurations data
-                org.ekstep.services.configuration.getFormConfigurations({ request: request }, function(error, response) {
+                org.ekstep.services.configuration.getFormConfigurations({ request: request }, function (error, response) {
                     if (!error) callback(undefined, response)
                     else callback(error, undefined)
-                        //callback(undefined, window.formConfigurations)
+                    //callback(undefined, window.formConfigurations)
                 })
             },
-            framework: function(callback) {
+            framework: function (callback) {
                 // get the framworkData
                 var metaData = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'))
                 var frameworkId = request.framework || metaData.framework;
-                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
+                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function (error, response) {
                     if (!error) callback(undefined, response)
                     else callback(error, undefined)
                 })
             },
-            resourceBundle: function(callback) {
+            resourceBundle: function (callback) {
                 // get the resource bundle data
                 callback(undefined, {})
             }
-        }, function(error, response) {
+        }, function (error, response) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
             if (error) {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -239,7 +240,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @returns {Object}
      */
-    getFields: function() {
+    getFields: function () {
         return this.form
     },
 
@@ -247,7 +248,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      *
      */
-    getTemplate: function() {
+    getTemplate: function () {
         return this.config.templateName
     },
 
@@ -258,13 +259,13 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @example                 - {resourceBundle:{},framework:{},config:{}}
      */
-    renderForm: function(isPopup, config) {
+    renderForm: function (isPopup, config) {
         var instance = this;
         this.resourceBundle = config.resourceBundle
         this.framework = config.framework
         this.config = config.formConfig
         this.form = this.mapObject(this.config.fields, this.framework.categories)
-        this.loadTemplate(this.config.templateName, function(templatePath) {
+        this.loadTemplate(this.config.templateName, function (templatePath) {
             isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath, "formAction": instance.config.action })
         })
 
@@ -275,7 +276,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @param {Object} stateObj - It should contain the {isRoot, isNew, and form metaData information}
      */
-    updateState: function(object) {
+    updateState: function (object) {
         var isNew = true
         var contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'))
         if (!_.isEmpty(contentMeta) && _.has(contentMeta, ['name'])) {
@@ -295,7 +296,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @param {String} type     - Should be subType @example(Textbook,course, assesment)
      * @param {String} action   - Defines the name of the action @example(review, save)
      */
-    mapResponse: function(type, action, value) {
+    mapResponse: function (type, action, value) {
         this.mappedResponse[type + '_' + action] = value;
     },
 
@@ -303,7 +304,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @description            - Which defines is configuration is already mapped in the local object or not    
      * @return     {Boolean}
      */
-    isConfigurationsExists: function(type, action) {
+    isConfigurationsExists: function (type, action) {
         return this.mappedResponse[type + '_' + action] ? true : false
     },
 
@@ -312,16 +313,16 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @param {String} type     - Should be subType @example(Textbook,course, assesment)
      * @param {String} action   - Defines the name of the action @example(review, save)       -
      */
-    getMappedResponse: function(type, action) {
+    getMappedResponse: function (type, action) {
         return this.mappedResponse[type + '_' + action]
     },
 
 
-    getModel: function() {
+    getModel: function () {
         return this.model || ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
     },
 
-    returnConfigs: function(event, callbackFn) {
+    returnConfigs: function (event, callbackFn) {
         callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form, editMode: this.editMode, messages: this.config.messages })
     }
 })

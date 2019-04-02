@@ -359,6 +359,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     position: 'bottom center',
                 });
         });
+        ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'AssetsBrowser', duration: (new Date()) - ctrl.pluginLoadStartTime });
     };
 
     ctrl.convertToBytes = function(bytes) {
@@ -603,6 +604,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
+            "id": data.id,
             "type": data.type,
             "subtype": data.subtype,
             "target": data.target,
@@ -643,7 +645,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             "subtype": data.subtype || "",
             "pageid": data.pageid || "",
             "uri": window.location.href,
-            "visits": ctrl.inViewLogs
+            "visits": ctrl.inViewLogs,
+            "duration": data.duration
         });
     }
 
@@ -651,7 +654,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     $scope.closePopup = function() {
         ctrl.generateImpression({ type: 'view', subtype: 'popup-exit', pageid: 'AssetsBrowser' });
         ctrl.inViewLogs = [];
-        ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'});
+        ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'close', target: 'closeAssetBrowser'});
         $scope.closeThisDialog();
     };    
     
@@ -725,6 +728,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     setTimeout(function() {
+        ctrl.pluginLoadStartTime = new Date();        
         ctrl.myTabScrollElement = (instance.mediaType === "image") ?  "my-image-tab" : "my-audio-tab";
         ctrl.allTabScrollElement = (instance.mediaType === "image") ?  "all-image-tab" : "all-audio-tab";
         
