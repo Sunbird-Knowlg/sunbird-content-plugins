@@ -420,6 +420,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
             $scope.disableTocActionBtn = true;
+        } else {
+            $scope.pendingChanges = true;
         }
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
