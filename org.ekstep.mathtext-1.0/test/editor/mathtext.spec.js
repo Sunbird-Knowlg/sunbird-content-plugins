@@ -75,12 +75,44 @@ describe("Math text Editor template controller", function() {
             $scope.latexToFormula('libFormula1', 'text');
             expect(katex.render).toHaveBeenCalled();
         });
+        it("Should call latexToEquations function", function() {
+            var obj = {"title":"Area of circle","latex":"A = \\pi r^2","$$hashKey":"object:1171"};
+            spyOn($scope, 'latexToEquations').and.callThrough();
+            $scope.latexToEquations(obj);
+            expect($scope.latexToEquations).toHaveBeenCalled();
+        });
+        it("Should call latexToFormulaMQ  function", function() {
+            var id = 'math-data';
+            spyOn($scope, 'latexToFormulaMQ').and.callThrough();
+            $scope.latexToFormulaMQ(id);
+            expect($scope.latexToFormulaMQ).toHaveBeenCalled();
+        });
+        it("Should call generateImpression   function", function() {
+            var data = {"type":"view","subtype":"popup-open","pageid":"MathText"};
+            spyOn($scope, 'generateImpression ').and.callThrough();
+            $scope.generateImpression(data);
+            expect($scope.generateImpression ).toHaveBeenCalled();
+        });     
+        it("Should call mergeAllSymbols    function", function() {
+            spyOn($scope, 'mergeAllSymbols ').and.callThrough();
+            $scope.mergeAllSymbols();
+            expect($scope.mergeAllSymbols ).toHaveBeenCalled();
+        });   
         it("Should dispatch event", function() {
             spyOn($scope, 'addToStage').and.callThrough();
             $scope.addToStage();
             expect(ecEditor.dispatchEvent).toHaveBeenCalled();
         });
-    
+        it("Should call getCursorPosition function", function() {
+            var element = {};
+            element.target = {};
+            element.target.selectionEnd = 24;
+            element.which = 8;
+            spyOn($scope, 'getCursorPosition').and.callThrough();
+            $scope.getCursorPosition(element);
+            expect($scope.getCursorPosition).toHaveBeenCalled();
+            expect(element.which).toEqual(8);
+        });
     });
   });
   //# sourceURL=math-controller.spec.js

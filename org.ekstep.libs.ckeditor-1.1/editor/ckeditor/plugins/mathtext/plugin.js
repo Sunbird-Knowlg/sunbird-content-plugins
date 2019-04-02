@@ -192,7 +192,7 @@
 
         // Set raw text inside <code>...</code>.
         el.add(new CKEDITOR.htmlParser.text(CKEDITOR.tools.htmlEncode(math)));
-
+        this.wrapper.$.setAttribute('contenteditable',false);
         return el;
       }
     });

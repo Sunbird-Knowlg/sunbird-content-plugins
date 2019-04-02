@@ -211,11 +211,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.saveContent = function (cb) {
+        $scope.saveInitiated = Date.now();
+        $scope.generateTelemetry({id:"button",subtype:'save_initiated'})
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
             showNotification: true,
             callback: function (err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
+                    $scope.generateTelemetry({id:'button',subtype:'save_successful',duration:(Date.now() - $scope.saveInitiated).toString()})
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
                         var contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
@@ -438,7 +441,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
         }
     }
-
     $scope.telemetry = function (data) {
         org.ekstep.services.telemetryService.interact({
             "type": 'click',
@@ -450,6 +452,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             "stage": ecEditor.getCurrentStage().id
         });
     };
+    /**
+     * @description   - Fires ImpressionEvent
+     * @param data {Object} 
+     */
+
+    $scope.generateImpression = function(data) {
+        if (data) ecEditor.getService('telemetry').impression({
+            "type": data.type,
+            "subtype": data.subtype || "",
+            "pageid": data.pageid || "",
+            "uri": window.location.href,
+            "duration": data.duration,
+            "visits": []
+        });
+    }
 
     $scope.internetStatusFn = function (event) {
         $scope.$safeApply(function () {
@@ -511,18 +528,26 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
         $scope.$apply();
     }
+    /**
+     * @description  -Will be called by immediately invoked function in this controller
+     */
     $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
         $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
         if (!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
             console.log('trigger upload form');
             ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
+            $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
         }
         $scope.$safeApply();
     };
-
+    /**
+     * @description -Opens uploadcontent form popup
+     */
     $scope.upload = function () {
+        $scope.uploadFormStart = new Date();
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
+        $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
     };
 
     $scope.download = function () {
@@ -556,7 +581,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         "objecttype": "",
                         "err": err.status,
                         "type": "API",
-                        "data": err,
+                        "data": err.message,
                         "severity": "fatal"
                     })
                 }
@@ -568,9 +593,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.generateTelemetry = function (data) {
         if (data) ecEditor.getService('telemetry').interact({
+            "id": data.id || "" ,
             "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
+            'duration': data.duration ||"",
             "pluginid": plugin.id,
             "pluginver": plugin.ver,
             "objectid": "",
@@ -1120,6 +1147,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;
             $scope.disableQRGenerateBtn = false;
+            $scope.uploadFormStart = new Date();
             $scope.showUploadForm();
         }
     })()

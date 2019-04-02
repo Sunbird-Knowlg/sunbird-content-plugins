@@ -21,6 +21,7 @@ QSFeedbackPopup.hidePopup = function() {
  */
 QSFeedbackPopup.moveToNextStage = function() {
   EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: 'button-next' });
   QSFeedbackPopup.hidePopup();
 }
 /**
@@ -38,6 +39,7 @@ QSFeedbackPopup.showTryAgain = function() {
  */
 QSFeedbackPopup.showRetry = function() {
   EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: 'button-retry' });
   QSFeedbackPopup.hidePopup();
 }
 /*

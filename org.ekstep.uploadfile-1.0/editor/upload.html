@@ -67,11 +67,11 @@
     <div class="content">
         <div ng-if="configData.sampleUploadCsvFileLink">
             <div class="csvdescription">{{configData.description}}</div>
-            <div class="sampleuploadcsv"><a href={{configData.sampleUploadCsvFileLink}} ng-click="generateTelemetry({subtype:'sampleuploadcsv',target:'samplecsvfile'})">{{configData.sampleUploadCsvFile}}</a></div>
+            <div class="sampleuploadcsv"><a href={{configData.sampleUploadCsvFileLink}} ng-click="generateTelemetry({id: 'button', subtype:'sampleuploadcsv',target:'samplecsvfile'})">{{configData.sampleUploadCsvFile}}</a></div>
         </div>
         <div ng-if="configData.sampleUpdateCsvFileLink">
             <div>{{configData.description}}</div>
-            <div class="sampleupdatecsv"><a href={{configData.sampleUpdateCsvFileLink}} ng-click="generateTelemetry({subtype:'sampleupdatecsv',target:'samplecsvfile'})">{{configData.sampleUpdateCsvFile}}</a></div>
+            <div class="sampleupdatecsv"><a href={{configData.sampleUpdateCsvFileLink}} ng-click="generateTelemetry({id: 'button', subtype:'sampleupdatecsv',target:'samplecsvfile'})">{{configData.sampleUpdateCsvFile}}</a></div>
         </div>
     <div class="content padding-top-0">
         <div id="upload-csv-div"></div>
@@ -86,9 +86,9 @@
     </div>
     <div class="actions">
         <div class="ui buttons">
-            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="configData.buttonText.exitBtn"></button>
+            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({id: 'button', subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="configData.buttonText.exitBtn"></button>
             <div class="or"></div>
-            <button class="ui blue button" id="uploadTocFile" ng-click="generateTelemetry({subtype:'upload',target:'uploadButton'})" ng-disabled="showLoaderIcon">{{configData.buttonText.primaryBtn}}</button>
+            <button class="ui blue button" id="uploadTocFile" ng-click="generateTelemetry({id: 'button', subtype:'upload',target:'uploadButton'})" ng-disabled="showLoaderIcon">{{configData.buttonText.primaryBtn}}</button>
         </div>
     </div>
 </div>

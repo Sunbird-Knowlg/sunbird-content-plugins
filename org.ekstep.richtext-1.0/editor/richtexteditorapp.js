@@ -20,7 +20,7 @@ angular.module('richtexteditorapp', [])
             richTextElement.addEventListener('click', function(event) {
                 var data = ctrl.mapElementWithName(event.srcElement);
                 if (data) {
-                    ctrl.generateTelemetry({'type': 'click', 'subtype': data.subtype, 'target': data.target});
+                    ctrl.generateTelemetry({'id': 'button', 'type': 'click', 'subtype': data.subtype, 'target': data.target});
                 }
             });
             ctrl.selectedText = false;
@@ -40,6 +40,7 @@ angular.module('richtexteditorapp', [])
         ctrl.generateTelemetry = function(data) {
             if (data) {
                 org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                        "id": data.id,
                         "type": data.type,
                         "subtype": data.subtype,
                         "target": data.target,

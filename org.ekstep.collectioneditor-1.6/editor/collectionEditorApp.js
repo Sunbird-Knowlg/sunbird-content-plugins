@@ -344,7 +344,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     };
 
     $scope.telemetry = function(data) {
-        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": manifest.id, "pluginver": manifest.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
+        org.ekstep.services.telemetryService.interact({ "id": data.id, "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": manifest.id, "pluginver": manifest.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
     };
     
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {

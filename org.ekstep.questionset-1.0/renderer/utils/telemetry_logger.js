@@ -2,6 +2,7 @@ var TelemetryService = TelemetryService || {};
 var QSTelemetryLogger = {
   EVENT_TYPES: {
     TOUCH: 'TOUCH',
+    DRAG: 'DRAG',
     RESPONSE: 'RESPONSE',
     ASSESS: 'ASSESS',
     ASSESSEND: 'ASSESSEND'
@@ -25,7 +26,7 @@ QSTelemetryLogger.setQuestion = function(ques, index) {
   this._qConfig = JSON.parse(qConfig);
 };
 QSTelemetryLogger.logInteract = function(data) {
-  TelemetryService.interact(data.type, data.id, this.EVENT_TYPES.TOUCH, { stageId: Renderer.theme._currentStage });
+  TelemetryService.interact(data.type, data.id, data.type, { stageId: Renderer.theme._currentStage });
 };
 QSTelemetryLogger.logResponse = function(data) {
   var edata = {
@@ -86,6 +87,9 @@ QSTelemetryLogger.logEvent = function(type, data) {
   try {
     switch (type.toUpperCase()) {
       case this.EVENT_TYPES.TOUCH:
+        this.logInteract(data);
+        break;
+        case this.EVENT_TYPES.DRAG:
         this.logInteract(data);
         break;
       case this.EVENT_TYPES.ASSESS:

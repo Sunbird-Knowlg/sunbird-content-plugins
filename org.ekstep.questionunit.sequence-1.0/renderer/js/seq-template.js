@@ -77,9 +77,20 @@ SEQController.touchConvertInit = function() {
 SEQController.onDomReady = function () {
   $(document).ready(function () {
     SEQController.touchConvertInit();
-    $(".option-block-container").sortable();
+    $(".option-block-container").sortable({
+      stop: function(evt,ui){
+        SEQController.logTelemetryInteract(evt);
+      }
+    });
     $(".option-block-container").disableSelection();
-  })
-}
+  });
+};
+
+SEQController.logTelemetryInteract = function (event) {
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.DRAG, {
+    type: QSTelemetryLogger.EVENT_TYPES.DRAG,
+    id: event.target.id
+  }); // eslint-disable-line no-undef
+};
 
 //# sourceURL=questionunit.seq.renderer.seq-template-controller.js

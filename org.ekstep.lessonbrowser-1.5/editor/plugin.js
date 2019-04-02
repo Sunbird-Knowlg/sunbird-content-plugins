@@ -9,7 +9,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
     type: 'lessonbrowser',
     initData: undefined,
     repos: [],
-
+    startLoadTime: new Date(),
+   
     /**
      *   registers events
      *   @memberof lessonBrowser
