@@ -236,3 +236,7 @@ button.clear-btn:focus {
 .font-size-1 {
     font-size: 1rem !important;
 }
+.searchResultMsg {
+    font-size: 14px;
+    padding: 2%;
+}

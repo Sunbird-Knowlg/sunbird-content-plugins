@@ -162,7 +162,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         ecEditor.jQuery('.popup-item').popup();
     },0);
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.coursemeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ 'id': data.id, "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.coursemeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
     
     $scope.init = function() {

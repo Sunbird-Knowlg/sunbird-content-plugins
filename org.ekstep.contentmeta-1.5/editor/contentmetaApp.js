@@ -52,12 +52,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true;
             $scope.$safeApply();
-        } 
+        }
     };
 
     $scope.initDropdown = function() {
-        $timeout(function() {                        
-            if ($scope.content.language) $('#contentmeta-language').dropdown('set selected', $scope.content.language[0]);            
+        $timeout(function() {
+            if ($scope.content.language) $('#contentmeta-language').dropdown('set selected', $scope.content.language[0]);
         });
     };
 
@@ -102,11 +102,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.onNodeSelect = function(event, data) {
+        $scope.isTabSwitched =  true;
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = (!data.data.root && data.data.metadata.visibility === 'Default') ? false : true;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
-            var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
+            var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
             $scope.editMode = true;
@@ -213,7 +214,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if ($scope.content) {
             if($scope.content.visibility === 'Parent')
                 $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);   
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
         }
     }
 
@@ -236,7 +237,17 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.changeTitle();
             }
         }
-    }   
+    }
+
+    $scope.onKeywordAdding = function(tag){
+        if($scope.isTabSwitched){
+            return false
+        }
+        return true
+    }
+    $scope.keywordFocus = function(){
+        $scope.isTabSwitched =  false
+    }
 
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:update", $scope.updateContent, $scope);
     ecEditor.addEventListener("org.ekstep.contenteditor:after-save", $scope.updateRootNode, $scope);

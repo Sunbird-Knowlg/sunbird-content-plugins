@@ -3,7 +3,7 @@ angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarControl
     $scope.videoTemplate = ecEditor.resolvePluginResource("org.ekstep.genericeditorsidebar", "1.0", "editor/partials/videoSidebarTemplate.html");
     $scope.pdf_Epub_Template = ecEditor.resolvePluginResource("org.ekstep.genericeditorsidebar", "1.0", "editor/partials/pdf_Epub_Template.html");
     $scope.html_h5pTemplate = ecEditor.resolvePluginResource("org.ekstep.genericeditorsidebar", "1.0", "editor/partials/html_h5pTemplate.html");
-    
+
     $scope.updateSideBarTemplate = function() {
     	var metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'))
         switch (metadata.mimeType) {
@@ -37,6 +37,10 @@ angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarControl
         },1000) //TODO: Need to remove the timeout
     };
 
+    var metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+    if(metadata){
+        $scope.updateSideBarTemplate();
+    }
     ecEditor.addEventListener('sidebar:show',$scope.updateSideBarTemplate,$scope);
    
 }]);
