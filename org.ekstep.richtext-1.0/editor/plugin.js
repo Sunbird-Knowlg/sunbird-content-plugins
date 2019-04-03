@@ -91,6 +91,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                editorObject.attributes.h =  e.target.getHeight();
                ecEditor.jQuery("#" + e.target.id).width(e.target.getWidth());
                ecEditor.jQuery("#" + e.target.id).height(e.target.getHeight());
+               
                /*Hardcoded plugin name - We can not get plugin instance here */
                ecEditor.dispatchEvent("org.ekstep.richtext:adddiv", { data: editorObject });
         }
