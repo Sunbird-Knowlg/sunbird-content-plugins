@@ -1,5 +1,5 @@
 describe("CKEditorPlugin", function () {
-  var plugin, originalTimeout;
+  var plugin;
   beforeAll(function (done) {
     ContentEditorTestFramework.init(function () {
       ecEditor.instantiatePlugin("org.ekstep.stage");
