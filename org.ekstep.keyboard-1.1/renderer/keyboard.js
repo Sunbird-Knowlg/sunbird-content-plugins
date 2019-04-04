@@ -11,7 +11,9 @@ Keyboard.constant = {
   keyboardElement: "#keyboardDiv",
   keyboardInput: "#keyboardInput",
 };
-
+Keyboard.initTemplate = function (pluginInstance) {
+  Keyboard.pluginInstance = pluginInstance;
+};
 Keyboard.htmlLayout = '<div id = "keyboardDiv">\
     <div class="textBoxArea">\
       <input type="text" id="keyboardInput" class="ansField" placeholder="Enter answer"  onclick="Keyboard.logTelemetryInteract(event);" disabled autofocus />\
@@ -31,10 +33,10 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
                 <div class="erase-icon">\
-                  <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="" onclick="Keyboard.deleteText();" style="width: 50%; height=100%;" />\
+                  <img src=<%= Keyboard.pluginInstance.getDefaultAsset("eras_icon.png")%> class="" onclick="Keyboard.deleteText();" style="width: 50%; height=100%;" />\
                 </div>\
                 <div class="erase-icon">\
-                  <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;"/>\
+                  <img src=<%= Keyboard.pluginInstance.getDefaultAsset("keyboard.svg")%> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;"/>\
                 </div>\
             </div>\
         </div>\
@@ -68,16 +70,16 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
             </div>\
             <div class="third-row-numeric">\
                 <div style="width: 10%; padding:1%">\
-                  <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="" onclick="Keyboard.changeToAlphabet()" style="width: 50%; height=100%;"/>\
+                  <img src=<%= Keyboard.pluginInstance.getDefaultAsset("language_icon.png")%> class="" onclick="Keyboard.changeToAlphabet()" style="width: 50%; height=100%;"/>\
                 </div>\
                 <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);" ><span>&nbsp</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
                 <div class="erase-icon">\
-                <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="" onclick="Keyboard.deleteText();" style="width: 50%; height=100%;"/>\
+                <img src=<%= Keyboard.pluginInstance.getDefaultAsset("eras_icon.png")%> class="" onclick="Keyboard.deleteText();" style="width: 50%; height=100%;"/>\
               </div>\
             <div class="erase-icon">\
-              <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;" />\
+              <img src=<%= Keyboard.pluginInstance.getDefaultAsset("keyboard.svg")%> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" style="width: 80%; height=100%;" />\
             </div>\
             </div>\
         </div>\
@@ -142,13 +144,13 @@ Keyboard.keyboardShow = function(config) {
   Keyboard.targetInput = config.targetInput; // eslint-disable-line no-undef
 };
 
-Keyboard.addImageIcon = function(imgURL) {
-  if (isbrowserpreview) { // eslint-disable-line no-undef
-    return org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.keyboard", "1.1", imgURL);
-  } else {
-    return 'file:///' + EkstepRendererAPI.getBaseURL() + "content-plugins/org.ekstep.keyboard-1.1/" + imgURL;
-  }
-};
+// Keyboard.addImageIcon = function(imgURL) {
+//   if (isbrowserpreview) { // eslint-disable-line no-undef
+//     return org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.keyboard", "1.1", imgURL);
+//   } else {
+//     return 'file:///' + EkstepRendererAPI.getBaseURL() + "content-plugins/org.ekstep.keyboard-1.1/" + imgURL;
+//   }
+// };
 
 Keyboard.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
