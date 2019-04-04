@@ -13,6 +13,8 @@ describe("Sunbird header plugin:", function() {
             ecEditor.getCurrentStage = jasmine.createSpy().and.callFake(function() {
                 return { id: '5437859-543758937' }
             });
+            cb = function() {};
+            visit = function() {};
             checklistJSON = JSON.parse('{"type":"content","subType":"resource","action":"requestforchanges","rootOrgId":"*","data":{"templateName":"defaultTemplate","action":"requestforchanges","fields":[{"title":"Please tick the reasons for requesting changes and provide detailed comments:","otherReason":"Other Issue(s) (if there are any other issues, tick this and provide details in the comments box)","contents":[{"name":"Appropriateness","checkList":["Has Hate speech, Abuse, Violence, Profanity","Has Sexual content, Nudity or Vulgarity","Has Discriminatory or Defamatory content","Is not suitable for children"]},{"name":"Content details","checkList":["Inappropriate Title or Description","Incorrect Board, Grade, Subject or Medium","Inappropriate tags such as Resource Type or Concepts","Irrelevant Keywords"]},{"name":"Usability","checkList":["Content is NOT playing correctly","CANNOT see the content clearly on Desktop and App","Audio is NOT clear or NOT easy to understand","Spelling mistakes found in text used","Language is NOT simple to understand"]}]}]}}');
             checklistEmptyResponse = JSON.parse('{"id":"api.form.read","ver":"1.0","ts":"2018-08-27T15:13:33.427Z","params":{"resmsgid":"c363f430-aa0b-11e8-b56f-3df6698f6418","msgid":"c3574a00-aa0b-11e8-a60e-1b24840be16f","status":"successful","err":null,"errmsg":null},"responseCode":"OK","result":{"tenantPreference":[]}}')
             done();
@@ -230,6 +232,51 @@ describe("Sunbird header plugin:", function() {
             });
             done();
         });
+
+        it("Should invoke saveContent method to save content data when click on save button", function(done) {
+            var res = {"res": {"data":{"id":"content.hierarchy.update","ver":"3.0","ts":"2019-04-04T10:04:27ZZ","params":{"resmsgid":"722bdf8f-9219-4970-805a-d18b31341c66","msgid":null,"err":null,"status":"successful","errmsg":null},"responseCode":"OK","result":{"content_id":"do_11273331893615820815","identifiers":{"7d5e69ab-d2da-405d-b395-0cdd340a469c":"do_112733417616949248160"},"versionKey":"1554372267807"},"responseTime":2282}}};
+            var err = undefined;
+            spyOn($scope, "saveContent").and.callThrough();
+            $scope.saveContent(cb);
+            cb(err, res)
+            expect($scope.saveContent).toHaveBeenCalled();
+            ecEditor.dispatchEvent("org.ekstep.contenteditor:save", function(callback) {
+                callback(undefined, res);
+            });
+            done();
+        });
+
+        it("Should invoke resolveQRDownloadBtn method to set true or false value", function(done) {
+            var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+            spyOn($scope, 'resolveQRDownloadBtn').and.callThrough();
+            $scope.resolveQRDownloadBtn();
+            $scope.disableQRDownloadBtn = (rootNode.data.metadata.hasOwnProperty('qrCodeProcessId')) ? true : false;
+            expect($scope.resolveQRDownloadBtn).toHaveBeenCalled();
+            expect(rootNode).not.toBeUndefined();
+            expect(rootNode.data.metadata).not.toBeUndefined();
+            expect(rootNode.data.metadata.hasOwnProperty('qrCodeProcessId')).toEqual($scope.disableQRDownloadBtn);
+            done();
+        });
+
+        it("Should invoke getQRCodeRequestCount method to count QR code", function(done) {
+            $scope.qrCodeCount.request = 0;
+            var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+            spyOn($scope, 'getQRCodeRequestCount').and.callThrough();
+            $scope.getQRCodeRequestCount();
+            var rootMeta = rootNode.data.metadata;
+            $scope.qrCodeCount.reserve = (rootMeta.reservedDialcodes) ? Object.keys(rootMeta.reservedDialcodes).length : 0;
+            // rootNode.visit(function (node) {
+            //     (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrCodeCount.request += 1: $scope.qrCodeCount.request;
+            // });
+            expect(rootMeta.reservedDialcodes).not.toBeUndefined();
+            expect($scope.getQRCodeRequestCount).toHaveBeenCalled();
+            expect(rootNode).not.toBeUndefined();
+            expect(rootNode.data.metadata).not.toBeUndefined();
+            expect(rootNode.data.metadata).not.toBeUndefined();
+            
+            done();
+        });
+
 
         it("Should invoke publishContent method to published content", function(done) {
             $scope.checkedContents = [];
