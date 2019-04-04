@@ -144,14 +144,6 @@ Keyboard.keyboardShow = function(config) {
   Keyboard.targetInput = config.targetInput; // eslint-disable-line no-undef
 };
 
-// Keyboard.addImageIcon = function(imgURL) {
-//   if (isbrowserpreview) { // eslint-disable-line no-undef
-//     return org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.keyboard", "1.1", imgURL);
-//   } else {
-//     return 'file:///' + EkstepRendererAPI.getBaseURL() + "content-plugins/org.ekstep.keyboard-1.1/" + imgURL;
-//   }
-// };
-
 Keyboard.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
 };
