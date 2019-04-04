@@ -9,11 +9,13 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
   _type: 'org.ekstep.keyboardPlugin',
   _render: true,
   initialize: function() {
-    EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", this.showKeyboard);
+    var instance = this;
+    EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", this.showKeyboard, instance);
     EkstepRendererAPI.addEventListener("org.ekstep.keyboard:hide", this.hideKeyboard);
-    Keyboard.initTemplate(this);
   },
   showKeyboard: function(event, callback) {
+    var instance = this;
+    Keyboard.initTemplate(instance);
     var customButtons = '';
     if (_.isFunction(callback)) {
       Keyboard.keyboardCallback = callback; // eslint-disable-line no-undef
