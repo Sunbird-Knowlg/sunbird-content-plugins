@@ -11,6 +11,7 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
   initialize: function() {
     EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", this.showKeyboard);
     EkstepRendererAPI.addEventListener("org.ekstep.keyboard:hide", this.hideKeyboard);
+    Keyboard.initTemplate(this);
   },
   showKeyboard: function(event, callback) {
     var customButtons = '';
@@ -44,6 +45,36 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
   },
   hideKeyboard: function() {
     $(Keyboard.constant.keyboardElement).remove(); // eslint-disable-line no-undef
+  },
+  /**
+   * provide media url to audio & image
+   * @memberof org.ekstep.keyboard
+   * @returns {String} url.
+   * @param {String} icon.
+   */
+  getDefaultAsset: function (icon) {
+    //In browser and device base path is different so we have to check
+    if (isbrowserpreview) {// eslint-disable-line no-undef
+      return this.getAssetUrl(org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/assets/" + icon));
+    }
+    else {
+      //static url
+      return this.getAssetUrl("/content-plugins/" + this._manifest.id + "-" + this._manifest.ver + "/renderer/assets/" + icon);
+    }
+  },
+  /**
+  * provide media url to asset
+  * @memberof org.ekstep.keyboard
+  * @param {String} url.
+  * @returns {String} url.
+  */
+  getAssetUrl: function (url) {
+    if (isbrowserpreview) {// eslint-disable-line no-undef
+      return url;
+    }
+    else {
+      return 'file:///' + EkstepRendererAPI.getBaseURL() + url;
+    }
   }
 });
 
