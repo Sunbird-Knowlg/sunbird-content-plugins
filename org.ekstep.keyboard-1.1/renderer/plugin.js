@@ -10,7 +10,7 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
   _render: true,
   initialize: function() {
     var instance = this;
-    EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", this.showKeyboard,instance);
+    EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", this.showKeyboard, instance);
     EkstepRendererAPI.addEventListener("org.ekstep.keyboard:hide", this.hideKeyboard);
   },
   showKeyboard: function(event, callback) {
