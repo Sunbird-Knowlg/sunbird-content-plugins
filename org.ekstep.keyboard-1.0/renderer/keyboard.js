@@ -11,7 +11,9 @@ Keyboard.constant = {
   keyboardElement: "#keyboardDiv",
   keyboardInput: "#keyboardInput",
 };
-
+Keyboard.initTemplate = function (pluginInstance) {
+  Keyboard.pluginInstance = pluginInstance;
+};
 Keyboard.htmlLayout = '<div id = "keyboardDiv">\
     <div class="textBoxArea">\
       <input type="text" id="keyboardInput" class="ansField" placeholder="Enter answer"  onclick="Keyboard.logTelemetryInteract(event);" disabled autofocus />\
@@ -34,7 +36,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
               <% }); %>\
             </div>\
             <div class="erasedDivParent">\
-                <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="Keyboard.deleteText();" />\
+                <img src=<%= Keyboard.pluginInstance.getDefaultAsset("eras_icon.png")%> class="qc-erase-icon" onclick="Keyboard.deleteText();" />\
             </div>\
             <% if(Keyboard.buttons.length > 10) { %> \
               <div id="secondRowdiv"></div>\
@@ -46,7 +48,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
             <div class="hideKeyboard">\
-                <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
+                <img src=<%= Keyboard.pluginInstance.getDefaultAsset("keyboard.svg")%> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
             </div>\
           <% } %> \
         </div>\
@@ -78,20 +80,20 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>×</span></div>\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>=</span></div>\
                 <div class="erasedDivParent">\
-                    <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="Keyboard.deleteText()" />\
+                    <img src=<%= Keyboard.pluginInstance.getDefaultAsset("eras_icon.png")%> class="qc-erase-icon" onclick="Keyboard.deleteText()" />\
                 </div>\
             </div>\
             <div class="third-row-numeric">\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id="<_btn"><span>&lt;</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
                 <div>\
-                    <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="qc-language-icon" onclick="Keyboard.changeToAlphabet()" /> </div>\
+                    <img src=<%= Keyboard.pluginInstance.getDefaultAsset("language_icon.png")%> class="qc-language-icon" onclick="Keyboard.changeToAlphabet()" /> </div>\
                 <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
             <div class="hideKeyboard">\
-              <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
+              <img src=<%= Keyboard.pluginInstance.getDefaultAsset("keyboard.svg")%> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
             </div>\
         </div>\
     </div>\
@@ -153,14 +155,6 @@ Keyboard.keyboardShow = function(config) {
   $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue);
   Keyboard.inputArray = Keyboard.inputValue.split("");
   Keyboard.targetInput = config.targetInput; // eslint-disable-line no-undef
-};
-
-Keyboard.addImageIcon = function(imgURL) {
-  if (isbrowserpreview) { // eslint-disable-line no-undef
-    return org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.keyboard", "1.0", imgURL);
-  } else {
-    return 'file:///' + EkstepRendererAPI.getBaseURL() + "content-plugins/org.ekstep.keyboard-1.0/" + imgURL;
-  }
 };
 
 Keyboard.logTelemetryInteract = function(event) {
