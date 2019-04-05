@@ -75,8 +75,35 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
       return url;
     }
     else {
-      return 'file:///' + EkstepRendererAPI.getBaseURL() + url;
+      if (EkstepRendererAPI.isStreamingContent()) {
+        // mobile online streaming
+        if(url)
+        return this.validateUrl(EkstepRendererAPI.getBaseURL() + url.substring(1, url.length));
+    } else {
+        // Loading content from mobile storage ( OFFLINE )
+        return this.validateUrl('file:///' + EkstepRendererAPI.getBaseURL() + url);
     }
+    }
+  },
+  validateUrl: function(url){
+      if(!url){
+          return
+      }
+      var regex = new RegExp("^(http|https)://", "i");
+      if(regex.test(url)){
+          var tempUrl = url.split("://")
+          if (tempUrl.length > 1){
+              var validString = tempUrl[1].split("//").join("/");
+              return [tempUrl[0], validString].join("://");
+          }             
+      }else{
+          var tempUrl = url.split(":///")
+          if (tempUrl.length > 1){
+              var validString = tempUrl[1].split("//").join("/");;
+              return [tempUrl[0], validString].join(":///");
+          }
+      } 
+      return url.split("//").join("/");
   }
 });
 
