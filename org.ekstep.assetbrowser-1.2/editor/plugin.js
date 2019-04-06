@@ -21,7 +21,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        var instance = this;        
+        var instance = this;
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetbrowserapp.js");
@@ -122,6 +122,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     fileValidation: function(fieldId, allowedFileSize, allowedMimeTypes) {
         var instance = this;
+        console.log(allowedFileSize, allowedMimeTypes);
 
         /*Check for browser support for all File API*/
         if (window.File && window.FileList && window.Blob) {
@@ -134,6 +135,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 alert('File size is higher than the allowed size!');
                 return false;
             }
+            console.log(ftype);
 
             /*Check mime type*/
             if (ftype) {

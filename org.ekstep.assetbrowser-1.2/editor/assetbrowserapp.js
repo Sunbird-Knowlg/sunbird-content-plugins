@@ -16,6 +16,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     var audiodata = {},
         assetMedia,
         assetdata = {},
+        videoData = {},
         searchText,
         lastSelectedAudio,
         lastSelectedImage,
@@ -23,7 +24,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         imageTabSelected = true,
         ctrl = this;
         ctrl.inViewLogs = [];
-
+        $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     var $sce = $injector.get('$sce');
     ctrl.file = {
         "infoShow": false,
@@ -44,6 +45,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.selected_images = {};
     ctrl.selected_audios = {};
     ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/contentNotFound.jpg");
+    ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default_image.png");
     ctrl.selectBtnDisable = true;
     ctrl.buttonToShow = 'select';
     ctrl.uploadView = false;
@@ -64,6 +66,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.uploadingAsset = false;
     ctrl.assetId = undefined;
     ctrl.tabSelected = "my";
+    ctrl.showPreview = false;
     ctrl.assetMeta = {
         'name': '',
         'keywords': [],
@@ -82,9 +85,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.loadMoreAssetSpinner = false;
     ctrl.showLoadMoreWarningMsg = false;
     ctrl.plugin = instance.mediaType;
-    // ctrl.upload = (instance.mediaType == 'image' ||  instance.mediaType == 'video') ? true : false;
-    // ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
-    // ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
     if (instance.mediaType == 'image') {
         ctrl.upload = true;
@@ -122,10 +122,30 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         // Hide loader
         hideLoader();
-
         $scope.$safeApply();
     };
+    function videoAssetCb(err, res){
+        if (res && res.data.result.content) {
+            ctrl.videoList = [];
 
+            ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                if (!ecEditor._.isUndefined(obj.downloadUrl)) {
+                    ctrl.videoList.push(obj);
+                }
+            });
+            ctrl.initPopup(res.data.result.content);
+        } else {
+            ctrl.videoList = [];
+        };
+
+        // Hide loader
+        hideLoader();
+
+        $scope.$safeApply();
+        ecEditor.jQuery('.special.cards .video').dimmer({
+            on: 'hover'
+        });
+    }
 
     function audioAssetCb(err, res) {
 
@@ -164,11 +184,22 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     //load image on opening window
     if (instance.mediaType == 'image') {
         instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, ctrl.offset, imageAssetCb);
-    } else {
+    } else if (instance.mediaType == 'audio') {
         instance.getAsset(undefined, new Array('audio', 'voice'), ctrl.createdBy, ctrl.offset, audioAssetCb);
+    } else if (instance.mediaType == 'video') {
+        instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, ctrl.offset, videoAssetCb);
     }
-
-    ctrl.myAssetTab = function() {
+    ctrl.setCallback = function(callback){
+        if(instance.mediaType == "image"){
+            callback = imageAssetCb
+        }else if(instance.mediaType == "audio"){
+            callback = audioAssetCb
+        }else if(instance.mediaType == "video"){
+            callback = videoAssetCb
+        }
+        return callback;
+    }
+    ctrl.myAssetTab = function () {
         /**rebind the scoll event to the element**/
         ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         ctrl.showLoadMoreWarningMsg = false;
@@ -188,12 +219,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.buttonToShow = 'select';
 
         (searchText === "") ? searchText = undefined: null;
-        callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-        callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        // callback = (instance.mediaType === "image") ? imageAssetCb : callback;
+        // callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        callback = ctrl.setCallback(callback)
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
         ctrl.selectBtnDisable = true;
         var mediaType = ctrl.getMediaType();
-        callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, ctrl.offset=0, callback);
+        callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, ctrl.offset = 0, callback);
     }
 
     ctrl.getMediaType = function() {
@@ -227,13 +259,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.buttonToShow = 'select';
 
         (searchText === "") ? searchText = undefined: null;
-        callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-        callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        callback = ctrl.setCallback(callback)
+
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
         ctrl.selectBtnDisable = true;
 
-        var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
-        callback && instance.getAsset(searchText, mediaType, undefined, ctrl.offset=0 , callback);
+        // var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
+        callback && instance.getAsset(searchText, ctrl.getMediaType(), undefined, ctrl.offset=0 , callback);
     }
 
     function showLoader() {
@@ -248,19 +280,18 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.uploadButton = function() {
         if (instance.mediaType == "image") {
-            ctrl.uploadBtnDisabled = false;
+            ctrl.uploadBtnDisabled = true;
         } else {
             if (ctrl.record == true) {
                 ctrl.audioType = "voice";
                 ctrl.uploadBtnDisabled = true;
-            } else if (ctrl.upload == false) {
+            } else if (ctrl.upload == true) {
                 ctrl.uploadBtnDisabled = true;
             } else {
                 ctrl.audioType = "audio";
                 ctrl.uploadBtnDisabled = false;
             }
         }
-
         $scope.$safeApply();
     }
 
@@ -289,8 +320,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         searchText = ctrl.query;
         (searchText === "") ? searchText = undefined: null;
-        callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-        callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        callback = ctrl.setCallback(callback)
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
         ctrl.selectBtnDisable = true;
         ctrl.showLoadMoreWarningMsg = false;
@@ -299,7 +329,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             var mediaType = ctrl.getMediaType();
             callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, ctrl.offset=0, callback);
             ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
-        } else {
+        } else if(instance.mediaType == 'video'){
+            var mediaType = new Array(instance.mediaType);
+            callback && instance.getAsset(searchText, mediaType, undefined, ctrl.offset=0, callback);
+            ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
+        }else {
             var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
             callback && instance.getAsset(searchText, mediaType, undefined, ctrl.offset=0, callback);
             ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
@@ -345,7 +379,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.selectBtnDisable = false;
         ctrl.toggleAudioCheck($index);
     };
-
+    ctrl.VideoSource =  function(video, index){
+        var videoEl;
+        videoData.asset= video.identifier;
+        videoData.assetMedia = {
+            name : video.name,
+            id: videoData.asset,
+            src: video.downloadUrl.toString(),
+            type: 'video'
+        }
+        ctrl.selectBtnDisable = false;
+    }
     ctrl.toggleAudioCheck = function($index) {
         var audioElem;
         if (!ecEditor._.isUndefined(lastSelectedAudio)) {
@@ -396,6 +440,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             instance.cb(audiodata);
             ctrl.cancel();
         }
+        if(videoData && videoData.asset && instance.mediaType == "video"){
+            instance.cb(videoData)
+            ctrl.cancel();
+        }
+
     }
 
     ecEditor.getService('language').getLanguages(function(err, resp) {
@@ -409,10 +458,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }
     });
 
-    ctrl.setPublic = function() {
+    ctrl.setPublic = function(task) {
         ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
         ctrl.asset.requiredField = 'required';
         ctrl.optional = false;
+        if(task == 'hide') {
+            ctrl.hideLicenseField = true;
+        }
     }
 
     ctrl.viewMore = function() {
@@ -464,13 +516,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.jQuery("#replaceRecordDiv").show();
     }
 
-    ctrl.uploadAsset = function(event, fields) {
+    ctrl.uploadAsset = function (event, fields, assetFile) {
         var requestObj,
             content = ctrl.assetMeta,
             data = new FormData();
 
         $scope.$safeApply();
-
         if (ctrl.record == true) {
             var file;
             file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
@@ -483,8 +534,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.assetMeta.mimeType = 'audio/mp3';
             ctrl.assetMeta.mediaType = ctrl.audioType;
             data.append('file', file);
-        } else {
-            ecEditor.jQuery.each(ecEditor.jQuery('#assetfile')[0].files, function(i, file) {
+        } else if(ctrl.plugin !== 'video') {
+            ecEditor.jQuery.each(ecEditor.jQuery('#assetfile')[0].files, function (i, file) {
                 data.append('file', file);
                 ctrl.assetMeta.mimeType = file.type;
 
@@ -508,7 +559,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }
 
         var requestObj = {};
-        angular.forEach(content, function(value, key) {
+        angular.forEach(content, function (value, key) {
 
             if ((ecEditor._.isUndefined(value) || value == null || value == "") && key != 'body') {
                 delete content[key];
@@ -518,15 +569,110 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         console.log(content);
 
-        // Create the content for asset
-        ecEditor.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
-            if (resp) {
-                ctrl.uploadingAsset = true;
-                ctrl.uploadFile(resp, data, fields.name);
+        if (ctrl.plugin == 'video') {
+            var data = {
+                request: {
+                    content: {
+                        "name": content.name,
+                        "creator": ecEditor.getContext('user').name,
+                        "createdBy": ecEditor.getContext('user').id,
+                        "code": UUID(),
+                        "mimeType": ctrl.mimeType,
+                        "mediaType": ctrl.plugin,
+                        "createdFor": ecEditor._.keys(ecEditor.getContext('user').organisations),
+                        "contentType": "Asset",
+                        "osId": "org.ekstep.quiz.app",
+                        "license": content.license
+                    }
+                }
             }
-        });
-    }
+            console.log(data.request.content.mimeType)
+            $scope.contentService.createContent(data, function (err, res) {
+                if (err) {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to create content!',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                } else {
+                    var result = res.data.result;
+                    if(ctrl.mimeType == 'video/x-youtube'){
+                        ctrl.uploadVideoAsset(ctrl.videoUrl, result.node_id)
+                    }
+                    else if(ctrl.mimeType == 'video/mp4' || ctrl.mimeType == 'video/webm' ){
+                        ctrl.getPresignedURL(result.node_id, assetFile.name, assetFile)
+                    }
 
+                }
+            })
+        }  else {
+            // Create the content for image and audio asset
+            ecEditor.getService('asset').saveAsset(ctrl.assetId, content, function (err, resp) {
+                if (resp) {
+                    ctrl.uploadingAsset = true;
+                    ctrl.uploadFile(resp, data, fields.name);
+                }
+            });
+        }
+
+    }
+    ctrl.getPresignedURL = function(nodeID, fileName, file){
+        $scope.contentService.getPresignedURL(nodeID, fileName, function(err, res){
+            if(err){
+                console.log('GETSIGNED URL FAILED');
+            }else{
+                var signedURL = res.data.result.pre_signed_url;
+                var config = {
+                    processData: false,
+                    contentType : ctrl.mimeType,
+                    headers: {
+                        'x-ms-blob-type': 'BlockBlob'
+                    }
+                }
+                ctrl.uploadToSignedURL(signedURL, file, config, nodeID)
+            }
+        })
+    }
+    ctrl.uploadToSignedURL = function(signedURL, file, config, nodeID){
+        $scope.contentService.uploadDataToSignedURL(signedURL, file, config, function(err, res) {
+            if (err) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'error while uploading!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            } else {
+                ctrl.uploadVideoAsset(signedURL.split('?')[0], nodeID);
+            }
+        })
+    }
+    ctrl.uploadVideoAsset = function(fileURL, nodeID){
+        var data=  new FormData();
+        data.append("fileUrl", fileURL);
+        data.append("mimeType", ctrl.mimeType);
+        var config = {
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false
+        }
+        $scope.contentService.uploadContent(nodeID, data, config, function(err, res) {
+            if (err) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to upload content!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            } else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'content uploaded successfully!',
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+                $scope.closeThisDialog();
+            }
+        })
+    }
     ctrl.blobToFile = function(theBlob, fileName) {
         var file = new File([theBlob], fileName, {
             type: theBlob.type,
@@ -545,8 +691,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         };
         ecEditor.getService('content').uploadContent(resp.data.result.node_id, data, config, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
-                console.log('response');
-                console.log(resp);
                 assetdata.asset = resp.data.result.node_id;
                 if(_.isUndefined(assetdata.assetMedia)){
                     assetdata.assetMedia = {
@@ -561,9 +705,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     assetdata.assetMedia.src = resp.data.result.content_url;
                     assetdata.assetMedia.type = instance.mediaType;
                 }
-                console.log("Passing data");
-                console.log(assetdata.assetMedia);
-
                 instance.cb(assetdata);
                 ctrl.uploadingAsset = false;
                 ctrl.uploadBtnDisabled = false;
@@ -583,24 +724,29 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         });
     }
 
-    ctrl.doUpload = function(event,mediaType) {
+    ctrl.doUpload = function(event) {
         ctrl.assetMeta.name == "" ? ctrl.assetNameError="error" : true;
         ecEditor.jQuery('#assetfile').val() == "" ? ctrl.assetFileError="error" : true;
-        if(ctrl.assetMeta.name != ""  && ecEditor.jQuery('#assetfile').val() != ""){
+        var fileUploader =   ecEditor.jQuery('#assetfile')[0];
+        if(ctrl.assetMeta.name != ""  &&  fileUploader && fileUploader.files.length !== 0){
             ctrl.uploadBtnDisabled = true;
+            var file = ecEditor.jQuery('#assetfile')[0].files[0];
             if (ctrl.record == true) {
                 // @Todo file size validation for recorded file
-                ctrl.uploadAsset(event, ctrl.assetMeta);
+                ctrl.uploadAsset(event, ctrl.assetMeta, file);
             } else {
                 // Validate file if not editing meta data
                 var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
                 if (validateFile) {
-                    ctrl.uploadAsset(event, ctrl.assetMeta);
+                    ctrl.uploadAsset(event, ctrl.assetMeta, file);
                 } else {
                     ctrl.uploadBtnDisabled = false;
                     return false;
                 }
             }
+        }
+        else if(ctrl.provider = "youtube" && ctrl.assetMeta.name != ""){
+            ctrl.uploadAsset(event, ctrl.assetMeta, null);
         }
         else {
             console.log("fields validation failed");
@@ -628,7 +774,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     ctrl.preFillForm = function(data) {
-        ctrl.assetMeta.name = data.name.replace(/\.[^/.]+$/, "").replace(/[_.^/_]/g, " ");
+        ctrl.assetMeta.name = (data.name) ? data.name.replace(/\.[^/.]+$/, "").replace(/[_.^/_]/g, " ") : '';
         ctrl.assetMeta.creator = ctrl.context.user.name;
         ecEditor.jQuery('.field', '#hideShowFields').removeClass('disabled');
         ctrl.showDragDropMsg = true;
@@ -701,8 +847,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 ecEditor._.forEach(res.data.result.content, function(obj, index) {
                     if(mediaType == 'image'){
                         ctrl.imageList.push(obj);
-                    }else{
+                    }else if(mediaType == 'audio'){
                         ctrl.audioList.push({
+                            downloadUrl: trustResource(obj.downloadUrl),
+                            identifier: obj.identifier,
+                            name: obj.name,
+                            mimeType: obj.mimeType,
+                            license: obj.license,
+                            contentType: obj.contentType
+                        });
+                    }else if(mediaType == 'video'){
+                        ctrl.videoList.push({
                             downloadUrl: trustResource(obj.downloadUrl),
                             identifier: obj.identifier,
                             name: obj.name,
@@ -738,25 +893,154 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.jQuery("#" + ctrl.myTabScrollElement).scrollTo(0, 0);
         ecEditor.jQuery("#" + ctrl.allTabScrollElement).scrollTo(0, 0);
     }
+    ctrl.hasInputChanged =  function(){
+        ctrl.previewHandler();
+    }
+    ctrl.previewHandler = function(){
+        ctrl.disposeStageVideos();
+    }
+    ctrl.disposeStageVideos = function(){
+        var availablePlayers = _.keys(videojs.getPlayers());
+            _.forEach(availablePlayers, function (value, key) {
+                videojs(value).dispose();
+                delete videojs.getPlayers()[value];
+            });
+        ctrl.showPreview = false;
+    }
+    ctrl.assetFileValidation = function (file) {
+        var isFileValid = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes)
+        if (isFileValid) {
+            console.log(file);
+            ctrl.provider = 'file'
+            if (ctrl.plugin == 'video') {
+                ctrl.previewVideo(file, ctrl.plugin, ctrl.provider)
+            }
+        }
+        console.log(instance.mediaType)
+    }
+    ctrl.previewVideo = function (file, mediaType, provider) {
+        if (mediaType == 'video' && provider == 'file') {
+            var videoURL = URL.createObjectURL(file)
+            var videoElement = ctrl.createVideoElement(videoURL);
+            ctrl.mimeType = file.type;
+            ecEditor.jQuery('.content #assetPreviewVideo').html(videoElement);
+        } else if (mediaType == 'video' && provider == 'youtube' || provider == 'googledrive') {
+            var videoURL = file;
+            var videoElement = ctrl.createVideoElement(file);
+            ecEditor.jQuery('.content #assetPreviewVideo').html(videoElement);
+        }
+        ctrl.generatePreview(videoElement, videoURL, provider);
+        ctrl.preFillForm(file);
+    }
+    ctrl.generatePreview = function (videoElement, videoUrl, provider) {
+        var videoID = 'ID' + Math.random().toString(36).substring(3);
+        videoElement.id = videoID;
+        videoElement.className = 'video-js vjs-default-skin';
+        ctrl.showPreview = true;
+        if (provider == "youtube") {
+            videojs(videoID, {
+                "techOrder": ["youtube"],
+                "src": videoUrl,
+                "youtube": {
+                    "iv_load_policy": 3
+                }
+            }, function () {});
+            videojs(videoID).ready(function () {
+                var youtubeInstance = this;
+                youtubeInstance.src({
+                    type: 'video/youtube',
+                    src: videoUrl
+                });
+            })
+        } else if (provider == "file") {
+            videojs(videoID).ready(function () {
+                this.load();
+                this.play();
+            });
+        }
+        $scope.$safeApply();
+    }
 
+    ctrl.createVideoElement = function (fileUrl) {
+        var element = document.createElement('video');
+        element.src = fileUrl;
+        element.width = '400';
+        element.height = '200';
+        element.controls = true;
+        element.autoplay = 'autoplay';
+        return element;
+    }
+    ctrl.addVideoAssetByURL = function () {
+        var link = ctrl.videoUrl;
+        var request = {}
+        ctrl.checkProvider(link, function (err, validURL, provider) {
+            if (err) {
+                ctrl.toastManager('error', true, false, ctrl.previewMessages.previewError);
+            } else {
+                request.provider = provider;
+                request.url = validURL;
+                ctrl.getVideoLicense(request);
+            }
+        })
+    }
+    ctrl.checkProvider = function (url, cb) {
+        var videoID = ctrl.isValidYoutube(url)
+        if (videoID) {
+            ctrl.videoUrl = 'https://www.youtube.com/watch?v=' + videoID;
+            ctrl.provider = 'youtube';
+            ctrl.setPublic('hide');
+            ctrl.mimeType = 'video/x-youtube'
+            cb(null, ctrl.videoUrl, ctrl.provider);
+        } else if (url.indexOf('drive') != -1) {
+            var gdrive = url.replace('/view?usp=sharing', '').replace('open?id=', 'uc?export=download&id=').replace('file/d/', 'uc?export=download&id=').replace('/edit?usp=sharing', '');
+            ctrl.videoUrl = gdrive;
+            ctrl.provider = 'googledrive'
+            ctrl.mimeType = 'video/mp4'
+            cb(null, ctrl.videoUrl, ctrl.provider);
+        } else {
+            cb(new Error('invalid url'), null, null)
+        }
+    }
+    ctrl.isValidYoutube = function (url) {
+        var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        if (url && url.match(p)) {
+            return url.match(p)[1];
+        }
+        return false;
+    }
+    ctrl.getVideoLicense = function (request) {
+        var requestObj = {
+            "request": {
+                "asset": {
+                    "provider": request.provider,
+                    "url": request.url
+                }
+            }
+        }
+        var fields = (request.provider == 'youtube') ? 'license' : 'size';
+        org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, fields, function (err, res) {
+            if (err) {
+                console.log('API FAILED');
+            } else {
+                ctrl.previewVideo(request.url, ctrl.plugin, request.provider)
+            }
+        })
+    }
     setTimeout(function() {
         ctrl.pluginLoadStartTime = new Date();
-        ctrl.myTabScrollElement = (instance.mediaType === "image") ?  "my-image-tab" : "my-audio-tab";
-        ctrl.allTabScrollElement = (instance.mediaType === "image") ?  "all-image-tab" : "all-audio-tab";
+        ctrl.myTabScrollElement = "my-"+instance.mediaType+"-tab";
+        ctrl.allTabScrollElement = "all-"+instance.mediaType+"-tab"
 
         ecEditor.jQuery('.assetbrowser .menu .item').tab();
         ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
         ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
         ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
-        ecEditor.jQuery("#ccByContribution2").click();
+        ecEditor.jQuery("#ccByContribution1").click();
 
         ecEditor.jQuery(document).on('change', '#assetName, #assetfile', function() {
             ctrl.uploadBtnDisabled = false;
             ctrl.assetNameError=true;
             ctrl.assetFileError=true;
-
-
-            var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
             ecEditor.ngSafeApply(ecEditor.getAngularScope());
         });
 
@@ -785,11 +1069,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             }
         });
         ecEditor.jQuery(document).on('change', '#assetfile', function() {
-            ctrl.preFillForm(this.files[0]);
-
-            if(ctrl.assetMeta.name != ""  && ecEditor.jQuery('#assetfile').val() != ""){
-
-            }
+            ctrl.assetFileValidation(this.files[0]);
+            console.log(instance.mediaType)
         });
 
 
