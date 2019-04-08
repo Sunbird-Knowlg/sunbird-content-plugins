@@ -24,7 +24,6 @@ Plugin.extend({
             delete data.id;
         }
         data.id = pid;
-        data.asset = data.id;
 
         var configStr = data.config.__cdata;
         var config = JSON.parse(configStr);
@@ -33,6 +32,7 @@ Plugin.extend({
         data.autoplay = config.autoplay;
         var checkYoutube = this.checkValidYoutube(config.url)
         if (checkYoutube) {
+            data.asset = data.id;
             var dims = this.relativeDims();
             this.createVideo(config.url, data, dims)
             this.id = _.uniqueId('org.ekstep.youtube');
