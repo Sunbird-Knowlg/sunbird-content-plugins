@@ -119,14 +119,40 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.contenteditor.api._.merge(requestObj.request.filters, allowableFilter);
 
         var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
-
         ecEditor.getService('search').search(requestObj, function(err, res){
             if (!err && res.data.responseCode == "OK") {
-                cb(null, res);
+                if(_.includes(contentType, 'Resource')){
+                    var resourceObj =  _.cloneDeep(requestObj);
+                    delete resourceObj.request.filters.license
+                    resourceObj.request.filters.contentType = new Array('Resource')
+                    instance.searchAsset(resourceObj)
+                            .then(function(resourceRes){
+                                var videoResources = {};
+                                Array.prototype.push.apply(res.data.result.content, resourceRes.data.result.content);
+                                videoResources = res;
+                                cb(null, videoResources);
+                            }).catch (function (error) {
+                                console.log(error);
+                            });
+                }
+                else{
+                    cb(null, res);
+                }
             } else {
                 cb(err, null);
             }
         });
+    },
+    searchAsset: function(requestObj){
+        return new Promise(function (resolve, reject){
+            ecEditor.getService('search').search(requestObj, function(err, res){
+                if (!err && res.data.responseCode == "OK") {
+                    resolve(res);
+                } else {
+                    reject(err);
+                }
+            });
+        })
     },
     /**
      *   invokes popup service to show the popup window

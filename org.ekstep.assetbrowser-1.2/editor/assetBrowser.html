@@ -331,7 +331,7 @@
 							<div class="card" ng-show="$ctrl.videoList.length > 0" ng-click="$ctrl.VideoSource(videoItem, $index, 'myasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index"
 								in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
 								<div class="video image  infopopover" id="{{videoItem.identifier}}" data-html="<b>{{videoItem.name}}</b> <br/> License: {{videoItem.license}}">
-										<img ng-src="{{videoItem.appIcon || $ctrl.defaultImage}}"  class="resourceMetaImage">
+										<img ng-src="{{videoItem.thumbnail || $ctrl.defaultImage}}"  class="resourceMetaImage">
 										<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_myasset_{{videoItem.identifier}}' style="z-index:12">
 												<input class="radioBox" type="radio" name="youtubeVideo">
 												<label></label>
@@ -368,7 +368,7 @@
 							</div>
 							<div class="twelve wide column" ng-show="$ctrl.videoList.length == 0">
 								<span>No result found. <a href="#" onclick="$('#allVideoTab').trigger('click'); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'noResultFoundSwitchToAllVideoTab'});">Click
-										here</a> to search in All audios</span>
+										here</a> to search in All Videos</span>
 							</div>
 							<div class="twelve wide column">
 								<div class="load-more-assets-spinner" ng-show="$ctrl.loadMoreAssetSpinner">
@@ -538,7 +538,7 @@
 							in-view-options="{ throttle: 1000 }">
 
 							<div class="video image infopopover">
-									<img src="/plugins/org.ekstep.assetbrowser-1.2/assets/default_image.png" class="resourceMetaImage">
+									<img ng-src="{{videoItem.thumbnail || $ctrl.defaultImage}}"  class="resourceMetaImage">
 									<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_allasset_{{videoItem.identifier}}' style="z-index:12">
 											<input class="radioBox" type="radio" name="youtubeVideo">
 											<label></label>

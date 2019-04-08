@@ -79,7 +79,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             media[instance.attributes.asset] = {
                 "id": instance.attributes.asset,
                 "src": videoSrc || '',
-                "assetId": instance.attributes.asset,
                 "type": "video"
             }
         }
