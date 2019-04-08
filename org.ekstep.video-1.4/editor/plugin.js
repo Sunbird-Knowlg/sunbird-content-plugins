@@ -124,7 +124,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     getPragmaValue: function () {
         var instance = this;
-        if(instance.isYoutubeURL(instance.getConfig()['url'])){
+        if(instance.isYoutubeURL(instance.media[instance.attributes.asset].src)){
             return "external";
         }else{
             return null;

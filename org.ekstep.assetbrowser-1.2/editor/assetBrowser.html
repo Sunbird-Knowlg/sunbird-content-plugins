@@ -245,7 +245,7 @@
    		    <a id="allImagesTab" ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'myAssetsTab', type: 'click', subtype: 'select', target: 'allImageTab'})">All image</a>
    		    <a id="myAudioTab" ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id: 'myAudioTab', type: 'click', subtype: 'select', target: 'myAudioTab'})">My audio</a>
 				 <a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'allAudioTab', type: 'click', subtype: 'select', target: 'allAudioTab'})">All audio</a>
-				 <a ng-if="$ctrl.plugin == 'video'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'myVideoTab'})">My video</a>
+				 <a ng-if="$ctrl.plugin == 'video'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'myVideoTab'})">My Videos</a>
    			<a id="allVideoTab" ng-if="$ctrl.plugin == 'video'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'allVideoTab'})">All Videos</a>
    		</div>
    		<div class="uploadingAsset ui tab active" data-tab="first" >
@@ -307,18 +307,18 @@
 							</div>
 						</div>
 						<div class="two wide right aligned column">
-							<div id="videoDropDown" class="ui floating labeled icon dropdown button video">
+							<div id="myVideoDropDown" class="ui floating labeled icon dropdown button video">
 								<i class="filter icon"></i>
 								<span class="text">All</span>
-								<div class="menu">
-									<div class="item" data-value='all'>
+								<div class="menu" style="z-index: 13;">
+									<div class="item" data-value='myvideos'>
 										<span class="text">All</span>
 									</div>
 									<div class="divider"></div>
-									<div class="item" data-value="video">
+									<div class="item" data-value="video/mp4,video/webm">
 										<span class="text">Video</span>
 									</div>
-									<div class="item" data-value="youtube">
+									<div class="item" data-value="video/x-youtube">
 										<span class="text">Youtube</span>
 									</div>
 								</div>
@@ -328,11 +328,11 @@
 					<div class="clearfix">&nbsp;</div>
 					<div class="asset_item_container" id="my-video-tab">
 						<div class="ui special three cards grid">
-							<div class="card" ng-show="$ctrl.videoList.length > 0" ng-click="$ctrl.VideoSource(videoItem, $index)" ng-repeat="videoItem in $ctrl.videoList track by $index"
+							<div class="card" ng-show="$ctrl.videoList.length > 0" ng-click="$ctrl.VideoSource(videoItem, $index, 'myasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index"
 								in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
 								<div class="video image  infopopover" id="{{videoItem.identifier}}" data-html="<b>{{videoItem.name}}</b> <br/> License: {{videoItem.license}}">
 										<img ng-src="{{videoItem.appIcon || $ctrl.defaultImage}}"  class="resourceMetaImage">
-										<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{videoItem.identifier}}' style="z-index:12">
+										<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_myasset_{{videoItem.identifier}}' style="z-index:12">
 												<input class="radioBox" type="radio" name="youtubeVideo">
 												<label></label>
 										</div>
@@ -502,23 +502,44 @@
 				 </div>
 				 <div class="content" ng-if="$ctrl.plugin == 'video'">
 					<div class="ui big loader {{$ctrl.loading}}"></div>
-					<div class="column">
-						<div class="column">
+					<div class="ui grid">
+						<div class="ten wide column">
 							<div class="ui icon input assetbrowser_searchBox">
 								<input id="searchAllVideoAssets" ng-model="$ctrl.query" placeholder="Search Video..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null"
 									type="text" />
 								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchVideoAsset'});"></i>
 							</div>
 						</div>
+						<div class="two wide right aligned column">
+								<div id="allVideoDropDown" class="ui floating labeled icon dropdown button video">
+									<i class="filter icon"></i>
+									<span class="text">All</span>
+									<div class="menu" style="z-index: 13;">
+										<div class="item" data-value='allvideos'>
+											<span class="text">All</span>
+										</div>
+										<div class="divider"></div>
+										<div class="item" data-value="video/mp4,video/webm">
+											<span class="text">Videos</span>
+										</div>
+										<div class="item" data-value="video/x-youtube">
+											<span class="text">Youtube</span>
+										</div>
+										<div class="item" data-value="Resource">
+												<span class="text">Resources</span>
+											</div>
+									</div>
+								</div>
+							</div>
 					</div>
 					<div class="clearfix">&nbsp;</div>
 					<div class="ui cards special three grid asset_item_container" id="all-video-tab">
-						<div ng-show="$ctrl.videoList.length > 0" class="card" ng-repeat="videoItem in $ctrl.videoList track by $index" in-view="lineInView($index, $inview, video, 'AssetsBrowser', $index)"
+						<div ng-show="$ctrl.videoList.length > 0" class="card" ng-click="$ctrl.VideoSource(videoItem, $index, 'allasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index" in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)"
 							in-view-options="{ throttle: 1000 }">
 
 							<div class="video image infopopover">
 									<img src="/plugins/org.ekstep.assetbrowser-1.2/assets/default_image.png" class="resourceMetaImage">
-									<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{videoItem.identifier}}' style="z-index:12">
+									<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_allasset_{{videoItem.identifier}}' style="z-index:12">
 											<input class="radioBox" type="radio" name="youtubeVideo">
 											<label></label>
 									</div>
@@ -625,7 +646,7 @@
    		<div class="ui grid">
    			<div class="three wide column left aligned">
    				<button class="ui blue button" ng-click="$ctrl.switchToUpload(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'open', target: 'openUpladForm'})" type="button">
-   				{{$ctrl.plugin=='image' || 'video' ? 'Upload and use': 'Upload/ Record'}}</button>
+   				{{$ctrl.plugin=='image' || $ctrl.plugin == 'video' ? 'Upload and use': 'Upload/ Record'}}</button>
    			</div>
    			<div class="nine wide column right aligned">
    				<div class="ui buttons" style="margin:0;">

@@ -60,28 +60,50 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof assetBrowser
      *
      */
-    getAsset: function(searchText, mediaType, createdBy, offset, cb) {
+    getAsset: function(searchText, mediaType, assetType, contentType,  createdBy, offset, cb) {
         var instance = this,
             requestObj,
             requestHeaders,
             allowableFilter;
-
-        requestObj = {
-            "request": {
-                "filters": {
-                    "mediaType": mediaType,
-                    "contentType": "Asset",
-                    "compatibilityLevel": {
-                        "min": 1,
-                        "max": 2
-                    },
-                    "status": new Array("Live", "Review", "Draft")
-                },
-                "limit": 50,
-                "offset": offset
+        if(assetType){
+            if(assetType == 'video'){
+                requestObj = {
+                    "request": {
+                        "filters": {
+                            "objectType": "Content",
+                            "mediaType": 'video',
+                            "mimeType": (mediaType == 'video') ? new Array('video/x-youtube', 'video/mp4', 'video/webm') : mediaType,
+                            "contentType": contentType,
+                            "compatibilityLevel": {
+                                "min": 1,
+                                "max": 2
+                            },
+                            "status": new Array("Live", "Review", "Draft"),
+                            "license": "Creative Commons Attribution (CC BY)",
+                        },
+                        "limit": 50,
+                        "offset": offset
+                    }
+                };
             }
-        };
-
+            else{
+                requestObj = {
+                    "request": {
+                        "filters": {
+                            "mediaType": mediaType,
+                            "contentType": contentType,
+                            "compatibilityLevel": {
+                                "min": 1,
+                                "max": 2
+                            },
+                            "status": new Array("Live", "Review", "Draft")
+                        },
+                        "limit": 50,
+                        "offset": offset
+                    }
+                };
+            }
+        }
         org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
         // Public assets only
