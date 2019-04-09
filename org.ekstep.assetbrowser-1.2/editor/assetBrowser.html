@@ -522,12 +522,9 @@
 										<div class="item" data-value="video/mp4,video/webm">
 											<span class="text">Videos</span>
 										</div>
-										<div class="item" data-value="video/x-youtube">
+										<div class="item" data-value="allYouTube">
 											<span class="text">Youtube</span>
 										</div>
-										<div class="item" data-value="Resource">
-												<span class="text">Resources</span>
-											</div>
 									</div>
 								</div>
 							</div>
@@ -538,7 +535,7 @@
 							in-view-options="{ throttle: 1000 }">
 
 							<div class="video image infopopover">
-									<img ng-src="{{videoItem.thumbnail || $ctrl.defaultImage}}"  class="resourceMetaImage">
+									<img ng-src="{{videoItem.thumbnail || videoItem.appIcon || $ctrl.defaultImage}}"  class="resourceMetaImage">
 									<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_allasset_{{videoItem.identifier}}' style="z-index:12">
 											<input class="radioBox" type="radio" name="youtubeVideo">
 											<label></label>

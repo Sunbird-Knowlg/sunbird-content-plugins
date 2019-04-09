@@ -32,7 +32,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         "name": "",
         "size": 0
     };
-
+    ctrl.previewMessages = {
+        emptyState : 'Click Go to preview' ,
+        previewError: 'Could not load the preview. Check the link and try again',
+        invalidYoutubeURL : 'Please provide valid YouTube URL!',
+        invalidDriveURL : 'Please provide valid Google drive URL!',
+        invalidLicense : 'The video you are trying to upload is not license by CC-BY. Please try another video.',
+        loadingState: 'Loading Video...',
+        fileExceed: 'Video file size is exceeded'
+    }
     ctrl.audioType = "audio";
     ctrl.voiceOption = [{
         label: "Audio",
@@ -184,11 +192,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     //load image on opening window
     if (instance.mediaType == 'image') {
-        instance.getAsset(undefined, new Array(instance.mediaType), 'image', 'Asset', ctrl.createdBy, ctrl.offset, imageAssetCb);
+        instance.getAsset(undefined, new Array(instance.mediaType), 'image', new Array('Asset'), ctrl.createdBy, ctrl.offset, imageAssetCb);
     } else if (instance.mediaType == 'audio') {
-        instance.getAsset(undefined, new Array('audio', 'voice'),'audio', 'Asset', ctrl.createdBy, ctrl.offset, audioAssetCb);
+        instance.getAsset(undefined, new Array('audio', 'voice'),'audio', new Array('Asset'), ctrl.createdBy, ctrl.offset, audioAssetCb);
     } else if (instance.mediaType == 'video') {
-        instance.getAsset(undefined, new Array(instance.mediaType), 'video', 'Asset', ctrl.createdBy, ctrl.offset, videoAssetCb);
+        instance.getAsset(undefined, new Array('video/x-youtube', 'video/mp4', 'video/webm'), 'video', new Array('Asset'), ctrl.createdBy, ctrl.offset, videoAssetCb);
     }
     ctrl.setCallback = function(callback){
         if(instance.mediaType == "image"){
@@ -225,9 +233,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         callback = ctrl.setCallback(callback)
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
         ctrl.selectBtnDisable = true;
-        ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'), 'Asset', ctrl.createdBy)
+        ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'), new Array('Asset'), ctrl.createdBy)
         var mediaType = ctrl.getMediaType();
-        callback && instance.getAsset(searchText, mediaType, ctrl.plugin, 'Asset', ctrl.createdBy, ctrl.offset = 0, callback);
+        callback && instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), ctrl.createdBy, ctrl.offset = 0, callback);
     }
     ctrl.getMediaType = function() {
         if (instance.mediaType === "image") {
@@ -267,7 +275,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.selectBtnDisable = true;
 
         // var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
-        (ctrl.plugin == 'video') ? contentType = new Array('Asset', 'Resource') : 'Asset'
+        contentType = (ctrl.plugin == 'video') ? new Array('Asset', 'Resource') : new Array('Asset')
         ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'),  new Array('Asset','Resource'), undefined)
         callback && instance.getAsset(searchText, ctrl.getMediaType(), ctrl.plugin, contentType, null, ctrl.offset=0 , callback);
     }
@@ -322,6 +330,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.searchFilter.contentType = contentType;
         ctrl.searchFilter.createdBy = createdBy;
     }
+    if(instance.mediaType == 'video'){
+        ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'), new Array('Asset'), ctrl.createdBy)
+    }
 
     ctrl.search = function() {
         var callback,
@@ -337,7 +348,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         if (ctrl.tabSelected == "my" && instance.mediaType !='video') {
             var mediaType = ctrl.getMediaType();
-            callback && instance.getAsset(searchText, mediaType, ctrl.plugin, 'Asset', ctrl.createdBy, ctrl.offset=0, callback);
+            callback && instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), ctrl.createdBy, ctrl.offset=0, callback);
             ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         } else if(instance.mediaType == 'video'){
             var mediaType = new Array(instance.mediaType);
@@ -345,7 +356,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         }else {
             var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
-            callback && instance.getAsset(searchText, mediaType, ctrl.plugin, 'Asset', undefined, ctrl.offset=0, callback);
+            callback && instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), undefined, ctrl.offset=0, callback);
             ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         }
 
@@ -408,7 +419,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         videoData.assetMedia = {
             name : video.name,
             id: videoData.asset,
-            src: video.downloadUrl.toString(),
+            src: video.artifactUrl,
             type: 'video'
         }
         ctrl.selectBtnDisable = false;
@@ -861,6 +872,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
 
     ctrl.loadMoreAsset = function(data) {
+        ctrl.loadMoreCurrentTab = "#"+data.target.id
         /**Check for max limit and Increment offset by 50**/
         if (ctrl.offset+50 >= ctrl.maxLimit){
             ecEditor.jQuery("#"+data.target.id).unbind('scroll');
@@ -878,50 +890,56 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         // Show loader
         ctrl.loadMoreAssetSpinner = true;
 
-        ctrl.selectBtnDisable = false;
         var createdBy = ctrl.tabSelected == "all" ? undefined :  ctrl.createdBy;
         imageTabSelected = true;
         audioTabSelected = false;
         (searchText === "") ? searchText = undefined: null;
 
         var mediaType = ctrl.getMediaType();
-        instance.getAsset(searchText, mediaType, ctrl.plugin, createdBy, 'Asset', ctrl.offset, function(err, res) {
-            if (res && res.data.result.content) {
-                ecEditor._.forEach(res.data.result.content, function(obj, index) {
-                    if(mediaType == 'image'){
-                        ctrl.imageList.push(obj);
-                    }else if(mediaType == 'audio'){
-                        ctrl.audioList.push({
-                            downloadUrl: trustResource(obj.downloadUrl),
-                            identifier: obj.identifier,
-                            name: obj.name,
-                            mimeType: obj.mimeType,
-                            license: obj.license,
-                            contentType: obj.contentType
-                        });
-                    }else if(mediaType == 'video'){
-                        ctrl.videoList.push({
-                            downloadUrl: trustResource(obj.downloadUrl),
-                            identifier: obj.identifier,
-                            name: obj.name,
-                            mimeType: obj.mimeType,
-                            license: obj.license,
-                            contentType: obj.contentType
-                        });
-                    }
-                });
-                ctrl.initPopup(res.data.result.content);
-                ecEditor.jQuery("#"+data.target.id).bind('scroll',ctrl.bindScroll);
-            } else {
-               ecEditor.jQuery("#"+data.target.id).unbind('scroll');
-            };
-
-            // Hide loader
-            ctrl.loadMoreAssetSpinner = false;
-            ecEditor.ngSafeApply(ecEditor.getAngularScope());
-        });
-        $scope.$safeApply();
+        if(ctrl.plugin  == 'video'){
+            instance.getAsset(searchText, ctrl.searchFilter.mimeType, ctrl.plugin, ctrl.searchFilter.contentType, ctrl.searchFilter.createdBy, ctrl.offset, loadMoreAssetCb);
+        }else{
+            instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), createdBy, ctrl.offset, loadMoreAssetCb);
+        }
     };
+
+
+    function loadMoreAssetCb(err, res) {
+        var mediaType = ctrl.getMediaType();
+        if (res && res.data.result.content) {
+            ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                if(mediaType == 'image'){
+                    ctrl.imageList.push(obj);
+                }else if(mediaType == 'audio'){
+                    ctrl.audioList.push({
+                        downloadUrl: trustResource(obj.downloadUrl),
+                        identifier: obj.identifier,
+                        name: obj.name,
+                        mimeType: obj.mimeType,
+                        license: obj.license,
+                        contentType: obj.contentType
+                    });
+                }else if(mediaType == 'video'){
+                    ctrl.videoList.push({
+                        downloadUrl: trustResource(obj.downloadUrl),
+                        identifier: obj.identifier,
+                        name: obj.name,
+                        mimeType: obj.mimeType,
+                        license: obj.license,
+                        contentType: obj.contentType
+                    });
+                }
+            });
+            ctrl.initPopup(res.data.result.content);
+            ecEditor.jQuery(ctrl.loadMoreCurrentTab).bind('scroll',ctrl.bindScroll);
+        } else {
+           ecEditor.jQuery(ctrl.loadMoreCurrentTab).unbind('scroll');
+        };
+
+        // Hide loader
+        ctrl.loadMoreAssetSpinner = false;
+        ecEditor.ngSafeApply(ecEditor.getAngularScope());
+    }
 
     ctrl.searchTextClicked = function(){
         /**Check for my asset search tab**/
@@ -1067,10 +1085,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, fields, function (err, res) {
             if (err) {
                 console.log('API FAILED');
-            } else {
+            } else if(res.data.result.license.valid){
                 ctrl.previewVideo(request.url, ctrl.plugin, request.provider)
             }
         })
+    }
+    ctrl.toastManager = function(message, type){
+        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+            message: "Error in Uploading " + (instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ", please try again!",
+            position: 'topCenter',
+            icon: 'fa fa-warning'
+        });
     }
     setTimeout(function() {
 
@@ -1144,7 +1169,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     ctrl.offset = 0;
                     searchText = (ctrl.query === "") ? undefined : ctrl.query;
                     var selectedValue = (value != 'all') ? new Array(value) : new Array('audio', 'voice');
-                    instance.getAsset(searchText, selectedValue, 'audio',  'Asset', ctrl.createdBy, ctrl.offset, audioAssetCb);
+                    instance.getAsset(searchText, selectedValue, 'audio',  new Array('Asset'), ctrl.createdBy, ctrl.offset, audioAssetCb);
                 }
             });
         ecEditor.jQuery('#myVideoDropDown')
@@ -1156,7 +1181,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     searchText = (ctrl.query === "") ? undefined : ctrl.query;
                     var selectedValue = (value != 'myvideos') ? value.split(',') : new Array('video/x-youtube', 'video/mp4', 'video/webm');
                     ctrl.searchFilter.mimeType = selectedValue;
-                    ctrl.searchFilter.contentType = 'Asset';
+                    ctrl.searchFilter.contentType = new Array('Asset');
                     ctrl.searchFilter.createdBy = ctrl.createdBy;
                     instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType ,ctrl.searchFilter.createdBy, ctrl.offset, videoAssetCb);
                 }
@@ -1171,11 +1196,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     if (value == 'allvideos') {
                         selectedValue = new Array('video/x-youtube', 'video/mp4', 'video/webm');
                         contentType = new Array('Asset', 'Resource')
-                    } else if (value == 'Resource') {
-                        selectedValue = new Array('video/x-youtube', 'video/mp4', 'video/webm');
-                        contentType = new Array(value);
+                    } else if (value == 'allYouTube') {
+                        selectedValue = new Array('video/x-youtube')
+                        contentType = new Array('Asset', 'Resource')
                     } else {
-                        selectedValue = value.split(',');
+                        selectedValue = value.split(',')
                         contentType = new Array('Asset')
                     }
                     ctrl.searchFilter.mimeType = selectedValue;

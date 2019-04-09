@@ -106,6 +106,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 contentMeta.questions = summary.questions;
             }
         }
+        contentMeta.assets = org.ekstep.contenteditor.stageManager.assets;
+        console.log(contentMeta.assets);
+
         contentMeta.editorState = JSON.stringify(this.editorState);
         contentMeta.pragma = org.ekstep.contenteditor.stageManager.getPragma();
         this._patchContent(contentMeta, contentBody, options);

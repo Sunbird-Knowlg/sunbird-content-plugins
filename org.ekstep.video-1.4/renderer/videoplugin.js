@@ -30,7 +30,23 @@ Plugin.extend({
         data.controls = config.controls;
         data.muted = config.muted;
         data.autoplay = config.autoplay;
-        var checkYoutube = this.checkValidYoutube(config.url)
+
+            var contentMeta = _.clone(content);
+            if(!_.isUndefined(contentMeta.assetsMap)){
+               var asset = _.findWhere(contentMeta.assetsMap, {identifier: data.asset});
+               if(isStreaming){
+                var checkYoutube = this.checkValidYoutube(asset.streamingUrl)
+               } else {
+                    if(portal){
+                        // use artifact url - asset.artifactUrl
+                    } else {
+                        // user media src .theme something
+                    }
+               }
+            }
+        }else{
+            var checkYoutube = this.checkValidYoutube(config.url)
+        }
         if (checkYoutube) {
             data.asset = data.id;
             var dims = this.relativeDims();
@@ -84,7 +100,7 @@ Plugin.extend({
             });
         }
     },
-    disposeStageVideos: function(){ 
+    disposeStageVideos: function(){
         var availablePlayers = _.pick(videojs.getPlayers(), _.identity);
             _.forEach(availablePlayers, function (value, key) {
                 videojs(key).dispose();

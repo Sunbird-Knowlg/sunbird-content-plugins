@@ -64,20 +64,18 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this,
             requestObj,
             requestHeaders,
-            allowableFilter;
+            allowableFilter,
+            hasResourceLoaded;
+
         if(assetType){
             if(assetType == 'video'){
+                hasResourceLoaded = (!_.includes(contentType, 'Asset')) ? true : false;
                 requestObj = {
                     "request": {
                         "filters": {
                             "objectType": "Content",
-                            "mediaType": 'video',
                             "mimeType": (mediaType == 'video') ? new Array('video/x-youtube', 'video/mp4', 'video/webm') : mediaType,
-                            "contentType": contentType,
-                            "compatibilityLevel": {
-                                "min": 1,
-                                "max": 2
-                            },
+                            "contentType": (_.includes(contentType, 'Asset')) ? new Array('Asset') : new Array('Resource'),
                             "status": new Array("Live", "Review", "Draft"),
                             "license": "Creative Commons Attribution (CC BY)",
                         },
@@ -119,24 +117,32 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.contenteditor.api._.merge(requestObj.request.filters, allowableFilter);
 
         var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
+        console.log(requestObj.request);
+
         ecEditor.getService('search').search(requestObj, function(err, res){
             if (!err && res.data.responseCode == "OK") {
-                if(_.includes(contentType, 'Resource')){
+                if(_.includes(contentType, 'Resource') && !hasResourceLoaded){
                     var resourceObj =  _.cloneDeep(requestObj);
-                    delete resourceObj.request.filters.license
                     resourceObj.request.filters.contentType = new Array('Resource')
+                    resourceObj.request.filters.mimeType = new Array('video/x-youtube')
+                    console.log(resourceObj.request);
                     instance.searchAsset(resourceObj)
                             .then(function(resourceRes){
                                 var videoResources = {};
-                                Array.prototype.push.apply(res.data.result.content, resourceRes.data.result.content);
-                                videoResources = res;
+                                if(_.includes(contentType, 'Asset') && !_.isUndefined(res.data.result.content)){
+                                    Array.prototype.push.apply(res.data.result.content, resourceRes.data.result.content);
+                                    res.data.result.content = _.orderBy(res.data.result.content, ['createdOn'], ['desc'] )
+                                    videoResources = res
+                                }else{
+                                    videoResources = resourceRes;
+                                }
                                 cb(null, videoResources);
                             }).catch (function (error) {
-                                console.log(error);
+                                cb(error, null);
                             });
                 }
                 else{
-                    cb(null, res);
+                    cb(null, res)
                 }
             } else {
                 cb(err, null);
