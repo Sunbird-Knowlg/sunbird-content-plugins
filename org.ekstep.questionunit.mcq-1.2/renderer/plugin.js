@@ -70,16 +70,25 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    */
   evaluateQuestion: function (event) {
     var callback = event.target;
-    var correctAnswer = false, telValues = {}, selectedAnsData, selectedAns, result = {}, option;
+    var correctAnswer = false, resValues = {}, selectedAnsData, selectedAns, result = {}, option,params = [];
     option = MCQController.pluginInstance._question.data.options;// eslint-disable-line no-undef
     selectedAnsData = option[MCQController.pluginInstance._selectedIndex]; // eslint-disable-line no-undef
     selectedAns = _.isUndefined(selectedAnsData) ? false : selectedAnsData.isCorrect;
-    option.forEach(function (option) { // eslint-disable-line no-undef
+    option.forEach(function (option,key) { // eslint-disable-line no-undef
       if (option.isCorrect === selectedAns) {
         correctAnswer = option.isCorrect;
       }
+      var temp = {};
+      temp[key+1] = JSON.stringify({'text':option.text,'image':option.image,'audio':option.audio});
+      params.push(temp);
     });
-    if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) telValues['option' + MCQController.pluginInstance._selectedIndex] = selectedAnsData.image.length > 0 ? selectedAnsData.image : selectedAnsData.text; // eslint-disable-line no-undef
+    var question = MCQController.pluginInstance._question.data.question;
+    var title = {};
+    title.title = JSON.stringify({'text':question.text,'image':question.image,'audio':question.audio});
+    params.push(title);
+    var rvalues = [];
+    if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) resValues[MCQController.pluginInstance._selectedIndex +1] = JSON.stringify({'text':selectedAnsData.text,'image':selectedAnsData.image,'audio':selectedAnsData.audio}); // eslint-disable-line no-undef
+    rvalues.push(resValues);
     result = {
       eval: correctAnswer,
       state: {
@@ -87,7 +96,8 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
         options: option // eslint-disable-line no-undef
       },
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
-      values: [telValues]
+      values: rvalues,
+      params: params
     }
     if (_.isFunction(callback)) {
       callback(result);
