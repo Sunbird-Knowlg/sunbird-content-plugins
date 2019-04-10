@@ -63,18 +63,20 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     var telemetryAnsArr = [], //array have all answer
       correctAnswer = false,
       answerArray = [],
-      ansObj = {};
+      ansObj = {},params = [];
     //check for evalution
     //get all text box value inside the class
     var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
     _.each(textBoxCollection, function (element, index) {
       answerArray.push(element.value.toLowerCase().trim());
-      var key = "ans" + index; // eslint-disable-line no-unused-vars
-      ansObj = {
-        key: element.value
-      };
-      telemetryAnsArr.push(ansObj);
+      var temp = {};
+      temp[index+1] = JSON.stringify({'text':element.value});
+      params.push(temp);
+      telemetryAnsArr.push(temp);
     });
+     var title = {};
+     title.title = JSON.stringify({'text':this.extractHTML(this._question.data.question.text),'image':this._question.data.question.image,'audio':this._question.data.question.audio});
+     params.push(title);
     //compare two array and compute partial score
     var correctAnswersCount = 0;
     if (this._question.config.evalUnordered) {
@@ -104,6 +106,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
         val: answerArray
       },
       score: questionScore,
+      params: params,
       max_score: this._question.config.max_score,
       values: telemetryAnsArr,
       noOfCorrectAns: correctAnswersCount,
@@ -117,6 +120,11 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     }
     
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr }); // eslint-disable-line no-undef
+  },
+  extractHTML: function(htmlElement){
+    var divElement= document.createElement('div');
+    divElement.innerHTML= htmlElement;
+    return divElement.textContent || divElement.innerText;
   }
 });
 //# sourceURL=questionunitFtbRendererPlugin.js
