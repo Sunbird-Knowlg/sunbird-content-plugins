@@ -22724,6 +22724,26 @@ describe("Topic selector plugin", function() {
         pluginInstance.setFiltersData(function(){
             done()
         });
-        expect(instance.topicData.length).toEqual(16);
+        expect(pluginInstance.topicData.length).toEqual(69);
+    });
+    it('If no topic terms avalible in API Should show topic tree picker popup with error message', function(done){
+        spyOn(pluginInstance, "initTopicBrowser").and.callThrough();
+        spyOn(pluginInstance, "getCategory").and.callThrough();
+        var apiResultWithoutTerms = {"data": {"id":"ekstep.learning.framework.read","ver":"1.0","ts":"2019-04-05T11:25:31ZZ","params":{"resmsgid":"61b9afad-0078-46a9-8e9e-d4e6c420ce7e","msgid":null,"err":null,"status":"successful","errmsg":null},"responseCode":"OK","result":{"framework":{"identifier":"NCFC2","code":"NCFC2","name":"NCFC2","description":" NCFC2 framework description","graph_id":"domain","nodeType":"DATA_NODE","type":"K-12","node_id":346099,"objectType":"Framework","categories":[{"identifier":"ncfc2_board","code":"board","translations":null,"name":"Curriculum","description":"","index":1,"status":"Live"},{"identifier":"ncfc2_gradelevel","code":"gradeLevel","translations":null,"name":"Class","description":"","index":2,"status":"Live"},{"identifier":"ncfc2_subject","code":"subject","translations":null,"name":"Resource","description":"Resource","index":3,"status":"Live"},{"identifier":"ncfc2_medium","code":"medium","translations":null,"name":"Medium","description":"","index":4,"status":"Live"},{"identifier":"ncfc2_topic","code":"topic","translations":null,"name":"Topic","description":"Topic","index":5,"status":"Live"}]}}}};
+        //spyOn(pluginInstance, "getContentMeta").and.callThrough();
+        ecEditor.getService('content').getContentMeta = jasmine.createSpy().and.callFake(function(data, callBack) {
+            return {"framework": "NCFC2"};
+        });
+        ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
+            callBack(undefined, apiResultWithoutTerms);
+        });
+        pluginInstance.initTopicBrowser('', {
+            "element": "defaultTemplate-topic",
+            "selectedTopics": []
+        });
+        expect(pluginInstance.initTopicBrowser).toHaveBeenCalled();
+        expect(pluginInstance.isPopupInitialized).toBe(true);
+        expect(pluginInstance.categories).toEqual([]);
+        done();
     });
 });
