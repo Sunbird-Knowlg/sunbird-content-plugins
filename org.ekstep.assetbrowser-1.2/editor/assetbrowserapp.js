@@ -1,5 +1,5 @@
 'use strict';
-angular.module('assetbrowserapp', ['angularAudioRecorder', 'angular-inview']).config(['recorderServiceProvider', function(recorderServiceProvider) {
+angular.module('assetbrowserapp', ['angularAudioRecorder', 'angular-inview','ngTagsInput']).config(['recorderServiceProvider', function(recorderServiceProvider) {
 
     recorderServiceProvider.forceSwf(false);
     var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.assetbrowser");
@@ -39,7 +39,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         invalidDriveURL : 'Please provide valid Google drive URL!',
         invalidLicense : 'The video you are trying to upload is not license by CC-BY. Please try another video.',
         loadingState: 'Loading Video...',
-        fileExceed: 'Video file size is exceeded'
+        fileExceed: 'Video file size is exceeded',
+        apiError: 'Please try again later'
     }
     ctrl.audioType = "audio";
     ctrl.voiceOption = [{
@@ -465,8 +466,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }
 
         if (audiodata && audiodata.asset && instance.mediaType == "audio") {
-            console.log("audiodata")
-            console.log(audiodata);
             //ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: ecEditor.getCurrentStage().id,type: 'audio', title: audiodata.asset });
             instance.cb(audiodata);
             ctrl.cancel();
@@ -584,7 +583,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         /** Convert keywords in to array **/
         if ((!ecEditor._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
-            content.keywords = ctrl.keywordsText.split(",");
+            content.keywords = ctrl.keywordsText
         } else {
             delete content.keywords;
         }
@@ -598,8 +597,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         }, null);
 
-        console.log(content);
-
         if (ctrl.plugin == 'video') {
             var data = {
                 request: {
@@ -608,6 +605,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         "creator": ecEditor.getContext('user').name,
                         "createdBy": ecEditor.getContext('user').id,
                         "code": UUID(),
+                        "keywords": content.keywords,
                         "mimeType": ctrl.mimeType,
                         "mediaType": ctrl.plugin,
                         "createdFor": ecEditor._.keys(ecEditor.getContext('user').organisations),
@@ -617,7 +615,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     }
                 }
             }
-            console.log(data.request.content.mimeType)
             $scope.contentService.createContent(data, function (err, res) {
                 if (err) {
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -803,7 +800,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.uploadAsset(event, ctrl.assetMeta, null);
         }
         else {
-            console.log("fields validation failed");
             ctrl.uploadBtnDisabled = false;
             return false;
         }
@@ -974,13 +970,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         var allowedMimeTypes = ctrl.allowedMimeTypes;
         var isFileValid = instance.fileValidation('assetfile', allowedFileSize, allowedMimeTypes)
         if (isFileValid) {
-            console.log(file);
             ctrl.provider = 'file'
             if (ctrl.plugin == 'video') {
                 ctrl.previewVideo(file, ctrl.plugin, ctrl.provider)
             }
         }
-        console.log(instance.mediaType)
     }
     ctrl.previewVideo = function (file, mediaType, provider) {
         if (mediaType == 'video' && provider == 'file') {
@@ -1084,7 +1078,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         var fields = (request.provider == 'youtube') ? 'license' : 'size';
         org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, fields, function (err, res) {
             if (err) {
-                console.log('API FAILED');
             } else if(res.data.result.license.valid){
                 ctrl.previewVideo(request.url, ctrl.plugin, request.provider)
             }
@@ -1098,7 +1091,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         });
     }
     setTimeout(function() {
-
         ctrl.pluginLoadStartTime = new Date();
         ctrl.myTabScrollElement = "my-"+instance.mediaType+"-tab";
         ctrl.allTabScrollElement = "all-"+instance.mediaType+"-tab"
@@ -1140,7 +1132,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 e.preventDefault();
             }
         });
-        ecEditor.jQuery(document).on('change', '#assetfile', function() {
+
+        ecEditor.jQuery("#assetfile").on('change', function() {
             if(ctrl.plugin == 'video'){
                 ctrl.assetFileValidation(this.files[0]);
             }

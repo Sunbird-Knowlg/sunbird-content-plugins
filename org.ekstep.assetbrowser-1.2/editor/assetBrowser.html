@@ -1,222 +1,254 @@
 <script type="text/ng-template" ng-app="assetbrowserapp" ng-controller="browsercontroller as $ctrl" id="partials/assetbrowser.html">
    <style>
-   audio::-internal-media-controls-download-button {
-      display:none !important;
-   }
+   	audio::-internal-media-controls-download-button {
+   		display: none !important;
+   	}
 
-   audio::-webkit-media-controls-enclosure {
-      overflow:hidden !important;
-   }
+   	audio::-webkit-media-controls-enclosure {
+   		overflow: hidden !important;
+   	}
 
-   audio::-webkit-media-controls-panel {
-      width: calc(100% + 30px) !important; /* Adjust as needed */
-   }
+   	audio::-webkit-media-controls-panel {
+   		width: calc(100% + 30px) !important;
+   		/* Adjust as needed */
+   	}
 
-   .assetbrowser {
-      position: inherit !important;
-      top: 0 !important;
-   }
+   	.assetbrowser {
+   		position: inherit !important;
+   		top: 0 !important;
+   	}
 
-   .ngdialog-content {
-      top: 5% !important;
-      width: 100% !important;
-      position: absolute !important;
-      background: none !important;
-   }
+   	.ngdialog-content {
+   		top: 5% !important;
+   		width: 100% !important;
+   		position: absolute !important;
+   		background: none !important;
+   	}
 
-   .assetbrowser .faloading {
-       position: fixed;
-       top: 250px;
-       left: 360px;
-   }
+   	.assetKeywords input {
+   		border: 0 !important;
+   	}
 
-   .assetbrowser .audioOverlay {
-       background-color: hsl(200, 100%, 43%);
-       opacity: 0.7;
-       position: absolute;
-       top: 0;
-       left: 0;
-       right: 0;
-       bottom: 0;
-       text-align: center;
-   }
+   	.assetbrowser .faloading {
+   		position: fixed;
+   		top: 250px;
+   		left: 360px;
+   	}
 
-   .assetbrowser_searchBox {
-       width: 100%;
-   }
+   	.assetbrowser .audioOverlay {
+   		background-color: hsl(200, 100%, 43%);
+   		opacity: 0.7;
+   		position: absolute;
+   		top: 0;
+   		left: 0;
+   		right: 0;
+   		bottom: 0;
+   		text-align: center;
+   	}
 
-   .assetbrowser .asset_item_container {
-       overflow-y: auto;
-       overflow-x: hidden;
-       min-height: 300px !important;
-       max-height: 300px !important;
-       padding:5px;
-   }
+   	.assetbrowser_searchBox {
+   		width: 100%;
+   	}
 
-   .assetbrowser .ui.modal.ui.form {
-   	min-height: 550px !important;
-   }
+   	.assetbrowser .asset_item_container {
+   		overflow-y: auto;
+   		overflow-x: hidden;
+   		min-height: 300px !important;
+   		max-height: 300px !important;
+   		padding: 5px;
+   	}
 
-   .assetbrowser .ui.modal>.content {
-   	min-height: 430px !important;*/
-   	max-height: 430px !important;*/
-   }
+   	.assetbrowser .ui.modal.ui.form {
+   		min-height: 550px !important;
+   	}
 
-   .assetbrowser .asset_thumbnail {
-       position: absolute;
-       top: 0;
-       bottom: 0;
-       left: 0;
-       right: 0;
-       margin: auto !important;
-   }
+   	.assetbrowser .ui.modal>.content {
+   		min-height: 430px !important;
+   		*/ max-height: 430px !important;
+   		*/
+   	}
 
-   .assetbrowser .ui.image{
-   	position: relative;
-       overflow: hidden;
-       padding-bottom: 100%
-   }
+   	.assetbrowser .asset_thumbnail {
+   		position: absolute;
+   		top: 0;
+   		bottom: 0;
+   		left: 0;
+   		right: 0;
+   		margin: auto !important;
+   	}
 
-   .assetbrowser .templatecard{
-      border: 1px dotted #ccc;
-       cursor: pointer;
-       position: relative;
-       margin-top: 15px;
-    }
+   	.assetbrowser .ui.image {
+   		position: relative;
+   		overflow: hidden;
+   		padding-bottom: 100%
+   	}
 
-   .assetbrowser .ui.floating.label {
-       top: 0;
-   	padding: 6px;
-       right: 0;
-       left: unset;
-   }
+   	.assetbrowser .templatecard {
+   		border: 1px dotted #ccc;
+   		cursor: pointer;
+   		position: relative;
+   		margin-top: 15px;
+   	}
 
-    .assetbrowser .ui.images .image, .ui.images img, .ui.images svg {
-       margin: auto !important;
-       width:121px !important;
-   }
+   	.assetbrowser .ui.floating.label {
+   		top: 0;
+   		padding: 6px;
+   		right: 0;
+   		left: unset;
+   	}
 
-   .assetbrowser .uiAction {
-   	background: #F9FAFB;
-   	padding: 1rem;
-   	border-top: 1px solid rgba(34,36,38,.15);
-   }
+   	.assetbrowser .ui.images .image,
+   	.ui.images img,
+   	.ui.images svg {
+   		margin: auto !important;
+   		width: 121px !important;
+   	}
 
-   .assetbrowser .audioitem {
-       border: 1px dotted #ccc;
-       position: relative !important;
-       cursor: pointer;
-   }
+   	.assetbrowser .uiAction {
+   		background: #F9FAFB;
+   		padding: 1rem;
+   		border-top: 1px solid rgba(34, 36, 38, .15);
+   	}
 
-   .assetbrowser .audioitem audio{
-   	width: 100%;
-   }
+   	.assetbrowser .audioitem {
+   		border: 1px dotted #ccc;
+   		position: relative !important;
+   		cursor: pointer;
+   	}
 
-   .assetbrowser .audio-tag {
-   	overflow: hidden;
-       padding-left: 5px;
-   }
+   	.assetbrowser .audioitem audio {
+   		width: 100%;
+   	}
 
-   i.play.icon:before, i.pause.icon:before{
-   	background: white !important;
-   }
+   	.assetbrowser .audio-tag {
+   		overflow: hidden;
+   		padding-left: 5px;
+   	}
 
-   .assetbrowser .cursor-pointer{
-   	cursor: pointer;
-   }
+   	i.play.icon:before,
+   	i.pause.icon:before {
+   		background: white !important;
+   	}
 
-   .assetbrowser .licenseMessage {
-   	font-size: 11px;
-   }
+   	.assetbrowser .cursor-pointer {
+   		cursor: pointer;
+   	}
 
-   .assetbrowser .checkContainer {
-       /*margin-top: 12px;*/
-       position: relative;
-   }
+   	.assetbrowser .licenseMessage {
+   		font-size: 11px;
+   	}
 
-   .assetbrowser .checkIcon{
-       position: absolute;
-       left: 0;
-       right: 0;
-       text-align: center;
-       margin-left: auto;
-       margin-right: auto;
-       color: white;
-       top: 10px;
-   }
+   	.assetbrowser .checkContainer {
+   		/*margin-top: 12px;*/
+   		position: relative;
+   	}
 
-   .assetbrowser .center-aligned{
-   	text-align: center;
-   }
+   	.assetbrowser .checkIcon {
+   		position: absolute;
+   		left: 0;
+   		right: 0;
+   		text-align: center;
+   		margin-left: auto;
+   		margin-right: auto;
+   		color: white;
+   		top: 10px;
+   	}
 
-   .assetbrowser .playContainer{
-   	position: absolute;top: 52px;left: 0;right: 0;z-index: 1000;margin-left: auto;margin-right: auto;
-   }
+   	.assetbrowser .center-aligned {
+   		text-align: center;
+   	}
 
-   .assetbrowser .recordContainer{
-   	min-height: 210px;
-   }
+   	.assetbrowser .playContainer {
+   		position: absolute;
+   		top: 52px;
+   		left: 0;
+   		right: 0;
+   		z-index: 1000;
+   		margin-left: auto;
+   		margin-right: auto;
+   	}
 
-   .assetbrowser .waveContainer{
-   	max-width: 500px; position: relative;
-   }
+   	.assetbrowser .recordContainer {
+   		min-height: 210px;
+   	}
 
-   #assetfile{
-   	border-color: darkgrey!important;
-   	border: dashed!important;
-   	padding: 23px;
-   }
+   	.assetbrowser .waveContainer {
+   		max-width: 500px;
+   		position: relative;
+   	}
 
-   .assetbrowser .is-dragover{
-   	background: darkgray!important;
-   }
-   .load-more-assets-spinner {
-    margin: 100px auto 0;
-    width: 70px;
-    text-align: center;
-  }
+   	#assetfile {
+   		border-color: darkgrey !important;
+   		border: dashed !important;
+   		padding: 23px;
+   	}
 
-  .load-more-assets-spinner > div {
-    width: 18px;
-    height: 18px;
-    background-color: #333;
+   	.assetbrowser .is-dragover {
+   		background: darkgray !important;
+   	}
 
-    border-radius: 100%;
-    display: inline-block;
-    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-  }
+   	.load-more-assets-spinner {
+   		margin: 100px auto 0;
+   		width: 70px;
+   		text-align: center;
+   	}
 
-  .load-more-assets-spinner .bounce1 {
-    -webkit-animation-delay: -0.32s;
-    animation-delay: -0.32s;
-  }
+   	.load-more-assets-spinner>div {
+   		width: 18px;
+   		height: 18px;
+   		background-color: #333;
 
-  .load-more-assets-spinner .bounce2 {
-    -webkit-animation-delay: -0.16s;
-    animation-delay: -0.16s;
-  }
+   		border-radius: 100%;
+   		display: inline-block;
+   		-webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+   		animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+   	}
 
-  @-webkit-keyframes sk-bouncedelay {
-    0%, 80%, 100% { -webkit-transform: scale(0) }
-    40% { -webkit-transform: scale(1.0) }
-  }
+   	.load-more-assets-spinner .bounce1 {
+   		-webkit-animation-delay: -0.32s;
+   		animation-delay: -0.32s;
+   	}
 
-  @keyframes sk-bouncedelay {
-    0%, 80%, 100% {
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    } 40% {
-      -webkit-transform: scale(1.0);
-      transform: scale(1.0);
-    }
-  }
-  .load-more-assets-warning-msg img{
-    padding:0px!important;
-  }
-  .load-more-assets-warning-msg p{
-    text-align:center;
-  }
+   	.load-more-assets-spinner .bounce2 {
+   		-webkit-animation-delay: -0.16s;
+   		animation-delay: -0.16s;
+   	}
+
+   	@-webkit-keyframes sk-bouncedelay {
+
+   		0%,
+   		80%,
+   		100% {
+   			-webkit-transform: scale(0)
+   		}
+
+   		40% {
+   			-webkit-transform: scale(1.0)
+   		}
+   	}
+
+   	@keyframes sk-bouncedelay {
+
+   		0%,
+   		80%,
+   		100% {
+   			-webkit-transform: scale(0);
+   			transform: scale(0);
+   		}
+
+   		40% {
+   			-webkit-transform: scale(1.0);
+   			transform: scale(1.0);
+   		}
+   	}
+
+   	.load-more-assets-warning-msg img {
+   		padding: 0px !important;
+   	}
+
+   	.load-more-assets-warning-msg p {
+   		text-align: center;
+   	}
    </style>
 
    <div class="assetbrowser ui modal active ui form">
@@ -809,10 +841,11 @@
    						<div ng-if="$ctrl.assetNameError == 'error'" class="ui basic red pointing prompt label transition visible">Please enter asset caption</div>
    					</div>
 
-   					<div class="field">
+   					<div class="field assetKeywords">
    						<label for="keywords" title="Tags">Tags</label>
-   						<input id="keywords" type="text"  name="keywords" ng-model="$ctrl.keywordsText" data-validate="keywords">
-   					 </div>
+							 <tags-input   class"assetKeywords" id="keywords" name="keywords" ng-model="$ctrl.keywordsText" display-property="lemma" use-strings="true" replace-spaces-with-dashes="false">
+							</tags-input>
+						</div>
 
    					<div class="field" ng-hide="$ctrl.hideField">
    						<label for="language" title="Choose Language">Language</label>
@@ -833,7 +866,7 @@
    					<div class="{{$ctrl.asset.requiredField}} field removeError" ng-hide="$ctrl.hideField">
    						<label for="creator" title="Creator">Creator</label>
    						<input id="creator" type="text" ng-model="$ctrl.assetMeta.creator" {{$ctrl.asset.requiredField}} name="creator" placeholder="Enter Name" data-validate="creator" >
-   					</div>
+						 </div>
    				</div>
    			</div>
    		</div>

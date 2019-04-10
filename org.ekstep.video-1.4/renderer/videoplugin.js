@@ -30,27 +30,16 @@ Plugin.extend({
         data.controls = config.controls;
         data.muted = config.muted;
         data.autoplay = config.autoplay;
+        var contentMeta = _.clone(content);
+        //var dataSrc = this._theme.getAsset(data.asset);
 
-            var contentMeta = _.clone(content);
-            if(!_.isUndefined(contentMeta.assetsMap)){
-               var asset = _.findWhere(contentMeta.assetsMap, {identifier: data.asset});
-               if(isStreaming){
-                var checkYoutube = this.checkValidYoutube(asset.streamingUrl)
-               } else {
-                    if(portal){
-                        // use artifact url - asset.artifactUrl
-                    } else {
-                        // user media src .theme something
-                    }
-               }
-            }
-        }else{
-            var checkYoutube = this.checkValidYoutube(config.url)
-        }
+        var assetSrc = this._theme.getAsset(data.asset)
+        var checkYoutube = this.checkValidYoutube(assetSrc)
+
         if (checkYoutube) {
             data.asset = data.id;
             var dims = this.relativeDims();
-            this.createVideo(config.url, data, dims)
+            this.createVideo(assetSrc, data, dims)
             this.id = _.uniqueId('org.ekstep.youtube');
         } else {
             this.id = _.uniqueId('org.ekstep.video');
