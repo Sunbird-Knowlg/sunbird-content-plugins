@@ -1,11 +1,20 @@
 describe('Asset Browser plugin', function () {
     var instance;
-
-    beforeAll(function () {
-        manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.assetbrowser");
-        path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/assetbrowserapp.js");
-        pluginInstance = ecEditor.instantiatePlugin("org.ekstep.assetbrowser");
-    });
+    beforeAll(function(done){
+        ContentEditorTestFramework.init(function() {
+          originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+          jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+          stage = ecEditor.instantiatePlugin("org.ekstep.stage");
+          config = ecEditor.instantiatePlugin("org.ekstep.config");
+          pluginInstance= ecEditor.instantiatePlugin("org.ekstep.assetbrowser");
+         done();
+        });
+      })
+    // beforeAll(function () {
+    //     manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.assetbrowser");
+    //     path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/assetbrowserapp.js");
+    //     pluginInstance = ecEditor.instantiatePlugin("org.ekstep.assetbrowser");
+    // });
 
     it('Should invoke initialize method and register event', function (done) {
         spyOn(pluginInstance, "initialize").and.callThrough();
