@@ -1,5 +1,9 @@
 describe("Sunbird header plugin:", function() {
-    var manifest, ctrl, $scope, pluginInstance, checklistJSON, checklistEmptyResponse;
+    var manifest, ctrl, $scope, pluginInstance, checklistJSON, checklistEmptyResponse, meta;
+    beforeEach(function(){
+        meta = {"medium":"English","subject":"Math","gradeLevel":"10"};
+    });
+
     beforeAll(function(done) {
         CollectionEditorTestFramework.init(function() {
             manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.sunbirdcommonheader");
@@ -274,6 +278,20 @@ describe("Sunbird header plugin:", function() {
             expect(rootNode.data.metadata).not.toBeUndefined();
             expect(rootNode.data.metadata).not.toBeUndefined();
             
+            done();
+        });
+
+        it("Should invoke downloadQRCodes method to download generated QRCode dddddddddddddddddddddddddddddddddd", function(done) {
+            //var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+           
+            spyOn($scope, 'downloadQRCodes').and.callThrough();
+            $scope.downloadQRCodes();
+            expect($scope.downloadQRCodes).toHaveBeenCalled();
+            console.log('meta', meta);
+            if(meta.medium && meta.gradeLevel && meta.subject) { 
+                var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
+                $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
+            }
             done();
         });
 
@@ -727,5 +745,45 @@ describe("Sunbird header plugin:", function() {
             done();
         })
     })
+
+    describe("Generate telemetry events", function() {
+        it("Should generate telemetry impression event", function (done) {
+            spyOn($scope, "generateImpression").and.callThrough();
+            spyOn(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE), 'impression');
+            var data = { type: 'click', subtype: 'view', target: 'impression' };
+            $scope.generateImpression(data);
+            expect($scope.generateImpression).toHaveBeenCalled();
+            expect($scope.generateImpression).not.toBeUndefined();
+            expect(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).impression).toHaveBeenCalledWith({
+                "type": data.type,
+                "subtype": data.subtype || "",
+                "pageid": data.pageid || "",
+                "uri": window.location.href,
+                "duration": data.duration,
+                "visits": []
+            });
+            done();
+        });
+
+        it("Should not generate telemetry impression event", function (done) {
+            spyOn($scope, "generateImpression").and.callThrough();
+            spyOn(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE), 'impression');
+            var data = false;
+            $scope.generateImpression(data);
+            expect($scope.generateImpression).toHaveBeenCalled();
+            expect($scope.generateImpression).not.toBeUndefined();
+            if(data) {
+                expect(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).impression).toHaveBeenCalledWith({
+                    "type": data.type,
+                    "subtype": data.subtype || "",
+                    "pageid": data.pageid || "",
+                    "uri": window.location.href,
+                    "duration": data.duration,
+                    "visits": []
+                });
+            }
+            done();
+        });
+    });
 
 })
