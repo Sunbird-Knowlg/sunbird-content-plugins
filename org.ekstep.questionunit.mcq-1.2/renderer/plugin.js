@@ -10,8 +10,6 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
   _isContainer: true,
   _render: true,
   _selectedanswere: undefined,
-  _params: [],
-  _resValues: [],
   _constant: {
     verticalLayout:'Vertical',
     horizontalLayout: 'Horizontal',
@@ -83,6 +81,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       }
     });
     if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) telValues['option' + MCQController.pluginInstance._selectedIndex] = selectedAnsData.image.length > 0 ? selectedAnsData.image : selectedAnsData.text; // eslint-disable-line no-undef
+    var params = instance.getTelemetryParams();
     result = {
       eval: correctAnswer,
       state: {
@@ -90,32 +89,32 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
         options: option // eslint-disable-line no-undef
       },
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
-      params: instance.getTelemetryParams(),
-      resValues: instance.getTelemetryResValues(),
+      params: params,
+      resValues: instance.getTelemetryResValues(params),
     };
     if (_.isFunction(callback)) {
       callback(result);
     }
   },
-  getTelemetryParams: function(){
+  getTelemetryParams: function() {
     // Any change in the index value affects resvalues as well
     var instance = this;
-    var params = [], title = {}, question = MCQController.pluginInstance._question.data.question;
-    MCQController.pluginInstance._question.data.options.forEach(function (option,key) { // eslint-disable-line no-undef
+    var params = [], title = {}, questionData = MCQController.pluginInstance._question.data;
+    title.title = instance.getTelemetryParamsValue(questionData.question);
+    params.push(title);
+    questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
       var temp = {};
-      temp[key+1] = JSON.stringify({'text':instance.extractHTML(option.text),'image':option.image,'audio':option.audio});
+      temp[key+1] = instance.getTelemetryParamsValue(option);
       params.push(temp);
     });
-    title.title = JSON.stringify({'text':instance.extractHTML(question.text),'image':question.image,'audio':question.audio});
-    params.push(title);
     instance._params = params;
     return params;
   },
-  getTelemetryResValues: function(){
+  getTelemetryResValues: function(params) {
     var instance = this;
     var resValues = [];
     if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) 
-    resValues.push(instance._params[MCQController.pluginInstance._selectedIndex]);
+    resValues.push(params[MCQController.pluginInstance._selectedIndex + 1]);
     return resValues;
   },
   /**

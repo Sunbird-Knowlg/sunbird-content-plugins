@@ -7,8 +7,6 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     config: {},
     state: undefined
   },
-  _params: [],
-  _resValues: [],
   /**
    * Initialize the plugin
    * @listens module:org.ekstep.contentrenderer.questionUnitPlugin~org.ekstep.questionunit:show
@@ -255,18 +253,29 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   /**
    * returns params for question telemetry
    */
-  getTelemetryParams: function(){
+  getTelemetryParams: function() {
 
   },
   /**
    * returns getResValues for question telemetry
    */
-  getTelemetryResValues: function(){
+  getTelemetryResValues: function(params) {
 
   },
   extractHTML: function(element){
     var ele = $.parseHTML(element);
     return $(ele).text();
+  },
+  /**
+   * returns telemetry params value as string
+  */
+  getTelemetryParamsValue: function(data) {
+    var valueObj = {};
+    // valueObj.text = data.text.length > 0 ? data.text : 
+    if(data.text.length > 0) valueObj.text = data.text;
+    if(data.image.length > 0) valueObj.image = data.image;
+    if(data.audio.length > 0) valueObj.audio = data.audio;
+    return JSON.stringify(valueObj);
   }
 });
 //# sourceURL=questionUnitRenderer.js
