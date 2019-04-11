@@ -97,7 +97,6 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
         questionScore = 0
       }
     }
-    var params = instance.getTelemetryParams();
     var result = {
       eval: correctAnswer,
       state: {
@@ -105,7 +104,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       },
       score: questionScore,
       max_score: this._question.config.max_score,
-      params: params,
+      params: instance.getTelemetryParams(),
       values: telemetryAnsArr,
       noOfCorrectAns: correctAnswersCount,
       totalAns: this._question.data.answer.length
