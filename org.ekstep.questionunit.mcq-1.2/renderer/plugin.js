@@ -107,7 +107,6 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       temp[key+1] = instance.getTelemetryParamsValue(option);
       params.push(temp);
     });
-    instance._params = params;
     return params;
   },
   getTelemetryResValues: function(params) {
