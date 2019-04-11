@@ -81,7 +81,6 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       }
     });
     if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) telValues['option' + MCQController.pluginInstance._selectedIndex] = selectedAnsData.image.length > 0 ? selectedAnsData.image : selectedAnsData.text; // eslint-disable-line no-undef
-    var params = instance.getTelemetryParams();
     result = {
       eval: correctAnswer,
       state: {
@@ -89,8 +88,8 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
         options: option // eslint-disable-line no-undef
       },
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
-      params: params,
-      resValues: instance.getTelemetryResValues(),
+      params: instance.getTelemetryParams(),
+      values: instance.getTelemetryResValues(),
     };
     if (_.isFunction(callback)) {
       callback(result);
@@ -112,8 +111,10 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
   getTelemetryResValues: function() {
     var resValues = [];
     var selectedIndex = MCQController.pluginInstance._selectedIndex;
-    if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) 
-    resValues[selectedIndex + 1 ] = this.getTelemetryParamsValue(MCQController.pluginInstance._question.data.options[selectedIndex]);
+    var value = {};
+    if (!_.isUndefined(selectedIndex))
+      value[selectedIndex + 1] = this.getTelemetryParamsValue(MCQController.pluginInstance._question.data.options[selectedIndex]);
+    resValues.push(value);
     return resValues;
   },
   /**
