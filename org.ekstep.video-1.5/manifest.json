@@ -17,7 +17,7 @@
             "iconClass": "fa fa-play-circle-o",
             "iconStyle": "",
             "onclick": {
-                "id": "org.ekstep.video:showpopup"
+                "id": "org.ekstep.video:assetbrowser:open"
             }
         }],
         "dependencies" : [{

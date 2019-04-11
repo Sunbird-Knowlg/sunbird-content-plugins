@@ -4,9 +4,10 @@
 org.ekstep.contenteditor.basePlugin.extend({
     screenShot: undefined,
     initialize: function() {
-        ecEditor.addEventListener(this.manifest.id + ":showpopup", this.loadBrowser, this);
+        // ecEditor.addEventListener(this.manifest.id + ":assetbrowser:open", this.loadBrowser, this);
+        ecEditor.addEventListener(this.manifest.id + ":assetbrowser:open", this.openBrowser, this);
         var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/video.html");
-        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js"); 
+        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js");
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     newInstance: function() {
@@ -14,17 +15,43 @@ org.ekstep.contenteditor.basePlugin.extend({
         var _parent = this.parent;
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
-        this.editorObj = undefined;        
-        //var imageURL = "/assets/public/content/do_1122156236916490241183/artifact/maxresdefault_387_1491164926_1491165001510.png";
-        // TODO: Comment out the above line and uncomment the below line before upload to dev
+        this.editorObj = undefined;
+        var media =  this.media ? this.media[this.attributes.asset] : undefined;
+        if (!(media && media.src)) {console.log('media is not defined')}
+        if(media && media.src){
+            media.src = (this.isYoutubeURL(media.src)) ? media.src : ecEditor.getMediaReverseProxyURL(media.src);
+            //var imageURL = "/assets/public/content/do_1122156236916490241183/artifact/maxresdefault_387_1491164926_1491165001510.png";
+            // TODO: Comment out the above line and uncomment the below line before upload to dev
+        }
         var imageURL = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'assets/maxresdefault.png');
-        imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(imageURL) : imageURL;
-        fabric.Image.fromURL(imageURL, function(img) {
-            instance.editorObj = img;
-            instance.parent = _parent;
-            instance.postInit();
-        }, props);
+            imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(imageURL) : imageURL;
+            fabric.Image.fromURL(imageURL, function(img) {
+                instance.editorObj = img;
+                instance.parent = _parent;
+                instance.postInit();
+            }, props);
     },
+    openBrowser: function(){
+        var instance = this;
+        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
+            type: 'video',
+            search_filter: {},
+            callback: function(data){
+                data.y = 7.9;
+                data.x= 10.97;
+                data.w= 78.4;
+                data.h=  79.51;
+                data.config =  {
+                    "autoplay": true,
+                    "controls": true,
+                    "muted": false,
+                    "visible": true
+                }
+                ecEditor.dispatchEvent(instance.manifest.id + ':create', data)
+            }
+        })
+    },
+
     loadBrowser: function() {
         currentInstance = this;
         currentInstance.pluginLoadStartTime = new Date();
@@ -45,19 +72,20 @@ org.ekstep.contenteditor.basePlugin.extend({
     getMedia: function() {
         var instance =  this;
         var media = {};
-        if(!instance.isYoutubeURL(instance.getConfig()['url'])){
-            media[instance.id] = {
-                "id": instance.id,
-                "src": instance.getConfig()['url'] || '',
-                "assetId": instance.id,
+        var videoSrc = instance.getConfig()['url'] || instance.media[instance.attributes.asset].src;
+        var videoType = instance.isYoutubeURL(videoSrc)
+        if(!videoType){
+            media[instance.attributes.asset || instance.id] = {
+                "id": instance.attributes.asset || instance.id,
+                "src": videoSrc || '',
                 "type": "video"
             }
         }
-        else if(instance.isYoutubeURL(instance.getConfig()['url'])){
-            media[instance.id] = {
-                "id": instance.id,
-                "src": instance.getConfig()['url'] || '',
-                "assetId": instance.id,
+        else if(videoType){
+            media[instance.attributes.asset || instance.id] = {
+                "id": instance.attributes.asset || instance.id,
+                "src": videoSrc || '',
+                "assetId": instance.attributes.asset,
                 "type": "youtube"
             }
         }
@@ -94,11 +122,16 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     getPragmaValue: function () {
         var instance = this;
-        if(instance.isYoutubeURL(instance.getConfig()['url'])){
+        if(instance.isYoutubeURL(instance.getConfig()['url'] || instance.media[instance.attributes.asset].src)){
             return "external";
         }else{
             return null;
         }
+    },
+    getCopy: function() {
+        var cp = this._super();
+        cp.assetMedia = this.media[this.attributes.asset];
+        return cp;
     },
     getConfigManifest: function() {
         var config = this._super();
