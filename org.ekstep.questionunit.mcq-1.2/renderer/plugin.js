@@ -99,9 +99,9 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
   getTelemetryParams: function() {
     // Any change in the index value affects resvalues as well
     var instance = this;
-    var params = [], title = {}, questionData = MCQController.pluginInstance._question.data;
-    title.title = instance.getTelemetryParamsValue(questionData.question);
-    params.push(title);
+    var params = [], qTitle = {}, questionData = MCQController.pluginInstance._question.data;
+    qTitle.title = instance.getTelemetryParamsValue(questionData.question);
+    params.push(qTitle);
     questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
       var temp = {};
       temp[key+1] = instance.getTelemetryParamsValue(option);

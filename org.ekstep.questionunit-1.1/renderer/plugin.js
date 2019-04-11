@@ -271,7 +271,6 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   */
   getTelemetryParamsValue: function(data) {
     var valueObj = {};
-    // valueObj.text = data.text.length > 0 ? data.text : 
     if(data.text.length > 0) valueObj.text = data.text;
     if(data.image.length > 0) valueObj.image = data.image;
     if(data.audio.length > 0) valueObj.audio = data.audio;
