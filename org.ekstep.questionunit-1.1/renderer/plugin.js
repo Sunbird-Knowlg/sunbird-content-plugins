@@ -7,6 +7,8 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     config: {},
     state: undefined
   },
+  _params: [],
+  _resValues: [],
   /**
    * Initialize the plugin
    * @listens module:org.ekstep.contentrenderer.questionUnitPlugin~org.ekstep.questionunit:show
@@ -249,6 +251,22 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
         displayMode: true
       });
     });
+  },
+  /**
+   * returns params for question telemetry
+   */
+  getTelemetryParams: function(){
+
+  },
+  /**
+   * returns getResValues for question telemetry
+   */
+  getTelemetryResValues: function(){
+
+  },
+  extractHTML: function(element){
+    var ele = $.parseHTML(element);
+    return $(ele).text();
   }
 });
 //# sourceURL=questionUnitRenderer.js

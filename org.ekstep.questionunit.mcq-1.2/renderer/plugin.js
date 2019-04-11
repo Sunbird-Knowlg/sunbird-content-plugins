@@ -10,6 +10,8 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
   _isContainer: true,
   _render: true,
   _selectedanswere: undefined,
+  _params: [],
+  _resValues: [],
   _constant: {
     verticalLayout:'Vertical',
     horizontalLayout: 'Horizontal',
@@ -69,6 +71,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {Object} event from question set.
    */
   evaluateQuestion: function (event) {
+    var instance = this;
     var callback = event.target;
     var correctAnswer = false, telValues = {}, selectedAnsData, selectedAns, result = {}, option;
     option = MCQController.pluginInstance._question.data.options;// eslint-disable-line no-undef
@@ -87,11 +90,33 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
         options: option // eslint-disable-line no-undef
       },
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
-      values: [telValues]
-    }
+      params: instance.getTelemetryParams(),
+      resValues: instance.getTelemetryResValues(),
+    };
     if (_.isFunction(callback)) {
       callback(result);
     }
+  },
+  getTelemetryParams: function(){
+    // Any change in the index value affects resvalues as well
+    var instance = this;
+    var params = [], title = {}, question = MCQController.pluginInstance._question.data.question;
+    MCQController.pluginInstance._question.data.options.forEach(function (option,key) { // eslint-disable-line no-undef
+      var temp = {};
+      temp[key+1] = JSON.stringify({'text':instance.extractHTML(option.text),'image':option.image,'audio':option.audio});
+      params.push(temp);
+    });
+    title.title = JSON.stringify({'text':instance.extractHTML(question.text),'image':question.image,'audio':question.audio});
+    params.push(title);
+    instance._params = params;
+    return params;
+  },
+  getTelemetryResValues: function(){
+    var instance = this;
+    var resValues = [];
+    if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) 
+    resValues.push(instance._params[MCQController.pluginInstance._selectedIndex]);
+    return resValues;
   },
   /**
    * provide media url to audio image
@@ -139,7 +164,6 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       "values": [telValues]
     });
   },
-
   logTelemetryInteract: function (event) {
     if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { // eslint-disable-line no-undef
       type: QSTelemetryLogger.EVENT_TYPES.TOUCH, // eslint-disable-line no-undef
