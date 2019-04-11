@@ -33,11 +33,11 @@ Plugin.extend({
         var contentMeta = _.clone(content);
         //var dataSrc = this._theme.getAsset(data.asset);
 
-        var assetSrc = this._theme.getAsset(data.asset)
+        var assetSrc =   (data.asset)  ? this._theme.getAsset(data.asset) : this._theme.getAsset(data.id)
         var checkYoutube = this.checkValidYoutube(assetSrc)
-
+        data.asset = data.asset || data.id;
         if (checkYoutube) {
-            data.asset = data.id;
+
             var dims = this.relativeDims();
             this.createVideo(assetSrc, data, dims)
             this.id = _.uniqueId('org.ekstep.youtube');
@@ -146,7 +146,7 @@ Plugin.extend({
     loadYoutube: function (path) {
         var instance_this = this;
         var instance = this._data;
-        var videoInstanceID = 'ID'+instance._id;
+        var videoInstanceID = (instance.asset) ? 'ID'+instance.asset : 'ID'+instance._id ;
         if (!navigator.onLine) {
             EkstepRendererAPI.logErrorEvent('No internet', {
                 'type': 'content',

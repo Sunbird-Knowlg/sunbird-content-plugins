@@ -17,19 +17,19 @@ org.ekstep.contenteditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         this.editorObj = undefined;
         var media =  this.media ? this.media[this.attributes.asset] : undefined;
-        if (!(media && media.src)) throw new Error('media source is missing!');
+        if (!(media && media.src)) {console.log('media is not defined')}
         if(media && media.src){
             media.src = (this.isYoutubeURL(media.src)) ? media.src : ecEditor.getMediaReverseProxyURL(media.src);
             //var imageURL = "/assets/public/content/do_1122156236916490241183/artifact/maxresdefault_387_1491164926_1491165001510.png";
             // TODO: Comment out the above line and uncomment the below line before upload to dev
-            var imageURL = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'assets/maxresdefault.png');
+        }
+        var imageURL = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'assets/maxresdefault.png');
             imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(imageURL) : imageURL;
             fabric.Image.fromURL(imageURL, function(img) {
                 instance.editorObj = img;
                 instance.parent = _parent;
                 instance.postInit();
             }, props);
-        }
     },
     openBrowser: function(){
         var instance = this;
@@ -73,18 +73,18 @@ org.ekstep.contenteditor.basePlugin.extend({
     getMedia: function() {
         var instance =  this;
         var media = {};
-        var videoSrc = instance.media[instance.attributes.asset].src;
+        var videoSrc = instance.getConfig()['url'] || instance.media[instance.attributes.asset].src;
         var videoType = instance.isYoutubeURL(videoSrc)
         if(!videoType){
-            media[instance.attributes.asset] = {
-                "id": instance.attributes.asset,
+            media[instance.attributes.asset || instance.id] = {
+                "id": instance.attributes.asset || instance.id,
                 "src": videoSrc || '',
                 "type": "video"
             }
         }
         else if(videoType){
-            media[instance.attributes.asset] = {
-                "id": instance.attributes.asset,
+            media[instance.attributes.asset || instance.id] = {
+                "id": instance.attributes.asset || instance.id,
                 "src": videoSrc || '',
                 "assetId": instance.attributes.asset,
                 "type": "youtube"
@@ -123,7 +123,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     getPragmaValue: function () {
         var instance = this;
-        if(instance.isYoutubeURL(instance.media[instance.attributes.asset].src)){
+        if(instance.isYoutubeURL(instance.getConfig()['url'] || instance.media[instance.attributes.asset].src)){
             return "external";
         }else{
             return null;
