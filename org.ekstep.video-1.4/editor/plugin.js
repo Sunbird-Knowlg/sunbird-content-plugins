@@ -45,8 +45,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     "autoplay": true,
                     "controls": true,
                     "muted": false,
-                    "visible": true,
-                    "url": data.assetMedia.src
+                    "visible": true
                 }
                 ecEditor.dispatchEvent(instance.manifest.id + ':create', data)
             }

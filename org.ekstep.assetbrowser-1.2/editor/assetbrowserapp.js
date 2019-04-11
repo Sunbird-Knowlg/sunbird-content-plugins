@@ -303,6 +303,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     function hideLoader() {
         // Just remove class active form loader element
         ctrl.loading = '';
+        $scope.$safeApply();
     }
 
     ctrl.uploadButton = function() {
