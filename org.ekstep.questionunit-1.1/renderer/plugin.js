@@ -270,8 +270,8 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
    * returns telemetry params value as string
   */
   getTelemetryParamsValue: function(data) {
-    var valueObj = {};
-    if(data.text.length > 0) valueObj.text = data.text;
+    var valueObj = {}, instanace = this;
+    if(data.text.length > 0) valueObj.text = instance.extractHTML(data.text);
     if(data.image.length > 0) valueObj.image = data.image;
     if(data.audio.length > 0) valueObj.audio = data.audio;
     return JSON.stringify(valueObj);
