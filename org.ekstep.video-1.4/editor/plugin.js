@@ -129,6 +129,11 @@ org.ekstep.contenteditor.basePlugin.extend({
             return null;
         }
     },
+    getCopy: function() {
+        var cp = this._super();
+        cp.assetMedia = this.media[this.attributes.asset];
+        return cp;
+    },
     getConfigManifest: function() {
         var config = this._super();
         ecEditor._.remove(config, function(c) {
