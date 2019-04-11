@@ -90,7 +90,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       },
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
       params: params,
-      resValues: instance.getTelemetryResValues(params),
+      resValues: instance.getTelemetryResValues(),
     };
     if (_.isFunction(callback)) {
       callback(result);
@@ -109,11 +109,11 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     });
     return params;
   },
-  getTelemetryResValues: function(params) {
-    var instance = this;
+  getTelemetryResValues: function() {
     var resValues = [];
+    var selectedIndex = MCQController.pluginInstance._selectedIndex;
     if (!_.isUndefined(MCQController.pluginInstance._selectedIndex)) 
-    resValues.push(params[MCQController.pluginInstance._selectedIndex + 1]);
+    resValues[selectedIndex + 1 ] = this.getTelemetryParamsValue(MCQController.pluginInstance._question.data.options[selectedIndex]);
     return resValues;
   },
   /**
