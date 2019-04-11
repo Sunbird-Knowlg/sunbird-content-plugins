@@ -1,6 +1,6 @@
 {
     "id": "org.ekstep.video",
-    "ver": "1.4",
+    "ver": "1.5",
     "author": "",
     "title": "Video Plugin",
     "description": "",
@@ -12,12 +12,12 @@
             "id": "videoPlugin",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Video", 
+            "toolTip": "Add Video",
             "title": "Add Video",
             "iconClass": "fa fa-play-circle-o",
             "iconStyle": "",
             "onclick": {
-                "id": "org.ekstep.video:showpopup"
+                "id": "org.ekstep.video:assetbrowser:open"
             }
         }],
         "dependencies" : [{
