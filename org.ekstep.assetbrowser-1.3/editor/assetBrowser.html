@@ -629,7 +629,7 @@
    					<div class="column">
    						<div class="ui icon input assetbrowser_searchBox">
    							<input id="searchAllAudioAssets" ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-   							<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({id: 'searchAllAudioAssets' type: 'click', subtype: 'search', target: 'searchAudioAsset'});"></i>
+   							<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({id: 'searchAllAudioAssets', type: 'click', subtype: 'search', target: 'searchAudioAsset'});"></i>
    						</div>
    					</div>
    				</div>
