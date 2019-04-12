@@ -60,6 +60,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @memberof org.ekstep.questionunit.ftb
    */
   evaluateQuestion: function (event) {
+    var instance = this;
     var telemetryAnsArr = [], //array have all answer
       correctAnswer = false,
       answerArray = [],
@@ -69,10 +70,8 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
     _.each(textBoxCollection, function (element, index) {
       answerArray.push(element.value.toLowerCase().trim());
-      var key = "ans" + index; // eslint-disable-line no-unused-vars
-      ansObj = {
-        key: element.value
-      };
+      var ansObj = {};
+      ansObj[index+1] = JSON.stringify({'text':element.value});
       telemetryAnsArr.push(ansObj);
     });
     //compare two array and compute partial score
@@ -105,6 +104,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       },
       score: questionScore,
       max_score: this._question.config.max_score,
+      params: instance.getTelemetryParams(),
       values: telemetryAnsArr,
       noOfCorrectAns: correctAnswersCount,
       totalAns: this._question.data.answer.length
@@ -117,6 +117,20 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     }
     
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr }); // eslint-disable-line no-undef
+  },
+  getTelemetryParams: function() {
+    // Any change in the index value affects resvalues as well
+    var instance = this;
+    var params = [], qTitle = {}, qData = this._question.data.question;
+    qTitle.title = instance.getTelemetryParamsValue(qData);
+    params.push(qTitle);
+    var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
+    _.each(textBoxCollection, function (element, index) {
+      var temp = {};
+      temp[index+1] = JSON.stringify({'text':element.value});
+      params.push(temp);
+    });
+    return params;
   }
 });
 //# sourceURL=questionunitFtbRendererPlugin.js
