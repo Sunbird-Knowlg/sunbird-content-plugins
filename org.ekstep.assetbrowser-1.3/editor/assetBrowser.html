@@ -277,8 +277,8 @@
    		    <a id="allImagesTab" ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'myAssetsTab', type: 'click', subtype: 'select', target: 'allImageTab'})">All image</a>
    		    <a id="myAudioTab" ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id: 'myAudioTab', type: 'click', subtype: 'select', target: 'myAudioTab'})">My audio</a>
 				 <a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id: 'allAudioTab', type: 'click', subtype: 'select', target: 'allAudioTab'})">All audio</a>
-				 <a ng-if="$ctrl.plugin == 'video'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'myVideoTab'})">My Videos</a>
-   			<a id="allVideoTab" ng-if="$ctrl.plugin == 'video'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'allVideoTab'})">All Videos</a>
+				 <a ng-if="$ctrl.plugin == 'video'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab(); $ctrl.generateTelemetry({id:'myVideoTab', type: 'click', subtype: 'select', target: 'myVideoTab'})">My Videos</a>
+   			<a id="allVideoTab" ng-if="$ctrl.plugin == 'video'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab(); $ctrl.generateTelemetry({id:'myAudioTab',type: 'click', subtype: 'select', target: 'allVideoTab'})">All Videos</a>
    		</div>
    		<div class="uploadingAsset ui tab active" data-tab="first" >
    			<div class="content" ng-if="$ctrl.plugin == 'image'">
@@ -335,7 +335,7 @@
 							<div class="ui icon input assetbrowser_searchBox">
 								<input id="searchMyVideoAssets" ng-model="$ctrl.query" placeholder="Search Video..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null"
 									type="text" />
-								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchVideoAsset'})"></i>
+								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({id: 'searchVideoAsset',type: 'click', subtype: 'search', target: 'searchVideoAsset'})"></i>
 							</div>
 						</div>
 						<div class="two wide right aligned column">
@@ -399,7 +399,7 @@
 								</div>
 							</div>
 							<div class="twelve wide column" ng-show="$ctrl.videoList.length == 0">
-								<span>No result found. <a href="#" onclick="$('#allVideoTab').trigger('click'); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'noResultFoundSwitchToAllVideoTab'});">Click
+								<span>No result found. <a href="#" onclick="$('#allVideoTab').trigger('click'); $ctrl.generateTelemetry({id:'noResultFoundSwitchToAllVideoTab',type: 'click', subtype: 'select', target: 'noResultFoundSwitchToAllVideoTab'});">Click
 										here</a> to search in All Videos</span>
 							</div>
 							<div class="twelve wide column">
@@ -539,7 +539,7 @@
 							<div class="ui icon input assetbrowser_searchBox">
 								<input id="searchAllVideoAssets" ng-model="$ctrl.query" placeholder="Search Video..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null"
 									type="text" />
-								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchVideoAsset'});"></i>
+								<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({id: 'searchVideoAsset', type: 'click', subtype: 'search', target: 'searchVideoAsset'});"></i>
 							</div>
 						</div>
 						<div class="two wide right aligned column">
@@ -712,9 +712,9 @@
 								<div class="row" ng-show="!$ctrl.showPreview">
                     <div class="column" style="padding:0;">
                         <div class="ui fluid action input">
-                            <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'videoUrl'})"
+                            <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'})"
                                 placeholder="Paste video URL here" ng-model="$ctrl.videoUrl" ng-change="$ctrl.hasInputChanged();">
-                            <div class="ui blue button" ng-click="$ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'videoUrl'})">Go</div>
+                            <div class="ui blue button" ng-click="$ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'})">Go</div>
                         </div>
                     </div>
                 </div>
@@ -751,7 +751,7 @@
 
    									<div class="cursor-pointer center aligned center-aligned"
    										ng-hide="recorder.status.isRecording === false"
-   										ng-click="recorder.stopRecord(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'stopRecording'});">
+   										ng-click="recorder.stopRecord(); $ctrl.generateTelemetry({id: 'stopRecording', type: 'click', subtype: 'select', target: 'stopRecording'});">
    										<i class="ui icon stop circle outline red big"></i>STOP</b>
    									</div>
    									<div class="ui grid">

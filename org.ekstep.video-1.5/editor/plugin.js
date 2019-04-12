@@ -4,7 +4,6 @@
 org.ekstep.contenteditor.basePlugin.extend({
     screenShot: undefined,
     initialize: function() {
-        // ecEditor.addEventListener(this.manifest.id + ":assetbrowser:open", this.loadBrowser, this);
         ecEditor.addEventListener(this.manifest.id + ":assetbrowser:open", this.openBrowser, this);
         var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/video.html");
         var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js");
@@ -50,24 +49,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                 ecEditor.dispatchEvent(instance.manifest.id + ':create', data)
             }
         })
-    },
-
-    loadBrowser: function() {
-        currentInstance = this;
-        currentInstance.pluginLoadStartTime = new Date();
-        ecEditor.getService('popup').open({
-            template: 'videoPreviewDialog',
-            controller: 'videoCtrl',
-            controllerAs: '$ctrl',
-            resolve: {
-                'instance': function() {
-                    return currentInstance;
-                }
-            },
-            width: 700,
-            showClose: false,
-            className: 'ngdialog-theme-plain'
-        });
     },
     getMedia: function() {
         var instance =  this;

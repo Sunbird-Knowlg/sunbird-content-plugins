@@ -616,7 +616,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         }, null);
 
-        console.log(content);
         if (ctrl.plugin == 'video') {
             showLoader()
             var data = {
@@ -637,7 +636,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     }
                 }
             }
-            console.log(data.request.content.mimeType)
             $scope.contentService.createContent(data, function (err, res) {
                 if (err) {
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -1018,7 +1016,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.showPreview = false;
     }
     $scope.onInputChange = function() {
-        console.log("input change");
         var files = event.target.files;
         if(ctrl.plugin == 'video'){
             ctrl.assetFileValidation(files[0]);
@@ -1033,7 +1030,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         var allowedMimeTypes = ctrl.allowedMimeTypes;
         var isFileValid = instance.fileValidation('assetfile', allowedFileSize, allowedMimeTypes)
         if (isFileValid) {
-            console.log(file);
             ctrl.provider = 'file'
             if (ctrl.plugin == 'video') {
                 ctrl.previewVideo(file, ctrl.plugin, ctrl.provider)
@@ -1181,7 +1177,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         });
     }
     setTimeout(function() {
-        console.log("ON Load of file - "+ctrl.plugin)
         ctrl.pluginLoadStartTime = new Date();
         ctrl.myTabScrollElement = "my-"+instance.mediaType+"-tab";
         ctrl.allTabScrollElement = "all-"+instance.mediaType+"-tab"

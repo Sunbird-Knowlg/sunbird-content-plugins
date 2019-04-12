@@ -117,7 +117,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.contenteditor.api._.merge(requestObj.request.filters, allowableFilter);
 
         var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
-        console.log(requestObj.request);
 
         ecEditor.getService('search').search(requestObj, function(err, res){
             if (!err && res.data.responseCode == "OK") {
@@ -125,7 +124,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var resourceObj =  _.cloneDeep(requestObj);
                     resourceObj.request.filters.contentType = new Array('Resource')
                     resourceObj.request.filters.mimeType = new Array('video/x-youtube')
-                    console.log(resourceObj.request);
                     instance.searchAsset(resourceObj)
                             .then(function(resourceRes){
                                 var videoResources = {};
@@ -176,7 +174,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     fileValidation: function(fieldId, allowedFileSize, allowedMimeTypes) {
         var instance = this;
-        console.log(allowedFileSize, allowedMimeTypes);
 
         /*Check for browser support for all File API*/
         if (window.File && window.FileList && window.Blob) {
@@ -189,7 +186,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                 alert('File size is higher than the allowed size!');
                 return false;
             }
-            console.log(ftype);
 
             /*Check mime type*/
             if (ftype) {
