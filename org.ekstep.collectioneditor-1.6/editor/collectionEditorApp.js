@@ -348,6 +348,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     };
     
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
+        var startTime = (new Date()).getTime()
         $scope.loadContent(event, showToc = true, function(err, res) {
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
@@ -359,6 +360,14 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 }, 200);
                 // close the loading screen
                 window.loading_screen && window.loading_screen.finish();
+                var editorConfig = _.get(ecEditor.getConfig('editorConfig'), 'mode')
+		        var mode = (editorConfig && (editorConfig.toLowerCase() === 'read' ? 'view' : editorConfig)) || 'edit'
+                org.ekstep.services.telemetryService.impression({
+                    type: mode.toLowerCase(),
+                    pageid: ecEditor.getContext('env') || 'collectioneditor',
+                    uri: encodeURIComponent(location.href),
+                    duration: (new Date()).getTime() - startTime
+                })
             } else {
                 ecEditor.jQuery('.loading-message').remove();
                 ecEditor.jQuery('.sk-cube-grid').remove();
