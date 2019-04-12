@@ -17,6 +17,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     horizontal: "Horizontal",
     vertial: "Vertical"
   },
+  rhs_rearranged : [],
   setQuestionTemplate: function () {
     MTFController.initTemplate(this);// eslint-disable-line no-undef
   },
@@ -47,9 +48,9 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       var newOrderedOptions = [];
       var optionsLength = renderedOptions.length;
       for (var i = 0; i < optionsLength; i++) {
-        var rhsObjIndex = _.findIndex(renderedOptions, function (rhsOpt) {
+        var rhsObjIndex = _.findIndex(renderedOptions, function(rhsOpt) {
           return rhsOpt.mapIndex == reorderedOptionsIndexes[i];
-        })
+        });
         newOrderedOptions[i] = renderedOptions[rhsObjIndex];
       }
       this._question.data.option.optionsRHS = newOrderedOptions;
@@ -66,7 +67,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     var correctAnswer = true;
     var correctAnswersCount = 0;
     var telemetryValues = [];
-    var rhs_rearranged = [];
+    instance.rhs_rearranged = [];
     var totalLHS = instance._question.data.option.optionsLHS.length;
 
     $('.rhs-block').each(function (elemIndex, elem) {
@@ -75,7 +76,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
         'RHS': []
       };
       var elemMappedIndex = parseInt($(elem).data('mapindex')) - 1;
-      rhs_rearranged[elemIndex] = elemMappedIndex + 1;
+      instance.rhs_rearranged[elemIndex] = elemMappedIndex + 1;
       telObj['LHS'][0] = instance._question.data.option.optionsLHS[elemIndex];
       telObj['RHS'][0] = instance._question.data.option.optionsRHS[elemMappedIndex];
       instance.removeOptionProperty(telObj.LHS[0]);
@@ -102,19 +103,55 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       eval: correctAnswer,
       state: {
         val: {
-          rhs_rearranged: rhs_rearranged
+          rhs_rearranged: instance.rhs_rearranged
         },
         rhs_rendered: instance._question.data.option.optionsRHS,
       },
       score: questionScore,
       max_score: this._question.config.max_score,
-      values: telemetryValues,
+      params: instance.getTelemetryParams(),
+      values: instance.getTelemetryResValues(),
       noOfCorrectAns: correctAnswersCount,
       totalAns: totalLHS
     };
     if (_.isFunction(callback)) {
       callback(result);
     }
+  },
+  getTelemetryParams: function() {
+    var params = [], instance = this, qTitle = {}, 
+    qData = instance._question.data;
+    qTitle.title = instance.getTelemetryParamsValue(qData.question);
+    params.push(qTitle);
+    var lhsParms = {}, rhsParms = {};
+
+    params.push({"lhs":instance.getTelOptions(qData.option.optionsLHS)});
+    params.push({"rhs":instance.getTelOptions(qData.option.optionsRHS)});
+    return params;
+  },
+  getTelemetryResValues: function() {
+    var instance = this;
+
+    var rhsRerendered = [];    
+    var rhsOptions = instance._question.data.option.optionsRHS;
+    _.each(rhsOptions, function(obj, index){
+      rhsRerendered.push(_.findWhere(rhsOptions, {mapIndex: instance.rhs_rearranged[index]}));
+    });
+   
+    var resValues = [];
+    resValues.push({"lhs": instance.getTelOptions(instance._question.data.option.optionsLHS)});
+    resValues.push({"rhs": instance.getTelOptions(rhsRerendered)});
+    return resValues;
+  },
+  getTelOptions: function(options){
+    var telOptions = [];
+    var optionsLength = options.length;
+    for(var j = 0; j < optionsLength; j++) {
+      var telObj = {};
+      telObj[j+1] = this.getTelemetryParamsValue(options[j]);
+      telOptions.push(telObj);
+    }
+    return JSON.stringify(telOptions);
   },
   logTelemetryItemResponse: function (data) {
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
