@@ -75,6 +75,7 @@ QSTelemetryLogger.logAssessEnd = function(result) {
     pass: result.eval,
     score: quesScore,
     res: result.values,
+    params: result.params,
     qindex: this._question.index,
     qtitle: quesTitle,
     qdesc: quesDesc,
