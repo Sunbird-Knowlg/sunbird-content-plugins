@@ -113,7 +113,8 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       },
       max_score: this._question.config.max_score,
       score: correctAnswer ? this._question.config.max_score : 0,
-      values: telemetryAnsArr,
+      params: this.getTelemetryParams(),
+      values: this.getTelemetryResValues(),
       noOfCorrectAns: numOfCorrectAns, //tempCount,
       totalAns: 1
     };
@@ -128,6 +129,29 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       "type": "INPUT",
       "values": telemetryAnsArr
     }); // eslint-disable-line no-undef
+  },
+
+  getTelemetryParams: function() {
+    var instance = this;
+    var params = [], qTitle = {}, questionData = instance._question.data;
+    qTitle.title = instance.getTelemetryParamsValue(questionData.question);
+    params.push(qTitle);
+    questionData.sentence.tabs.forEach(function (tab,key) { // eslint-disable-line no-undef
+      var temp = {};
+      temp[key+1] = instance.getTelemetryParamsValue(tab);
+      params.push(temp);
+    });
+    return params;
+  },
+  getTelemetryResValues: function() {
+    var resValues = [];
+    var instance = this;
+    this._userWords.forEach(function(word, key){
+      var temp = {};
+      temp[key+1] = instance.getTelemetryParamsValue(word);
+      resValues.push(temp);
+    })
+    return resValues;
   }
 });
 //# sourceURL=ReorderingRendererPlugin.js
