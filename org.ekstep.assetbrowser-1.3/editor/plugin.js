@@ -21,7 +21,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        var instance = this;        
+        var instance = this;
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetbrowserapp.js");
@@ -60,28 +60,48 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof assetBrowser
      *
      */
-    getAsset: function(searchText, mediaType, createdBy, offset, cb) {
+    getAsset: function(searchText, mediaType, assetType, contentType,  createdBy, offset, cb) {
         var instance = this,
             requestObj,
             requestHeaders,
-            allowableFilter;
+            allowableFilter,
+            hasResourceLoaded;
 
-        requestObj = {
-            "request": {
-                "filters": {
-                    "mediaType": mediaType,
-                    "contentType": "Asset",
-                    "compatibilityLevel": {
-                        "min": 1,
-                        "max": 2
-                    },
-                    "status": new Array("Live", "Review", "Draft")
-                },
-                "limit": 50,
-                "offset": offset
+        if(assetType){
+            if(assetType == 'video'){
+                hasResourceLoaded = (!_.includes(contentType, 'Asset')) ? true : false;
+                requestObj = {
+                    "request": {
+                        "filters": {
+                            "objectType": "Content",
+                            "mimeType": (mediaType == 'video') ? new Array('video/x-youtube', 'video/mp4', 'video/webm') : mediaType,
+                            "contentType": (_.includes(contentType, 'Asset')) ? new Array('Asset') : new Array('Resource'),
+                            "status": new Array("Live", "Review", "Draft"),
+                            "license": "Creative Commons Attribution (CC BY)",
+                        },
+                        "limit": 50,
+                        "offset": offset
+                    }
+                };
             }
-        };
-
+            else{
+                requestObj = {
+                    "request": {
+                        "filters": {
+                            "mediaType": mediaType,
+                            "contentType": contentType,
+                            "compatibilityLevel": {
+                                "min": 1,
+                                "max": 2
+                            },
+                            "status": new Array("Live", "Review", "Draft")
+                        },
+                        "limit": 50,
+                        "offset": offset
+                    }
+                };
+            }
+        }
         org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
         // Public assets only
@@ -100,11 +120,43 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         ecEditor.getService('search').search(requestObj, function(err, res){
             if (!err && res.data.responseCode == "OK") {
-                cb(null, res);
+                if(_.includes(contentType, 'Resource') && !hasResourceLoaded){
+                    var resourceObj =  _.cloneDeep(requestObj);
+                    resourceObj.request.filters.contentType = new Array('Resource')
+                    resourceObj.request.filters.mimeType = new Array('video/x-youtube')
+                    instance.searchAsset(resourceObj)
+                            .then(function(resourceRes){
+                                var videoResources = {};
+                                if(_.includes(contentType, 'Asset') && !_.isUndefined(res.data.result.content)){
+                                    Array.prototype.push.apply(res.data.result.content, resourceRes.data.result.content);
+                                    res.data.result.content = _.orderBy(res.data.result.content, ['createdOn'], ['desc'] )
+                                    videoResources = res
+                                }else{
+                                    videoResources = resourceRes;
+                                }
+                                cb(null, videoResources);
+                            }).catch (function (error) {
+                                cb(error, null);
+                            });
+                }
+                else{
+                    cb(null, res)
+                }
             } else {
                 cb(err, null);
             }
         });
+    },
+    searchAsset: function(requestObj){
+        return new Promise(function (resolve, reject){
+            ecEditor.getService('search').search(requestObj, function(err, res){
+                if (!err && res.data.responseCode == "OK") {
+                    resolve(res);
+                } else {
+                    reject(err);
+                }
+            });
+        })
     },
     /**
      *   invokes popup service to show the popup window

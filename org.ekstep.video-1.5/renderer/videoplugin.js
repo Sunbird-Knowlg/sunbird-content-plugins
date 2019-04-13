@@ -24,17 +24,22 @@ Plugin.extend({
             delete data.id;
         }
         data.id = pid;
-        data.asset = data.id;
 
         var configStr = data.config.__cdata;
         var config = JSON.parse(configStr);
         data.controls = config.controls;
         data.muted = config.muted;
         data.autoplay = config.autoplay;
-        var checkYoutube = this.checkValidYoutube(config.url)
+        var contentMeta = _.clone(content);
+        //var dataSrc = this._theme.getAsset(data.asset);
+
+        var assetSrc =   (data.asset)  ? this._theme.getAsset(data.asset) : this._theme.getAsset(data.id)
+        var checkYoutube = this.checkValidYoutube(assetSrc)
+        data.asset = data.asset || data.id;
         if (checkYoutube) {
+
             var dims = this.relativeDims();
-            this.createVideo(config.url, data, dims)
+            this.createVideo(assetSrc, data, dims)
             this.id = _.uniqueId('org.ekstep.youtube');
         } else {
             this.id = _.uniqueId('org.ekstep.video');
@@ -84,7 +89,7 @@ Plugin.extend({
             });
         }
     },
-    disposeStageVideos: function(){ 
+    disposeStageVideos: function(){
         var availablePlayers = _.pick(videojs.getPlayers(), _.identity);
             _.forEach(availablePlayers, function (value, key) {
                 videojs(key).dispose();
@@ -141,7 +146,7 @@ Plugin.extend({
     loadYoutube: function (path) {
         var instance_this = this;
         var instance = this._data;
-        var videoInstanceID = 'ID'+instance._id;
+        var videoInstanceID = (instance.asset) ? 'ID'+instance.asset : 'ID'+instance._id ;
         if (!navigator.onLine) {
             EkstepRendererAPI.logErrorEvent('No internet', {
                 'type': 'content',
