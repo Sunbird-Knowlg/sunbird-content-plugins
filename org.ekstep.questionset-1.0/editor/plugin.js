@@ -29,12 +29,50 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
     var publishedDate = new Date().getTime();
     ecEditor.loadAndInitPlugin(instance._dependencyPlugin, "1.0", publishedDate);
     //Loading question unit plugins(MCQ,FTB and MTF) which all having target id 'org.ekstep.questionset'
-    this.loadQSPlugins();
+    //this.loadQSPlugins();
     //Get loaded plugins
     ecEditor.addEventListener(this.manifest.id + ":getPlugins", this.getplugins, this);
 
     ecEditor.addEventListener(instance.manifest.id + ":showPopup", instance.openQuestionBank, instance);
     ecEditor.addEventListener(instance.manifest.id + ":addQS", instance.addQS, instance);
+    var pluginsData = [
+      {
+        "identifier": "org.ekstep.questionunit.mtf",
+        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.mtf/artifact/assetsimage-2018-06-08_1_636_1528450998_1528450998768.thumb.png",
+        "semanticVersion": "1.2",
+        "contentType": "Plugin",
+        "objectType": "Content"
+      },
+      {
+        "identifier": "org.ekstep.questionunit.mcq",
+        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.mcq/artifact/assetsmcq-horizontal_636_1529387086_1529387086269.thumb.png",
+        "semanticVersion": "1.2",
+        "contentType": "Plugin",
+        "objectType": "Content"
+      },
+      {
+        "identifier": "org.ekstep.questionunit.ftb",
+        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.ftb/artifact/assetsimage-2018-06-08_636_1528450313_1528450313262.thumb.png",
+        "semanticVersion": "1.1",
+        "contentType": "Plugin",
+        "objectType": "Content"
+      },
+      {
+        "identifier": "org.ekstep.questionunit.reorder",
+        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.reorder/artifact/assetsreorder-preview_540_1535349115_1535349115561.thumb.png",
+        "semanticVersion": "1.1",
+        "contentType": "Plugin",
+        "objectType": "Content"
+      },
+      {
+        "identifier": "org.ekstep.questionunit.sequence",
+        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.sequence/artifact/assetssequencial-preview_540_1535349474_1535349474483.thumb.png",
+        "semanticVersion": "1.1",
+        "contentType": "Plugin",
+        "objectType": "Content"
+      }
+    ];
+    instance.pluginsRespHandler(pluginsData);
   },
   newInstance: function () {
     var instance = this;
