@@ -12,7 +12,7 @@ angular.module('assetbrowserapp', ['angularAudioRecorder', 'angular-inview','ngT
     recorderServiceProvider.withMp3Conversion(true, config);
 }]);
 
-angular.module("assetbrowserapp",[]).directive("filesInput", function() {
+angular.module("assetbrowserapp").directive("filesInput", function() {
   return {
     require: "ngModel",
     link: function postLink(scope,elem,attrs,ngModel) {
