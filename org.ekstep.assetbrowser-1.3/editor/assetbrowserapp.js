@@ -36,6 +36,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         audioTabSelected = false,
         imageTabSelected = true,
         ctrl = this;
+        ctrl.videoMimeTypes = {
+           all: new Array('video/x-youtube', 'video/mp4', 'video/webm'),
+           video: new Array('video/mp4', 'video/webm'),
+           youtube: new Array('video/x-youtube')
+        }
         ctrl.inViewLogs = [];
         $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     var $sce = $injector.get('$sce');
@@ -211,7 +216,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     } else if (instance.mediaType == 'audio') {
         instance.getAsset(undefined, new Array('audio', 'voice'),'audio', new Array('Asset'), ctrl.createdBy, ctrl.offset, audioAssetCb);
     } else if (instance.mediaType == 'video') {
-        instance.getAsset(undefined, new Array('video/x-youtube', 'video/mp4', 'video/webm'), 'video', new Array('Asset'), ctrl.createdBy, ctrl.offset, videoAssetCb);
+        instance.getAsset(undefined, ctrl.videoMimeTypes.all, 'video', new Array('Asset'), ctrl.createdBy, ctrl.offset, videoAssetCb);
     }
     ctrl.setCallback = function(callback){
         if(instance.mediaType == "image"){
@@ -243,12 +248,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.buttonToShow = 'select';
 
         (searchText === "") ? searchText = undefined: null;
-        // callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-        // callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
         callback = ctrl.setCallback(callback)
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
         ctrl.selectBtnDisable = true;
-        ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'), new Array('Asset'), ctrl.createdBy)
+        ctrl.setSearchFilter(ctrl.videoMimeTypes.all, new Array('Asset'), ctrl.createdBy)
         var mediaType = ctrl.getMediaType();
         callback && instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), ctrl.createdBy, ctrl.offset = 0, callback);
     }
@@ -289,9 +292,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
         ctrl.selectBtnDisable = true;
 
-        // var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
         contentType = (ctrl.plugin == 'video') ? new Array('Asset', 'Resource') : new Array('Asset')
-        ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'),  new Array('Asset','Resource'), undefined)
+        ctrl.setSearchFilter(ctrl.videoMimeTypes.all,  new Array('Asset','Resource'), undefined)
         callback && instance.getAsset(searchText, ctrl.getMediaType(), ctrl.plugin, contentType, null, ctrl.offset=0 , callback);
     }
 
@@ -350,7 +352,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.searchFilter.createdBy = createdBy;
     }
     if(instance.mediaType == 'video'){
-        ctrl.setSearchFilter(new Array('video/x-youtube', 'video/mp4', 'video/webm'), new Array('Asset'), ctrl.createdBy)
+        ctrl.setSearchFilter(ctrl.videoMimeTypes.all, new Array('Asset'), ctrl.createdBy)
     }
 
     ctrl.search = function() {
@@ -486,7 +488,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         if (audiodata && audiodata.asset && instance.mediaType == "audio") {
             console.log("audiodata")
             console.log(audiodata);
-            //ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: ecEditor.getCurrentStage().id,type: 'audio', title: audiodata.asset });
             instance.cb(audiodata);
             ctrl.cancel();
         }
@@ -1249,7 +1250,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     ctrl.offset =0
 
                     searchText = (ctrl.query === "") ? undefined : ctrl.query;
-                    var selectedValue = (value != 'myvideos') ? value.split(',') : new Array('video/x-youtube', 'video/mp4', 'video/webm');
+                    var selectedValue = (value != 'myvideos') ? value.split(',') : ctrl.videoMimeTypes.all;
                     ctrl.searchFilter.mimeType = selectedValue;
                     ctrl.searchFilter.contentType = new Array('Asset');
                     ctrl.searchFilter.createdBy = ctrl.createdBy;
@@ -1264,10 +1265,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     searchText = (ctrl.query === "") ? undefined : ctrl.query;
                     var selectedValue, contentType;
                     if (value == 'allvideos') {
-                        selectedValue = new Array('video/x-youtube', 'video/mp4', 'video/webm');
+                        selectedValue = ctrl.videoMimeTypes.all;
                         contentType = new Array('Asset', 'Resource')
                     } else if (value == 'allYouTube') {
-                        selectedValue = new Array('video/x-youtube')
+                        selectedValue = ctrl.videoMimeTypes.youtube
                         contentType = new Array('Asset', 'Resource')
                     } else {
                         selectedValue = value.split(',')
