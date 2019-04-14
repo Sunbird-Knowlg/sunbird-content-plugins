@@ -100,7 +100,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: totalOptions
     };
     if (_.isFunction(callback)) {
-      //callback(result);
+      callback(result);
     }
   },
   getTelemetryParams: function() {
