@@ -38,35 +38,35 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
     var pluginsData = [
       {
         "identifier": "org.ekstep.questionunit.mtf",
-        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.mtf/artifact/assetsimage-2018-06-08_1_636_1528450998_1528450998768.thumb.png",
+        "appIcon": ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/mtf_app_icon.jpg'),
         "semanticVersion": "1.2",
         "contentType": "Plugin",
         "objectType": "Content"
       },
       {
         "identifier": "org.ekstep.questionunit.mcq",
-        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.mcq/artifact/assetsmcq-horizontal_636_1529387086_1529387086269.thumb.png",
+        "appIcon": ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/mcq_app_icon.jpg'),
         "semanticVersion": "1.2",
         "contentType": "Plugin",
         "objectType": "Content"
       },
       {
         "identifier": "org.ekstep.questionunit.ftb",
-        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.ftb/artifact/assetsimage-2018-06-08_636_1528450313_1528450313262.thumb.png",
+        "appIcon": ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/ftb_app_icon.jpg'),
         "semanticVersion": "1.1",
         "contentType": "Plugin",
         "objectType": "Content"
       },
       {
         "identifier": "org.ekstep.questionunit.reorder",
-        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.reorder/artifact/assetsreorder-preview_540_1535349115_1535349115561.thumb.png",
+        "appIcon": ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/reorder_app_icon.jpg'),
         "semanticVersion": "1.1",
         "contentType": "Plugin",
         "objectType": "Content"
       },
       {
         "identifier": "org.ekstep.questionunit.sequence",
-        "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/org.ekstep.questionunit.sequence/artifact/assetssequencial-preview_540_1535349474_1535349474483.thumb.png",
+        "appIcon": ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/sequence_app_icon.jpg'),
         "semanticVersion": "1.1",
         "contentType": "Plugin",
         "objectType": "Content"
