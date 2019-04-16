@@ -165,8 +165,16 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }
     };
 
+    $scope.upadteQrData = function(event,isQrRequired) {
+        if(!_.isUndefined(isQrRequired)){
+            $scope.unit.dialcodeRequired = isQrRequired
+            $scope.updateNode();
+        }
+    }
+
     $scope.init = function() {
         var activeNode = undefined;
+        ecEditor.addEventListener('org.ekstep.collectioneditor:update:nodemeta',$scope.upadteQrData)
         $scope.$watch('unit', function() {
             if ($scope.unit) {
                 $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
@@ -176,7 +184,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                     if (!_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                         $scope.newNode = false;
                     }
-                        $scope.updateNode();
+                    $scope.updateNode();
+                    ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:update:details');
 
                 }
             }

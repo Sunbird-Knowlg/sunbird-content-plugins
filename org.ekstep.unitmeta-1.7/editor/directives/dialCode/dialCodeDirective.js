@@ -6,13 +6,15 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
     var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.unitmeta");
     template = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/dialCode/template.html")
     var dialCodeController = ['$scope', '$controller', '$filter', function ($scope, $controller, $filter) {
-        $scope.mode = ecEditor.getConfig('editorConfig').mode;
-        $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-        $scope.maxChar = 6;
-        $scope.minChar = 0;
-        $scope.editFlag = false;
-        $scope.errorMessage = "";
-        $scope.status = true;
+    $scope.mode = ecEditor.getConfig('editorConfig').mode;
+    $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+    $scope.maxChar = 6;
+    $scope.minChar = 0;
+    $scope.editFlag = false;
+    $scope.errorMessage = "";
+    $scope.status = true;
+    $scope.mode = ecEditor.getConfig('editorConfig').mode;
+    
 
     var stateService = org.ekstep.services.stateService;  
 
@@ -37,6 +39,17 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     console.error('Invalid DIAL Code!', err);
                 }
             });
+        }
+
+        $scope.setQrcodeDetails = function() {
+            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+            $scope.nodeId = activeNode.data.id;
+            $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
+            $scope.unit.dialcodeRequired = $scope.unit.dialcodeRequired || 'No';   
+        }
+
+        $scope.updateQrField = function (isQrRequired) {
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:update:nodemeta', isQrRequired);
         }
 
         // validate the dialCode
@@ -141,6 +154,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         $scope.init = function () {
             ecEditor.addEventListener("editor:dialcode:get", $scope.getCurrentDialCode, $scope);
             ecEditor.addEventListener("editor:update:dialcode", $scope.updateDialCode);
+            ecEditor.addEventListener('org.ekstep.collectioneditor:node:update:details',$scope.setQrcodeDetails)
         }
 
         $scope.updateDialCode = function (event, data) {
