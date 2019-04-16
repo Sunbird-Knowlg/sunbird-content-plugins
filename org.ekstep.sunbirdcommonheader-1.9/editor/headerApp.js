@@ -325,15 +325,79 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                 }
             };
-            $scope._sendReview();
             if ($scope.editorEnv == "COLLECTION") {
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
-                if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
+                if(rootNode && rootNode.data.metadata && _.isUndefined(rootNode.data.metadata.dialcodes)){
+                    ecEditor.getService('popup').open({
+                        templateUrl: 'sendForReviewWarning',
+                        controller: ['$scope', function ($scope) {
+                            $scope.validateUnitsDilcodes = function(){
+                                var warned = false;
+                                rootNode.visit(function (iterateNodes) {
+                                    if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
+                                        warned = true;
+                                        org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
+                                    }
+                                })
+                                if (!warned) {
+                                    $scope._sendReview();
+                                    if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
+                                }else{
+                                    $scope.closeThisDialog()
+                                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                        message: "Please fill the missing QR codes",
+                                        position: 'topCenter',
+                                        icon: 'fa fa-warning'
+                                    })
+                                }
+                            }
+
+                            $scope.addQRCode = function(){
+                                $scope.closeThisDialog()
+                                ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
+                                    action: 'save',
+                                    subType: 'textbook',
+                                    framework: ecEditor.getContext('framework'),
+                                    rootOrgId: ecEditor.getContext('channel'),
+                                    type: 'content',
+                                    popup: true,
+                                    editMode: 'edit'
+                                })
+                            }
+                        }],
+                        width: 100,
+                        className: 'ngdialog-theme-default'
+                    });
+                }else{
+                    $scope.validateUnitsDilcodes(rootNode, editMetaOptions)
+                }
+            }else{
+                $scope._sendReview();
             }
         } else {
             $scope._sendReview();
         }
     };
+
+    $scope.validateUnitsDilcodes = function(rootNode, editMetaOptions){
+        var warned = false;
+        rootNode.visit(function (iterateNodes) {
+            if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
+                warned = true;
+                org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
+            }
+        })
+        if (!warned) {
+            $scope._sendReview();
+            if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: "Please fill the missing QR codes",
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            })
+        }
+    }
 
     $scope.limitedSharing = function () {
         ecEditor.getService('popup').open({

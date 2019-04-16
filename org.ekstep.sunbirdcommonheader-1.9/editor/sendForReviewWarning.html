@@ -1,0 +1,12 @@
+<script type="text/ng-template" ng-controller="mainCtrl as $ctrl" id="sendForReviewWarning">
+  <div class="ui tiny test modal transition visible active" style="display: block !important;">
+    <div class="content">
+            <h4>Are you sure you want to submit for review without QR code?</h4>
+            <p>you haven't added any Textbook levele QR code.</p>
+        </div>
+        <div class="actions">
+              <div class="ui primary basic button" ng-click="addQRCode()">Add QR Code</div>
+              <div class="ui blue button" ng-click="validateUnitsDilcodes()">Continue anyway</div>
+        </div>
+  </div>
+</script>

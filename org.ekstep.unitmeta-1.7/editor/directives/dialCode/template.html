@@ -1,4 +1,20 @@
-<div class="field">
+<div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
+    <label>QR code required</label>
+    <div class="field" style=" margin-top: 10px; ">
+
+    <div class="ui radio checkbox qrCodeCheck">
+        <input type="radio" value="No" ng-model="unit.dialcodeRequired" required
+            ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'}); updateQrField('No')"
+            name="dialcodeRequired" tabindex="0">
+        <label>No</label>
+    </div>
+    <div class="ui radio checkbox qrCodeCheck">
+        <input type="radio" value="Yes" ng-model="unit.dialcodeRequired" required ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'});updateQrField('Yes')"
+            name="dialcodeRequired" tabindex="0">
+        <label>Yes</label>
+    </div>
+</div>
+<div class="field" ng-show ="unit.dialcodeRequired == 'Yes'">
     <label style="align-items: center;display: flex">QR code
         <span class="ui icon" data-tooltip="Digital Infrastructure for Augmented Learning" data-position="top left">
             <i style="cursor: pointer;color: #007aff" class="large question circle icon link"></i>

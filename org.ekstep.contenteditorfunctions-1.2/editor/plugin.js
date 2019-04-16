@@ -541,11 +541,19 @@ org.ekstep.contenteditor.basePlugin.extend({
                         });
                     }
                 }else{
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        title: 'DIAL code(s) updating failed!',
-                        position: 'topCenter',
-                        icon: 'fa fa-warning'
-                    });
+                    if (!ecEditor._.isUndefined(err.responseJSON) && err.responseJSON.params.err == "ERR_DIALCODE_LINK"){
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            title: err.responseJSON.params.errmsg,
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }else{
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            title: 'DIAL code(s) updating failed!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }
                 }
             });
         }else if(!ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
