@@ -113,6 +113,34 @@ describe("Sunbird header plugin:", function() {
             done();
         });
 
+        it("Should called setPendingChangingStatus method and enable pendingChanges if any changes in conent", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:modified"};
+            var data = {};
+            var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+            switch (meta.mimeType) {
+                case "application/vnd.ekstep.ecml-archive":
+                    $scope.editorEnv = "ECML"
+                    break;
+                case "application/vnd.ekstep.content-collection":
+                    $scope.editorEnv = "COLLECTION"
+                    break;
+                default:
+                    $scope.editorEnv = "NON-ECML"
+                    break;
+            };
+            spyOn($scope, "setPendingChangingStatus").and.callThrough();
+            $scope.setPendingChangingStatus(event, data);
+            if($scope.editorEnv === "COLLECTION") {
+                $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
+                $scope.disableTocActionBtn = true;
+            } else {
+                $scope.pendingChanges = true;
+            }
+            expect($scope.setPendingChangingStatus).toHaveBeenCalled();
+            done();
+        });
+
+
         it("Should invoke addListSize method to increase listSize", function(done) {
             spyOn($scope, "addListSize").and.callThrough();
             $scope.addListSize();

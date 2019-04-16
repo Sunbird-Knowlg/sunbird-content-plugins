@@ -94,6 +94,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
     }, $scope);
 
     org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
+        var startTime = (new Date()).getTime()
         if (ecEditor.getContext('contentId')) {
             $scope.loadContent(function(err, res) {
                 if (res) {
@@ -102,6 +103,12 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
                     ecEditor.dispatchEvent('sidebar:show');
                     ecEditor.dispatchEvent("atpreview:show");
                     window.loading_screen && window.loading_screen.finish();
+                    org.ekstep.services.telemetryService.impression({
+                        type: 'edit',
+                        pageid: ecEditor.getContext('env') || 'generic-editor',
+                        uri: encodeURIComponent(location.href),
+                        duration: (new Date()).getTime() - startTime
+                    })
                 } else {
                     ecEditor.jQuery('.loading-message').remove();
                     ecEditor.jQuery('.sk-cube-grid').remove();
@@ -114,6 +121,12 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
                 ecEditor.getService(ServiceConstants.META_SERVICE).getFrameworks(channel, function(err, res) {
                     if (res && res.data) {
                         ecEditor.setContext("framework", res.data.result.channel.defaultFramework);
+                        org.ekstep.services.telemetryService.impression({
+                            type: 'edit',
+                            pageid: ecEditor.getContext('env') || 'genericeditor',
+                            uri: encodeURIComponent(location.href),
+                            duration: (new Date()).getTime() - startTime
+                        })
                         window.loading_screen && window.loading_screen.finish();
                     } else {
                         ecEditor.jQuery('.loading-message').remove();
