@@ -525,7 +525,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     "content": dialcodeMap
                 }
             };
-            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
+            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('contentId'), ecEditor.getContext('channel'), request, function(err, rep) {
                 if (!err) {
                     if( !ecEditor._.isEmpty(org.ekstep.services.stateService.state.dialCodeMap) && !ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
                         ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
