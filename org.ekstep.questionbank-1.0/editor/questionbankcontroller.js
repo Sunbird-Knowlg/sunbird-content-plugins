@@ -38,6 +38,14 @@ angular.module('createquestionapp', [])
     }, {
       "name": "Match the Following",
       "value": "mtf"
+    },
+    {
+      "name": "Reordering words",
+      "value": "mcq"
+    },
+    {
+      "name": "Arrange in Sequence",
+      "value": "mcq"
     }];
     $scope.filterObj = {};
     $scope.selectedIndex;
