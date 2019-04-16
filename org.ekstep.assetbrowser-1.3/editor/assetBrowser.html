@@ -844,7 +844,7 @@
    					</div>
    					<div class="required field {{$ctrl.assetNameError}}">
    						<label for="assetName" title="Enter asset caption">Asset Caption</label>
-   						<input id="assetName" type="text" name="assetName" ng-model="$ctrl.assetMeta.name" placeholder="Enter asset caption" data-validate="assetName" />
+   						<input id="assetName" type="text" name="assetName" ng-change="$ctrl.assetNameHandler()" ng-model="$ctrl.assetMeta.name" placeholder="Enter asset caption" data-validate="assetName" />
    						<div ng-if="$ctrl.assetNameError == 'error'" class="ui basic red pointing prompt label transition visible">Please enter asset caption</div>
    					</div>
 

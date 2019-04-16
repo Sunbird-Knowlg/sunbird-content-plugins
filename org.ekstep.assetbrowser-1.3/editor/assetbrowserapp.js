@@ -1008,6 +1008,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.hasInputChanged =  function(){
         ctrl.previewHandler();
     }
+    ctrl.assetNameHandler = function(){
+        if(ctrl.assetMeta.name != '') ctrl.uploadBtnDisabled = false;
+    }
     ctrl.previewHandler = function(){
         ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
         ctrl.assetMeta.name = ''
@@ -1016,6 +1019,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.disposeStageVideos();
         $scope.$safeApply();
     }
+
     ctrl.disposeStageVideos = function(){
         var availablePlayers = _.keys(videojs.getPlayers());
             _.forEach(availablePlayers, function (value, key) {
