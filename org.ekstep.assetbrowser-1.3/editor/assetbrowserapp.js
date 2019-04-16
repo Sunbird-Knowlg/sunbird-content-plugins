@@ -175,7 +175,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             on: 'hover'
         });
     }
-
+    function uploadIndicator(val){
+        ecEditor.jQuery('.uploadingAssetIndicator').dimmer({closable: false}).dimmer(val);
+    }
     function audioAssetCb(err, res) {
 
         if (res && res.data.result.content) {
@@ -618,7 +620,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }, null);
 
         if (ctrl.plugin == 'video') {
-            showLoader()
+            uploadIndicator('show')
             var data = {
                 request: {
                     content: {
@@ -644,7 +646,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
-                    hideLoader();
+                    uploadIndicator('hide')
                 } else if(res) {
                     var result = res.data.result;
                     if(ctrl.mimeType == 'video/x-youtube'){
@@ -660,7 +662,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
-                    hideLoader();
+                    uploadIndicator('hide')
                 }
             })
         }  else {
@@ -682,7 +684,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
-                hideLoader();
+                uploadIndicator('hide')
             }else{
                 var signedURL = res.data.result.pre_signed_url;
                 var config = {
@@ -704,7 +706,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
-                hideLoader();
+                uploadIndicator('hide')
             } else {
                 ctrl.uploadVideoAsset(signedURL.split('?')[0], nodeID);
             }
@@ -727,7 +729,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
-                hideLoader();
+                uploadIndicator('hide')
             } else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'content uploaded successfully!',
@@ -756,7 +758,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     position: 'topCenter',
                     icon: 'fa fa-check-circle'
                 });
-                hideLoader();
+                uploadIndicator('hide')
                 ctrl.cancel();
                 $scope.closeThisDialog();
             }
@@ -1006,7 +1008,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.previewHandler();
     }
     ctrl.previewHandler = function(){
+        ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
+        ctrl.assetMeta.name = ''
+        ctrl.hideLicenseField = false;
+        ecEditor.jQuery("#assetfile").val('')
         ctrl.disposeStageVideos();
+        $scope.$safeApply();
     }
     ctrl.disposeStageVideos = function(){
         var availablePlayers = _.keys(videojs.getPlayers());
@@ -1124,11 +1131,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.mimeType = 'video/x-youtube'
             cb(null, ctrl.videoUrl, ctrl.provider);
         } else if (url.indexOf('drive') != -1) {
-            var gdrive = url.replace('/view?usp=sharing', '').replace('open?id=', 'uc?export=download&id=').replace('file/d/', 'uc?export=download&id=').replace('/edit?usp=sharing', '');
-            ctrl.videoUrl = gdrive;
-            ctrl.provider = 'googledrive'
-            ctrl.mimeType = 'video/mp4'
-            cb(null, ctrl.videoUrl, ctrl.provider);
+            cb(new Error('Please provide valid Youtube URL'), null, null);
         } else {
             cb(new Error('invalid url'), null, null)
         }
