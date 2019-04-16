@@ -248,7 +248,10 @@
 
    	.load-more-assets-warning-msg p {
    		text-align: center;
-   	}
+		 }
+		 .uploadingAssetIndicator{
+			 z-index:1001 !important
+		 }
    </style>
 
    <div class="assetbrowser ui modal active ui form">
@@ -362,9 +365,10 @@
 						<div class="ui special three cards grid">
 							<div class="card" ng-show="$ctrl.videoList.length > 0" ng-click="$ctrl.VideoSource(videoItem, $index, 'myasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index"
 								in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
-								<div class="video image  infopopover" id="{{videoItem.identifier}}" data-html="<b>{{videoItem.name}}</b> <br/> License: {{videoItem.license}}">
+								<div class="ui video image  infopopover" id="{{videoItem.identifier}}" data-html="<b>{{videoItem.name}}</b> <br/> License: {{videoItem.license}}">
 										<img ng-src="{{videoItem.thumbnail || $ctrl.defaultImage}}"  class="resourceMetaImage">
-										<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_myasset_{{videoItem.identifier}}' style="z-index:12">
+										<a class="ui black right ribbon label">{{videoItem.mimeType == 'video/x-youtube' ? 'Youtube' : 'Video'}}</a>
+										<div class="ui checkbox blue-checkbox checkBoxOverImage-top-left-corner" id='checkBox_myasset_{{videoItem.identifier}}' style="z-index:12">
 												<input class="radioBox" type="radio" name="youtubeVideo">
 												<label></label>
 										</div>
@@ -566,9 +570,10 @@
 						<div ng-show="$ctrl.videoList.length > 0" class="card" ng-click="$ctrl.VideoSource(videoItem, $index, 'allasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index" in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)"
 							in-view-options="{ throttle: 1000 }">
 
-							<div class="video image infopopover">
+							<div class="ui video image infopopover">
 									<img ng-src="{{videoItem.thumbnail || videoItem.appIcon || $ctrl.defaultImage}}"  class="resourceMetaImage">
-									<div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_allasset_{{videoItem.identifier}}' style="z-index:12">
+									<a class="ui black right ribbon label">{{videoItem.mimeType == 'video/x-youtube' ? 'Youtube' : 'Video'}}</a>
+									<div class="ui checkbox blue-checkbox checkBoxOverImage-top-left-corner" id='checkBox_allasset_{{videoItem.identifier}}' style="z-index:12">
 											<input class="radioBox" type="radio" name="youtubeVideo">
 											<label></label>
 									</div>
@@ -887,6 +892,11 @@
    				</div>
    			</div>
    		</div>
-   	</div>
-   </div>
+		 </div>
+	 </div>
+	 <div class="ui">
+			<div class="uploadingAssetIndicator ui page inverted dimmer">
+					<div class="ui text loader">Uploading...</div>
+			</div>
+		</div>
 </script>
