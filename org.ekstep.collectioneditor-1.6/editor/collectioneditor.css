@@ -9,7 +9,6 @@ body.pg-loaded>.inner {
 body {
     min-width: 800px;
     color: #9b9b9b !important;
-    font-family: 'Open Sans' !important;
 }
 
 #collectionMasterhead {
@@ -245,7 +244,6 @@ ul.fancytree-container {
     font-color: grey;
     color: black;
     font-weight: 300;
-    font-family: "raleway", sans-serif;
 }
 
 .search-menu-cursor,
