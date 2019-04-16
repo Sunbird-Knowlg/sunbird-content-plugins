@@ -93,6 +93,11 @@
     margin-top: 0 !important;
     padding-top: 2% !important;
 }
+.qb-selected-question-list-container  > .ui.divided.items > .item:first-child {
+    border-top: none;
+    margin-top: 0 !important;
+    padding-top: 2% !important;
+}
 
 .qb-question-list-container > .ui.divided.items > .item:last-child {
     border-top: none;
