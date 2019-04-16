@@ -155,6 +155,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         $scope.$safeApply();
     };
     function videoAssetCb(err, res){
+        ctrl.disposeStageVideos()
         if (res && res.data.result.content) {
             ctrl.videoList = [];
             if(ctrl.isVideoResource) ctrl.videoList = loadResourceVideo();
@@ -1018,7 +1019,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.disposeStageVideos = function(){
         var availablePlayers = _.keys(videojs.getPlayers());
             _.forEach(availablePlayers, function (value, key) {
-                videojs(value).dispose();
+                videojs.getPlayers()[value] = null;
                 delete videojs.getPlayers()[value];
             });
         ctrl.showPreview = false;
