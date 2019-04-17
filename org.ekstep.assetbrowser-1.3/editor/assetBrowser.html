@@ -344,16 +344,16 @@
 						<div class="two wide right aligned column">
 							<div id="myVideoDropDown" class="ui floating labeled icon dropdown button video">
 								<i class="filter icon"></i>
-								<span class="text">All</span>
+								<span class="text" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});">All</span>
 								<div class="menu" style="z-index: 13;">
-									<div class="item" data-value='all'>
+									<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value='all'>
 										All
 									</div>
 									<div class="divider"></div>
-									<div class="item" data-value="video">
+									<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="video">
 										Videos
 									</div>
-									<div class="item" data-value="youtube">
+									<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="youtube">
 										Youtube
 									</div>
 								</div>
@@ -549,16 +549,16 @@
 						<div class="two wide right aligned column">
 								<div id="allVideoDropDown" class="ui floating labeled icon dropdown button video">
 									<i class="filter icon"></i>
-									<span class="text">All</span>
+									<span class="text" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});">All</span>
 									<div class="menu" style="z-index: 13;">
 										<div class="item" data-value='all'>
 											All
 										</div>
 										<div class="divider"></div>
-										<div class="item" data-value="video">
+										<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="video">
 											Videos
 										</div>
-										<div class="item" data-value="youtube">
+										<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="youtube">
 											Youtube
 										</div>
 									</div>
