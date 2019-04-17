@@ -308,57 +308,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.sendForReview = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
-            var editMetaOptions = {
-                callback: function (err, res) {
-                    if (res) {
-                        $scope.saveContent(function (err, res) {
-                            if (res) {
-                                $scope._sendReview();
-                            }
-                        });
-                    } else {
-                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            message: 'Unable to save content, try again!',
-                            position: 'topCenter',
-                            icon: 'fa fa-warning'
-                        });
-                    }
-                }
-            };
             if ($scope.editorEnv == "COLLECTION") {
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
                 if(rootNode && rootNode.data.metadata && _.isUndefined(rootNode.data.metadata.dialcodes)){
-                    ecEditor.getService('popup').open({
-                        templateUrl: 'sendForReviewWarning',
-                        controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
-                            $scope.validateUnitsDilcodes = function(){
-                                $scope.closeThisDialog()
-                                mainCtrlScope.validateUnitsDilcodes(rootNode, editMetaOptions);
-                            }
-                            $scope.addQRCode = function(){
-                                $scope.closeThisDialog()
-                                ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
-                                    action: 'save',
-                                    subType: 'textbook',
-                                    framework: ecEditor.getContext('framework'),
-                                    rootOrgId: ecEditor.getContext('channel'),
-                                    type: 'content',
-                                    popup: true,
-                                    editMode: 'edit'
-                                })
-                            }
-                        }],
-                        resolve: {
-                            mainCtrlScope: function() {
-                                return $scope;
-                            }
-                        },
-                        showClose: false,
-                        width: 100,
-                        className: 'ngdialog-theme-default'
-                    });
+                    $scope.validateRootNodeDialCode(rootNode);
                 }else{
-                    $scope.validateUnitsDilcodes(rootNode, editMetaOptions)
+                    $scope.validateUnitsDilcodes(rootNode)
                 }
             }else{
                 $scope._sendReview();
@@ -368,23 +323,54 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     };
 
-    $scope.validateUnitsDilcodes = function(rootNode, editMetaOptions){
-        var warned = false;
+    $scope.validateRootNodeDialCode = function(rootNode){
+        ecEditor.getService('popup').open({
+            templateUrl: 'sendForReviewWarning',
+            controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
+                $scope.validateUnitsDilcodes = function(){
+                    $scope.closeThisDialog()
+                    mainCtrlScope.validateUnitsDilcodes(rootNode);
+                }
+                $scope.addQRCode = function(){
+                    $scope.closeThisDialog()
+                    ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
+                        action: 'save',
+                        subType: 'textbook',
+                        framework: ecEditor.getContext('framework'),
+                        rootOrgId: ecEditor.getContext('channel'),
+                        type: 'content',
+                        popup: true,
+                        editMode: 'edit'
+                    })
+                }
+            }],
+            resolve: {
+                mainCtrlScope: function() {
+                    return $scope;
+                }
+            },
+            showClose: false,
+            width: 100,
+            className: 'ngdialog-theme-default'
+        });
+    }
+
+    $scope.validateUnitsDilcodes = function(rootNode){
+        var dialCodeMisssing = false;
         rootNode.visit(function (iterateNodes) {
             if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
-                warned = true;
+                dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
             }
         })
-        if (!warned) {
-            $scope._sendReview();
-            if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
-        }else{
+        if (dialCodeMisssing) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                 message: "Please fill the missing QR codes",
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             })
+        }else{
+            $scope._sendReview();
         }
     }
 

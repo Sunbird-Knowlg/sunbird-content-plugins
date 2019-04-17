@@ -541,7 +541,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         });
                     }
                 }else{
-                    if (!ecEditor._.isUndefined(err.responseJSON) && err.responseJSON.params.err == "ERR_DIALCODE_LINK"){
+                    if (!ecEditor._.isUndefined(err.responseJSON) && err.responseJSON.params && err.responseJSON.params.err == "ERR_DIALCODE_LINK"){
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                             title: err.responseJSON.params.errmsg,
                             position: 'topCenter',
