@@ -313,7 +313,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if(rootNode && rootNode.data.metadata && _.isUndefined(rootNode.data.metadata.dialcodes)){
                     $scope.validateRootNodeDialCode(rootNode);
                 }else{
-                    $scope.validateUnitsDilcodes(rootNode)
+                    $scope.validateUnitsDialcodes(rootNode)
                 }
             }else{
                 $scope._sendReview();
@@ -327,9 +327,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         ecEditor.getService('popup').open({
             templateUrl: 'sendForReviewWarning',
             controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
-                $scope.validateUnitsDilcodes = function(){
+                $scope.validateUnitsDialcodes = function(){
                     $scope.closeThisDialog()
-                    mainCtrlScope.validateUnitsDilcodes(rootNode);
+                    mainCtrlScope.validateUnitsDialcodes(rootNode);
                 }
                 $scope.addQRCode = function(){
                     $scope.closeThisDialog()
@@ -355,10 +355,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     }
 
-    $scope.validateUnitsDilcodes = function(rootNode){
+    $scope.validateUnitsDialcodes = function(rootNode){
         var dialCodeMisssing = false;
         rootNode.visit(function (iterateNodes) {
             if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
+                dialCodeMisssing = true;
+                org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
+            }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes))){
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
             }
