@@ -330,28 +330,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if(rootNode && rootNode.data.metadata && _.isUndefined(rootNode.data.metadata.dialcodes)){
                     ecEditor.getService('popup').open({
                         templateUrl: 'sendForReviewWarning',
-                        controller: ['$scope', function ($scope) {
+                        controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
                             $scope.validateUnitsDilcodes = function(){
-                                var warned = false;
-                                rootNode.visit(function (iterateNodes) {
-                                    if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
-                                        warned = true;
-                                        org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
-                                    }
-                                })
-                                if (!warned) {
-                                    $scope._sendReview();
-                                    if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
-                                }else{
-                                    $scope.closeThisDialog()
-                                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                                        message: "Please fill the missing QR codes",
-                                        position: 'topCenter',
-                                        icon: 'fa fa-warning'
-                                    })
-                                }
+                                $scope.closeThisDialog()
+                                mainCtrlScope.validateUnitsDilcodes(rootNode, editMetaOptions);
                             }
-
                             $scope.addQRCode = function(){
                                 $scope.closeThisDialog()
                                 ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
@@ -365,6 +348,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                                 })
                             }
                         }],
+                        resolve: {
+                            mainCtrlScope: function() {
+                                return $scope;
+                            }
+                        },
+                        showClose: false,
                         width: 100,
                         className: 'ngdialog-theme-default'
                     });
