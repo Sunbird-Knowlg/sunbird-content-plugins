@@ -1303,45 +1303,22 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             });
         ecEditor.jQuery('#myVideoDropDown')
             .dropdown({
-                onChange: function(value) {
+                onChange: function(value, text, $selectedItem) {
                     /**check if searchText is blank**/
                     ctrl.filterType = value;
-                    ecEditor.jQuery('#allVideoDropDown').dropdown('set selected', ctrl.filterType);
+                    ecEditor.jQuery('#myVideoDropDown').find('.text').first().text(text);
+                    ecEditor.jQuery('#allVideoDropDown').find('.text').first().text(text);
                     ctrl.applyVideoFilter();
-                    // ctrl.offset =0
-
-                    // searchText = (ctrl.query === "") ? undefined : ctrl.query;
-                    // var selectedValue = (value != 'myvideos') ? value.split(',') : ctrl.videoMimeTypes.all;
-                    // ctrl.searchFilter.mimeType = selectedValue;
-                    // ctrl.searchFilter.contentType = new Array('Asset');
-                    // ctrl.searchFilter.createdBy = ctrl.createdBy;
-                    // instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType ,ctrl.searchFilter.createdBy, ctrl.offset, videoAssetCb);
                 }
             });
         ecEditor.jQuery('#allVideoDropDown')
             .dropdown({
-                onChange: function (value) {
+                onChange: function (value, text, $selectedItem) {
                     /**check if searchText is blank**/
                     ctrl.filterType = value;
-                    ecEditor.jQuery('#myVideoDropDown').dropdown('set selected', ctrl.filterType);
+                    ecEditor.jQuery('#allVideoDropDown').find('.text').first().text(text);
+                    ecEditor.jQuery('#myVideoDropDown').find('.text').first().text(text);
                     ctrl.applyVideoFilter();
-                    // ctrl.offset = 0;
-                    // searchText = (ctrl.query === "") ? undefined : ctrl.query;
-                    // var selectedValue, contentType;
-                    // if (value == 'allvideos') {
-                    //     selectedValue = ctrl.videoMimeTypes.all;
-                    //     contentType = new Array('Asset', 'Resource')
-                    // } else if (value == 'allYouTube') {
-                    //     selectedValue = ctrl.videoMimeTypes.youtube
-                    //     contentType = new Array('Asset', 'Resource')
-                    // } else {
-                    //     selectedValue = value.split(',')
-                    //     contentType = new Array('Asset')
-                    // }
-                    // ctrl.searchFilter.mimeType = selectedValue;
-                    // ctrl.searchFilter.contentType = contentType;
-                    // ctrl.searchFilter.createdBy = undefined;
-                    // instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType, undefined, ctrl.offset, videoAssetCb);
                 }
             });
 
