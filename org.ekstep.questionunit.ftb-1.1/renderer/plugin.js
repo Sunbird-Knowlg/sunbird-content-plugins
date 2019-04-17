@@ -68,11 +68,15 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     //check for evalution
     //get all text box value inside the class
     var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
-    _.each(textBoxCollection, function (element, index) {
+    _.each(textBoxCollection, function (element, key) {
       answerArray.push(element.value.toLowerCase().trim());
       var ansObj = {};
-      ansObj[index+1] = JSON.stringify({'text':element.value});
-      telemetryAnsArr.push(ansObj);
+      if(element.value.length > 0) {
+        var index = element.id;
+        index = index.replace(/\D/g,'');
+        ansObj[index] = JSON.stringify({'text':element.value});
+        telemetryAnsArr.push(ansObj);
+      }
     });
     //compare two array and compute partial score
     var correctAnswersCount = 0;
@@ -121,16 +125,16 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
   getTelemetryParams: function() {
     // Any change in the index value affects resvalues as well
     var instance = this;
-    var params = [], qTitle = {}, qData = this._question.data.question;
-    qTitle.title = instance.getTelemetryParamsValue(qData);
-    params.push(qTitle);
+    var params = [], qData = instance._question.data.question;
     var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
     _.each(textBoxCollection, function (element, index) {
       var temp = {};
-      temp[index+1] = JSON.stringify({'text':element.value});
+      temp[index+1] = JSON.stringify({'text':instance._question.data.answer[index]});
       params.push(temp);
     });
-    return params;
+    var evalOrder = instance._question.config.evalUnordered ? 'unorder' : 'order';
+    params.push({'eval':evalOrder});
+    return params; 
   }
 });
 //# sourceURL=questionunitFtbRendererPlugin.js
