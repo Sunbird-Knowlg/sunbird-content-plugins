@@ -26,6 +26,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.unit.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.framework = frameworkId;
+            delete org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.topicData;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
@@ -105,6 +106,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
+        $scope.unit.topicData = '(0) topics selected';
         $scope.unit.name = $scope.unit.name || 'Untitled Textbook'
         $scope.unit.dialcodeRequired = $scope.unit.dialcodeRequired || 'No';
         ecEditor.dispatchEvent("editor:update:dialcode");
@@ -135,6 +137,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
+        delete org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.topicData;
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
