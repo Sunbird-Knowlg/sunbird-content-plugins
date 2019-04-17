@@ -344,17 +344,17 @@
 						<div class="two wide right aligned column">
 							<div id="myVideoDropDown" class="ui floating labeled icon dropdown button video">
 								<i class="filter icon"></i>
-								<span class="text">All</span>
+								<span class="text" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});">All</span>
 								<div class="menu" style="z-index: 13;">
-									<div class="item" data-value='myvideos'>
-										<span class="text">All</span>
+									<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value='all'>
+										All
 									</div>
 									<div class="divider"></div>
-									<div class="item" data-value="video/mp4,video/webm">
-										<span class="text">Video</span>
+									<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="video">
+										Videos
 									</div>
-									<div class="item" data-value="video/x-youtube">
-										<span class="text">Youtube</span>
+									<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="youtube">
+										Youtube
 									</div>
 								</div>
 							</div>
@@ -363,7 +363,7 @@
 					<div class="clearfix">&nbsp;</div>
 					<div class="asset_item_container" id="my-video-tab">
 						<div class="ui special three cards grid">
-							<div class="card" ng-show="$ctrl.videoList.length > 0" ng-click="$ctrl.VideoSource(videoItem, $index, 'myasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index"
+							<div class="card" ng-show="$ctrl.videoList.length > 0" ng-click="$ctrl.VideoSource(videoItem, $index, 'myasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectVideoAsset'});" ng-repeat="videoItem in $ctrl.videoList track by $index"
 								in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
 								<div class="ui video image  infopopover" id="{{videoItem.identifier}}" data-html="<b>{{videoItem.name}}</b> <br/> License: {{videoItem.license}}">
 										<img ng-src="{{videoItem.thumbnail || $ctrl.defaultImage}}"  class="resourceMetaImage">
@@ -549,17 +549,17 @@
 						<div class="two wide right aligned column">
 								<div id="allVideoDropDown" class="ui floating labeled icon dropdown button video">
 									<i class="filter icon"></i>
-									<span class="text">All</span>
+									<span class="text" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});">All</span>
 									<div class="menu" style="z-index: 13;">
-										<div class="item" data-value='allvideos'>
-											<span class="text">All</span>
+										<div class="item" data-value='all'>
+											All
 										</div>
 										<div class="divider"></div>
-										<div class="item" data-value="video/mp4,video/webm">
-											<span class="text">Videos</span>
+										<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="video">
+											Videos
 										</div>
-										<div class="item" data-value="allYouTube">
-											<span class="text">Youtube</span>
+										<div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="youtube">
+											Youtube
 										</div>
 									</div>
 								</div>
@@ -567,7 +567,7 @@
 					</div>
 					<div class="clearfix">&nbsp;</div>
 					<div class="ui cards special three grid asset_item_container" id="all-video-tab">
-						<div ng-show="$ctrl.videoList.length > 0" class="card" ng-click="$ctrl.VideoSource(videoItem, $index, 'allasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}" ng-repeat="videoItem in $ctrl.videoList track by $index" in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)"
+						<div ng-show="$ctrl.videoList.length > 0" class="card" ng-click="$ctrl.VideoSource(videoItem, $index, 'allasset'); $ctrl.selected_videos[$index]={selected: !$ctrl.selected_videos[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectVideoAsset'});" ng-repeat="videoItem in $ctrl.videoList track by $index" in-view="lineInView($index, $inview, videoItem, 'AssetsBrowser', $index)"
 							in-view-options="{ throttle: 1000 }">
 
 							<div class="ui video image infopopover">
