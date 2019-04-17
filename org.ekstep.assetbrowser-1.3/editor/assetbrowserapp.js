@@ -1203,31 +1203,22 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         var searchText = (ctrl.query === "") ? undefined : ctrl.query;
         var selectedValue, contentType, createdBy;
         contentType = new Array('Asset');
-        if(ctrl.tabSelected == 'my'){
-            if(value == 'all'){
-                selectedValue = ctrl.videoMimeTypes.all;
-            }else if(value == 'youtube'){
-                selectedValue = ctrl.videoMimeTypes.youtube;
-            }else if(value =='video'){
-                selectedValue = ctrl.videoMimeTypes.video;
-            }else{
-                selectedValue = ctrl.videoMimeTypes.all;
-            }
-            createdBy = ctrl.createdBy;
-        } else if(ctrl.tabSelected == 'all') {
-            if (value == 'all') {
-                selectedValue = ctrl.videoMimeTypes.all;
-                contentType.push('Resource');
-            } else if (value == 'youtube') {
-                selectedValue = ctrl.videoMimeTypes.youtube
-                contentType.push('Resource');
-            } else if(value =='video') {
-                selectedValue = ctrl.videoMimeTypes.video
-            }else{
-                selectedValue = ctrl.videoMimeTypes.all
-                contentType.push('Resource');
-            }
+        if (value == 'youtube') {
+            selectedValue = ctrl.videoMimeTypes.youtube
+        } else if (value == 'video') {
+            selectedValue = ctrl.videoMimeTypes.video
+        } else {
+            selectedValue = ctrl.videoMimeTypes.all
+        }
+
+
+        if (ctrl.tabSelected == 'all') {
             createdBy = undefined;
+            if ((value == 'all') || (value == 'youtube')) {
+                contentType.push('Resource');
+            }
+        } else if (ctrl.tabSelected == 'my') {
+            createdBy = ctrl.createdBy;
         }
         ctrl.searchFilter.createdBy = createdBy;
         ctrl.searchFilter.mimeType = selectedValue;
