@@ -56,6 +56,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                             stateService.create('dialCodeMap');
                         }
                         stateService.setState('dialCodeMap', node.data.id, this.dialcodes);
+                        node.data.metadata.dialcodes = this.dialcodes;
                     }
                     $scope.editFlag = true;
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -70,6 +71,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                                 }
                                 stateService.setState('dialCodeMap', node.data.id, instance.dialcodes);
                             }
+                            node.data.metadata.dialcodes = instance.dialcodes;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                             $scope.$safeApply();
@@ -79,6 +81,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                             }
                             _.has(stateService.state.dialCodeMap, node.data.id) ? _.unset(stateService.state.dialCodeMap, node.data.id) : "";
                             stateService.setState('invaliddialCodeMap', node.data.id, instance.dialcodes);
+                            node.data.metadata.dialcodes = instance.dialcodes;
                             $scope.status = response.isValid;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -111,6 +114,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     stateService.create('dialCodeMap');
                 }
                 stateService.setState('dialCodeMap', currentNode.id, "");
+                currentNode.metadata.dialcodes = undefined;
             }
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
         }
@@ -130,6 +134,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                         stateService.create('dialCodeMap');
                     }
                     stateService.setState('dialCodeMap', currentNode.id, "");
+                    currentNode.metadata.dialcodes = undefined;
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                 }
             } else {

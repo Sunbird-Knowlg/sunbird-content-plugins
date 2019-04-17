@@ -105,9 +105,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
-        $scope.unit.topicData = '(0) topics selected';
         $scope.unit.name = $scope.unit.name || 'Untitled Textbook'
         $scope.unit.dialcodeRequired = $scope.unit.dialcodeRequired || 'No';
+        ecEditor.dispatchEvent("editor:update:dialcode");
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             if(!_.isUndefined(activeNode.data.metadata.topic)){
                 $scope.unit.topic = activeNode.data.metadata.topic;
@@ -135,9 +135,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
-        setTimeout(function(){
-            ecEditor.dispatchEvent("editor:update:dialcode");
-        }, 0);
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
