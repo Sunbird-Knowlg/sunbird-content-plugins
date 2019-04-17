@@ -530,13 +530,13 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (!err) {
                     if( !ecEditor._.isEmpty(org.ekstep.services.stateService.state.dialCodeMap) && !ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
                         ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                            title: 'Unable to update some of the DIAL codes.',
+                            title: 'Unable to update some of the QR codes.',
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
                     } else {
                         ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                            title: 'DIAL code(s) updated successfully!',
+                            title: 'QR code(s) updated successfully!',
                             position: 'topCenter',
                             icon: 'fa fa-check-circle'
                         });
@@ -550,7 +550,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         });
                     }else{
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            title: 'DIAL code(s) updating failed!',
+                            title: 'QR code(s) updating failed!',
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
@@ -559,7 +559,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             });
         }else if(!ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                title: 'Unable to update some of the DIAL codes.',
+                title: 'Unable to update some of the QR codes.',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
