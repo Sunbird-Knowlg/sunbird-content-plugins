@@ -137,7 +137,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
-        delete org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.topicData;
+        if(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] && org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata){
+            delete org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.topicData;
+        }
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
