@@ -753,7 +753,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (!_.isEmpty(errResponse) && errResponse.hasOwnProperty('count')) {
                         if (errResponse.count >= $scope.qrCodeCount.request) {
                         toasterPrompt = {
-                            message: 'No new DIAL Codes have been generated!',
+                            message: 'No new QR Codes have been generated!',
                             type: "org.ekstep.toaster:warning",
                             icon: 'fa fa-warning'
                         }
@@ -768,7 +768,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.isGeneratingQRCodes = false;
             } else if (res) {
                 toasterPrompt = {
-                    message: 'DIAL code generated.',
+                    message: 'QR code generated.',
                     type: "org.ekstep.toaster:success",
                     icon: 'fa fa-check-circle'
                 }
