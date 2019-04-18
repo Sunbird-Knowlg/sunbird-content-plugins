@@ -308,7 +308,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.sendForReview = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
-            if ($scope.editorEnv == "COLLECTION") {
+            if ($scope.editorEnv == "COLLECTION" && meta.contentType === "TextBook") {
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
                 if(rootNode && rootNode.data.metadata && _.isUndefined(rootNode.data.metadata.dialcodes)){
                     $scope.validateRootNodeDialCode(rootNode);
