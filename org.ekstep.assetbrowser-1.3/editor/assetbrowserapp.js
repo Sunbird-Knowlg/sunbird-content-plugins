@@ -99,7 +99,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.assetId = undefined;
     ctrl.tabSelected = "my";
     ctrl.showPreview = false;
-    ctrl.filterType = "";
+    ctrl.filterType = "all";
     ctrl.assetMeta = {
         'name': '',
         'keywords': [],
