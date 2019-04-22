@@ -1223,7 +1223,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.searchFilter.createdBy = createdBy;
         ctrl.searchFilter.mimeType = selectedValue;
         ctrl.searchFilter.contentType = contentType;
-        instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType, undefined, ctrl.offset, videoAssetCb);
+        instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType, ctrl.searchFilter.createdBy, ctrl.offset, videoAssetCb);
     }
 
     setTimeout(function() {
