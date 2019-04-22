@@ -361,7 +361,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
-            }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes))){
+            }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes) && iterateNodes.data.metadata.dialcodes != "")){
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
             }
