@@ -34,7 +34,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                         callback && callback({ isValid:false, dialcode:undefined });
                     }
                 }else{
-                    console.error('Invalid DIAL Code!', err);
+                    console.error('Invalid QR Code!', err);
                 }
             });
         }
@@ -91,7 +91,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 }
             } else {
                 $scope.editFlag = false;
-                $scope.errorMessage = "Please enter valid DIAL code";
+                $scope.errorMessage = "Please enter valid QR code";
             }
         }
 
@@ -139,7 +139,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 }
             } else {
                 $scope.editFlag = false;
-                $scope.errorMessage = (this.dialcodes.length && !String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) ? "Please enter valid DIAL code" : "";
+                $scope.errorMessage = (this.dialcodes.length && !String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) ? "Please enter valid QR code" : "";
             }    
         }
 
