@@ -21,25 +21,6 @@
                         </div>
                     </div>
                     <div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
-                        <label>QR code required</label>
-                        <div class="field" style=" margin-top: 10px; ">
-
-                        <div class="ui radio checkbox qrCodeCheck">
-                            <input data-qr="{{unit.dialcodeRequired}}" type="radio" value="No" ng-model="unit.dialcodeRequired" required
-                                ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'})"
-                                name="dialcodeRequired" tabindex="0">
-                            <label>No</label>
-                        </div>
-                        <div class="ui radio checkbox qrCodeCheck">
-                            <input data-qr="{{unit.dialcodeRequired}}" type="radio" value="Yes" ng-model="unit.dialcodeRequired" required ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'})"
-                                name="dialcodeRequired" tabindex="0">
-                            <label>Yes</label>
-                        </div>
-                    </div>
-
-
-                    </div>
-                    <div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
                         <label>Topics</label>
                         <input name="topic" id="unitTopicSelector" ng-model="unit.topicData" type="text" ng-click="generateTelemetry({id: 'unit-topicselector', type: 'click', subtype: 'input', target: 'topic'})">
                     </div>
