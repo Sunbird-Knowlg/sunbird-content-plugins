@@ -244,6 +244,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.disableQRGenerateBtn = true;
                     $scope.hideCollaboratorBtn = true;
                 } else {
+                    if(res.responseJSON.responseCode == 'CLIENT_ERROR' && !_.isUndefined(res.responseJSON.result)){
+                        ecEditor.dispatchEvent('org.ekstep.toaster:error', {
+                            message: res.responseJSON.result.messages[0],
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }
                     $scope.disableSaveBtn = false;
                     $scope.disableQRGenerateBtn = false;
                 }
