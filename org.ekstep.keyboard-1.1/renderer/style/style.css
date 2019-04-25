@@ -28,8 +28,9 @@
   position: fixed;
   width: 50%;
   margin: 0 auto;
-  top: 33%;
-  margin-left: 28%;
+  top: 32%;
+  margin-left: 24%;
+  height: 12%;
 }
 
 .parentDivMainKeyboard,
