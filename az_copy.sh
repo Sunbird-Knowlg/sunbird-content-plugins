@@ -88,6 +88,6 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
 
 for i in "${coreplugins[@]}"
 do
-   az storage blob delete-batch -s $1 --pattern content-plugins/$i --account-name $azure_account_name --account-key $azure_account_key
-   az storage blob upload-batch --destination $1/content-plugins/$i --source content-plugins/$i --account-name $azure_account_name --account-key $azure_account_key
+   az storage blob delete-batch -s $1 --pattern content-plugins/$i --account-name 
+   az storage blob upload-batch --destination $1/content-plugins/$i --source content-plugins/$i
 done
