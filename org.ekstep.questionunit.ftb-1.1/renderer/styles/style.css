@@ -4,8 +4,7 @@
   line-height: 2em;
   width: 80%;
   margin-top: 2%;
-  /* display: grid; */
-  height: 80%;
+  height: 80%
 }
 
 .qs-ftb-container {
@@ -99,8 +98,8 @@
 }
 
 .align-question {
-  margin: 33px 0px 0px 2px;
-  height: 35vh;
+  margin: 13px 0px 0px 2px;
+  height: 30vh;
   overflow-y: auto;
 }
 

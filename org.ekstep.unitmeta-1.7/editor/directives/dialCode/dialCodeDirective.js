@@ -34,7 +34,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                         callback && callback({ isValid:false, dialcode:undefined });
                     }
                 }else{
-                    console.error('Invalid DIAL Code!', err);
+                    console.error('Invalid QR Code!', err);
                 }
             });
         }
@@ -56,6 +56,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                             stateService.create('dialCodeMap');
                         }
                         stateService.setState('dialCodeMap', node.data.id, this.dialcodes);
+                        node.data.metadata.dialcodes = this.dialcodes;
                     }
                     $scope.editFlag = true;
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -70,6 +71,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                                 }
                                 stateService.setState('dialCodeMap', node.data.id, instance.dialcodes);
                             }
+                            node.data.metadata.dialcodes = instance.dialcodes;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                             $scope.$safeApply();
@@ -79,6 +81,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                             }
                             _.has(stateService.state.dialCodeMap, node.data.id) ? _.unset(stateService.state.dialCodeMap, node.data.id) : "";
                             stateService.setState('invaliddialCodeMap', node.data.id, instance.dialcodes);
+                            node.data.metadata.dialcodes = instance.dialcodes;
                             $scope.status = response.isValid;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -88,7 +91,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 }
             } else {
                 $scope.editFlag = false;
-                $scope.errorMessage = "Please enter valid DIAL code";
+                $scope.errorMessage = "Please enter valid QR code";
             }
         }
 
@@ -111,6 +114,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     stateService.create('dialCodeMap');
                 }
                 stateService.setState('dialCodeMap', currentNode.id, "");
+                currentNode.metadata.dialcodes = undefined;
             }
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
         }
@@ -130,11 +134,12 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                         stateService.create('dialCodeMap');
                     }
                     stateService.setState('dialCodeMap', currentNode.id, "");
+                    currentNode.metadata.dialcodes = undefined;
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                 }
             } else {
                 $scope.editFlag = false;
-                $scope.errorMessage = (this.dialcodes.length && !String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) ? "Please enter valid DIAL code" : "";
+                $scope.errorMessage = (this.dialcodes.length && !String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) ? "Please enter valid QR code" : "";
             }    
         }
 

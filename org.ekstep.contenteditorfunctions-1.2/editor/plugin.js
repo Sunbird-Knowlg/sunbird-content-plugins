@@ -106,6 +106,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 contentMeta.questions = summary.questions;
             }
         }
+        contentMeta.assets = ecEditor._.compact(org.ekstep.contenteditor.stageManager.assets);
         contentMeta.editorState = JSON.stringify(this.editorState);
         contentMeta.pragma = org.ekstep.contenteditor.stageManager.getPragma();
         this._patchContent(contentMeta, contentBody, options);
@@ -525,32 +526,40 @@ org.ekstep.contenteditor.basePlugin.extend({
                     "content": dialcodeMap
                 }
             };
-            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
+            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('contentId'), ecEditor.getContext('channel'), request, function(err, rep) {
                 if (!err) {
                     if( !ecEditor._.isEmpty(org.ekstep.services.stateService.state.dialCodeMap) && !ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
                         ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                            title: 'Unable to update some of the DIAL codes.',
+                            title: 'Unable to update some of the QR codes.',
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
                     } else {
                         ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                            title: 'DIAL code(s) updated successfully!',
+                            title: 'QR code(s) updated successfully!',
                             position: 'topCenter',
                             icon: 'fa fa-check-circle'
                         });
                     }
                 }else{
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        title: 'DIAL code(s) updating failed!',
-                        position: 'topCenter',
-                        icon: 'fa fa-warning'
-                    });
+                    if (!ecEditor._.isUndefined(err.responseJSON) && err.responseJSON.params && err.responseJSON.params.err == "ERR_DIALCODE_LINK"){
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            title: err.responseJSON.params.errmsg,
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }else{
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            title: 'QR code(s) updating failed!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }
                 }
             });
         }else if(!ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                title: 'Unable to update some of the DIAL codes.',
+                title: 'Unable to update some of the QR codes.',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });

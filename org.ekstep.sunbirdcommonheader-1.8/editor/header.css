@@ -195,7 +195,6 @@ body {
 .label-icon-box-text {
     position: relative;
     left: -10px;
-    font-family: HelveticaNeueLTStd-Lt, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     cursor: pointer;
     font-size: 11px;
     color: #9B9B9B!important;
@@ -270,7 +269,6 @@ body {
     font-size: 11px !important;
     line-height: 11px;
     padding: 9px 10px !important;
-    font-family: Helvetica;
     color: #9b9b9b!important;
     font-weight: normal!important;
 }

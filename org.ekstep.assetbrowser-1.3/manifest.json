@@ -11,7 +11,10 @@
         "dependencies": [
             {"type": "js", "src": "editor/recorder/wave/wavesurfer.min.js"},
             {"type": "js", "src": "editor/recorder/angular-audio-recorder.js"},
-            {"type": "js","src": "editor/libs/angular-inview.js"}
+            {"type": "js","src": "editor/libs/angular-inview.js"},
+            { "type": "js", "src": "editor/libs/video.js" },
+            { "type": "js", "src": "editor/libs/videoyoutube.js" },
+            {"type": "css", "src": "editor/libs/videojs.css"}
         ],
         "views":[
             {"template":"./assetBrowser.html", "controller":"./assetbrowserapp.js"}
