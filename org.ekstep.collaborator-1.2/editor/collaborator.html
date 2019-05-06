@@ -22,7 +22,7 @@
 
                 <ul class="searchList" ng-show="searchKeyword.length >= 3 && searchRes.content.length">
                     <li class="searchResult" ng-repeat="user in searchRes.content | filter: filterSearch | limitTo:5" ng-show="!user.isCollaborator">
-                        <p ng-click="selectUser(user)">{{user.firstName}}{{user.lastName}}</p>
+                        <p ng-click="selectUser(user)">{{user.firstName + ' ' + user.lastName}}</p>
                     </li>
                     <li id="view-all-results" ng-if="searchRes.content.length > 5" ng-click="viewAllResults()" class="color-blue view-all"><span>View All Results</span></li>
                 </ul>
