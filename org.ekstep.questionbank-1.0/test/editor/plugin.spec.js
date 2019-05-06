@@ -13,10 +13,8 @@ describe("EditorPlugin", function() {
   beforeEach(module('org.ekstep.questionbank'));
 
   beforeEach(function() {
-    //plugin = new org.ekstep.questionbank.EditorPlugin({}, {}, {});
     spyOn(plugin, "initialize").and.callThrough();
     spyOn(plugin, "loadHtml").and.callThrough();
-    // spyOn(plugin, "loadQSPlugins").and.callThrough();
     dataObj = {callback:undefined,data:undefined};
     event = {target:undefined,type:"org.ekstep.questionbank:showpopup"};
     popupService = jasmine.createSpyObj("popupService", ["loadNgModules", "open"]);
