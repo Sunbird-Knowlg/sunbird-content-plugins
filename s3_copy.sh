@@ -84,7 +84,9 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.questionunit.ftb-1.0"
                 "org.ekstep.questionunit.ftb-1.1"
                 "org.ekstep.questionunit.mtf-1.2"
+                "org.ekstep.questionunit.reorder-1.0"
                 "org.ekstep.questionunit.reorder-1.1"
+                "org.ekstep.questionunit.sequence-1.0"
                 "org.ekstep.questionunit.sequence-1.1");
 
 for i in "${coreplugins[@]}"
