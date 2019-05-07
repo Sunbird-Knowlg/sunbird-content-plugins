@@ -847,6 +847,7 @@
 							<input id="assetName" type="text" name="assetName" ng-change="$ctrl.assetNameHandler()" ng-model="$ctrl.assetMeta.name" placeholder="Enter asset caption" data-validate="assetName" />
 							<div ng-if="$ctrl.assetNameError == 'error'" class="ui basic red pointing prompt label transition visible">Please enter asset caption</div>
 						</div>
+ 
 						<div class="field assetKeywords">
 							<label for="keywords" title="Tags">Tags</label>
 							  <tags-input   class="assetKeywords" id="keywords" name="keywords" ng-model="$ctrl.keywordsText" display-property="lemma" use-strings="true" replace-spaces-with-dashes="false">
