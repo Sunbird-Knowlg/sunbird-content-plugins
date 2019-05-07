@@ -97,7 +97,8 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       values: instance.getTelemetryResValues(),
       params: instance.getTelemetryParams(),
       noOfCorrectAns: correctAnswersCount,
-      totalAns: totalOptions
+      totalAns: totalOptions,
+      type: "sequence"
     };
     if (_.isFunction(callback)) {
       callback(result);

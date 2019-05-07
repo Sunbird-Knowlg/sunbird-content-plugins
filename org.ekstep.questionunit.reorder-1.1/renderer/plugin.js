@@ -116,7 +116,8 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       params: this.getTelemetryParams(),
       values: this.getTelemetryResValues(),
       noOfCorrectAns: numOfCorrectAns, //tempCount,
-      totalAns: 1
+      totalAns: 1,
+      type: "reorder"
     };
 
     var callback = event.target;
