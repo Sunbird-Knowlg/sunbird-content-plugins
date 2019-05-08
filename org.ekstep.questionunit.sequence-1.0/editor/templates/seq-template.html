@@ -13,7 +13,7 @@
                                     <div class="ui grid">
                                         <div class="twelve wide column">
                                             <div class="form-group segment textBoxDiv questionTextBox">
-                                                <textarea class="form-control textboxQ" maxlength="200" placeholder="Enter the question" name="seqQuestion" ng-model="seqFormData.question.text"
+                                                <textarea class="form-control textboxQ" placeholder="Enter the question" name="seqQuestion" ng-model="seqFormData.question.text"
                                                     ng-class="{'has-success':seqForm.question.$valid, 'has-error': submitted && seqForm.question.$error.required}"
                                                     ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;" ng-blur="$ctrl.focused = false"
                                                     ng-required="!(seqFormData.question.text.length)"></textarea>
