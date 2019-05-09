@@ -16,21 +16,20 @@ module.exports = function(config) {
         files: [
             'node_modules/angular/angular.min.js',
             'node_modules/angular-mocks/angular-mocks.js',
-            'https://dev.ekstep.in/collection-editor/scripts/external.min.js',
+            'test/jquery-2.1.4.min.js',
+            'test/canvas.test.js',
+            'test/fabric.min.js',
+            'test/script.min.content.js',
             'test/bootstrap-html.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/content-editor/scripts/script.min.1.35.859.js',            
-            'test/bootstrap-editor.js',            
-            //'**/editor/**/*.js',
-            // 'plugins/org.ekstep.test-1.0/editor/*.js', // if you want to test your editor plugin only
-            // 'plugins/org.ekstep.test-1.0/test/*.js',  // include test directory for your specific plugin
+            'test/bootstrap-editor.js',   
             // fixtures - include as required, below patterns cover the core plugins
-
             { pattern: '**/*.md', watched: true, served: true, included: false },
             { pattern: '**/*.css', watched: true, served: true, included: false },
             { pattern: '**/*.html', watched: true, served: true, included: false },
             { pattern: '**/*.json', watched: true, served: true, included: false },
             { pattern: '**/*.js', watched: true, served: true, included: false },
             { pattern: '**/*.png', watched: true, served: true, included: false },
+            'org.ekstep.question-1.0/test/editor/question.spec.js',
             'org.ekstep.assessmentbrowser-1.1/test/editor/*.spec.js',
             'org.ekstep.stage-1.0/test/editor/*.spec.js',
             'org.ekstep.activitybrowser-1.3/test/editor/*.spec.js',
@@ -50,6 +49,11 @@ module.exports = function(config) {
         client: {
             captureConsole: false
         },
+        browserConsoleLogOptions: {
+			level: 'log',
+			format: '%b %T: %m',
+			terminal: true
+		  },
 
         plugins: [
             'karma-jasmine',
@@ -114,7 +118,7 @@ module.exports = function(config) {
         browsers: [
             "ChromeHeadless"
         ],
-
+        browserNoActivityTimeout: 300000,
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
