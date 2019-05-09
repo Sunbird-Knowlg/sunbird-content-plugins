@@ -125,7 +125,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
 
     params.push({"lhs":instance.getTelOptions(qData.option.optionsLHS)});
     params.push({"rhs":instance.getTelOptions(qData.option.optionsRHS)});
-    params.push({"answer":instance.getAnswers(qData.option.optionsLHS,instance.rhs_rearranged)});
+    params.push({"answer":instance.getAnswers(qData.option)});
     return params;
   },
   getTelemetryResValues: function() {
@@ -153,13 +153,20 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     }
     return JSON.stringify(telOptions);
   },
-  getAnswers: function(lhsOptions,rhsRearranged) {
+  getAnswers: function(options) {
+    var lhsOptions = options.optionsLHS,rhsOptions = options.optionsRHS;
+    var rhsRearranged = rhsOptions;
     var lhs = [], rhs = [], answer = {};
     _.each(lhsOptions, function(val, index){
       lhs.push((val.index).toString());
     });
-    _.each(rhsRearranged, function(val, index){
-      rhs.push((val).toString());
+    rhsOptions = _.sortBy(rhsRearranged, 'mapIndex');
+    _.each(rhsOptions, function(val, i){
+      _.each(rhsRearranged,function(v,k){
+        if(v.text == val.text)
+          rhs.push((k+1).toString());
+      })
+     
     });
     answer = {'lhs': lhs, 'rhs':rhs};
     return JSON.stringify(answer);
