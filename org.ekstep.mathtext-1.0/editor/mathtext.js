@@ -12,6 +12,10 @@ angular.module('org.ekstep.mathtext', [])
     $scope.cursorPosition = undefined;
     $scope.text_hint = true;
     $scope.pluginLoadStartTime = new Date();
+    $scope.selectionStart = undefined;
+    $scope.selectionEnd = undefined;
+
+  
     $scope.libraryEquations = [
       {
         "title": "Area of circle",
@@ -732,7 +736,7 @@ angular.module('org.ekstep.mathtext', [])
         } else if(object.latex){
           mathField.write(object.latex);
         } else{
-          $scope.latexValue = $scope.latexValue.substr(0, cursorPosition) + object.latexText + $scope.latexValue.substr(cursorPosition);
+          $scope.latexValue = $scope.latexValue.substr(0, cursorPosition)  + object.latexText + $scope.latexValue.substr(cursorPosition);
         }
       }
     };
@@ -754,13 +758,35 @@ angular.module('org.ekstep.mathtext', [])
       return divElement.textContent || divElement.innerText;
     }
 
+     $timeout( function() {
+      /**
+       * @description 
+       * - Responsible for returning the range of Cursor from selection Start
+       *   to End through MOUSE EVENT.
+       * - Click event has more priority than select event.
+       */
+      setTimeout( function() {
+        ecEditor.jQuery( '#advInput' ).select(function(selectTextEvent) {
+           $scope.selectionEnd= selectTextEvent.target.selectionEnd
+           $scope.selectionStart= selectTextEvent.target.selectionStart
+        });
+        ecEditor.jQuery( '#advInput' ).on('click',function() {
+          $scope.selectionStart = $scope.selectionEnd = undefined;
+        }); 
+      },100);
+     })
+    
     $scope.getCursorPosition = function(e){
       var currentPosition = e.target.selectionEnd;
-      if(e.which == 8){
-        $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
+      if(!_.isUndefined($scope.selectionStart) && !_.isUndefined($scope.selectionEnd)){
+        $scope.cursorPosition = $scope.selectionStart ;
       }else{
-        $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition;
-      } 
+        if(e.which == 8){
+          $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
+        }else{
+          $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition;
+        } 
+      }
     };
 
     $scope.addToStage = function (activeTab) {
