@@ -112,7 +112,8 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       params: instance.getTelemetryParams(),
       values: instance.getTelemetryResValues(),
       noOfCorrectAns: correctAnswersCount,
-      totalAns: totalLHS
+      totalAns: totalLHS,
+      type: "mtf"
     };
     if (_.isFunction(callback)) {
       callback(result);

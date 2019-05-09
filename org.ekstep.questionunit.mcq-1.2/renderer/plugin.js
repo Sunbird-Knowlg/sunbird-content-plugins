@@ -90,6 +90,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
       params: instance.getTelemetryParams(),
       values: instance.getTelemetryResValues(),
+      type: "mcq"
     };
     if (_.isFunction(callback)) {
       callback(result);

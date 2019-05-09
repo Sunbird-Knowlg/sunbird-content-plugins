@@ -111,7 +111,8 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       params: instance.getTelemetryParams(),
       values: telemetryAnsArr,
       noOfCorrectAns: correctAnswersCount,
-      totalAns: this._question.data.answer.length
+      totalAns: this._question.data.answer.length,
+      type: "ftb"
     };
 
     var callback = event.target;
