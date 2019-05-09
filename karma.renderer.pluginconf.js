@@ -18,23 +18,51 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            // bower:js
+            'test/jquery-2.1.4.min.js',
+            'test/canvas.test.js',
+            'test/fabric.min.js',
+            'test/super.js',
             'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/createjs.min.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/cordovaaudioplugin-0.6.1.min.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/creatine-1.0.0.min.js',
+            'test/createjs.min.js',
+            'test/cordovaaudioplugin-0.6.1.min.js',
+            'test/creatine-1.0.0.min.js',
+            // 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js',
+            // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/createjs.min.js',
+            // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/cordovaaudioplugin-0.6.1.min.js',
+            // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/creatine-1.0.0.min.js',
             // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/scripts/renderer.external.min.js',
             // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/scripts/renderer.telemetry.min.js',
             'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js',
-            'https://community.ekstep.in/content/preview/script.min.1.9.686.js',
+            'test/script.min.player.js',
+            // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/script.min.1.9.686.js',
+            // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/**',
             'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular-mocks.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/v3/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/renderer.min.js',
+            'coreplugins/**/renderer/*.js',
+            { pattern: 'assets/user_list/user_list.json', watched: true, served: true, included: false },
+            { pattern: 'assets/sounds/goodjob.mp3', watched: true, served: true, included: false },
+            { pattern: 'assets/sounds/letstryagain.mp3', watched: true, served: true, included: false },
+            // { pattern: 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/assets/user_list/user_list.json', watched: true, served: true, included: false },
+            // { pattern: 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/assets/sounds/goodjob.mp3', watched: true, served: true, included: false },
+            // { pattern: 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/assets/sounds/letstryagain.mp3', watched: true, served: true, included: false },
+            { pattern: 'test/testContent/widgets/content-plugins/**/manifest.json', watched: true, served: true, included: false },
+            { pattern: 'test/testContent/assets/assets/public/content/*.jpeg', watched: true, served: true, included: false },
+            { pattern: 'test/testContent/assets/assets/public/content/*.png', watched: true, served: true, included: false },
+            { pattern: 'test/testContent/index.html', watched: true, served: true, included: false },
+            // { pattern: 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/coreplugins/**/manifest.json', watched: true, served: true, included: false },
+            { pattern: 'test/coreplugins/**/manifest.json', watched: true, served: true, included: false },
+            { pattern: 'test/testContent/index.json', watched: true, served: true, included: false },
+            { pattern: '**/*.js', watched: true, served: true, included: false },
+            { pattern: '**/*.json', watched: true, served: true, included: false },
+            // 'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/preview/coreplugins/org.ekstep.ecmlrenderer-1.0/renderer/libs/renderer.min.js',
+            'test/renderer.min.js', 
             'test/renderer.js',
-            "**/renderer/*.js",
-            // { pattern: '**/*.png', watched: true, served: true, included: false },
+            "*/renderer/*.js",
+            "*/renderer/util/*.js",
+            "*/renderer/utils/*.js",         
+            "*/test/mocks/renderer/*.js",
             { pattern: '**/manifest.json', watched: false, served: true, included: false },
-            "**/test/mocks/renderer/*.js",
             '**/test/renderer/*.spec.js'
+            // 'org.ekstep.questionunit.ftb-1.0/test/renderer/plugin.spec.js'
         ],
 
         exclude: [
@@ -51,7 +79,7 @@ module.exports = function(config) {
             'karma-jasmine',
             'karma-jasmine-matchers',
             'karma-coverage',
-            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
             'karma-mocha-reporter',
             "karma-jasmine-jquery",
             "karma-junit-reporter",
@@ -103,17 +131,21 @@ module.exports = function(config) {
         // enable / disable watching file and executing tests whenever any file changes
         autoWatch: false,
 
-
+		// customLaunchers: {
+		// 	ChromeDebugging: {
+		// 	  base: 'Chrome',
+		// 	  flags: [ '--remote-debugging-port=9333' ]
+		// 	}
+		//   },
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            "PhantomJS"
+            "ChromeHeadless"
         ],
-
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true,
+        singleRun: false,
 
         // Concurrency level
         // how many browser should be started simultaneous
@@ -126,6 +158,5 @@ module.exports = function(config) {
                 { type: 'cobertura' }
             ]
         },
-        browserNoActivityTimeout: 60000
     })
 }
