@@ -158,5 +158,6 @@ module.exports = function(config) {
                 { type: 'cobertura' }
             ]
         },
+        browserNoActivityTimeout: 60000
     })
 }
