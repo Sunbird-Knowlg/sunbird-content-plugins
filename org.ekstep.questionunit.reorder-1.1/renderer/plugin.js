@@ -116,7 +116,8 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       params: this.getTelemetryParams(),
       values: this.getTelemetryResValues(),
       noOfCorrectAns: numOfCorrectAns, //tempCount,
-      totalAns: 1
+      totalAns: 1,
+      type: "reorder"
     };
 
     var callback = event.target;
@@ -146,11 +147,13 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
   getTelemetryResValues: function() {
     var resValues = [];
     var instance = this;
+    var data = this._question.data.sentence.tabs;
     this._userWords.forEach(function(word, key){
       var temp = {};
-      temp[key+1] = instance.getTelemetryParamsValue(word);
+      var selectedWordIndex = _.findIndex(data, {text: word.text});
+      temp[selectedWordIndex+1] = instance.getTelemetryParamsValue(word);
       resValues.push(temp);
-    })
+    });
     return resValues;
   }
 });
