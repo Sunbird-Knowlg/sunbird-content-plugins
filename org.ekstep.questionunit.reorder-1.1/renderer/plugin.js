@@ -150,8 +150,7 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
     var data = this._question.data.sentence.tabs;
     this._userWords.forEach(function(word, key){
       var temp = {};
-      var selectedWordIndex;
-      selectedWordIndex = _.findIndex(data, {text: word.text});
+      var selectedWordIndex = _.findIndex(data, {text: word.text});
       temp[selectedWordIndex+1] = instance.getTelemetryParamsValue(word);
       resValues.push(temp);
     });
