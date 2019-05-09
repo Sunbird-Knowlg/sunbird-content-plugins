@@ -72,7 +72,7 @@ QSTelemetryLogger.logAssessEnd = function(result) {
     quesScore = parseFloat((result.score).toFixed(2));
   }
   var data = {
-    assessEventVer: "3.1",
+    eventVer: "3.1",
     type: result.type,
     pass: result.eval,
     score: quesScore,
