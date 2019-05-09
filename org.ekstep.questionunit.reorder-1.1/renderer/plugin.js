@@ -147,11 +147,18 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
   getTelemetryResValues: function() {
     var resValues = [];
     var instance = this;
+    var data = this._question.data.sentence.tabs;
     this._userWords.forEach(function(word, key){
       var temp = {};
-      temp[key+1] = instance.getTelemetryParamsValue(word);
+      var selectedWordIndex;
+      _.each(data,function(val,k){
+        if(val.text == word.text){
+          selectedWordIndex = k+1;
+        }
+      });
+      temp[selectedWordIndex] = instance.getTelemetryParamsValue(word);
       resValues.push(temp);
-    })
+    });
     return resValues;
   }
 });
