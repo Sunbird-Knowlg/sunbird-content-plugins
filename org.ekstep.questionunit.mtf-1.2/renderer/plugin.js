@@ -163,11 +163,8 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     });
     rhsOptions = _.sortBy(rhsRearranged, 'mapIndex');
     _.each(rhsOptions, function(val, i){
-      _.each(rhsRearranged,function(v,k){
-        if(v.text == val.text)
-          rhs.push((k+1).toString());
-      })
-     
+      var rhsIndex = _.findIndex(rhsRearranged, {text: val.text});
+      rhs.push(rhsIndex+1);
     });
     answer = {'lhs': lhs, 'rhs':rhs};
     return JSON.stringify(answer);
