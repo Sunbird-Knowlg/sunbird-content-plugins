@@ -25,6 +25,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.contenteditor:discardFlag", this.discardContentFlag, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:retire", this.retireContent, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:unlistedPublish", this.unlistedPublishContent, this);
+        ecEditor.addEventListener("org.ekstep.contenteditor:Unauthorized", this.unauthorizedToken, this);
+    },
+    unauthorizedToken: function() {
+        this.popUpValues.headerMsg = 'Your session has timed out due to inactivity. Please login to resume!';
+        this.popUpValues.popUpIcon = 'circle remove red';
+        this.popUpValues.showCloseButton = true;
+        this.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';
     },
     setEditorState: function(event, data) {
         if (data) this.editorState = data;
