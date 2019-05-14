@@ -26,6 +26,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.unit.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.framework = frameworkId;
+            delete org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.topicData;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
@@ -90,6 +91,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     }
 
     $scope.onNodeSelect = function(event, data){
+        $scope.isTabSwitched = true;
         var selectedTopics = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
@@ -107,6 +109,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.unit.topicData = '(0) topics selected';
         $scope.unit.name = $scope.unit.name || 'Untitled Textbook'
         $scope.unit.dialcodeRequired = $scope.unit.dialcodeRequired || 'No';
+        ecEditor.dispatchEvent("editor:update:dialcode");
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             if(!_.isUndefined(activeNode.data.metadata.topic)){
                 $scope.unit.topic = activeNode.data.metadata.topic;
@@ -134,9 +137,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
-        setTimeout(function(){
-            ecEditor.dispatchEvent("editor:update:dialcode");
-        }, 0);
+        if(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] && org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata){
+            delete org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.topicData;
+        }
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
@@ -151,7 +154,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     },0);
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "id": data.id, "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 
     $scope.loadKeywords = function($query) {
@@ -181,7 +184,15 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             }
         }, true);
     }
-
+    $scope.onKeywordAdding = function(tag){
+        if($scope.isTabSwitched){
+            return false
+        }
+        return true
+    }
+    $scope.keywordFocus = function(){
+        $scope.isTabSwitched =  false
+    }
     $scope.changeTitle = function(){
         $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);

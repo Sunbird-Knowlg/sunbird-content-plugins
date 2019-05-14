@@ -9,7 +9,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
     type: 'lessonbrowser',
     initData: undefined,
     repos: [],
-
+    startLoadTime: new Date(),
+   
     /**
      *   registers events
      *   @memberof lessonBrowser
@@ -32,6 +33,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
      */
     initPreview: function(event, params) {
         var instance = this;
+        instance.startLoadTime = new Date(); 
         instance.client = params.client;
         instance.query = params.query;
         cb = params.callback || function() {};

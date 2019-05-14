@@ -111,17 +111,22 @@ describe('qs-feedback', function() {
 
   describe("logEvent", function() {
     it('should call QSTelemetryLogger logInteract', function() {
-      var type = 'touch';
+      var type = 'TOUCH';
+      QSTelemetryLogger.logEvent(type, data);
+      expect(QSTelemetryLogger.logInteract).toHaveBeenCalled();
+    });
+    it('should call QSTelemetryLogger logInteract', function() {
+      var type = 'DRAG';
       QSTelemetryLogger.logEvent(type, data);
       expect(QSTelemetryLogger.logInteract).toHaveBeenCalled();
     });
     it('should call TelemetryService logAssess', function() {
-      var type = 'assess';
+      var type = 'ASSESS';
       QSTelemetryLogger.logEvent(type, data);
       expect(QSTelemetryLogger.logAssess).toHaveBeenCalled();
     });
     it('should call TelemetryService logResponse', function() {
-      var type = 'response';
+      var type = 'RESPONSE';
       QSTelemetryLogger.logEvent(type, data);
       expect(QSTelemetryLogger.logResponse).toHaveBeenCalled();
     });

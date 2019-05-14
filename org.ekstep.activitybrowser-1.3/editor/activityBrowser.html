@@ -23,7 +23,7 @@
                         <div class="ui transparent input custom-input height-100-percent" style='flex-grow:1; margin-right:5px;'>
                             <input class="height-100-percent" type="text" placeholder="Search activity" ng-model="$ctrl.activityOptions.searchQuery" ng-keypress="$event.keyCode === 13 ? $ctrl.getActivities() : null" />
                         </div>
-                        <button class="ui primary button height-100-percent" ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})">Search</button>
+                        <button class="ui primary button height-100-percent" ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({id:'button', type: 'click', subtype: 'search', target: 'searchActivityCard'})">Search</button>
                     </div>
                     <div class="ui vertical divider"></div>
                     <div class="three wide right aligned column" style="display:flex; flex-flow:row; align-items:center;">
@@ -31,7 +31,7 @@
                             Category
                         </label>
                         <div style="flex-grow:1;" class="ui input" ng-init="$ctrl.activityOptions.categories = []">
-                            <select multiple="" class="ui dropdown search lableCls custom-dropdown" ng-model="$ctrl.activityOptions.categories" ng-options="type for type in $ctrl.categories" ng-change="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype:    'advanceSearch', target: 'searchActivityCard'})">
+                            <select multiple="" class="ui dropdown search lableCls custom-dropdown" ng-model="$ctrl.activityOptions.categories" ng-options="type for type in $ctrl.categories" ng-change="$ctrl.getActivities();$ctrl.generateTelemetry({id:'button', type: 'click', subtype:    'advanceSearch', target: 'searchActivityCard'})">
                                 <option value="">
                                     Type
                                 </option>
@@ -116,7 +116,7 @@
                             <div ng-if="$ctrl.activityPageApiResponse" ng-class=" $ctrl.expandedGroupId !='' && $ctrl.expandedGroupId != '{{activityGroup.name | camelize}}' ? 'ui vertical segment     hide-segment' : 'ui vertical segment show-segment'" ng-show="$ctrl.activityGroupsList.length > 0 && !$ctrl.hideMainPage" id="{{activityGroup.name | camelize}}" ng-repeat="activityGroup in $ctrl.activityGroupsList">
                                 <p>{{activityGroup.name}} ({{activityGroup.contents.length}})<a ng-show="($ctrl.clickedViewMoreLinkId != '{{activityGroup.name | camelize}}ViewMore')" id="{{activityGroup.name | camelize}}ViewMore" style="float:right; cursor:pointer;" ng-click="$ctrl.viewMorePlugins($event)">View More&nbsp;<i class="angle right icon"></i></a></p>
                                 <div ng-class="$ctrl.expandedGroupId == '{{activityGroup.name | camelize}}' ? 'ui five stackable cards activity-cards expanded-segment' : 'ui five stackable cards activity-cards collapsed-segment'">
-                                    <div class="ui link card activity-card" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});" ng-repeat="activity in activityGroup.contents track by $index">
+                                    <div class="ui link card activity-card" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({id:'button', type: 'click', subtype: 'select', target: 'activityCard'});" ng-repeat="activity in activityGroup.contents track by $index">
                                         <div class="blurring dimmable image">
                                             <div class="ui dimmer">
                                                 <div class="content">
@@ -155,7 +155,7 @@
                                         </div>
                                         <div class="content" style="padding:5px 10px;">
                                             <div class="right floated">
-                                                <button class="ui mini primary button" ng-click="$ctrl.addPlugin(activity);$ctrl.generateTelemetry({type: 'click', subtype: 'add', target: 'addActivityCard'})">Add</button>
+                                                <button class="ui mini primary button" ng-click="$ctrl.addPlugin(activity);$ctrl.generateTelemetry({id:'button', type: 'click', subtype: 'add', target: 'addActivityCard'})">Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
                             </div>
                             <div ng-if="!$ctrl.activityPageApiResponse" class="ui vertical segment" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage" style="border-bottom:transparent;">
                                 <div class="ui five stackable cards activity-cards" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
-                                    <div class="ui link card activity-card" ng-repeat="activity in $ctrl.activitiesList track by $index" in-view="lineInView($index, $inview, activity, 'ActivityBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
+                                    <div class="ui link card activity-card" ng-repeat="activity in $ctrl.activitiesList track by $index" in-view="lineInView($index, $inview, activity, 'ActivityBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({id:'button', type: 'click', subtype: 'select', target: 'activityCard'});">
                                         <div class="blurring dimmable image">
                                             <div class="ui dimmer">
                                                 <div class="content">
@@ -218,7 +218,7 @@
                                     <div class="header">
                                         We're sorry!
                                     </div>
-                                    <p>There's an error while fetching activities, <a href ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})">Click here</a> to try again.</p>
+                                    <p>There's an error while fetching activities, <a href ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'search', target: 'searchActivityCard'})">Click here</a> to try again.</p>
                                 </div>
                             </div>
                         </div>
@@ -229,10 +229,10 @@
         <div class="actions" ng-show="$ctrl.showPluginDetails || $ctrl.viewMorePluginsFlag">
             <div class="ui grid">
                 <div class="ui two wide column left aligned">
-                    <div class="ui basic primary button" ng-click="$ctrl.closePluginDetails();$ctrl.generateTelemetry({type: 'click', subtype: 'back', target: 'backButton'})">Back</div>
+                    <div class="ui basic primary button" ng-click="$ctrl.closePluginDetails();$ctrl.generateTelemetry({id:'button' ,type: 'click', subtype: 'back', target: 'backButton'})">Back</div>
                 </div>
                 <div class="ui ten wide column right aligned">
-                    <button class="ui primary button" ng-click="$ctrl.addPlugin($ctrl.selectedPlugin);$ctrl.generateTelemetry({type: 'click', subtype: 'add', target: 'addActivityCard'})">Add</button>
+                    <button class="ui primary button" ng-click="$ctrl.addPlugin($ctrl.selectedPlugin);$ctrl.generateTelemetry({id:'button' ,type: 'click', subtype: 'add', target: 'addActivityCard'})">Add</button>
                 </div>
             </div>
         </div>

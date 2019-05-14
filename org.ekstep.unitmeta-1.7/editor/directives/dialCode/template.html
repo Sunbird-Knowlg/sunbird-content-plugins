@@ -1,12 +1,28 @@
+<div class="field" ng-class="mode == 'Edit' ? '' : 'disabled'">
+    <label>QR code required</label>
+    <div class="field" style=" margin-top: 10px; ">
+
+    <div class="ui radio checkbox qrCodeCheck">
+        <input type="radio" value="No" ng-model="unit.dialcodeRequired" required
+            ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'});"
+            name="dialcodeRequired" tabindex="0">
+        <label>No</label>
+    </div>
+    <div class="ui radio checkbox qrCodeCheck">
+        <input type="radio" value="Yes" ng-model="unit.dialcodeRequired" required ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'});"
+            name="dialcodeRequired" tabindex="0">
+        <label>Yes</label>
+    </div>
+</div>
 <div class="field">
     <label style="align-items: center;display: flex">QR code
         <span class="ui icon" data-tooltip="Digital Infrastructure for Augmented Learning" data-position="top left">
             <i style="cursor: pointer;color: #007aff" class="large question circle icon link"></i>
         </span>
-        <a ng-show="editFlag && mode == 'Edit'" ng-click="editDialCode()" style="cursor:pointer;color: #007aff !important;">Edit</a>
+        <a ng-show="editFlag && mode == 'Edit' && unit.dialcodeRequired == 'Yes'" ng-click="editDialCode()" style="cursor:pointer;color: #007aff !important;">Edit</a>
         <span ng-show="!editFlag" style="background-color: transparent;text-align: right;width: 40vw">{{dialcodes.length || minChar}}/{{ maxChar }}</span>
     </label>
-    <div class="ui action right icon input" ng-class="mode == 'Edit' ? '' : 'disabled'" style="align-items: center;">
+    <div class="ui action right icon input" ng-class="mode == 'Edit' ? (unit.dialcodeRequired == 'No' ? 'disabled' : '') : 'disabled'" style="align-items: center;">
         <input ng-show="!editFlag" class="dialCode" type="text" placeholder="Enter code here" ng-model="dialcodes" maxlength="6" ng-disabled="false" ng-change="changeDialCode()">
         <div ng-show="editFlag" class="ui action right icon input">
             <div class="ui action right icon">

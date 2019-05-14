@@ -211,11 +211,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.saveContent = function (cb) {
+        $scope.saveInitiated = Date.now();
+        $scope.generateTelemetry({id:"button",subtype:'save_initiated'})
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
             showNotification: true,
             callback: function (err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
+                    $scope.generateTelemetry({id:'button',subtype:'save_successful',duration:(Date.now() - $scope.saveInitiated).toString()})
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
                         var contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
@@ -241,6 +244,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.disableQRGenerateBtn = true;
                     $scope.hideCollaboratorBtn = true;
                 } else {
+                    if(res.responseJSON.responseCode == 'CLIENT_ERROR' && !_.isUndefined(res.responseJSON.result.messages)){
+                        ecEditor.dispatchEvent('org.ekstep.toaster:error', {
+                            message: res.responseJSON.result.messages[0],
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }
                     $scope.disableSaveBtn = false;
                     $scope.disableQRGenerateBtn = false;
                 }
@@ -305,32 +315,74 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.sendForReview = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
-            var editMetaOptions = {
-                callback: function (err, res) {
-                    if (res) {
-                        $scope.saveContent(function (err, res) {
-                            if (res) {
-                                $scope._sendReview();
-                            }
-                        });
-                    } else {
-                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            message: 'Unable to save content, try again!',
-                            position: 'topCenter',
-                            icon: 'fa fa-warning'
-                        });
-                    }
-                }
-            };
-            $scope._sendReview();
-            if ($scope.editorEnv == "COLLECTION") {
+            if ($scope.editorEnv == "COLLECTION" && meta.contentType === "TextBook") {
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
-                if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
+                if(rootNode && rootNode.data.metadata && _.isUndefined(rootNode.data.metadata.dialcodes)){
+                    $scope.validateRootNodeDialCode(rootNode);
+                }else{
+                    $scope.validateUnitsDialcodes(rootNode)
+                }
+            }else{
+                $scope._sendReview();
             }
         } else {
             $scope._sendReview();
         }
     };
+
+    $scope.validateRootNodeDialCode = function(rootNode){
+        ecEditor.getService('popup').open({
+            templateUrl: 'sendForReviewWarning',
+            controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
+                $scope.validateUnitsDialcodes = function(){
+                    $scope.closeThisDialog()
+                    mainCtrlScope.validateUnitsDialcodes(rootNode);
+                }
+                $scope.addQRCode = function(){
+                    $scope.closeThisDialog()
+                    ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
+                        action: 'save',
+                        subType: 'textbook',
+                        framework: ecEditor.getContext('framework'),
+                        rootOrgId: ecEditor.getContext('channel'),
+                        type: 'content',
+                        popup: true,
+                        editMode: 'edit'
+                    })
+                }
+            }],
+            resolve: {
+                mainCtrlScope: function() {
+                    return $scope;
+                }
+            },
+            showClose: false,
+            width: 100,
+            className: 'ngdialog-theme-default'
+        });
+    }
+
+    $scope.validateUnitsDialcodes = function(rootNode){
+        var dialCodeMisssing = false;
+        rootNode.visit(function (iterateNodes) {
+            if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
+                dialCodeMisssing = true;
+                org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
+            }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes) && iterateNodes.data.metadata.dialcodes != "")){
+                dialCodeMisssing = true;
+                org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
+            }
+        })
+        if (dialCodeMisssing) {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: "Please fill in missing QR codes or remove QR code where not required",
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            })
+        }else{
+            $scope._sendReview();
+        }
+    }
 
     $scope.limitedSharing = function () {
         ecEditor.getService('popup').open({
@@ -417,6 +469,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
             $scope.disableTocActionBtn = true;
+        } else {
+            $scope.pendingChanges = true;
         }
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
@@ -438,7 +492,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
         }
     }
-
     $scope.telemetry = function (data) {
         org.ekstep.services.telemetryService.interact({
             "type": 'click',
@@ -450,6 +503,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             "stage": ecEditor.getCurrentStage().id
         });
     };
+    /**
+     * @description   - Fires ImpressionEvent
+     * @param data {Object} 
+     */
+
+    $scope.generateImpression = function(data) {
+        if (data) ecEditor.getService('telemetry').impression({
+            "type": data.type,
+            "subtype": data.subtype || "",
+            "pageid": data.pageid || "",
+            "uri": window.location.href,
+            "duration": data.duration,
+            "visits": []
+        });
+    }
 
     $scope.internetStatusFn = function (event) {
         $scope.$safeApply(function () {
@@ -511,18 +579,26 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
         $scope.$apply();
     }
+    /**
+     * @description  -Will be called by immediately invoked function in this controller
+     */
     $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
         $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
         if (!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
             console.log('trigger upload form');
             ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
+            $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
         }
         $scope.$safeApply();
     };
-
+    /**
+     * @description -Opens uploadcontent form popup
+     */
     $scope.upload = function () {
+        $scope.uploadFormStart = new Date();
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
+        $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
     };
 
     $scope.download = function () {
@@ -556,7 +632,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         "objecttype": "",
                         "err": err.status,
                         "type": "API",
-                        "data": err,
+                        "data": err.message,
                         "severity": "fatal"
                     })
                 }
@@ -568,9 +644,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.generateTelemetry = function (data) {
         if (data) ecEditor.getService('telemetry').interact({
+            "id": data.id || "" ,
             "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
+            'duration': data.duration ||"",
             "pluginid": plugin.id,
             "pluginver": plugin.ver,
             "objectid": "",
@@ -682,7 +760,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (!_.isEmpty(errResponse) && errResponse.hasOwnProperty('count')) {
                         if (errResponse.count >= $scope.qrCodeCount.request) {
                         toasterPrompt = {
-                            message: 'No new DIAL Codes have been generated!',
+                            message: 'No new QR Codes have been generated!',
                             type: "org.ekstep.toaster:warning",
                             icon: 'fa fa-warning'
                         }
@@ -697,7 +775,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.isGeneratingQRCodes = false;
             } else if (res) {
                 toasterPrompt = {
-                    message: 'DIAL code generated.',
+                    message: 'QR code generated.',
                     type: "org.ekstep.toaster:success",
                     icon: 'fa fa-check-circle'
                 }
@@ -1120,6 +1198,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;
             $scope.disableQRGenerateBtn = false;
+            $scope.uploadFormStart = new Date();
             $scope.showUploadForm();
         }
     })()

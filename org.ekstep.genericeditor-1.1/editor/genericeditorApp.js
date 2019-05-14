@@ -94,12 +94,19 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
     }, $scope);
 
     ecEditor.addEventListener('org.ekstep.genericeditor:preview', function(event, callback) {
+        var startTime = (new Date()).getTime()
         $scope.loadContent(function(err, res) {
             if (res) {
                 ecEditor.dispatchEvent('content:title:update', res.name);
                 ecEditor.dispatchEvent('sidebar:show');
                 callback && callback();
                 window.loading_screen && window.loading_screen.finish();
+                org.ekstep.services.telemetryService.impression({
+                    type: 'edit',
+                    pageid: ecEditor.getContext('env') || 'generic-editor',
+                    uri: encodeURIComponent(location.href),
+                    duration: (new Date()).getTime() - startTime
+                })
             } else {
                 ecEditor.jQuery('.loading-message').remove();
                 ecEditor.jQuery('.sk-cube-grid').remove();
@@ -109,12 +116,19 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
     }, $scope);
 
     org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
+        var startTime = (new Date()).getTime()
         if (!ecEditor.getContext('contentId')) {
-           if (!ecEditor.getContext('framework')) {
+            if (!ecEditor.getContext('framework')) {
                 var channel = ecEditor.getContext('channel') || "in.ekstep";
                 ecEditor.getService(ServiceConstants.META_SERVICE).getFrameworks(channel, function(err, res) {
                     if (res && res.data) {
                         ecEditor.setContext("framework", res.data.result.channel.defaultFramework);
+                        org.ekstep.services.telemetryService.impression({
+                            type: 'edit',
+                            pageid: ecEditor.getContext('env') || 'genericeditor',
+                            uri: encodeURIComponent(location.href),
+                            duration: (new Date()).getTime() - startTime
+                        })
                         window.loading_screen && window.loading_screen.finish();
                     } else {
                         ecEditor.jQuery('.loading-message').remove();

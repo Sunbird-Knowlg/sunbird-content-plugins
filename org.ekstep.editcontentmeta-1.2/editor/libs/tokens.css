@@ -8,8 +8,6 @@
     -moz-box-sizing: padding-box;
     -ms-box-sizing: padding-box;
     box-sizing: padding-box;
-
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .ng-token-field {
