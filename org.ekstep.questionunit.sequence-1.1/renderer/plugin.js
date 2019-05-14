@@ -107,14 +107,15 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
   getTelemetryParams: function() {
     // Any change in the index value affects resvalues as well
     var instance = this;
-    var params = [], qTitle = {}, questionData = instance._question.data;
-    qTitle.title = instance.getTelemetryParamsValue(questionData.question);
-    params.push(qTitle);
+    var params = [], questionData = instance._question.data;
+    var answer = [];
     questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
       var temp = {};
       temp[key+1] = instance.getTelemetryParamsValue(option);
+      answer.push(instance.seq_rearranged[key].toString());
       params.push(temp);
     });
+    params.push({'answer':JSON.stringify({'seq': answer})});
     return params;
   },
   getTelemetryResValues: function() {
@@ -127,7 +128,8 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     });
     _.each(rerenderedOptions,function(obj,key) {
       var value = {};
-      value[key+1] = instance.getTelemetryParamsValue(obj);
+      var index = instance.seq_rearranged[key];
+      value[index] = instance.getTelemetryParamsValue(obj);
       resValues.push(value);
     });    
     return resValues;

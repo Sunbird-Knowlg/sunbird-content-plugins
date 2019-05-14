@@ -134,14 +134,16 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
 
   getTelemetryParams: function() {
     var instance = this;
-    var params = [], qTitle = {}, questionData = instance._question.data;
-    qTitle.title = instance.getTelemetryParamsValue(questionData.question);
-    params.push(qTitle);
+    var params = [], questionData = instance._question.data;
+    var answer = [];
     questionData.sentence.tabs.forEach(function (tab,key) { // eslint-disable-line no-undef
       var temp = {};
       temp[key+1] = instance.getTelemetryParamsValue(tab);
+      var id = tab.id + 1;
+      answer.push(id.toString());
       params.push(temp);
     });
+    params.push({'answer':JSON.stringify({'seq':answer})});
     return params;
   },
   getTelemetryResValues: function() {
