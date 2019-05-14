@@ -326,8 +326,10 @@ angular.module('collaboratorApp', ['angular-inview'])
                     /* istanbul ignore else */
                     if (res.data.result.response.count) {
                         
-                        _.forEach(res.data.result.response.content, function( object, index) {
-                            (object.lastName == null) ? res.data.result.response.content[index].lastName = "" : "" ;
+                        _.forEach(res.data.result.response.content, function(object, index) {
+                            if(object.lastName == null){
+                                res.data.result.response.content[index].lastName = ""
+                            }
                         })
                         $scope.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
 
