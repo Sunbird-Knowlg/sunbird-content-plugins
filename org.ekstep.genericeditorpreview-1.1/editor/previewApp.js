@@ -6,6 +6,10 @@ angular.module('org.ekstep.genericeditorpreview', []).controller('previewControl
 		$scope.showPdfWarningMsg = (metadata.mimeType == 'application/pdf') ? true : false;
 		$scope.$safeApply();
 	});
+	
+	ecEditor.dispatchEvent("org.ekstep.genericeditor:preview", function(){
+		ecEditor.dispatchEvent("atpreview:show");
+	});
 
 	$scope.hidePdfWarningMsg = function(){
 		$scope.showPdfWarningMsg = false;

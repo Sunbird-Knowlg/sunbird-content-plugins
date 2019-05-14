@@ -93,23 +93,24 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         });
     }, $scope);
 
+    ecEditor.addEventListener('org.ekstep.genericeditor:preview', function(event, callback) {
+        $scope.loadContent(function(err, res) {
+            if (res) {
+                ecEditor.dispatchEvent('content:title:update', res.name);
+                ecEditor.dispatchEvent('sidebar:show');
+                callback && callback();
+                window.loading_screen && window.loading_screen.finish();
+            } else {
+                ecEditor.jQuery('.loading-message').remove();
+                ecEditor.jQuery('.sk-cube-grid').remove();
+                ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
+            }
+        });
+    }, $scope);
+
     org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
-        if (ecEditor.getContext('contentId')) {
-            $scope.loadContent(function(err, res) {
-                if (res) {
-                    // close the loading screen
-                    ecEditor.dispatchEvent('content:title:update', res.name);
-                    ecEditor.dispatchEvent('sidebar:show');
-                    ecEditor.dispatchEvent("atpreview:show");
-                    window.loading_screen && window.loading_screen.finish();
-                } else {
-                    ecEditor.jQuery('.loading-message').remove();
-                    ecEditor.jQuery('.sk-cube-grid').remove();
-                    ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
-                }
-            });
-        } else {
-            if (!ecEditor.getContext('framework')) {
+        if (!ecEditor.getContext('contentId')) {
+           if (!ecEditor.getContext('framework')) {
                 var channel = ecEditor.getContext('channel') || "in.ekstep";
                 ecEditor.getService(ServiceConstants.META_SERVICE).getFrameworks(channel, function(err, res) {
                     if (res && res.data) {
