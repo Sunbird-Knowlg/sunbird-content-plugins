@@ -93,8 +93,13 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         });
     }, $scope);
 
-    ecEditor.addEventListener('org.ekstep.genericeditor:preview', function(event, callback) {
-        ecEditor.dispatchEvent("atpreview:show");
+    ecEditor.addEventListener('org.ekstep.genericeditor:preview', function() {
+        var loadingScreen = setInterval (function(){
+            if(window.loading_screen.finishing){             
+                ecEditor.dispatchEvent("atpreview:show");
+                clearInterval (loadingScreen);
+            }
+        },100);
     }, $scope);
 
     org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {

@@ -15,9 +15,7 @@ angular.module('org.ekstep.genericeditorpreview', []).controller('previewControl
 		$scope.$safeApply();
 	});
 	
-	ecEditor.dispatchEvent("org.ekstep.genericeditor:preview", function(){
-		ecEditor.dispatchEvent("atpreview:show");
-	});
+	ecEditor.dispatchEvent("org.ekstep.genericeditor:preview");
 
 	$scope.hidePdfWarningMsg = function(){
 		$scope.showPdfWarningMsg = false;
