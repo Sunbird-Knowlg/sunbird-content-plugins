@@ -12,10 +12,6 @@ angular.module('org.ekstep.mathtext', [])
     $scope.cursorPosition = undefined;
     $scope.text_hint = true;
     $scope.pluginLoadStartTime = new Date();
-    $scope.selectionStart = undefined;
-    $scope.selectionEnd = undefined;
-
-  
     $scope.libraryEquations = [
       {
         "title": "Area of circle",
@@ -63,7 +59,6 @@ angular.module('org.ekstep.mathtext', [])
     //   symbol: <string> // If a literal symbol should be displayed instead of latex
     // }
     // Precedence for display in the UI: latexDisplay -> icon -> symbol -> latex
-
     $scope.symbols = {
       greek: [
         {
@@ -368,7 +363,6 @@ angular.module('org.ekstep.mathtext', [])
       ]
     };
     $scope.symbolGroup = 'all';
-
     $scope.equations = {
       trig: [
         {
@@ -625,6 +619,19 @@ angular.module('org.ekstep.mathtext', [])
         $('.mq-render').each(function (index, element) {
           MQ.StaticMath(element);
         });
+      /**
+       * @description 
+       * - Responsible for returning the range of Cursor from selection Start
+       *   to End through MOUSE EVENT.
+       * - Click event has more priority than select event.
+       */
+      ecEditor.jQuery( '#advInput' ).select(function(selectTextEvent) {
+          $scope.selectionEnd= selectTextEvent.target.selectionEnd
+          $scope.selectionStart= selectTextEvent.target.selectionStart
+       });
+       ecEditor.jQuery( '#advInput' ).on('click',function() {
+         $scope.selectionStart = $scope.selectionEnd = undefined;
+       }); 
       }, 1000);
       $scope.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'MathText' });
     });
@@ -758,27 +765,9 @@ angular.module('org.ekstep.mathtext', [])
       return divElement.textContent || divElement.innerText;
     }
 
-     $timeout( function() {
-      /**
-       * @description 
-       * - Responsible for returning the range of Cursor from selection Start
-       *   to End through MOUSE EVENT.
-       * - Click event has more priority than select event.
-       */
-      setTimeout( function() {
-        ecEditor.jQuery( '#advInput' ).select(function(selectTextEvent) {
-           $scope.selectionEnd= selectTextEvent.target.selectionEnd
-           $scope.selectionStart= selectTextEvent.target.selectionStart
-        });
-        ecEditor.jQuery( '#advInput' ).on('click',function() {
-          $scope.selectionStart = $scope.selectionEnd = undefined;
-        }); 
-      },100);
-     })
-    
     $scope.getCursorPosition = function(e){
       var currentPosition = e.target.selectionEnd;
-      if(!_.isUndefined($scope.selectionStart) && !_.isUndefined($scope.selectionEnd)){
+      if(!_.isUndefined($scope.selectionStart)){
         $scope.cursorPosition = $scope.selectionStart ;
       }else{
         if(e.which == 8){
