@@ -770,10 +770,10 @@ angular.module('org.ekstep.mathtext', [])
       if(!_.isUndefined($scope.selectionStart)){
         $scope.cursorPosition = $scope.selectionStart ;
       }else{
-        if(e.which == 8){
-          $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
+        if(e.which == 8 && currentPosition > 0 ){
+          $scope.cursorPosition = currentPosition -1;
         }else{
-          $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition;
+          $scope.cursorPosition = currentPosition;
         } 
       }
     };
