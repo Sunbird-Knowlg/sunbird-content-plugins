@@ -199,6 +199,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     }
                     $scope.contentService._setContentMeta(ecEditor.getContext('contentId'), metaData);
                     $scope.isLoading = false;
+                    ecEditor.dispatchEvent("meta:after:save", {});
                     $scope.closePopup();
                 }
             });
