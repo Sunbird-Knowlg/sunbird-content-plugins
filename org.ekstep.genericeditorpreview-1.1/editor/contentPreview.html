@@ -1,4 +1,4 @@
-<div class="main" ng-app='org.ekstep.genericeditorpreview' ng-controller='previewController'>
+<div class="main" ng-app='org.ekstep.genericeditorpreview' ng-controller='previewController' ng-init="init()">
     <div class="ui raised card child preview-iframe-wrapper" id="previewContentIframeWrapper" ng-show='showPreview'>
         <div class="field pdf-warning-message {{showPdfWarningMsg ? 'visible' : 'transition hidden';}}">
             <div class="ui icon warning message">

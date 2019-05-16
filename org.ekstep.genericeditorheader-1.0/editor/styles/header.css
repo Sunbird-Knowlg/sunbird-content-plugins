@@ -204,7 +204,6 @@ body {
 .label-icon-box-text {
     position: relative;
     left: -10px;
-    font-family: HelveticaNeueLTStd-Lt, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     cursor: pointer;
     font-size: 11px;
 }

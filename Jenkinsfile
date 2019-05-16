@@ -36,6 +36,7 @@ node() {
                 }
                 
                 
+                
                 stage('ArchiveArtifacts') {
                     sh """
                         mkdir content-plugins-artifacts

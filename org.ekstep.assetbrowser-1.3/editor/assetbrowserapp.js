@@ -99,6 +99,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.assetId = undefined;
     ctrl.tabSelected = "my";
     ctrl.showPreview = false;
+    ctrl.filterType = "all";
     ctrl.assetMeta = {
         'name': '',
         'keywords': [],
@@ -250,13 +251,19 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
         ctrl.buttonToShow = 'select';
 
-        (searchText === "") ? searchText = undefined: null;
-        callback = ctrl.setCallback(callback)
-        callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
+
+
         ctrl.selectBtnDisable = true;
-        ctrl.setSearchFilter(ctrl.videoMimeTypes.all, new Array('Asset'), ctrl.createdBy)
-        var mediaType = ctrl.getMediaType();
-        callback && instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), ctrl.createdBy, ctrl.offset = 0, callback);
+        if(instance.mediaType == "video") {
+            ctrl.applyVideoFilter();
+        } else {
+            (searchText === "") ? searchText = undefined: null;
+            callback = ctrl.setCallback(callback)
+            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
+            ctrl.setSearchFilter(ctrl.videoMimeTypes.all, new Array('Asset'), ctrl.createdBy)
+            var mediaType = ctrl.getMediaType();
+            callback && instance.getAsset(searchText, mediaType, ctrl.plugin, new Array('Asset'), ctrl.createdBy, ctrl.offset = 0, callback);
+        }
     }
     ctrl.getMediaType = function() {
         if (instance.mediaType === "image") {
@@ -289,15 +296,20 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
         ctrl.buttonToShow = 'select';
 
-        (searchText === "") ? searchText = undefined: null;
-        callback = ctrl.setCallback(callback)
 
-        callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
         ctrl.selectBtnDisable = true;
 
-        contentType = (ctrl.plugin == 'video') ? new Array('Asset', 'Resource') : new Array('Asset')
-        ctrl.setSearchFilter(ctrl.videoMimeTypes.all,  new Array('Asset','Resource'), undefined)
-        callback && instance.getAsset(searchText, ctrl.getMediaType(), ctrl.plugin, contentType, null, ctrl.offset=0 , callback);
+        if(instance.mediaType == "video") {
+            ctrl.applyVideoFilter();
+        } else {
+            (searchText === "") ? searchText = undefined: null;
+            callback = ctrl.setCallback(callback)
+
+            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck() && ctrl.toggleVideoCheck()
+            contentType =  new Array('Asset')
+            ctrl.setSearchFilter(ctrl.videoMimeTypes.all,  new Array('Asset','Resource'), undefined)
+            callback && instance.getAsset(searchText, ctrl.getMediaType(), ctrl.plugin, contentType, null, ctrl.offset=0 , callback);
+        }
     }
 
     function showLoader() {
@@ -1185,6 +1197,35 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             icon: 'fa fa-warning'
         });
     }
+    ctrl.applyVideoFilter = function() {
+        var value = ctrl.filterType;
+        ctrl.offset =0
+        var searchText = (ctrl.query === "") ? undefined : ctrl.query;
+        var selectedValue, contentType, createdBy;
+        contentType = new Array('Asset');
+        if (value == 'youtube') {
+            selectedValue = ctrl.videoMimeTypes.youtube
+        } else if (value == 'video') {
+            selectedValue = ctrl.videoMimeTypes.video
+        } else {
+            selectedValue = ctrl.videoMimeTypes.all
+        }
+
+
+        if (ctrl.tabSelected == 'all') {
+            createdBy = undefined;
+            if ((value == 'all') || (value == 'youtube')) {
+                contentType.push('Resource');
+            }
+        } else if (ctrl.tabSelected == 'my') {
+            createdBy = ctrl.createdBy;
+        }
+        ctrl.searchFilter.createdBy = createdBy;
+        ctrl.searchFilter.mimeType = selectedValue;
+        ctrl.searchFilter.contentType = contentType;
+        instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType, ctrl.searchFilter.createdBy, ctrl.offset, videoAssetCb);
+    }
+
     setTimeout(function() {
         ctrl.pluginLoadStartTime = new Date();
         ctrl.myTabScrollElement = "my-"+instance.mediaType+"-tab";
@@ -1253,39 +1294,22 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             });
         ecEditor.jQuery('#myVideoDropDown')
             .dropdown({
-                onChange: function(value) {
+                onChange: function(value, text, $selectedItem) {
                     /**check if searchText is blank**/
-                    ctrl.offset =0
-
-                    searchText = (ctrl.query === "") ? undefined : ctrl.query;
-                    var selectedValue = (value != 'myvideos') ? value.split(',') : ctrl.videoMimeTypes.all;
-                    ctrl.searchFilter.mimeType = selectedValue;
-                    ctrl.searchFilter.contentType = new Array('Asset');
-                    ctrl.searchFilter.createdBy = ctrl.createdBy;
-                    instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType ,ctrl.searchFilter.createdBy, ctrl.offset, videoAssetCb);
+                    ctrl.filterType = value;
+                    ecEditor.jQuery('#myVideoDropDown').find('.text').first().text(text);
+                    ecEditor.jQuery('#allVideoDropDown').find('.text').first().text(text);
+                    ctrl.applyVideoFilter();
                 }
             });
         ecEditor.jQuery('#allVideoDropDown')
             .dropdown({
-                onChange: function (value) {
+                onChange: function (value, text, $selectedItem) {
                     /**check if searchText is blank**/
-                    ctrl.offset = 0;
-                    searchText = (ctrl.query === "") ? undefined : ctrl.query;
-                    var selectedValue, contentType;
-                    if (value == 'allvideos') {
-                        selectedValue = ctrl.videoMimeTypes.all;
-                        contentType = new Array('Asset', 'Resource')
-                    } else if (value == 'allYouTube') {
-                        selectedValue = ctrl.videoMimeTypes.youtube
-                        contentType = new Array('Asset', 'Resource')
-                    } else {
-                        selectedValue = value.split(',')
-                        contentType = new Array('Asset')
-                    }
-                    ctrl.searchFilter.mimeType = selectedValue;
-                    ctrl.searchFilter.contentType = contentType;
-                    ctrl.searchFilter.createdBy = undefined;
-                    instance.getAsset(searchText, ctrl.searchFilter.mimeType, 'video', ctrl.searchFilter.contentType, undefined, ctrl.offset, videoAssetCb);
+                    ctrl.filterType = value;
+                    ecEditor.jQuery('#allVideoDropDown').find('.text').first().text(text);
+                    ecEditor.jQuery('#myVideoDropDown').find('.text').first().text(text);
+                    ctrl.applyVideoFilter();
                 }
             });
 

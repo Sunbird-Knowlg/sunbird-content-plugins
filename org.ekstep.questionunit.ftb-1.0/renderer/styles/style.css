@@ -4,7 +4,6 @@
   line-height: 2em;
   width: 80%;
   margin-top: 2%;
-  /* display: grid; */
   height: 80%;
 }
 
@@ -49,6 +48,7 @@
 #image-model-popup .popup-overlay{
   opacity:0.8;
 }
+/*Pop up */
 #image-model-popup .popup-full-body{
   width:auto;
   margin:auto;
@@ -99,8 +99,8 @@
 }
 
 .align-question {
-  margin: 33px 0px 0px 2px;
-  height: 35vh;
+  margin: 12px 0px 0px 2px;
+  height: 30vh;
   overflow-y: auto;
 }
 

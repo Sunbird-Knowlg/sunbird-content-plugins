@@ -93,6 +93,15 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         });
     }, $scope);
 
+    ecEditor.addEventListener('org.ekstep.genericeditor:preview', function() {
+        var loadingScreen = setInterval (function(){
+            if(window.loading_screen.finishing){             
+                ecEditor.dispatchEvent("atpreview:show");
+                clearInterval (loadingScreen);
+            }
+        },100);
+    }, $scope);
+
     org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
         var startTime = (new Date()).getTime()
         if (ecEditor.getContext('contentId')) {
@@ -101,7 +110,6 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
                     // close the loading screen
                     ecEditor.dispatchEvent('content:title:update', res.name);
                     ecEditor.dispatchEvent('sidebar:show');
-                    ecEditor.dispatchEvent("atpreview:show");
                     window.loading_screen && window.loading_screen.finish();
                     org.ekstep.services.telemetryService.impression({
                         type: 'edit',

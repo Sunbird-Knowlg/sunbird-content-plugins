@@ -108,6 +108,7 @@ angular.module('createquestionapp', [])
             "objectType": [
               "AssessmentItem"
             ],
+            "version": [1,2],
             "status": ["Live"]
           },
           "sort_by": {
