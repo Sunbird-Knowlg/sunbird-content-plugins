@@ -112,7 +112,12 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
       var temp = {};
       temp[key+1] = instance.getTelemetryParamsValue(option);
-      answer.push(instance.seq_rearranged[key].toString());
+      var answerIndex = questionData.options.findIndex(function(seq){
+        if(seq.sequenceOrder == key+1){
+          return true;
+        }
+      })
+      answer.push((answerIndex+1) +'');
       params.push(temp);
     });
     params.push({'answer':JSON.stringify({'seq': answer})});
@@ -126,10 +131,16 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     _.each(options, function(obj, index){
       rerenderedOptions.push(_.findWhere(options, {sequenceOrder: instance.seq_rearranged[index]}));
     });
-    _.each(rerenderedOptions,function(obj,key) {
+    _.each(instance.seq_rearranged,function(seqIndex,index) {
       var value = {};
-      var index = instance.seq_rearranged[key];
-      value[index] = instance.getTelemetryParamsValue(obj);
+      var index = options.findIndex(function(seq){
+        if(seq.sequenceOrder == seqIndex){
+            return true;
+        }
+      })
+      value[index + 1] = instance.getTelemetryParamsValue(options.find(function(seq) {
+        return seq.sequenceOrder == seqIndex;
+      }));
       resValues.push(value);
     });    
     return resValues;
