@@ -25,6 +25,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.contenteditor:discardFlag", this.discardContentFlag, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:retire", this.retireContent, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:unlistedPublish", this.unlistedPublishContent, this);
+        ecEditor.addEventListener("org.ekstep.contenteditor:updateVersionKey", this.updateHierarchyVersionKey, this);
     },
     setEditorState: function(event, data) {
         if (data) this.editorState = data;
@@ -598,6 +599,12 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
             data.callback && data.callback(err, res);
         });
+    },
+    updateHierarchyVersionKey: function(){
+        var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (metaData && metaData.versionKey){
+            org.ekstep.collectioneditor.cache.nodesModified[metaData.identifier].metadata.versionKey = metaData.versionKey;
+        }
     }
 });
 
