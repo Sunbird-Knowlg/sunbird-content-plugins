@@ -420,6 +420,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var nodes = { validNodes: [], invalidNodes: [] }
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
+        var ContentMetaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (contentBody) {
             //angular.toJson to remove $$hashKey from scope object
             contentBody = JSON.parse(angular.toJson(contentBody));
@@ -441,6 +442,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                     }
                 });
             });
+        }
+
+        if (ContentMetaData && ContentMetaData.versionKey){
+            org.ekstep.collectioneditor.cache.nodesModified[ContentMetaData.identifier].metadata.versionKey = ContentMetaData.versionKey;
         }
         var isvalid = isValidSave();
         this.lowlightNode(nodes.validNodes);
