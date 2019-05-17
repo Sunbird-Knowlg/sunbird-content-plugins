@@ -25,7 +25,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.contenteditor:discardFlag", this.discardContentFlag, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:retire", this.retireContent, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:unlistedPublish", this.unlistedPublishContent, this);
-        ecEditor.addEventListener("org.ekstep.contenteditor:updateVersionKey", this.updateHierarchyVersionKey, this);
     },
     setEditorState: function(event, data) {
         if (data) this.editorState = data;
@@ -409,6 +408,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var nodes = { validNodes: [], invalidNodes: [] }
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
+        var ContentMetaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (contentBody) {
             //angular.toJson to remove $$hashKey from scope object
             contentBody = JSON.parse(angular.toJson(contentBody));
@@ -430,6 +430,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                     }
                 });
             });
+        }
+
+        if (ContentMetaData && ContentMetaData.versionKey){
+            org.ekstep.collectioneditor.cache.nodesModified[ContentMetaData.identifier].metadata.versionKey = ContentMetaData.versionKey;
         }
         var isvalid = isValidSave();
         this.lowlightNode(nodes.validNodes);
@@ -599,12 +603,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
             data.callback && data.callback(err, res);
         });
-    },
-    updateHierarchyVersionKey: function(){
-        var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        if (metaData && metaData.versionKey){
-            org.ekstep.collectioneditor.cache.nodesModified[metaData.identifier].metadata.versionKey = metaData.versionKey;
-        }
     }
 });
 
