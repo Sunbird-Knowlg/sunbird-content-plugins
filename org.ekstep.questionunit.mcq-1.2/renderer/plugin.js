@@ -104,8 +104,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
       var temp = {};
       temp[key+1] = instance.getTelemetryParamsValue(option);
-      var index = MCQController.pluginInstance._selectedIndex + 1
-      if(option.isCorrect) correctAnsIndex.push(index.toString());
+      if(option.isCorrect) correctAnsIndex.push((key+1).toString());
       params.push(temp);
     });
     answer.correct = correctAnsIndex;

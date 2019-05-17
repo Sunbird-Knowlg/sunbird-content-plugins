@@ -164,7 +164,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     rhsOptions = _.sortBy(rhsRearranged, 'mapIndex');
     _.each(rhsOptions, function(val, i){
       var rhsIndex = _.findIndex(rhsRearranged, {text: val.text});
-      rhs.push(rhsIndex+1);
+      rhs.push((rhsIndex+1).toString());
     });
     answer = {'lhs': lhs, 'rhs':rhs};
     return JSON.stringify(answer);
