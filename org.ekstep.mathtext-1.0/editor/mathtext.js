@@ -422,7 +422,7 @@ angular.module('org.ekstep.mathtext', [])
           latex: "\\int _{ }^{ }"
         },
         {
-          latex: "\oint"
+          latex: "\\oint"
         }
       ],
       supsub: [
