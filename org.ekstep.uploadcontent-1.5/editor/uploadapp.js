@@ -173,6 +173,15 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             $scope.showLoader(false);
             return;
         }
+        if(($scope.uploader.getFile(0).name).indexOf(' ') >= 0) {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'File name should not contain empty space',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.showLoader(false);
+            return;
+        }
 
         var fileUpload = false;
         if ($scope.uploader.getFile(0) != null) {
