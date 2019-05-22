@@ -446,7 +446,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
-            _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
+            // _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
             $scope.$safeApply();
         }, 0)
     }
