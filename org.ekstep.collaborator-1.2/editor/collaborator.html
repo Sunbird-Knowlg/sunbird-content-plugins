@@ -27,7 +27,7 @@
                     <li id="view-all-results" ng-if="searchRes.content.length > 5" ng-click="viewAllResults()" class="color-blue view-all"><span>View All Results</span></li>
                 </ul>
                 <ul class="searchList" ng-show="!searchRes.content.length && searchKeyword.length >= 3 && searchRes.isEmptyResponse">
-                    <li class="searchResultMsg"><strong>No Results</strong><p>Your search returned no results</p></li>
+                    <li class="searchResultMsg"><strong>No Results</strong></li>
                 </ul>
                 <ul class="searchList" ng-show="searchRes.errorMessage.length  && (searchKeyword.length >= 3)">
                     <strong class="searchResultMsg">{{searchRes.errorMessage}}</strong>
