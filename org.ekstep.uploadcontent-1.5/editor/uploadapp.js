@@ -180,7 +180,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         }
         if($scope.validateEmptyFile($scope.uploader.getFile(0).name)) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'File name should not contain empty space',
+                message: 'File name cannot be empty',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
@@ -188,7 +188,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             return;
         }else if(($scope.uploader.getFile(0).name).length > 256) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'File name should not exceed more than 256 characters',
+                message: 'File name should not have more than 256 characters',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
