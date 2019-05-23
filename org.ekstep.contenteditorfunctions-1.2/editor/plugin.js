@@ -422,7 +422,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         var contentMetaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         
         if (contentMetaData && contentMetaData.versionKey){
-            org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier].metadata.versionKey = contentMetaData.versionKey;
+            if(org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier] && org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier].metadata){
+                org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier].metadata.versionKey = contentMetaData.versionKey;
+            }
         }
 
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
