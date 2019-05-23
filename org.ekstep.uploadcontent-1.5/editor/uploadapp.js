@@ -161,6 +161,11 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         return false;
     }
 
+    $scope.validateEmptyFile = function(fileName) {
+        fileName = fileName.split('.');
+        return fileName[0] == "" ? true: false;
+    }
+
     $scope.upload = function() {
         $scope.generateTelemetry({id:"button", type:"click", subtype:"upload",target:"browseButton",objecttype:'content'})
         $scope.showLoader(true);
@@ -173,9 +178,17 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             $scope.showLoader(false);
             return;
         }
-        if(($scope.uploader.getFile(0).name).indexOf(' ') >= 0) {
+        if($scope.validateEmptyFile($scope.uploader.getFile(0).name)) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                 message: 'File name should not contain empty space',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.showLoader(false);
+            return;
+        }else if(($scope.uploader.getFile(0).name).length > 256) {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'File name should not exceed more than 256 characters',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
