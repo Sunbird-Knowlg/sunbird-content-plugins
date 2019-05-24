@@ -150,10 +150,9 @@ angular.module('createquestionapp', [])
               data.request.filters.subject = value;
               break;
             case "questionType":
-              ecEditor._.forEach($scope.questionTypes, function (val, key) { // eslint-disable-line no-unused-vars
-                if (value.length && value == val.name) {
-                  data.request.filters.type = val.value;
-                }
+              data.request.filters.type = [];
+              _.each(value, function(val){
+                data.request.filters.type.push(_.find($scope.questionTypes, { 'name': val}).value);
               });
               break;
             case "concepts":
