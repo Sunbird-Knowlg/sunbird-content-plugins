@@ -48,7 +48,23 @@ org.ekstep.contenteditor.basePlugin.extend({
             this.name = this.audioData.title;
             ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", this.audioData);
         } else {
-            this.parent = undefined;
+            org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({
+                'err': 'Asset mismatch: audio source missing in manifest media of content', 
+                'errtype': 'PORTAL', 
+                'stacktrace': 'audio source missing in manifest media of content', 
+                'severity': 'fatal',
+                'pageid': ecEditor.getCurrentStage().id,
+                'plugin': {
+                    'id': instance.manifest.id,
+                    'ver': instance.manifest.ver,
+                    'category': 'core'
+                },
+                'object':{
+                    "id": instance.editorData.asset,
+                    "type": 'Asset', 
+                    "ver": instance.manifest.ver
+                }
+            });
         }
     },
     /**    

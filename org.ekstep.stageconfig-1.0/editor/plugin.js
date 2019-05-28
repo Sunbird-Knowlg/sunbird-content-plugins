@@ -51,9 +51,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var items = [];
         ecEditor._.forEach(this.stageAudios[stageId], function(component) {
-            var plugin = ecEditor.getPluginInstance(component.id);
-            component.autoplay =  plugin.config.autoplay;
-            items.push(component);
+            if(component) {
+                var plugin = ecEditor.getPluginInstance(component.id);
+                component.autoplay =  plugin.config.autoplay;
+                items.push(component);
+            }
         });
         ecEditor.ngSafeApply(instance.scope, function() {
             instance.scope.stageAttachments['audio'] = {};

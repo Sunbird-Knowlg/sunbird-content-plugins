@@ -16,6 +16,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             "mode": "soft",
             "filters": {
                 objectType: ["Content"],
+                visibility: "Default",
                 status: ["Live"]
             },
             "offset": 0,
