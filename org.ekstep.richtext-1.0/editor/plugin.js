@@ -89,6 +89,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                });
                editorObject.attributes.w =  e.target.getWidth();
                editorObject.attributes.h =  e.target.getHeight();
+               editorObject.editorObj.width = e.target.getWidth();
+               editorObject.editorObj.height = e.target.getHeight();
                ecEditor.jQuery("#" + e.target.id).width(e.target.getWidth());
                ecEditor.jQuery("#" + e.target.id).height(e.target.getHeight());
         }
@@ -138,7 +140,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         div.setAttribute("id", instance.data.id);
         div.style.position = 'absolute';
         div.style.fontSize = '14px';
-        div.style.fontFamily = 'NotoSans';
         div.style.width = instance.data.editorObj.width ? instance.data.editorObj.width + 1 + 'px' : "auto";
         div.style.height = instance.data.editorObj.height ? instance.data.editorObj.height + 1 + 'px' : "auto";
         div.style.pointerEvents = "none";

@@ -404,7 +404,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	$scope.questionData.topic = questionData.topic;
     $scope.selectedConceptsData = questionData1.data.config.metadata.concepts;
   	$scope.selectedTopicsData = questionData.topic;
-  	$scope.questionData.questionDesc = questionData1.data.config.metadata.description;
+  	$scope.questionData.description = questionData1.data.config.metadata.description;
   	$scope.questionData.max_score = questionData1.data.config.metadata.max_score;
   	$scope.conceptsCheck = true;
   	$scope.topicsCheck = true;

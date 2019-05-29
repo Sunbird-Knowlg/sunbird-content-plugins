@@ -13,6 +13,10 @@
       {
         "type": "js",
         "src": "editor/ckeditor/ckeditor.js"
+      },
+      {
+        "type": "css",
+        "src": "editor/css/custom_toolbar_style.css"
       }
     ]
   }

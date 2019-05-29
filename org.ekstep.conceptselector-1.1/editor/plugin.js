@@ -9,7 +9,7 @@
  */
 
 org.ekstep.contenteditor.basePlugin.extend({
-    conceptData: undefined,
+    conceptData: [],
     callback: undefined,
     /**
      * set default limit to search API

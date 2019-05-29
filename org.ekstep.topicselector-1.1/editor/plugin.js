@@ -178,7 +178,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (!error) {
                     instance.response = response.data.result.framework.categories;
                     ecEditor._.forEach(instance.response, function (value, key) {
-                        if (value.code == "topic") instance.categories = value.terms;
+                        if (value.code == "topic") instance.categories = value.terms || [];
                         //else instance.terms.push(value.code);
                     });
                 }
