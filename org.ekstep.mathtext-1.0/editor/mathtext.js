@@ -35,7 +35,7 @@ angular.module('org.ekstep.mathtext', [])
       },
       {
         "title": "Slope of a line",
-        "latex": "m=\\frac{y_2-y}{x_2-x_1}"
+        "latex": "m=\\frac{y_2-y_1}{x_2-x_1}"
       },
       {
         "title": "Distance between two points",
