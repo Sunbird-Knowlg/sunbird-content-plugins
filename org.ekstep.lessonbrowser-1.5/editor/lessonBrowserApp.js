@@ -52,6 +52,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             "request": {
                 "filters": {
                     "objectType": ["Content"],
+                    "visibility": "Default",
                     "status": ["Live"]
                 },
                 "sort_by":{"lastUpdatedOn":"desc"}
@@ -247,6 +248,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 "request": {
                     "filters": {
                         "objectType": ["Content"],
+                        "visibility": "Default",
                         "status": ["Live"]
                     },
                     "query": "",
@@ -285,6 +287,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 "request": {
                     "filters": {
                         "objectType": ["Content"],
+                        "visibility": "Default",
                         "status": ["Live"]
                     },
                     "query": ecEditor.jQuery('#resourceSearch').val(),
@@ -416,6 +419,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             let Obj = {
                 request: {
                     source: "web",
+                    filters: {
+                        visibility: "Default"
+                    },
                     name: ecEditor.getContext('pageAPI') || DEFAULT_PAGEAPI
                 }
             }
@@ -499,6 +505,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 "request": {
                     "filters": {
                         "objectType": ["Content"],
+                        "visibility": "Default",
                         "status": ["Live"]
                     },
                     "query": ""

@@ -25,6 +25,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.contenteditor:discardFlag", this.discardContentFlag, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:retire", this.retireContent, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:unlistedPublish", this.unlistedPublishContent, this);
+        ecEditor.addEventListener("org.ekstep.contenteditor:Unauthorized", this.unauthorizedToken, this);
+    },
+    unauthorizedToken: function(){
+        this.popUpValues.headerMsg = 'Your session has timed out due to inactivity. Please login to resume!';
+        this.popUpValues.popUpIcon = 'circle remove red';
+        this.popUpValues.showCloseButton = true;
+        this.popUpValues.unauthorized = 'unauthorized';
     },
     setEditorState: function(event, data) {
         if (data) this.editorState = data;
@@ -205,6 +212,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                 $scope.$on('ngDialog.opened', function(e, $dialog) {
                     instance.isSaveNotificationPopupOpened = true;
                 });
+                //Close the editor and redirect to login page when session out
+                $scope.unauthorizedUser = function() {
+                   if(this.popUpValues.unauthorized == 'unauthorized') 
+                        ecEditor.dispatchEvent("org.ekstep:sunbirdcommonheader:close:editor");
+                };
             }],
             showClose: false,
             closeByEscape: false,
@@ -407,7 +419,16 @@ org.ekstep.contenteditor.basePlugin.extend({
         data = data || {};
         var instance = this;
         var nodes = { validNodes: [], invalidNodes: [] }
+        var contentMetaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        
+        if (contentMetaData && contentMetaData.versionKey){
+            if(org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier] && org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier].metadata){
+                org.ekstep.collectioneditor.cache.nodesModified[contentMetaData.identifier].metadata.versionKey = contentMetaData.versionKey;
+            }
+        }
+
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
+        
         if (contentBody) {
             //angular.toJson to remove $$hashKey from scope object
             contentBody = JSON.parse(angular.toJson(contentBody));
@@ -430,6 +451,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 });
             });
         }
+
         var isvalid = isValidSave();
         this.lowlightNode(nodes.validNodes);
         if (_.size(nodes.invalidNodes) > 0) {

@@ -150,6 +150,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
 
         $scope.updateDialCode = function (event, data) {
             $scope.dialcodes = "";
+            $scope.errorMessage = "";
             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                 var node = org.ekstep.services.collectionService.getActiveNode();
                 if(node.data.metadata.dialcodes){

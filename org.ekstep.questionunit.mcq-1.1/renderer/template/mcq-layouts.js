@@ -96,7 +96,6 @@ MCQController.grid.getOptionTemplate = function (option, index) {
         <img class="mcq-grid-option-image" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
       </div>\
     <% } %> \
-    <div class="selected-icon"><img src="<%= MCQController.pluginInstance.getDefaultAsset("tick_icon.png") %>"></div>\
     <% if (option.text){ %> \
       <div class="mcq-grid-option-text">\
         <div><%= option.text %></div>\
@@ -236,7 +235,6 @@ MCQController.horizontal.getOptionLayout = function (layout) {
                         <span><%= val.text %></span>\
                   <% } %>\
                     </div>\
-                    <img src="<%= MCQController.pluginInstance.getDefaultAsset("tick_icon.png") %>" class="tick" />\
                 </div>\
               <% }) %>\
               </div>\
@@ -348,9 +346,6 @@ MCQController.vertical2.getOption = function (option, key) {
     <span>\
     <%= option.text %>\
     <span>\
-    </div>\
-    <div class='tick-icon-holder'>\
-    <img src=<%= MCQController.pluginInstance.getDefaultAsset('tick_icon.png') %> style='height: 100%;'>\
     </div>\
     </div>\
     </div>"
@@ -464,11 +459,7 @@ MCQController.grid2.getOption = function (option, key) {
   <%if(!option.image && option.text){%>\
     <div class='mcq2-2-option-text'><%= option.text %></div>\
   <%}%>\
-  <div class='mcq2-2-check-image-holder' >\
-    <img class='mcq2-2-check-image'\
-    src=<%= MCQController.pluginInstance.getDefaultAsset('tick_icon.png') %> />\
   </div>\
-</div>\
 ";
     return _.template(optTemplate)({
         "option": option,

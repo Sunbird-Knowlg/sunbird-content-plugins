@@ -51,7 +51,18 @@
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block.selected {
-    background-color: #8EEBFE;
+    background-color: #7AB4EE;
+    border: solid 2px #024F9D;
+}
+
+#mcq-question-container .mcq-qLeft-content-container .opt-selected {
+    background-color: #7AB4EE;
+    border: solid 2px #024F9D;
+}
+
+#mcq-question-container .mcq-question-container-grid .mcq-grid-option-container .mcq-grid-options-row .mcq-grid-option-wrapper .mcq-grid-option-outer .selected {
+    background-color: #7AB4EE;
+    border: solid 2px #024F9D; 
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block img.audio {
@@ -179,7 +190,8 @@
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block.selected {
-    background-color: #8EEBFE;
+    background-color: #7AB4EE;
+    border: solid 2px #024F9D;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block img.audio {
