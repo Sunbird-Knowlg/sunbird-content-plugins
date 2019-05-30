@@ -1,6 +1,6 @@
 body {
     font-family: NotoSans, NotoSansOriya, NotoSansGujarati, NotoSansMalayalam;
-    line-height: 19px;
+    line-height: 1.6;
 }
 
 /* overiding katex css */
