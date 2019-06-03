@@ -279,7 +279,7 @@ MCQController.vertical2.getTemplate = function (question) {
     var optionsTemplate = MCQController.vertical2.getOptionsTemplate(question.data.options);
     return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
         questionTemplate + 
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + 
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) + 
         optionsTemplate +
         "</div></div>";
 }
@@ -411,7 +411,7 @@ MCQController.grid2.getTemplate = function (question) {
     var optionsTemplate = MCQController.grid2.getOptionsTemplate(question.data.options)
     return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
         questionTemplate +
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + optionsTemplate +
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) + optionsTemplate +
         "</div></div>";
 }
 

@@ -120,11 +120,17 @@ org.ekstep.questionunit.backgroundComponent = {
         bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
         bgColor: "#5DC4F5"
     },
-    getBackgroundGraphics: function () {
+    getBackgroundGraphics: function (layoutType) {
         org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
+        if(layoutType === 'grid2' || layoutType === 'vertical2'){
+            return '\
+            <div class="bg-graphics left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            '
+        } else {
         return '\
             <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
             '
+        }
     }
 };
 
