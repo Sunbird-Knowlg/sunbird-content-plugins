@@ -163,16 +163,17 @@ MCQController.grid.getOptionsTemplate = function (options) {
  * @param {object} question 
  */
 MCQController.grid.getTemplate = function (question) {
+    var wrapperEnd = '</div>';
     var template =
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
         '<div class="mcq-question-container-grid plugin-content-container">\
     <div class="mcq-grid-question-container question-content-container">' +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent() +
-        '</div>\
-    <div class="mcq-grid-option-container"><div>' +
+        wrapperEnd +
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +  
+     '<div class="mcq-grid-option-container"><div>' +
         MCQController.grid.getOptionsTemplate(question.data.options) +
         '</div></div>\
-    </div>';
+    </div></div>';
     return template;
 }
 
@@ -188,11 +189,12 @@ MCQController.horizontal.getTemplateForLayout = function (layout) {
     var wrapperEndQuestionComponent = '</div>';
     var wrapperEnd = '</div>';
     var layoutTemplate = MCQController.horizontal.getOptionLayout(layout);
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
+    return '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
         wrapperStartQuestionComponent +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
-        layoutTemplate +
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
+        layoutTemplate + wrapperEnd +
         wrapperEnd;
 }
 
@@ -275,9 +277,11 @@ MCQController.vertical2 = MCQController.vertical2 || jQuery.extend({}, MCQContro
 MCQController.vertical2.getTemplate = function (question) {
     var questionTemplate = MCQController.vertical2.getQuestionTemplate(question);
     var optionsTemplate = MCQController.vertical2.getOptionsTemplate(question.data.options);
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + "<div class='mcq-qLeft-content-container plugin-content-container'>" +
-        questionTemplate + optionsTemplate +
-        "</div>";
+    return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
+        questionTemplate + 
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + 
+        optionsTemplate +
+        "</div></div>";
 }
 
 /**
@@ -405,9 +409,10 @@ MCQController.grid2 = MCQController.grid2 || jQuery.extend({}, MCQController.lay
 MCQController.grid2.getTemplate = function (question) {
     var questionTemplate = MCQController.vertical2.getQuestionTemplate(question);
     var optionsTemplate = MCQController.grid2.getOptionsTemplate(question.data.options)
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + "<div class='mcq-qLeft-content-container plugin-content-container'>" +
-        questionTemplate + optionsTemplate +
-        "</div>";
+    return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
+        questionTemplate +
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + optionsTemplate +
+        "</div></div>";
 }
 
 /**
@@ -477,7 +482,7 @@ MCQController.grid2.optionStyleUponClick = function (element) {
  * @param {object} event 
  * @param {number} index 
  */
-MCQController.grid2.onOptionSelected = function (event, index) {    
+MCQController.grid2.onOptionSelected = function (event, index) {
     var optElt = $(event.target);
     MCQController.grid2.optionStyleUponClick(optElt);
     MCQController.pluginInstance.onOptionSelected(event, index);

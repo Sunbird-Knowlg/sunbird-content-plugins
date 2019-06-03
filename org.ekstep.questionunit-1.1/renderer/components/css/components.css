@@ -187,10 +187,8 @@ body {
 }
 
 .bg-graphics {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    position: relative;
+    overflow: auto;
     height: 100%;
 }
 
