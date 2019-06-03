@@ -423,6 +423,9 @@ MCQController.grid2.adjustOptions = function (question) {
     var optLength = question.data.options.length;
     if (optLength == 2) {
         $(".mcq2-2-option").css("margin-top", "15%");
+        if(question.config.layout.toLowerCase() === 'grid2'){
+            $(".mcq2-2-option").css("width", "40%");
+        }
     } else if (optLength == 3) {
         $(".mcq2-2-option3").css("margin-left", "17.15%");
     }
