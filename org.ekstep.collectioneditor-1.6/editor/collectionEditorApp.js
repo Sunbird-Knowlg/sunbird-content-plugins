@@ -136,6 +136,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 configuration.context = {
                     'mode':'edit',
                     'contentId': ecEditor.getContext('contentId'),
+                    'did' : ecEditor.getContext('did'),
+                    'tags' : ecEditor.getContext('tags'),
+                    'rollup' : ecEditor.getContext('contextRollUp'),
                     'sid': ecEditor.getContext('sid'),
                     'uid': ecEditor.getContext('uid'), 
                     'channel': ecEditor.getContext('channel') || "in.ekstep", 
