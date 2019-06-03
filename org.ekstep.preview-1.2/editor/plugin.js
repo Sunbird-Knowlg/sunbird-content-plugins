@@ -77,7 +77,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             'contentId': ecEditor.getContext('contentId'),
             'did' : ecEditor.getContext('did'),
             'tags' : ecEditor.getContext('tags'),
-            'rollup' : ecEditor.getContext('contextRollUp'),
+            'contextRollUp' : ecEditor.getContext('contextRollUp'),
             'sid': ecEditor.getContext('sid'),
             'uid': ecEditor.getContext('uid'),
             'channel': ecEditor.getContext('channel') || "in.ekstep",

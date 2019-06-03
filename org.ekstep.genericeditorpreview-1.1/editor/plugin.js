@@ -55,7 +55,7 @@ org.ekstep.genericeditor.basePlugin.extend({
                     'uid': ecEditor.getContext('uid'),
                     'did' : ecEditor.getContext('did'),
                     'tags' : ecEditor.getContext('tags'),
-                    'rollup' : ecEditor.getContext('contextRollUp'),
+                    'contextRollUp' : ecEditor.getContext('contextRollUp'),
                     'channel': ecEditor.getContext('channel') || "in.ekstep",
                     'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"},
                     'app': userData.etags.app || [],
