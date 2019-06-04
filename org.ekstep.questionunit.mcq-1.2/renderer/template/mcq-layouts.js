@@ -169,7 +169,7 @@ MCQController.grid.getTemplate = function (question) {
     <div class="mcq-grid-question-container question-content-container">' +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent() +
         wrapperEnd +
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +  
+        MCQController.backgroundComponent.getBackgroundGraphics() +  
      '<div class="mcq-grid-option-container"><div>' +
         MCQController.grid.getOptionsTemplate(question.data.options) +
         '</div></div>\
@@ -279,7 +279,7 @@ MCQController.vertical2.getTemplate = function (question) {
     var optionsTemplate = MCQController.vertical2.getOptionsTemplate(question.data.options);
     return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
         questionTemplate + 
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) + 
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +  
         optionsTemplate +
         "</div></div>";
 }
@@ -411,7 +411,8 @@ MCQController.grid2.getTemplate = function (question) {
     var optionsTemplate = MCQController.grid2.getOptionsTemplate(question.data.options)
     return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
         questionTemplate +
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) + optionsTemplate +
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) 
+        + optionsTemplate +
         "</div></div>";
 }
 
@@ -422,12 +423,10 @@ MCQController.grid2.getTemplate = function (question) {
 MCQController.grid2.adjustOptions = function (question) {
     var optLength = question.data.options.length;
     if (optLength == 2) {
-        $(".mcq2-2-option").css("margin-top", "15%");
-        if(question.config.layout.toLowerCase() === 'grid2'){
-            $(".mcq2-2-option").css("width", "40%");
-        }
+        $(".mcq2-2-option").css("margin-top", "28%");
     } else if (optLength == 3) {
-        $(".mcq2-2-option3").css("margin-left", "17.15%");
+        $(".mcq2-2-option3").css("margin-left", "30.15%");
+       
     }
 }
 
@@ -436,6 +435,9 @@ MCQController.grid2.adjustOptions = function (question) {
  * @param {object} question the question object
  */
 MCQController.grid2.postRender = function (question) {
+    if(question.config.layout.toLowerCase() === 'grid2'){
+        $(".mcq2-2-option").css("width", "40%", "margin-top", "3%", "margin-bottom", "3%");
+    }
     if (question.data.options.length < 4) {
         MCQController.grid2.adjustOptions(question);
     }
@@ -494,5 +496,27 @@ MCQController.grid2.onOptionSelected = function (event, index) {
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
 }
+
+MCQController.backgroundComponent = {
+    settings: {
+        bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
+        bgColor: "#5DC4F5"
+    },
+    getBackgroundGraphics: function (layoutType) {
+        org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
+        if (layoutType === 'grid2' || layoutType === 'vertical2') {
+            return '\
+            <div class="bg-graphics left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+             <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+            '
+        } else {
+            return '\
+        <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+        '
+        }
+    }
+};
+
 
 //# sourceURL=mcq-layouts.js
