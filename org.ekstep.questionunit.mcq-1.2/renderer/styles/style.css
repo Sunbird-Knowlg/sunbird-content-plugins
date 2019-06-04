@@ -1164,8 +1164,10 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option-image {
+    height: 100%;
+    width: 100%;
     margin-top: 0%;
-    max-height: 46.411%;
+    max-height: 40.411%;
     max-width: 40.164%;
     position: absolute;
     object-fit: contain;
