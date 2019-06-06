@@ -40,6 +40,16 @@ describe("Ekstep contenteditorfunction Plugin:", function() {
             expect(pluginInstance.dialcodeLink).toHaveBeenCalled();
             done();
         });
+
+        it('Should invoke dialcodelink method to save dialcode and dialcode is empty string', function (done) {
+            var dialcodeMap = "";
+            org.ekstep.services.stateService.state = {'invaliddialCodeMap':'invalid'};
+            spyOn(pluginInstance, "dialcodeLink").and.callThrough();
+            pluginInstance.dialcodeLink(dialcodeMap);
+            expect(pluginInstance.dialcodeLink).not.toBeUndefined();
+            expect(pluginInstance.dialcodeLink).toHaveBeenCalled();
+            done();
+        });
     
     });
 })
