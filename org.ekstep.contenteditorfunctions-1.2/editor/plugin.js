@@ -525,7 +525,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
         var dialcodesUpdated = false;
         ecEditor._.forIn(nodesModified, function(node) {
-            if(node.metadata.dialcodes && !dialcodesUpdated){
+            if(!_.isUndefined(node.metadata.dialcodes) && !dialcodesUpdated){
                 dialcodesUpdated = true;
             }else{
                 var dialObj =  _.find(mapArr,function(Obj){
@@ -541,7 +541,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     dialcodeLink: function(dialcodeMap) {
-        var dialcodeMapObj = _.find(dialcodeMap, 'dialcode');
+        var dialcodeMapObj = _.find(dialcodeMap, function(o){
+		    return o.dialcode != undefined
+        });
         if(!_.isEmpty(dialcodeMap)){
             var request = {
                 "request": {
