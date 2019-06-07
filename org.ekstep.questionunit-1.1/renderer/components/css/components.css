@@ -187,11 +187,13 @@ body {
 }
 
 .bg-graphics {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    position: relative;
+    overflow: auto;
     height: 100%;
+}
+
+.left2{
+    left: 2%;
 }
 
 .bg-graphics .bg-circle {

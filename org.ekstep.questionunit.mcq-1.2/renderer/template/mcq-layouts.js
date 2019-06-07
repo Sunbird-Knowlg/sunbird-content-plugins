@@ -163,16 +163,17 @@ MCQController.grid.getOptionsTemplate = function (options) {
  * @param {object} question 
  */
 MCQController.grid.getTemplate = function (question) {
+    var wrapperEnd = '</div>';
     var template =
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
         '<div class="mcq-question-container-grid plugin-content-container">\
     <div class="mcq-grid-question-container question-content-container">' +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent() +
-        '</div>\
-    <div class="mcq-grid-option-container"><div>' +
+        wrapperEnd +
+        MCQController.backgroundComponent.getBackgroundGraphics() +  
+     '<div class="mcq-grid-option-container"><div>' +
         MCQController.grid.getOptionsTemplate(question.data.options) +
         '</div></div>\
-    </div>';
+    </div></div>';
     return template;
 }
 
@@ -188,11 +189,12 @@ MCQController.horizontal.getTemplateForLayout = function (layout) {
     var wrapperEndQuestionComponent = '</div>';
     var wrapperEnd = '</div>';
     var layoutTemplate = MCQController.horizontal.getOptionLayout(layout);
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
+    return '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
         wrapperStartQuestionComponent +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
-        layoutTemplate +
+        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
+        layoutTemplate + wrapperEnd +
         wrapperEnd;
 }
 
@@ -275,9 +277,11 @@ MCQController.vertical2 = MCQController.vertical2 || jQuery.extend({}, MCQContro
 MCQController.vertical2.getTemplate = function (question) {
     var questionTemplate = MCQController.vertical2.getQuestionTemplate(question);
     var optionsTemplate = MCQController.vertical2.getOptionsTemplate(question.data.options);
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + "<div class='mcq-qLeft-content-container plugin-content-container'>" +
-        questionTemplate + optionsTemplate +
-        "</div>";
+    return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
+        questionTemplate + 
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +  
+        optionsTemplate +
+        "</div></div>";
 }
 
 /**
@@ -405,9 +409,11 @@ MCQController.grid2 = MCQController.grid2 || jQuery.extend({}, MCQController.lay
 MCQController.grid2.getTemplate = function (question) {
     var questionTemplate = MCQController.vertical2.getQuestionTemplate(question);
     var optionsTemplate = MCQController.grid2.getOptionsTemplate(question.data.options)
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + "<div class='mcq-qLeft-content-container plugin-content-container'>" +
-        questionTemplate + optionsTemplate +
-        "</div>";
+    return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
+        questionTemplate +
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) 
+        + optionsTemplate +
+        "</div></div>";
 }
 
 /**
@@ -417,9 +423,10 @@ MCQController.grid2.getTemplate = function (question) {
 MCQController.grid2.adjustOptions = function (question) {
     var optLength = question.data.options.length;
     if (optLength == 2) {
-        $(".mcq2-2-option").css("margin-top", "15%");
+        $(".mcq2-2-option").css("margin-top", "28%");
     } else if (optLength == 3) {
-        $(".mcq2-2-option3").css("margin-left", "17.15%");
+        $(".mcq2-2-option3").css("margin-left", "30.15%");
+       
     }
 }
 
@@ -428,6 +435,9 @@ MCQController.grid2.adjustOptions = function (question) {
  * @param {object} question the question object
  */
 MCQController.grid2.postRender = function (question) {
+    if(question.config.layout.toLowerCase() === 'grid2'){
+        $(".mcq2-2-option").css("width", "40%", "margin-top", "3%", "margin-bottom", "3%");
+    }
     if (question.data.options.length < 4) {
         MCQController.grid2.adjustOptions(question);
     }
@@ -477,7 +487,7 @@ MCQController.grid2.optionStyleUponClick = function (element) {
  * @param {object} event 
  * @param {number} index 
  */
-MCQController.grid2.onOptionSelected = function (event, index) {    
+MCQController.grid2.onOptionSelected = function (event, index) {
     var optElt = $(event.target);
     MCQController.grid2.optionStyleUponClick(optElt);
     MCQController.pluginInstance.onOptionSelected(event, index);
@@ -486,5 +496,27 @@ MCQController.grid2.onOptionSelected = function (event, index) {
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
 }
+
+MCQController.backgroundComponent = {
+    settings: {
+        bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
+        bgColor: "#5DC4F5"
+    },
+    getBackgroundGraphics: function (layoutType) {
+        org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
+        if (layoutType === 'grid2' || layoutType === 'vertical2') {
+            return '\
+            <div class="bg-graphics left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+             <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+            '
+        } else {
+            return '\
+        <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+        '
+        }
+    }
+};
+
 
 //# sourceURL=mcq-layouts.js

@@ -123,9 +123,9 @@ org.ekstep.questionunit.backgroundComponent = {
     getBackgroundGraphics: function () {
         org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
         return '\
-            <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
-                <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
-            </div >'
+        <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+        '
     }
 };
 

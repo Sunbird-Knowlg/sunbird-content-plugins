@@ -922,7 +922,7 @@ span.qc-option-txt {
 
 .mcq-grid-question-container {
     width: 100vw;
-    height: 22.22vh;
+    height: 23.5%;
     position: relative;
     font-size: 14px;
 }
@@ -972,7 +972,7 @@ span.qc-option-txt {
 
 .mcq-grid-option-image-container {
     width: 100%;
-    height: 100%;
+    height: 22vh;
     position: relative;
     background-size: contain;
     margin: auto;
@@ -1114,7 +1114,7 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option2 {
-    margin-left: 1.575%;
+    margin-left: 10.575%;
 }
 
 .mcq2-2-option3 {
@@ -1123,13 +1123,20 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option4 {
-    margin-left: 1.575%;
+    margin-left: 10.575%;
+    margin-top: 1.95%;
+}
+
+.mcq2-2-option5 {
+    margin-left: 3.15%;
     margin-top: 1.95%;
 }
 
 .mcq2-2-option {
-    height: 48.411%;
-    width: 27.164%;
+    height: 41.411%;
+    width: 40%;
+    margin-top: 3%;
+    margin-bottom: 3%;
     background: #ffffff;
     float: left;
     border-radius: 4px;
@@ -1157,9 +1164,11 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option-image {
+    height: 100%;
+    width: 100%;
     margin-top: 0%;
-    max-height: 46.411%;
-    max-width: 26.164%;
+    max-height: 40.411%;
+    max-width: 40.164%;
     position: absolute;
     object-fit: contain;
     overflow: hidden;
@@ -1170,7 +1179,7 @@ span.qc-option-txt {
     padding:0% 2%;
     margin-top: 0%;
     height: 48.411%;
-    width: 27.164%;
+    width: 37.164%;
     position: absolute;
     object-fit: contain;
     overflow: hidden;
@@ -1217,6 +1226,20 @@ span.qc-option-txt {
     align-items: center;
     vertical-align: middle;
     padding-right: 5px;
+}
+
+.left2::-webkit-scrollbar {
+    width: 0.5em;
+}
+.left2::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.left2::-webkit-scrollbar-thumb {
+    background-color: #65A0E6;
+    outline: 1px solid slategrey;
+    border: 0.3em;
+    height: 75%;
+    width: 75%;
 }
 
 .mcq-2-options-outer-container-vertical::-webkit-scrollbar {
