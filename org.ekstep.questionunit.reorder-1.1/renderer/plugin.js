@@ -113,9 +113,11 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       },
       max_score: this._question.config.max_score,
       score: correctAnswer ? this._question.config.max_score : 0,
-      values: telemetryAnsArr,
+      params: this.getTelemetryParams(),
+      values: this.getTelemetryResValues(),
       noOfCorrectAns: numOfCorrectAns, //tempCount,
-      totalAns: 1
+      totalAns: 1,
+      type: "reorder"
     };
 
     var callback = event.target;
@@ -128,6 +130,33 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       "type": "INPUT",
       "values": telemetryAnsArr
     }); // eslint-disable-line no-undef
+  },
+
+  getTelemetryParams: function() {
+    var instance = this;
+    var params = [], questionData = instance._question.data;
+    var answer = [];
+    questionData.sentence.tabs.forEach(function (tab,key) { // eslint-disable-line no-undef
+      var temp = {};
+      temp[key+1] = instance.getTelemetryParamsValue(tab);
+      var id = tab.id + 1;
+      answer.push(id.toString());
+      params.push(temp);
+    });
+    params.push({'answer':JSON.stringify({'seq':answer})});
+    return params;
+  },
+  getTelemetryResValues: function() {
+    var resValues = [];
+    var instance = this;
+    var data = this._question.data.sentence.tabs;
+    this._userWords.forEach(function(word, key){
+      var temp = {};
+      var selectedWordIndex = _.findIndex(data, {text: word.text});
+      temp[selectedWordIndex+1] = instance.getTelemetryParamsValue(word);
+      resValues.push(temp);
+    });
+    return resValues;
   }
 });
 //# sourceURL=ReorderingRendererPlugin.js

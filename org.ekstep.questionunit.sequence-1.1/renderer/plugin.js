@@ -16,6 +16,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     horizontal: "Horizontal",
     vertial: "Vertical"
   },
+  seq_rearranged: [],
   setQuestionTemplate: function () {
     SEQController.initTemplate(this); // eslint-disable-line no-undef
   },
@@ -54,7 +55,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     var correctAnswer = true;
     var correctAnswersCount = 0;
     var telemetryValues = [];
-    var seq_rearranged = [];
+    instance.seq_rearranged = [];
     var totalOptions = instance._question.data.options.length;
 
     $('.option-block').each(function (actualSeqMapIndex, elem) {
@@ -62,7 +63,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
         'SEQ': []
       };
       var selectedSeqOrder = parseInt($(elem).data('seqorder')) - 1;
-      seq_rearranged[actualSeqMapIndex] = selectedSeqOrder + 1;
+      instance.seq_rearranged[actualSeqMapIndex] = selectedSeqOrder + 1;
       telObj['SEQ'][0] = instance._question.data.options[actualSeqMapIndex];
       instance.removeOptionProperty(telObj['SEQ'][0]);
       telemetryValues.push(telObj);
@@ -87,19 +88,62 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       eval: correctAnswer,
       state: {
         val: {
-          "seq_rearranged": seq_rearranged
+          "seq_rearranged": instance.seq_rearranged
         },
         "seq_rendered": instance._question.data.options
       },
       score: questionScore,
       max_score: this._question.config.max_score,
-      values: telemetryValues,
+      values: instance.getTelemetryResValues(),
+      params: instance.getTelemetryParams(),
       noOfCorrectAns: correctAnswersCount,
-      totalAns: totalOptions
+      totalAns: totalOptions,
+      type: "sequence"
     };
     if (_.isFunction(callback)) {
       callback(result);
     }
+  },
+  getTelemetryParams: function() {
+    // Any change in the index value affects resvalues as well
+    var instance = this;
+    var params = [], questionData = instance._question.data;
+    var answer = [];
+    questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
+      var temp = {};
+      temp[key+1] = instance.getTelemetryParamsValue(option);
+      var answerIndex = questionData.options.findIndex(function(seq){
+        if(seq.sequenceOrder == key+1){
+          return true;
+        }
+      })
+      answer.push((answerIndex+1) +'');
+      params.push(temp);
+    });
+    params.push({'answer':JSON.stringify({'seq': answer})});
+    return params;
+  },
+  getTelemetryResValues: function() {
+    var instance = this;
+    var resValues = [];
+    var rerenderedOptions = [];    
+    var options = instance._question.data.options;
+    _.each(options, function(obj, index){
+      rerenderedOptions.push(_.findWhere(options, {sequenceOrder: instance.seq_rearranged[index]}));
+    });
+    _.each(instance.seq_rearranged,function(seqIndex,index) {
+      var value = {};
+      var index = options.findIndex(function(seq){
+        if(seq.sequenceOrder == seqIndex){
+            return true;
+        }
+      })
+      value[index + 1] = instance.getTelemetryParamsValue(options.find(function(seq) {
+        return seq.sequenceOrder == seqIndex;
+      }));
+      resValues.push(value);
+    });    
+    return resValues;
   },
   logTelemetryItemResponse: function (data) {
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {
