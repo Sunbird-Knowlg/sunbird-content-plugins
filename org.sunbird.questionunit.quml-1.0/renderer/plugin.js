@@ -100,7 +100,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
         if (this._question.data.responseDeclaration) {
             var responseDeclaration = this._question.data.responseDeclaration;
             var key = _.keys(instance.responseValueMap);
-            if (responseDeclaration[key[0]].correct_response.value === instance.responseValueMap[key[0]]) {
+            if (key.length > 0 && responseDeclaration[key[0]].correct_response.value === instance.responseValueMap[key[0]]) {
                 correctAnswer = true;
             }
             result = {
