@@ -1217,7 +1217,6 @@ span.qc-option-txt {
     display: table-cell;
     align-items: center;
     vertical-align: middle;
-    padding-right: 5px;
 }
 
 .left2::-webkit-scrollbar {
