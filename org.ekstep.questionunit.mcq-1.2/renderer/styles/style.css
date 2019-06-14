@@ -1166,6 +1166,7 @@ span.qc-option-txt {
     position: absolute;
     overflow: hidden;
     border: solid 2px #777777;
+    object-fit: contain;
 }
 
 .mcq2-2-option-text {
