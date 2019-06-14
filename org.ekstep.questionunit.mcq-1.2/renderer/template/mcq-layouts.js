@@ -285,8 +285,15 @@ MCQController.vertical2.getTemplate = function (question) {
  */
 MCQController.vertical2.getQuestionTemplate = function (question) {
     var q_image_class = '';
-    if (question.data.question.text) q_image_class = 'mcq-question-image'
-    else q_image_class = 'mcq-question-image-full'
+    var question_text_class = '';
+    if (question.data.question.text && question.data.question.image) {
+        q_image_class = 'mcq-question-image';
+    } else if (question.data.question.image && !question.data.question.text) {
+        q_image_class = 'mcq-question-image-full';
+    }
+    if (!question.data.question.image && question.data.question.text) {
+        question_text_class = "vertical-center";
+    }         
     var qTemplate = "<div class='mcq-qLeft-question-container'>\
                 <div class=<%= q_image_class%>>\
                 <% if(question.data.question.image){%>\
@@ -294,7 +301,7 @@ MCQController.vertical2.getQuestionTemplate = function (question) {
                 <%}%>\
                 </div>\
                 <% if(question.data.question.text){%>\
-                <div class='mcq-question-text'>\
+                <div class='mcq-question-text "+  question_text_class+"'>\
                   <div class='mcq-text-content'>\
                   <div><%= question.data.question.text %></div>\
                   </div>\
@@ -307,7 +314,8 @@ MCQController.vertical2.getQuestionTemplate = function (question) {
               ";
     return _.template(qTemplate)({
         "question": question,
-        "q_image_class": q_image_class
+        "q_image_class": q_image_class,
+        "question_text_class": question_text_class
     });
 }
 
