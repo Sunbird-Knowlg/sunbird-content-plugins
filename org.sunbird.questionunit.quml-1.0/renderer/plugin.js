@@ -85,6 +85,9 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                 }
             })
         }
+        jQuery('.mathText').each(function(index, element) {
+            katex.render(element.innerText, jQuery(element)[0]);
+        });
     },
     /**
      * Question evalution
