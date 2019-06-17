@@ -1066,9 +1066,7 @@ span.qc-option-txt {
     height: 100%;
     float: left;
     border-radius: 4px;
-    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.5);
     position: relative;
-    background: #ffffff;
     overflow: hidden;
 }
 
@@ -1076,7 +1074,6 @@ span.qc-option-txt {
     height: 74.02%;
     width: 100%;
     margin: 0;
-    background: #c6e2e7;
 }
 
 .mcq-qLeft-question-container .mcq-question-image-full {
@@ -1225,7 +1222,6 @@ span.qc-option-txt {
     display: table-cell;
     align-items: center;
     vertical-align: middle;
-    padding-right: 5px;
 }
 
 .left2::-webkit-scrollbar {
@@ -1256,9 +1252,7 @@ span.qc-option-txt {
     width: 75%;
 }
 .mcq-2-options-container-vertical .outer-option-block {
-    display: table;
-    width: 100%;
-    margin-bottom: 2vh;
+    margin: 3%;
 }
 .mcq-2-options-container-vertical .text-option {
     cursor: pointer;
@@ -1361,3 +1355,20 @@ span.qc-option-txt {
 .text-option.opt-selected .tick-icon-holder>img {
     visibility: visible;
 }
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  .mcq-qLeft-question-container .vertical-center {
+    height: 25.98%;
+    width: 100%;
+    background: #ffffff;
+    float: left;
+    overflow: hidden;
+}
+
