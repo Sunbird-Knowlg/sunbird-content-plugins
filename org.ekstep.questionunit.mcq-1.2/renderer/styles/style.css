@@ -320,11 +320,11 @@ audio.qc-question-audio {
 }
 
 .mcq-question-image {
-    width: 15%;
-    height: 56px;
-    float: left;
-    margin-left: -1%;
-    object-fit: fill;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .mcq-question-text>span {
@@ -956,11 +956,7 @@ span.qc-option-txt {
     width: 100%;
     height: 33.27vh;
     position: relative;
-    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0px 1px 1px 0px #000000;
-    background-color: #FFFFFF;
-    /* top: 4.5vh; */
     cursor: pointer;
 }
 
@@ -976,11 +972,12 @@ span.qc-option-txt {
     position: relative;
     background-size: contain;
     margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mcq-grid-option-image {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
     cursor: pointer;
     max-height: 100%;
     max-width: 100%;
@@ -1000,8 +997,7 @@ span.qc-option-txt {
     display: table;
     height: 10vh;
     opacity: 0.6;
-    background-color: #000000;
-    color: #FFFFFF;
+    color: black;
     z-index: 1;
     font-size: 14px;
 }
@@ -1066,17 +1062,14 @@ span.qc-option-txt {
     height: 100%;
     float: left;
     border-radius: 4px;
-    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.5);
     position: relative;
-    background: #ffffff;
     overflow: hidden;
 }
 
 .mcq-qLeft-question-container .mcq-question-image {
-    height: 74.02%;
+    height: 100%;
     width: 100%;
     margin: 0;
-    background: #c6e2e7;
 }
 
 .mcq-qLeft-question-container .mcq-question-image-full {
@@ -1132,15 +1125,32 @@ span.qc-option-txt {
     margin-top: 1.95%;
 }
 
+.mcq2-2-option6 {
+    margin-left: 10.575%;
+    margin-top: 1.95%;
+}
+
+.mcq2-2-option7 {
+    margin-left: 3.15%;
+    margin-top: 1.95%;
+}
+
+.mcq2-2-option8 {
+    margin-left: 10.575%;
+    margin-top: 1.95%;
+}
+
 .mcq2-2-option {
     height: 41.411%;
     width: 40%;
     margin-top: 3%;
     margin-bottom: 3%;
-    background: #ffffff;
     float: left;
+    position: relative;
     border-radius: 4px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mcq2-2-check-image-holder {
@@ -1164,22 +1174,20 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option-image {
-    height: 100%;
-    width: 100%;
     margin-top: 0%;
-    max-height: 40.411%;
-    max-width: 40.164%;
+    max-height: 100%;
+    max-width: 100%;
     position: absolute;
-    object-fit: contain;
     overflow: hidden;
+    object-fit: contain;
 }
 
 .mcq2-2-option-text {
     padding-top: 2%;
     padding:0% 2%;
     margin-top: 0%;
-    height: 48.411%;
-    width: 37.164%;
+    height: 100%;
+    width: 100%;
     position: absolute;
     object-fit: contain;
     overflow: hidden;
@@ -1187,8 +1195,8 @@ span.qc-option-txt {
 }
 
 .mcq-qLeft-question-container .q-image {
-    height: 100%;
-    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
     position: relative;
     object-fit: contain;
     overflow: hidden;
@@ -1225,7 +1233,6 @@ span.qc-option-txt {
     display: table-cell;
     align-items: center;
     vertical-align: middle;
-    padding-right: 5px;
 }
 
 .left2::-webkit-scrollbar {
@@ -1256,9 +1263,7 @@ span.qc-option-txt {
     width: 75%;
 }
 .mcq-2-options-container-vertical .outer-option-block {
-    display: table;
-    width: 100%;
-    margin-bottom: 2vh;
+    margin: 3%;
 }
 .mcq-2-options-container-vertical .text-option {
     cursor: pointer;
@@ -1360,4 +1365,39 @@ span.qc-option-txt {
 
 .text-option.opt-selected .tick-icon-holder>img {
     visibility: visible;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  .mcq-qLeft-question-container .vertical-center {
+    height: 25.98%;
+    width: 100%;
+    background: #ffffff;
+    float: left;
+    overflow: hidden;
+}
+
+.question-text {
+    max-height: 27%;
+    overflow: hidden;
+    word-break: break-all;
+    margin-top: 10%
+}
+
+.border-solid {
+    border: 2px solid #777777;
+}
+.position-relative {
+    position: relative;
+}
+.center-aligned {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
