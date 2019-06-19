@@ -288,30 +288,22 @@ MCQController.vertical2.getTemplate = function (question) {
  * returns the question HTML template for the `vertical2` and `grid2` layouts
  */
 MCQController.vertical2.getQuestionTemplate = function (question) {
-    var q_image_class = '';
-    if (question.data.question.text) q_image_class = 'mcq-question-image'
-    else q_image_class = 'mcq-question-image-full'
     var qTemplate = "<div class='mcq-qLeft-question-container'>\
-                <div class=<%= q_image_class%>>\
+                <div class='mcq-question-image'>\
                 <% if(question.data.question.image){%>\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <%}%>\
-                </div>\
                 <% if(question.data.question.text){%>\
-                <div class='mcq-question-text'>\
-                  <div class='mcq-text-content'>\
-                  <div><%= question.data.question.text %></div>\
-                  </div>\
+                    <div class='question-text'\><%= question.data.question.text %></div>\
+                    <%}%>\
                 </div>\
-                <%}%>\
                 <% if ( question.data.question.audio.length > 0 ){ %> \
                 <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon2.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
                 <% } %> \
               </div>\
               ";
     return _.template(qTemplate)({
-        "question": question,
-        "q_image_class": q_image_class
+        "question": question
     });
 }
 
