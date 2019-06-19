@@ -972,12 +972,12 @@ span.qc-option-txt {
     position: relative;
     background-size: contain;
     margin: auto;
-    border: 2px solid #777777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mcq-grid-option-image {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
     cursor: pointer;
     max-height: 100%;
     max-width: 100%;
@@ -1125,6 +1125,21 @@ span.qc-option-txt {
     margin-top: 1.95%;
 }
 
+.mcq2-2-option6 {
+    margin-left: 10.575%;
+    margin-top: 1.95%;
+}
+
+.mcq2-2-option7 {
+    margin-left: 3.15%;
+    margin-top: 1.95%;
+}
+
+.mcq2-2-option8 {
+    margin-left: 10.575%;
+    margin-top: 1.95%;
+}
+
 .mcq2-2-option {
     height: 41.411%;
     width: 40%;
@@ -1164,7 +1179,6 @@ span.qc-option-txt {
     max-width: 100%;
     position: absolute;
     overflow: hidden;
-    border: solid 2px #777777;
     object-fit: contain;
 }
 
@@ -1374,4 +1388,16 @@ span.qc-option-txt {
     overflow: hidden;
     word-break: break-all;
     margin-top: 10%
+}
+
+.border-solid {
+    border: 2px solid #777777;
+}
+.position-relative {
+    position: relative;
+}
+.center-aligned {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
