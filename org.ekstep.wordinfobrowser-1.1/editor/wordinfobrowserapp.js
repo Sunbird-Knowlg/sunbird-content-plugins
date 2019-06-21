@@ -59,7 +59,7 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
         ctrl.keywords = [];
         var requestData = {
             "request": {
-                "language_id": ['cat'],
+                "language_id": 'en',
                 "wordSuggestions": true,
                 "relatedWords": true,
                 "translations": true,
