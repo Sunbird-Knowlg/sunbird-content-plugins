@@ -193,8 +193,8 @@ MCQController.horizontal.getTemplateForLayout = function (layout) {
         wrapperStartQuestionComponent +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
-        layoutTemplate + wrapperEnd +
+        MCQController.backgroundComponent.getBackgroundGraphics(layout) +  
+            layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
 }
 
@@ -498,12 +498,12 @@ MCQController.backgroundComponent = {
         org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
         if (layoutType === 'grid2' || layoutType === 'vertical2') {
             return '\
-            <div class="bg-graphics left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-graphics-2 left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
              <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
             '
         } else {
             return '\
-        <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+        <div class="bg-graphics-2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
             <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
         '
         }
