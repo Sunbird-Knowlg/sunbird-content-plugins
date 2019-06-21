@@ -1375,3 +1375,7 @@ span.qc-option-txt {
     word-break: break-all;
     margin-top: 10%
 }
+.align-text {
+    line-height: 1.2;
+    font-size: calc(100%+1.5vw);
+}
