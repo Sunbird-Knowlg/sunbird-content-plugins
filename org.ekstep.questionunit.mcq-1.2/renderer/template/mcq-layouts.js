@@ -82,7 +82,7 @@ MCQController.grid.onOptionSelected = function (event, index) {
  * @param {object} option
  * @param {number} index
  */
-MCQController.grid.getOptionTemplate = function (option, index, size) {
+MCQController.grid.getOptionTemplate = function (option, index) {
     var optTemplate = '\
   <div class="mcq-grid-option-outer">\
     <% if (false && option.audio){ %> \
@@ -93,7 +93,7 @@ MCQController.grid.getOptionTemplate = function (option, index, size) {
     <div class="org-ekstep-questionunit-mcq-option-element mcq-grid-option" onclick="MCQController.grid.onOptionSelected(event, <%= index %>)">\
     <% if (option.image){ %> \
       <div class="mcq-grid-option-image-container">\
-      <div class="border-solid position-relative" style="height:'+size.maxHeight+'px;width:'+size.maxWidth+'px"><img class="mcq-grid-option-image" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
+      <div class="border-solid position-relative"><img class="mcq-grid-option-image" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
      </div> </div>\
     <% } %> \
     <% if (option.text){ %> \
@@ -115,7 +115,7 @@ MCQController.grid.getOptionTemplate = function (option, index, size) {
  * @param {number} i the index of the row
  * @param {array} options the array of options
  */
-MCQController.grid.getOptionsForRow = function (optIndices, i, options, size) {
+MCQController.grid.getOptionsForRow = function (optIndices, i, options) {
     var rowOpts = [],
         opts = "";
     if (i == 0)
@@ -126,7 +126,7 @@ MCQController.grid.getOptionsForRow = function (optIndices, i, options, size) {
         rowOpts = _.last(optIndices, remainingOptions);
     }
     _.each(rowOpts, function (o, i) {
-        opts += MCQController.grid.getOptionTemplate(options[o], o, size);
+        opts += MCQController.grid.getOptionTemplate(options[o], o);
     });
     return opts;
 }
@@ -137,16 +137,13 @@ MCQController.grid.getOptionsForRow = function (optIndices, i, options, size) {
  * @param {array} options
  */
 MCQController.grid.getOptionRows = function (optIndices, options) {
-    var defaultMaxHeight = 59.49;
-    var defaultMaxWidth = 86.4;
-    var size = MCQController.getMaxWidthHeight(options, defaultMaxHeight, defaultMaxWidth);
     var rowTemplate = '';
     var r = 0;
     maxRow = MCQController.grid.getRowCount(optIndices.length);
     while (r < maxRow) {
         rowTemplate += '<div class="mcq-grid-options-row">\
 			<div class="mcq-grid-option-wrapper">' +
-            MCQController.grid.getOptionsForRow(optIndices, r, options, size) +
+            MCQController.grid.getOptionsForRow(optIndices, r, options) +
             '</div></div>';
         r++;
     }
@@ -216,12 +213,9 @@ MCQController.horizontal.getTemplate = function (question) {
  * @param {string} layout
  */
 MCQController.horizontal.getOptionLayout = function (layout, question) {
-    var audioIcon, size = { maxHeight: 0, maxWidth: 0 };
     MCQController.horizontal.isVerticalLayout = ('vertical' == layout) ? true : false;
     if ('vertical' == layout) {
         audioIcon = "music-blue.png"
-        var defaultSize = MCQController.getDefaultWidthHeightGrid(question.data.options.length);
-        size = MCQController.getMaxWidthHeight(question.data.options, defaultSize.height, defaultSize.width);
     } else {
         audioIcon = "audio-icon2.png"
     }
@@ -234,7 +228,7 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
                     <div class="option-image-container <% if(!val.image) { %> no-image<% } %>" \>\
                   <%  if(val.image) { %>\
                     <%  if(MCQController.horizontal.isVerticalLayout) { %>\
-                        <div class="border-solid position-relative" style="height:'+size.maxHeight+'px;width:'+size.maxWidth+'px;"><img onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" /></div>\
+                        <div class="border-solid position-relative"><img onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" /></div>\
                   <% } %>\
                   <%  if(!MCQController.horizontal.isVerticalLayout) { %>\
                     <img onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
@@ -387,10 +381,30 @@ MCQController.vertical2.postRender = function (question) {
     }
 }
 
+MCQController.grid.postRender = function (question) {
+    var defaultMaxHeight = $(".mcq-grid-option-image-container").outerHeight();
+    var defaultMaxWidth = $(".mcq-grid-option-image-container").width();
+    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+    $(".border-solid").css("height", size.maxHeight);
+    $(".border-solid").css("width", size.maxWidth);
+}
+MCQController.vertical.postRender = function (question) {
+    var defaultMaxHeight = $(".option-image-container").outerHeight();
+    var defaultMaxWidth = $(".option-image-container").width();
+    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+    $(".border-solid").css("height", size.maxHeight);
+    $(".border-solid").css("width", size.maxWidth);
+}
+
 MCQController.vertical2.optionStyleUponClick = function (element) {
     $('.text-option').removeClass('opt-selected');
     var optElt = $(element).closest('.text-option');
     if (optElt) optElt.addClass('opt-selected');
+    var defaultMaxHeight = $(".mcq2-2-option").outerHeight();
+    var defaultMaxWidth = $(".mcq2-2-option").width();
+    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+    $(".border-solid").css("height", size.maxHeight);
+    $(".border-solid").css("width", size.maxWidth);
 }
 /**
  * called when the option in `vertical2` layout is selected/tapped
@@ -445,6 +459,11 @@ MCQController.grid2.postRender = function (question) {
     if (question.data.options.length < 4) {
         MCQController.grid2.adjustOptions(question);
     }
+    var defaultMaxHeight = $(".mcq2-2-option").outerHeight();
+    var defaultMaxWidth = $(".mcq2-2-option").width();
+    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+    $(".border-solid").css("height", size.maxHeight);
+    $(".border-solid").css("width", size.maxWidth);
 }
 
 /**
@@ -452,10 +471,9 @@ MCQController.grid2.postRender = function (question) {
  * @param {array} options
  */
 MCQController.grid2.getOptionsTemplate = function (options) {
-    var size = MCQController.getMaxWidthHeight(options, 87.250, 92.250);
     var optionTemplate = ''
     _.each(options, function (val, key, index) {
-        optionTemplate += MCQController.grid2.getOption(val, key, size);
+        optionTemplate += MCQController.grid2.getOption(val, key);
     });
     return optionTemplate;
 }
@@ -466,10 +484,10 @@ MCQController.grid2.getOptionsTemplate = function (options) {
  * @param {number} key the index of the option
  * @param {size} maxHeight and width for layout
  */
-MCQController.grid2.getOption = function (option, key, size) {
+MCQController.grid2.getOption = function (option, key) {
     var optTemplate = " <div class='org-ekstep-questionunit-mcq-option-element mcq2-2-option mcq2-2-option<%=key+1%>' onClick=MCQController.grid2.onOptionSelected(event,<%= key %>)>\
   <%if(option.image){%>\
-     <div class='border-solid position-relative center-aligned' style='height:"+ size.maxHeight + "px;width:" + size.maxWidth +"px'><img class='mcq2-2-option-image'\
+     <div class='border-solid position-relative center-aligned'><img class='mcq2-2-option-image'\
       src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> /></div>\
   <%}%>\
   <%if(!option.image && option.text){%>\
@@ -502,29 +520,6 @@ MCQController.grid2.onOptionSelected = function (event, index) {
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
 }
-
-
-MCQController.getDefaultWidthHeightGrid = function (optionLength) {
-    var size = {
-        height: 91.26,
-        width: 102.59
-    }
-    switch (optionLength) {
-        case 5:
-        case 6:
-            size.width = 59;
-            break;
-        case 7:
-            size.width = 50.71;
-            break;
-        case 8:
-            size.width = 43.95;
-            break;
-
-    }
-    return size;
-}
-
 
 MCQController.getMaxWidthHeight = function (options, height, width) {
     var size = { maxWidth: 0, maxHeight: 0 };
@@ -562,6 +557,12 @@ MCQController.getMaxWidthHeight = function (options, height, width) {
         size.maxHeight = height;
         size.maxWidth = size.maxHeight / aspectRatio;
     }
+
+    if (size.maxWidth === 0 || size.maxHeight === 0) {
+        size.maxWidth = width;
+        size.maxHeight = height;
+    }
+
     return size;
 }
 
