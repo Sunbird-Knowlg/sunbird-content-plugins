@@ -93,7 +93,7 @@ MCQController.grid.getOptionTemplate = function (option, index) {
     <div class="org-ekstep-questionunit-mcq-option-element mcq-grid-option" onclick="MCQController.grid.onOptionSelected(event, <%= index %>)">\
     <% if (option.image){ %> \
       <div class="mcq-grid-option-image-container">\
-      <div class="border-solid position-relative"><img class="mcq-grid-option-image" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
+      <div class="border-solid position-relative"><img class="mcq-grid-option-image mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
      </div> </div>\
     <% } %> \
     <% if (option.text){ %> \
@@ -193,8 +193,8 @@ MCQController.horizontal.getTemplateForLayout = function (layout, question) {
         wrapperStartQuestionComponent +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
-        layoutTemplate + wrapperEnd +
+        MCQController.backgroundComponent.getBackgroundGraphics(layout) +  
+            layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
 }
 
@@ -228,10 +228,10 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
                     <div class="option-image-container <% if(!val.image) { %> no-image<% } %>" \>\
                   <%  if(val.image) { %>\
                     <%  if(MCQController.horizontal.isVerticalLayout) { %>\
-                        <div class="border-solid position-relative"><img onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" /></div>\
+                        <div class="border-solid position-relative"><img class="mcq-option-img" onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" /></div>\
                   <% } %>\
                   <%  if(!MCQController.horizontal.isVerticalLayout) { %>\
-                    <img onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
+                    <img class="mcq-option-img" onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
                   <% } %>\
                   <% } %>\
                     </div>\
@@ -240,7 +240,7 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
                     <% } %>\
                     <div class="option-text-container<% if(val.audio) { %> with-audio <% } %> <% if(val.image) { %>with-image<% } %>">\
                   <%  if(val.text) { %>\
-                        <span><%= val.text %></span>\
+                      <span><%= val.text %></span>\
                   <% } %>\
                     </div>\
                 </div>\
@@ -381,30 +381,31 @@ MCQController.vertical2.postRender = function (question) {
     }
 }
 
+MCQController.onImageDomLoad = function (container, question) {
+    var domLoaded = false;
+    $('.mcq-option-img').on("load", function () {
+        if(domLoaded) return;
+
+        var defaultMaxHeight = $(container).outerHeight();
+        var defaultMaxWidth = $(container).width();
+        var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+        $(".border-solid").css("height", size.maxHeight);
+        $(".border-solid").css("width", size.maxWidth);
+        domLoaded = true;
+    })
+}
+
 MCQController.grid.postRender = function (question) {
-    var defaultMaxHeight = $(".mcq-grid-option-image-container").outerHeight();
-    var defaultMaxWidth = $(".mcq-grid-option-image-container").width();
-    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
-    $(".border-solid").css("height", size.maxHeight);
-    $(".border-solid").css("width", size.maxWidth);
+    MCQController.onImageDomLoad(".mcq-grid-option-image-container", question);
 }
 MCQController.vertical.postRender = function (question) {
-    var defaultMaxHeight = $(".option-image-container").outerHeight();
-    var defaultMaxWidth = $(".option-image-container").width();
-    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
-    $(".border-solid").css("height", size.maxHeight);
-    $(".border-solid").css("width", size.maxWidth);
+    MCQController.onImageDomLoad(".option-image-container", question);
 }
 
 MCQController.vertical2.optionStyleUponClick = function (element) {
     $('.text-option').removeClass('opt-selected');
     var optElt = $(element).closest('.text-option');
     if (optElt) optElt.addClass('opt-selected');
-    var defaultMaxHeight = $(".mcq2-2-option").outerHeight();
-    var defaultMaxWidth = $(".mcq2-2-option").width();
-    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
-    $(".border-solid").css("height", size.maxHeight);
-    $(".border-solid").css("width", size.maxWidth);
 }
 /**
  * called when the option in `vertical2` layout is selected/tapped
@@ -453,18 +454,14 @@ MCQController.grid2.adjustOptions = function (question) {
  * @param {object} question the question object
  */
 MCQController.grid2.postRender = function (question) {
+    MCQController.onImageDomLoad(".mcq2-2-option", question);
     if(question.config.layout.toLowerCase() === 'grid2'){
         $(".mcq2-2-option").css("width", "40%", "margin-top", "3%", "margin-bottom", "3%");
     }
     if (question.data.options.length < 4) {
         MCQController.grid2.adjustOptions(question);
     }
-    var defaultMaxHeight = $(".mcq2-2-option").outerHeight();
-    var defaultMaxWidth = $(".mcq2-2-option").width();
-    var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
-    $(".border-solid").css("height", size.maxHeight);
-    $(".border-solid").css("width", size.maxWidth);
-}
+ }
 
 /**
  * returns the HTML template for options for `grid2` layout
@@ -487,7 +484,7 @@ MCQController.grid2.getOptionsTemplate = function (options) {
 MCQController.grid2.getOption = function (option, key) {
     var optTemplate = " <div class='org-ekstep-questionunit-mcq-option-element mcq2-2-option mcq2-2-option<%=key+1%>' onClick=MCQController.grid2.onOptionSelected(event,<%= key %>)>\
   <%if(option.image){%>\
-     <div class='border-solid position-relative center-aligned'><img class='mcq2-2-option-image'\
+     <div class='border-solid position-relative center-aligned'><img class='mcq2-2-option-image mcq-option-img'\
       src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> /></div>\
   <%}%>\
   <%if(!option.image && option.text){%>\
@@ -540,12 +537,10 @@ MCQController.getMaxWidthHeight = function (options, height, width) {
         if (aspectRatio === 1) {
             size.maxWidth = height / aspectRatio;
             size.maxHeight = height;
-        }
-        if (size.maxHeight > size.maxWidth) {
+        } else if (size.maxHeight > size.maxWidth) {
             size.maxHeight = height;
             size.maxWidth = size.maxHeight / aspectRatio;
-        }
-        if (size.maxWidth > size.maxHeight) {
+        } else if (size.maxWidth > size.maxHeight) {
             size.maxWidth = width;
             size.maxHeight = aspectRatio     * size.maxWidth;
         }
@@ -575,12 +570,12 @@ MCQController.backgroundComponent = {
         org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
         if (layoutType === 'grid2' || layoutType === 'vertical2') {
             return '\
-            <div class="bg-graphics left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-graphics-2 left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
              <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
             '
         } else {
             return '\
-        <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+        <div class="bg-graphics-2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
             <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
         '
         }

@@ -63,7 +63,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             }
         });
         if (this._question.data.solution && this._question.data.solution[0].length > 0) {
-            document.getElementById('questionset').addClass = 'sb-question-dsp-container';
+            document.getElementById('questionset').className = 'sb-question-dsp-container'
             document.getElementById('answerBtn').display = 'none'
             document.getElementById('answerBtn').onclick = function() {
                 $('.sb-question-content').animate({
