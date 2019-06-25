@@ -269,7 +269,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     if (prevQ) {
       this.renderQuestion(prevQ);
       this.generateNavigateTelemetry(null, this._currentQuestion);
-    } else {
+    } else if(Renderer.theme._previousStage){
       // If no question is remaining, it is the beginning of the question set, move to previous stage after
       // hiding the first question and some housekeeping
       this.saveQuestionSetState();
