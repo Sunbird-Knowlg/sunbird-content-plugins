@@ -1,6 +1,6 @@
 .sb-question-dsp-container {
     height: 100%;
-    padding-top: 24px;
+    /* padding-top: 24px; */
 }
 .sb-question-dsp-container .sb-editor-image {
     margin: 0 auto;
@@ -47,7 +47,7 @@
 .sb-question-dsp-container .sb-question-dsp-body {
     border-radius: 4px;
     height: calc(100% - 48px);
-    padding-left: 8%;
+    /* padding-left: 8%; */
 }
 .sb-question-dsp-container .sb-question-dsp-body .question-bg {
     background-image: linear-gradient(-90deg, lightblue, white);
@@ -68,7 +68,7 @@
 }
 .sb-question-dsp-container .sb-question-header {
     display: block;
-    padding: 8px 16px;
+    padding: 8px 10%;
     text-align: right;
 }
 .sb-question-dsp-container .sb-question-header .sb-mark {
@@ -84,7 +84,7 @@
 }
 .sb-question-dsp-container .sb-question-content .page-section {
     min-height: 100%;
-    padding: 24px;
+    padding: 24px 10%;
 }
 .sb-question-dsp-container .sb-question-content .page-section:first-child {
     padding-top: 0;
