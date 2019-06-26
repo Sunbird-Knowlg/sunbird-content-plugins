@@ -137,7 +137,7 @@ window.formConfigurations = {
       "editable": true,
       "index": 4,
       "inputType": "dialcode",
-      "label": "dialcode",
+      "label": "QR Code",
       "name": "dialcode",
       "placeholder": "Select Year",
       "renderingHints": {},
