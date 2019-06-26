@@ -47,7 +47,6 @@ org.ekstep.questionunit.baseComponent = {
     }
 }
 
-org.ekstep.questionunit = org.ekstep.questionunit || {};
 org.ekstep.questionunit.questionComponent = {
     generateQuestionComponent: function () {
         return '\
@@ -115,7 +114,6 @@ org.ekstep.questionunit.questionComponent = {
 }
 jQuery.extend(org.ekstep.questionunit.questionComponent, org.ekstep.questionunit.baseComponent);
 
-org.ekstep.questionunit = org.ekstep.questionunit || {};
 org.ekstep.questionunit.backgroundComponent = {
     settings: {
         bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
