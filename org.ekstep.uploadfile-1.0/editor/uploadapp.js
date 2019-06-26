@@ -114,6 +114,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
                                 instance.callback(errMessage, errTitle);
                                 $scope.showLoader(false);
                             } else {
+                                $scope.generateTelemetry({id:'updatetoc', subtype:'toc_updated_successful'});
                                 ecEditor.dispatchEvent("org.ekstep.collectioneditor:reload");
                                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                                     title: 'content uploaded successfully!',

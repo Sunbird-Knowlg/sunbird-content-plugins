@@ -165,6 +165,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     link.setAttribute('target', '_blank');
                 link.click();
                 document.body.removeChild(link);
+                $scope.generateTelemetry({id:'downloadtoc', subtype:'toc_saved_successful'});
             } else {
                 $scope.loader = false;
                 $scope.$safeApply();
