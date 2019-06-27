@@ -179,7 +179,7 @@
 #questionset .mcq-horizontal .mcq-options .mcq-option, #questionset .mcq-vertical .mcq-options .mcq-option, #questionset .mcq-grid .mcq-options .mcq-option {
     margin-bottom: 16px;
     height: auto;
-    box-shadow: 2px 5px 7px 0 rgba(0, 0, 0, 0.2);
+    /* box-shadow: 2px 5px 7px 0 rgba(0, 0, 0, 0.2); */
     background: white;
     border-radius: 8px;
     line-height: 20px;
@@ -398,4 +398,11 @@
 }
 .mcq-option figure.image img {
     width:100%;
+}
+
+#questionset .mcq-horizontal .mcq-options .mcq-option.mcq-options-select, 
+#questionset .mcq-vertical .mcq-options .mcq-option.mcq-options-select, 
+#questionset .mcq-grid .mcq-options .mcq-option.mcq-options-select{
+    box-shadow: 0px 0px 10px 0 rgb(2, 123, 210);
+    background: #f5fff8;
 }
