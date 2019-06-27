@@ -245,12 +245,10 @@
 #questionset .mcq-vertical .mcq-options .mcq-option {
     width: 100%;
     display: inline-flex;
-    align-items: center;
 }
 #questionset .mcq-grid .mcq-options .mcq-option {
     width: 45%;
     display: inline-flex;
-    align-items: center;
 }
 #questionset .mcq-submit-btn {
     margin-left: auto;
