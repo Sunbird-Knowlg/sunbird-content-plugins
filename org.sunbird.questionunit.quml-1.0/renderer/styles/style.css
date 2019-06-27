@@ -393,3 +393,6 @@
     left: 0.25em;
     transform: rotate(-135deg);
 }
+.mcq-option figure.image img {
+    width:100%;
+}
