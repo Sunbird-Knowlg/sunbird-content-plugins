@@ -416,3 +416,20 @@
     width: inherit;
     height: inherit;
 }
+
+#questionset .image-style-align-left {
+    margin: 0;
+    max-width: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+}
+
+#questionset .image-style-align-right {
+    margin: 0;
+    max-width: 50%;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+    float: right;
+}
