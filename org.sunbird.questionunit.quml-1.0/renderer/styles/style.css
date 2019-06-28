@@ -433,3 +433,7 @@
     text-align: right;
     float: right;
 }
+
+#questionset .image-style-align-right img, #questionset .image-style-align-left img {
+    max-width: 80px !important;
+}
