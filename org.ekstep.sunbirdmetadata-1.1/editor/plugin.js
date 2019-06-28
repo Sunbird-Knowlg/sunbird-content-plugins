@@ -73,8 +73,8 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         if (!this.isConfigurationsExists(config.subType, config.action)) {
             this.getConfigurations(config, function (error, res) {
                 if (res) {
-                    instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res })
-                    instance.renderForm(config.popup, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res })
+                    instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
+                    instance.renderForm(config.popup, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
                 } else {
                     console.error('Fails to render', error)
                 }
@@ -204,9 +204,9 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             config: function (callback) {
                 // get the formConfigurations data
                 org.ekstep.services.configuration.getFormConfigurations({ request: request }, function (error, response) {
-                    //if (!error) callback(undefined, response)
-                    //else callback(error, undefined)
-                    callback(undefined, window.formConfigurations)
+                    if (!error) callback(undefined, response)
+                    else callback(error, undefined)
+                    //callback(undefined, window.formConfigurations)
                 })
             },
             framework: function (callback) {
@@ -264,7 +264,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         this.resourceBundle = config.resourceBundle
         this.framework = config.framework
         this.config = config.formConfig
-        this.form = this.mapObject(this.config.config.fields, this.framework.categories)
+        this.form = this.mapObject(this.config.fields, this.framework.categories)
         this.loadTemplate(this.config.templateName, function (templatePath) {
             isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath, "formAction": instance.config.action })
         })
