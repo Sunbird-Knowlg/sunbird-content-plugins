@@ -51,7 +51,9 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
             controller: 'metadataForm',
             controllerAs: '$ctrl',
             width: 900,
-            showClose: false
+            showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
         });
     },
     /**

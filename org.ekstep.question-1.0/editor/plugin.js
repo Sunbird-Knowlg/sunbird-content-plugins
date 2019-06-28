@@ -41,6 +41,8 @@ org.ekstep.question.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
       },
       width: 900,
       showClose: false,
+      closeByEscape: false,
+      closeByDocument: false,
       className: 'qc-ngdialog-custome'
     });
   }

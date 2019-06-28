@@ -76,6 +76,8 @@ org.ekstep.mathtext.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
       data: { 'textSelected': this.textSelected, 'instanceId': this.instanceId },
       width: 900,
       showClose: false,
+      closeByEscape: false,
+      closeByDocument: false,
       className: 'qc-ngdialog-custome mathtextEditor_1'
     });
   },

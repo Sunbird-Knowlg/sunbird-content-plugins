@@ -48,6 +48,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             showClose: false,
+            closeByDocument: false,
+            closeByEscape: false,
             className: 'ngdialog-theme-plain'
         });
     },
