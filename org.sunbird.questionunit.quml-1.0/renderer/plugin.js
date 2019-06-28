@@ -8,6 +8,9 @@ org.ekstep.questionunit.quml = {};
 org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questionUnitPlugin.extend({
     responseValueMap: {},
     preQuestionShow: function(event) {
+        if(isbrowserpreview && (Renderer.theme._basePath === "/assets/")){
+            Renderer.theme._basePath = "/";
+        }
         var questionData = JSON.parse(event.target._currentQuestion.data.__cdata);
         questionData.question = this.replaceAssetWithBaseURL(questionData.question);
         if (questionData.solution) {
