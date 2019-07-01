@@ -32,7 +32,9 @@ org.ekstep.questionbank.EditorPlugin = org.ekstep.contenteditor.basePlugin.exten
         'pluginInstance': function () {
           return instance;
         }
-      }
+      },
+      closeByEscape: false,
+      closeByDocument: false
     });
   }
 });

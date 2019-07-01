@@ -139,6 +139,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                     controller: ['$scope', modalController],
                     width: 900,
                     showClose: true,
+                    closeByEscape: false,
+                    closeByDocument: false,
                     className: 'ngdialog-theme-default'
                 },function(){
                     instance.isPopupOpen = false;

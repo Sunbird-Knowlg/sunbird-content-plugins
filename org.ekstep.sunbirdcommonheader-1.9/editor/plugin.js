@@ -28,6 +28,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             controller: 'headerController',
             controllerAs: '$ctrl',
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             className: 'ngdialog-theme-default'
         });
 

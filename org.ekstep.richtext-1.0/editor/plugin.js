@@ -188,6 +188,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                data: {'textSelected':this.textSelected},
                width: 500,
                showClose: false,
+               closeByEscape: false,
+               closeByDocument: false,
                className: 'ngdialog-theme-plain richtextEditor_1'
         });
     },

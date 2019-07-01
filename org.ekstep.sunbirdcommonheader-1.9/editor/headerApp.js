@@ -357,6 +357,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 }
             },
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             width: 100,
             className: 'ngdialog-theme-default'
         });
@@ -735,7 +737,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         return $scope;
                     }
                 },
-                showClose: false
+                showClose: false,
+                closeByEscape: false,
+                closeByDocument: false
             });
         }
     };
@@ -942,7 +946,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         }
                     },
                     showClose: false,
-                    closeByEscape: false
+                    closeByEscape: false,
+                    closeByDocument: false
                 });
             }
         });
