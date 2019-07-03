@@ -14,10 +14,13 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
         var questionData = JSON.parse(event.target._currentQuestion.data.__cdata);
         questionData.question = this.replaceAssetWithBaseURL(questionData.question);
         if(/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.question)){
-            questionData.question = questionData.question.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/, '<span class="mathText">$1</span>')
+            questionData.question = questionData.question.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, '<span class="mathText">$1</span>')
         }
         if (questionData.solution) {
             questionData.solution[0] = this.replaceAssetWithBaseURL(questionData.solution[0]);
+            if(/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.solution[0])){
+                questionData.solution[0] = questionData.solution[0].replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, '<span class="mathText">$1</span>')
+            }
         }
         event.target._currentQuestion.data.__cdata = JSON.stringify(questionData);
         this._super(event);
