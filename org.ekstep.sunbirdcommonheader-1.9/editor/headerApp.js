@@ -165,6 +165,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     link.setAttribute('target', '_blank');
                 link.click();
                 document.body.removeChild(link);
+                $scope.generateTelemetry({id:'downloadtoc', subtype:'toc_saved_successful'});
             } else {
                 $scope.loader = false;
                 $scope.$safeApply();
@@ -357,6 +358,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 }
             },
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             width: 100,
             className: 'ngdialog-theme-default'
         });
@@ -735,7 +738,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         return $scope;
                     }
                 },
-                showClose: false
+                showClose: false,
+                closeByEscape: false,
+                closeByDocument: false
             });
         }
     };
@@ -942,7 +947,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         }
                     },
                     showClose: false,
-                    closeByEscape: false
+                    closeByEscape: false,
+                    closeByDocument: false
                 });
             }
         });

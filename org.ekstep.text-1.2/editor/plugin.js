@@ -549,7 +549,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             }],
             width: 520,
-            showClose: false
+            showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
         });
     },
     /**

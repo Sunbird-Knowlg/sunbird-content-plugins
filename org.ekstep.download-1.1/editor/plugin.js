@@ -63,6 +63,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             template: 'partials_org.ekstep.download.html',
             controller: ['$scope', modalController],
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             width: 900,
             background: 'transparent!important',
             className: 'ngdialog-theme-plain dwContent'

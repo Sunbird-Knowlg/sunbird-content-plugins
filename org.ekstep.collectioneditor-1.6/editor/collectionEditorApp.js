@@ -196,7 +196,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                     };
                }],
                 plain: true,
-                showClose: false
+                showClose: false,
+                closeByEscape: false,
+                closeByDocument: false
             });
             var ngDialogEventListener = $scope.$on('ngDialog.opened', function (e, $dialog) {
                 var dialogWidth = ecEditor.jQuery('#deletePopup').width();
@@ -329,7 +331,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                         }
                     },
                     showClose: false,
-                    closeByEscape: false
+                    closeByEscape: false,
+                    closeByDocument: false,
                 });
             }
         });

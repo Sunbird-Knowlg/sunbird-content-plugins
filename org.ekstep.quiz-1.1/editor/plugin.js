@@ -161,6 +161,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
             ecEditor.getService('popup').open({
                 showClose: false,
+                closeByEscape: false,
+                closeByDocument: false,
                 template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/warning.html"),
                 controller: ['$scope', function($scope) {
                     $scope.callClear = function() {
@@ -347,6 +349,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             className: 'ngdialog-theme-plain'
         });
     },
