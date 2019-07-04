@@ -86,11 +86,13 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                 $('.sb-question-content').animate({
                     scrollTop: $('#answer').offset().top
                 });
+                instance.logTelemetryInteract({target : { id : 'answerBtn' }});
             }
             document.getElementById('questionBtn').onclick = function() {
                 $('.sb-question-content').animate({
                     scrollTop: $('#question').offset().top
                 });
+                instance.logTelemetryInteract({target : { id : 'questionBtn' }});
             }
             $('.sb-question-content').scroll(function() {
                 if ($('#answer').position().top <= ($('.sb-question-content').height()) / 2) {
