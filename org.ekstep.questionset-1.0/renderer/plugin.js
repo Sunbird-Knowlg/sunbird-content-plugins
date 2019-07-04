@@ -189,7 +189,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     var instance = this;
     if (!this._displayedPopup) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
-        if(!result.eval && !result.evalRequired){
+        if(!result.eval && !_.isUndefined(result.evalRequired) && !result.evalRequired){
           instance.renderNextQuestion();
         }else{
           QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
