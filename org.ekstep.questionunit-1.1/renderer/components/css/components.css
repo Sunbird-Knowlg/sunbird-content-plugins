@@ -1,6 +1,6 @@
 body {
     font-family: NotoSans, NotoSansOriya, NotoSansGujarati, NotoSansMalayalam;
-    line-height: 19px;
+    line-height: normal;
 }
 
 /* overiding katex css */
@@ -187,11 +187,15 @@ body {
 }
 
 .bg-graphics {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+   position: absolute;
+   left:0;
+   top:0;
+   width: 100%;
+   height: 100%;
+}
+
+.left2{
+    left: 2%;
 }
 
 .bg-graphics .bg-circle {
@@ -211,6 +215,29 @@ body {
 .bg-graphics .bg-circle.circle-right {
     right: -20vw;
     top: 30vh;
+}
+
+.bg-graphics-2 {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+}
+.bg-graphics-2 .bg-circle.circle-left {
+    left: -20vw;
+    top: 0vh;
+}
+
+.bg-graphics-2 .bg-circle.circle-right {
+    right: -20vw;
+    top: 30vh;
+}
+.bg-graphics-2 .bg-circle {
+    position: fixed;
+    width: 60vw;
+    height: 106.6662vh;
+    border-radius: 50%;
+    opacity: 0.15;
+    background-color: #ffffff;
 }
 
 .plugin-content-container em {

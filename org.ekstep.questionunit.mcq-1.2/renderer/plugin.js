@@ -69,6 +69,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {Object} event from question set.
    */
   evaluateQuestion: function (event) {
+    var instance = this;
     var callback = event.target;
     var correctAnswer = false, telValues = {}, selectedAnsData, selectedAns, result = {}, option;
     option = MCQController.pluginInstance._question.data.options;// eslint-disable-line no-undef
@@ -87,11 +88,37 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
         options: option // eslint-disable-line no-undef
       },
       score: correctAnswer ? MCQController.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
-      values: [telValues]
-    }
+      params: instance.getTelemetryParams(),
+      values: instance.getTelemetryResValues(),
+      type: "mcq"
+    };
     if (_.isFunction(callback)) {
       callback(result);
     }
+  },
+  getTelemetryParams: function() {
+    // Any change in the index value affects resvalues as well
+    var instance = this;
+    var params = [], questionData = MCQController.pluginInstance._question.data;
+    var correctAnsIndex = [],answer = {};
+    questionData.options.forEach(function (option,key) { // eslint-disable-line no-undef
+      var temp = {};
+      temp[key+1] = instance.getTelemetryParamsValue(option);
+      if(option.isCorrect) correctAnsIndex.push((key+1).toString());
+      params.push(temp);
+    });
+    answer.correct = correctAnsIndex;
+    params.push({'answer':JSON.stringify(answer)});
+    return params;
+  },
+  getTelemetryResValues: function() {
+    var resValues = [];
+    var selectedIndex = MCQController.pluginInstance._selectedIndex;
+    var value = {};
+    if (!_.isUndefined(selectedIndex))
+      value[selectedIndex + 1] = this.getTelemetryParamsValue(MCQController.pluginInstance._question.data.options[selectedIndex]);
+    resValues.push(value);
+    return resValues;
   },
   /**
    * provide media url to audio image
@@ -139,7 +166,6 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       "values": [telValues]
     });
   },
-
   logTelemetryInteract: function (event) {
     if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { // eslint-disable-line no-undef
       type: QSTelemetryLogger.EVENT_TYPES.TOUCH, // eslint-disable-line no-undef

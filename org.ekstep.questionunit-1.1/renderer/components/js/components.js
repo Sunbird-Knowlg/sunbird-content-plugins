@@ -47,7 +47,6 @@ org.ekstep.questionunit.baseComponent = {
     }
 }
 
-org.ekstep.questionunit = org.ekstep.questionunit || {};
 org.ekstep.questionunit.questionComponent = {
     generateQuestionComponent: function () {
         return '\
@@ -107,14 +106,14 @@ org.ekstep.questionunit.questionComponent = {
     },
     onDomReady: function () {
         this.isQuestionTextOverflow();
-        org.ekstep.questionunit.questionComponent.loadImageFromUrl($('#org-ekstep-contentrenderer-questionunit-questionComponent-downArwImg'), 'renderer/assets/down_arrow.png', 'org.ekstep.questionunit', '1.0');
-        org.ekstep.questionunit.questionComponent.loadImageFromUrl($('#org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg'), 'renderer/assets/audio-icon.png', 'org.ekstep.questionunit', '1.0');
-        org.ekstep.questionunit.questionComponent.loadAssetUrl($('#org-ekstep-questionunit-questionComponent-qimage'), $('#org-ekstep-questionunit-questionComponent-qimage').data('image'), 'org.ekstep.questionunit', '1.0');
+        var quesitonUnitPluginVer = PluginManager.pluginMap["org.ekstep.questionunit"].m.ver;
+        org.ekstep.questionunit.questionComponent.loadImageFromUrl($('#org-ekstep-contentrenderer-questionunit-questionComponent-downArwImg'), 'renderer/assets/down_arrow.png', 'org.ekstep.questionunit', quesitonUnitPluginVer);
+        org.ekstep.questionunit.questionComponent.loadImageFromUrl($('#org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg'), 'renderer/assets/audio-icon.png', 'org.ekstep.questionunit', quesitonUnitPluginVer);
+        org.ekstep.questionunit.questionComponent.loadAssetUrl($('#org-ekstep-questionunit-questionComponent-qimage'), $('#org-ekstep-questionunit-questionComponent-qimage').data('image'), 'org.ekstep.questionunit', quesitonUnitPluginVer);
     }
 }
 jQuery.extend(org.ekstep.questionunit.questionComponent, org.ekstep.questionunit.baseComponent);
 
-org.ekstep.questionunit = org.ekstep.questionunit || {};
 org.ekstep.questionunit.backgroundComponent = {
     settings: {
         bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
@@ -123,9 +122,9 @@ org.ekstep.questionunit.backgroundComponent = {
     getBackgroundGraphics: function () {
         org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
         return '\
-            <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
-                <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
-            </div >'
+        <div class="bg-graphics" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+        '
     }
 };
 

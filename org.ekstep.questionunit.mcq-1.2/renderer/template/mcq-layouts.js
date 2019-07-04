@@ -39,7 +39,7 @@ MCQController.grid.config = {
 
 /**
  * initializes the grid layout.
- * @param {object} question 
+ * @param {object} question
  */
 MCQController.grid.preRender = function (question) {
     MCQController.grid.config.optIndices = _.range(question.data.options.length);
@@ -47,7 +47,7 @@ MCQController.grid.preRender = function (question) {
 
 /**
  * returns the number of rows for the grid layout depening on the number of options
- * @param {Number} optsCount 
+ * @param {Number} optsCount
  */
 MCQController.grid.getRowCount = function (optsCount) {
     return optsCount > 4 ? 2 : 1
@@ -63,8 +63,8 @@ MCQController.grid.optionStyleUponClick = function (element) {
  * called when the option in grid layout is selected. It updates the CSS class
  * for selected option element, and also plays the audio if there is audio
  * associated with the option
- * @param {object} event 
- * @param {number} index 
+ * @param {object} event
+ * @param {number} index
  */
 MCQController.grid.onOptionSelected = function (event, index) {
     // clear all selected options and select this option
@@ -79,8 +79,8 @@ MCQController.grid.onOptionSelected = function (event, index) {
 
 /**
  * returns the option template for grid layout
- * @param {object} option 
- * @param {number} index 
+ * @param {object} option
+ * @param {number} index
  */
 MCQController.grid.getOptionTemplate = function (option, index) {
     var optTemplate = '\
@@ -93,8 +93,8 @@ MCQController.grid.getOptionTemplate = function (option, index) {
     <div class="org-ekstep-questionunit-mcq-option-element mcq-grid-option" onclick="MCQController.grid.onOptionSelected(event, <%= index %>)">\
     <% if (option.image){ %> \
       <div class="mcq-grid-option-image-container">\
-        <img class="mcq-grid-option-image" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
-      </div>\
+      <div class="border-solid position-relative"><img class="mcq-grid-option-image mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
+     </div> </div>\
     <% } %> \
     <% if (option.text){ %> \
       <div class="mcq-grid-option-text">\
@@ -133,8 +133,8 @@ MCQController.grid.getOptionsForRow = function (optIndices, i, options) {
 
 /**
  * returns the HTML for row elements with options populated
- * @param {array} optIndices 
- * @param {array} options 
+ * @param {array} optIndices
+ * @param {array} options
  */
 MCQController.grid.getOptionRows = function (optIndices, options) {
     var rowTemplate = '';
@@ -152,7 +152,7 @@ MCQController.grid.getOptionRows = function (optIndices, options) {
 
 /**
  * returns the options HTML template
- * @param {array} options 
+ * @param {array} options
  */
 MCQController.grid.getOptionsTemplate = function (options) {
     return MCQController.grid.getOptionRows(MCQController.grid.config.optIndices, options);
@@ -160,19 +160,20 @@ MCQController.grid.getOptionsTemplate = function (options) {
 
 /**
  * returns the HTML template for the grid layout
- * @param {object} question 
+ * @param {object} question
  */
 MCQController.grid.getTemplate = function (question) {
+    var wrapperEnd = '</div>';
     var template =
-        org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() +
         '<div class="mcq-question-container-grid plugin-content-container">\
     <div class="mcq-grid-question-container question-content-container">' +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent() +
-        '</div>\
-    <div class="mcq-grid-option-container"><div>' +
+        wrapperEnd +
+        MCQController.backgroundComponent.getBackgroundGraphics() +
+     '<div class="mcq-grid-option-container"><div>' +
         MCQController.grid.getOptionsTemplate(question.data.options) +
         '</div></div>\
-    </div>';
+    </div></div>';
     return template;
 }
 
@@ -183,40 +184,42 @@ MCQController.horizontal = MCQController.horizontal || jQuery.extend({}, MCQCont
  * returns the template for the specified layout
  * @param {string} layout the layout type `horizontal` or `vertical`
  */
-MCQController.horizontal.getTemplateForLayout = function (layout) {
+MCQController.horizontal.getTemplateForLayout = function (layout, question) {
     var wrapperStartQuestionComponent = '<div class="question-content-container">';
     var wrapperEndQuestionComponent = '</div>';
     var wrapperEnd = '</div>';
-    var layoutTemplate = MCQController.horizontal.getOptionLayout(layout);
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
+    var layoutTemplate = MCQController.horizontal.getOptionLayout(layout, question);
+    return '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
         wrapperStartQuestionComponent +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
-        layoutTemplate +
+        MCQController.backgroundComponent.getBackgroundGraphics(layout) +  
+            layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
 }
 
 /**
- * returns complete sequence plugin renderer html, 
+ * returns complete sequence plugin renderer html,
  * @param {String} selectedLayout selected layout from editor
  * @param {Object} availableLayout provides list of layouts
  * @memberof org.ekstep.questionunit.mcq.horizontal_and_vertical
  */
 MCQController.horizontal.getTemplate = function (question) {
-    return MCQController.horizontal.getTemplateForLayout(question.config.layout.toLowerCase());
+    return MCQController.horizontal.getTemplateForLayout(question.config.layout.toLowerCase(), question);
 }
 
 /**
- * returns the options HTML template for the specified `layout` 
- * @param {string} layout 
+ * returns the options HTML template for the specified `layout`
+ * @param {string} layout
  */
-MCQController.horizontal.getOptionLayout = function (layout) {
-    var audioIcon;
+MCQController.horizontal.getOptionLayout = function (layout, question) {
+    MCQController.horizontal.isVerticalLayout = ('vertical' == layout) ? true : false;
     if ('vertical' == layout) {
         audioIcon = "music-blue.png"
     } else {
         audioIcon = "audio-icon2.png"
     }
+
     return '<div class="outer-option-container ' + layout + '">\
             <div class="option-container ' + layout + '">\
             <div class="option-block-container">\
@@ -224,7 +227,12 @@ MCQController.horizontal.getOptionLayout = function (layout) {
                 <div class="option-block org-ekstep-questionunit-mcq-option-element<% if(val.isCorrect) { %> mcq-correct-answer<% } %>" onclick="MCQController.horizontal.onSelectOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
                     <div class="option-image-container <% if(!val.image) { %> no-image<% } %>" \>\
                   <%  if(val.image) { %>\
-                        <img onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
+                    <%  if(MCQController.horizontal.isVerticalLayout) { %>\
+                        <div class="border-solid position-relative"><img class="mcq-option-img" onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" /></div>\
+                  <% } %>\
+                  <%  if(!MCQController.horizontal.isVerticalLayout) { %>\
+                    <img class="mcq-option-img" onclick="MCQController.showImageModel(event, \'<%= MCQController.pluginInstance.getAssetUrl(val.image) %>\')" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
+                  <% } %>\
                   <% } %>\
                     </div>\
                     <%  if(val.audio) { %>\
@@ -232,7 +240,7 @@ MCQController.horizontal.getOptionLayout = function (layout) {
                     <% } %>\
                     <div class="option-text-container<% if(val.audio) { %> with-audio <% } %> <% if(val.image) { %>with-image<% } %>">\
                   <%  if(val.text) { %>\
-                        <span><%= val.text %></span>\
+                      <span><%= val.text %></span>\
                   <% } %>\
                     </div>\
                 </div>\
@@ -248,8 +256,8 @@ MCQController.horizontal.optionStyleUponClick = function (element) {
 }
 /**
  * called when the option in `horizontal` or `vertical` layout is selected
- * @param {object} element 
- * @param {number} index 
+ * @param {object} element
+ * @param {number} index
  */
 MCQController.horizontal.onSelectOption = function (element, index) {
     MCQController.horizontal.optionStyleUponClick(element);
@@ -270,50 +278,44 @@ MCQController.vertical2 = MCQController.vertical2 || jQuery.extend({}, MCQContro
 /**
  * returns the HTML template for `vertial2` layout where question is to the left and options are
  * displayed one below other on the right hand side
- * @param {object} question 
+ * @param {object} question
  */
 MCQController.vertical2.getTemplate = function (question) {
     var questionTemplate = MCQController.vertical2.getQuestionTemplate(question);
     var optionsTemplate = MCQController.vertical2.getOptionsTemplate(question.data.options);
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + "<div class='mcq-qLeft-content-container plugin-content-container'>" +
-        questionTemplate + optionsTemplate +
-        "</div>";
+    return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
+        questionTemplate +
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +
+        optionsTemplate +
+        "</div></div>";
 }
 
 /**
  * returns the question HTML template for the `vertical2` and `grid2` layouts
  */
 MCQController.vertical2.getQuestionTemplate = function (question) {
-    var q_image_class = '';
-    if (question.data.question.text) q_image_class = 'mcq-question-image'
-    else q_image_class = 'mcq-question-image-full'
     var qTemplate = "<div class='mcq-qLeft-question-container'>\
-                <div class=<%= q_image_class%>>\
+                <div class='mcq-question-image'>\
                 <% if(question.data.question.image){%>\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <%}%>\
-                </div>\
                 <% if(question.data.question.text){%>\
-                <div class='mcq-question-text'>\
-                  <div class='mcq-text-content'>\
-                  <div><%= question.data.question.text %></div>\
-                  </div>\
+                    <div class='question-text'\><%= question.data.question.text %></div>\
+                    <%}%>\
                 </div>\
-                <%}%>\
                 <% if ( question.data.question.audio.length > 0 ){ %> \
                 <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon2.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
                 <% } %> \
               </div>\
               ";
     return _.template(qTemplate)({
-        "question": question,
-        "q_image_class": q_image_class
+        "question": question
     });
 }
 
 /**
  * returns the HTML options template for the `vertical2` layout
- * @param {array} options 
+ * @param {array} options
  */
 MCQController.vertical2.getOptionsTemplate = function (options) {
     var opts = ''
@@ -358,7 +360,7 @@ MCQController.vertical2.getOption = function (option, key) {
 
 /**
  * adjusts the CSS properties of the options for `vertical2` layout
- * @param {object} question 
+ * @param {object} question
  */
 MCQController.vertical2.adjustOptions = function (question) {
     var optLength = question.data.options.length;
@@ -371,12 +373,33 @@ MCQController.vertical2.adjustOptions = function (question) {
 
 /**
  * called after the HTML template is updated in the DOM
- * @param {object} question 
+ * @param {object} question
  */
 MCQController.vertical2.postRender = function (question) {
     if (question.data.options.length < 4) {
         // MCQController.vertical2.adjustOptions(question);
     }
+}
+
+MCQController.onImageDomLoad = function (container, question) {
+    var domLoaded = false;
+    $('.mcq-option-img').on("load", function () {
+        if(domLoaded) return;
+
+        var defaultMaxHeight = $(container).outerHeight();
+        var defaultMaxWidth = $(container).width();
+        var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+        $(".border-solid").css("height", size.maxHeight);
+        $(".border-solid").css("width", size.maxWidth);
+        domLoaded = true;
+    })
+}
+
+MCQController.grid.postRender = function (question) {
+    MCQController.onImageDomLoad(".mcq-grid-option-image-container", question);
+}
+MCQController.vertical.postRender = function (question) {
+    MCQController.onImageDomLoad(".option-image-container", question);
 }
 
 MCQController.vertical2.optionStyleUponClick = function (element) {
@@ -386,8 +409,8 @@ MCQController.vertical2.optionStyleUponClick = function (element) {
 }
 /**
  * called when the option in `vertical2` layout is selected/tapped
- * @param {object} event 
- * @param {number} index 
+ * @param {object} event
+ * @param {number} index
  */
 MCQController.vertical2.onOptionSelected = function (event, index) {
     var optionElement = $(event.target);
@@ -400,14 +423,16 @@ MCQController.grid2 = MCQController.grid2 || jQuery.extend({}, MCQController.lay
 
 /**
  * returns the HTML template for the `grid2` layout
- * @param {object} question 
+ * @param {object} question
  */
 MCQController.grid2.getTemplate = function (question) {
     var questionTemplate = MCQController.vertical2.getQuestionTemplate(question);
     var optionsTemplate = MCQController.grid2.getOptionsTemplate(question.data.options)
-    return org.ekstep.questionunit.backgroundComponent.getBackgroundGraphics() + "<div class='mcq-qLeft-content-container plugin-content-container'>" +
-        questionTemplate + optionsTemplate +
-        "</div>";
+    return "<div class='mcq-qLeft-content-container plugin-content-container'>" +
+        questionTemplate +
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase())
+        + optionsTemplate +
+        "</div></div>";
 }
 
 /**
@@ -417,9 +442,10 @@ MCQController.grid2.getTemplate = function (question) {
 MCQController.grid2.adjustOptions = function (question) {
     var optLength = question.data.options.length;
     if (optLength == 2) {
-        $(".mcq2-2-option").css("margin-top", "15%");
+        $(".mcq2-2-option").css("margin-top", "28%");
     } else if (optLength == 3) {
-        $(".mcq2-2-option3").css("margin-left", "17.15%");
+        $(".mcq2-2-option3").css("margin-left", "30.15%");
+
     }
 }
 
@@ -428,14 +454,18 @@ MCQController.grid2.adjustOptions = function (question) {
  * @param {object} question the question object
  */
 MCQController.grid2.postRender = function (question) {
+    MCQController.onImageDomLoad(".mcq2-2-option", question);
+    if(question.config.layout.toLowerCase() === 'grid2'){
+        $(".mcq2-2-option").css("width", "40%", "margin-top", "3%", "margin-bottom", "3%");
+    }
     if (question.data.options.length < 4) {
         MCQController.grid2.adjustOptions(question);
     }
-}
+ }
 
 /**
  * returns the HTML template for options for `grid2` layout
- * @param {array} options 
+ * @param {array} options
  */
 MCQController.grid2.getOptionsTemplate = function (options) {
     var optionTemplate = ''
@@ -449,12 +479,13 @@ MCQController.grid2.getOptionsTemplate = function (options) {
  * returns the HTML template of the option in `grid2` template
  * @param {object} option the option object
  * @param {number} key the index of the option
+ * @param {size} maxHeight and width for layout
  */
 MCQController.grid2.getOption = function (option, key) {
     var optTemplate = " <div class='org-ekstep-questionunit-mcq-option-element mcq2-2-option mcq2-2-option<%=key+1%>' onClick=MCQController.grid2.onOptionSelected(event,<%= key %>)>\
   <%if(option.image){%>\
-      <img class='mcq2-2-option-image'\
-      src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
+     <div class='border-solid position-relative center-aligned'><img class='mcq2-2-option-image mcq-option-img'\
+      src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> /></div>\
   <%}%>\
   <%if(!option.image && option.text){%>\
     <div class='mcq2-2-option-text'><%= option.text %></div>\
@@ -474,10 +505,10 @@ MCQController.grid2.optionStyleUponClick = function (element) {
 }
 /**
  * called when the option in `grid2` layout is selected
- * @param {object} event 
- * @param {number} index 
+ * @param {object} event
+ * @param {number} index
  */
-MCQController.grid2.onOptionSelected = function (event, index) {    
+MCQController.grid2.onOptionSelected = function (event, index) {
     var optElt = $(event.target);
     MCQController.grid2.optionStyleUponClick(optElt);
     MCQController.pluginInstance.onOptionSelected(event, index);
@@ -486,5 +517,70 @@ MCQController.grid2.onOptionSelected = function (event, index) {
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
 }
+
+MCQController.getMaxWidthHeight = function (options, height, width) {
+    var size = { maxWidth: 0, maxHeight: 0 };
+    _.each(options, function (option, key) {
+        if (option.image) {
+            var img = new Image();
+            img.src = option.image;
+            if (img.height > size.maxHeight) {
+                size.maxHeight = img.height;
+            }
+            if (img.width > size.maxWidth) {
+                size.maxWidth = img.width;
+            }
+        }
+    });
+    var aspectRatio = size.maxHeight / size.maxWidth;
+    if (size.maxHeight > height || size.maxWidth > width) {
+        if (aspectRatio === 1) {
+            size.maxWidth = height / aspectRatio;
+            size.maxHeight = height;
+        } else if (size.maxHeight > size.maxWidth) {
+            size.maxHeight = height;
+            size.maxWidth = size.maxHeight / aspectRatio;
+        } else if (size.maxWidth > size.maxHeight) {
+            size.maxWidth = width;
+            size.maxHeight = aspectRatio     * size.maxWidth;
+        }
+    }
+    if (size.maxWidth > width) {
+        size.maxWidth = width;
+        size.maxHeight = aspectRatio * size.maxWidth;
+    } else if (size.maxHeight > height) {
+        size.maxHeight = height;
+        size.maxWidth = size.maxHeight / aspectRatio;
+    }
+
+    if (size.maxWidth === 0 || size.maxHeight === 0) {
+        size.maxWidth = width;
+        size.maxHeight = height;
+    }
+
+    return size;
+}
+
+MCQController.backgroundComponent = {
+    settings: {
+        bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
+        bgColor: "#5DC4F5"
+    },
+    getBackgroundGraphics: function (layoutType) {
+        org.ekstep.questionunit.backgroundComponent.settings.bgColor = org.ekstep.questionunit.backgroundComponent.settings.bgColors[_.random(0, org.ekstep.questionunit.backgroundComponent.settings.bgColors.length - 1)];
+        if (layoutType === 'grid2' || layoutType === 'vertical2') {
+            return '\
+            <div class="bg-graphics-2 left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+             <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+            '
+        } else {
+            return '\
+        <div class="bg-graphics-2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+            <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+        '
+        }
+    }
+};
+
 
 //# sourceURL=mcq-layouts.js
