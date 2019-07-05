@@ -7,6 +7,7 @@
 org.ekstep.questionunit.quml = {};
 org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questionUnitPlugin.extend({
     responseValueMap: {},
+    _selectedIndex: undefined,
     preQuestionShow: function(event) {
         if(isbrowserpreview && (Renderer.theme._basePath === "/assets/")){
             Renderer.theme._basePath = "/";
@@ -27,7 +28,6 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
         if (this._question.data.solution && this._question.data.solution[0].length > 0) {
             this._question.template = "<div class='sb-question-dsp-body'> \
             <div class='sb-question-header question-bg'> \
-              <span class='sb-question'></span><span class='sb-mark'>1 Marks</span> \
                 <button  class='sb-btn sb-btn-primary sb-btn-normal' id='questionBtn' style='display: none;' type='button'>Question</button> \
                 <button  class='sb-btn sb-btn-secondary sb-btn-normal mr-0' id='answerBtn' type='button' style='display: inline-block;'>Solution</button> \
             </div> \
@@ -69,6 +69,13 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                 $(this).addClass('mcq-options-select');
                 var resVal = this.attributes['data-response-variable'].value;
                 instance.responseValueMap[resVal] = this.attributes.value.value;
+                instance._selectedIndex = this.attributes.value.value;
+                var telValues = {};
+                telValues['option' + this.attributes.value.value] = $(this).text();
+                QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { // eslint-disable-line no-undef
+                    "type": "MCQ",
+                    "values": [telValues]
+                });
             }
         });
         if (this._question.data.solution && this._question.data.solution[0].length > 0) {
@@ -78,11 +85,13 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                 $('.sb-question-content').animate({
                     scrollTop: $('#answer').offset().top
                 });
+                instance.logTelemetryInteract({target : { id : 'answerBtn' }});
             }
             document.getElementById('questionBtn').onclick = function() {
                 $('.sb-question-content').animate({
                     scrollTop: $('#question').offset().top
                 });
+                instance.logTelemetryInteract({target : { id : 'questionBtn' }});
             }
             $('.sb-question-content').scroll(function() {
                 if ($('#answer').position().top <= ($('.sb-question-content').height()) / 2) {
@@ -115,17 +124,37 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             if (key.length > 0 && responseDeclaration[key[0]].correct_response.value === instance.responseValueMap[key[0]]) {
                 correctAnswer = true;
             }
+
+            var params = [];
+            if(this._question.data.options){
+                _.forEach(this._question.data.options, function(val){
+                    var temp = {};
+                    var index = parseInt(val.value.resindex) + 1;
+                    if(val.answer){
+                        params.push({'answer': JSON.stringify({ "correct": [index.toString()] })});
+                    }
+                    temp[index] = JSON.stringify({ text: val.value.body });
+                    if(val.value.resindex === parseInt(instance._selectedIndex)){
+                        telValues[index] = JSON.stringify({ text: val.value.body });
+                    }
+                    params.push(temp);
+                })
+
+            }
             result = {
                 eval: correctAnswer,
                 state: {
                     val: instance.responseValueMap[key[0]]
                 },
                 score: correctAnswer ? instance._question.config.max_score : 0,
-                values: [telValues]
+                values: [telValues],
+                params: params,
+                type: instance._question.config.metadata.type
             }
         } else {
             result = {
-                eval: correctAnswer
+                eval: correctAnswer,
+                evalRequired: false
             }
         }
         if (_.isFunction(callback)) {
