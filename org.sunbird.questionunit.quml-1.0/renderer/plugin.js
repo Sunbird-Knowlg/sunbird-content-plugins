@@ -28,7 +28,6 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
         if (this._question.data.solution && this._question.data.solution[0].length > 0) {
             this._question.template = "<div class='sb-question-dsp-body'> \
             <div class='sb-question-header question-bg'> \
-              <span class='sb-question'></span><span class='sb-mark'>1 Marks</span> \
                 <button  class='sb-btn sb-btn-primary sb-btn-normal' id='questionBtn' style='display: none;' type='button'>Question</button> \
                 <button  class='sb-btn sb-btn-secondary sb-btn-normal mr-0' id='answerBtn' type='button' style='display: inline-block;'>Solution</button> \
             </div> \
