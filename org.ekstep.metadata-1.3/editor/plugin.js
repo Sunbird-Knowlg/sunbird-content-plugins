@@ -93,17 +93,21 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * @returns {Object}
      */
     mapObject: function(destination, source) {
-        
+        var instance = this;
         destination.forEach(function(dest) {
             source.forEach(function(src) {
                 if (dest.code === src.code) {
-                    dest.range = src.terms;
+                    instance.mapAssociations(dest, src, function(dest, src){
+                        dest.range = src.terms;
+                    }) 
                 }
             })
         });
         return destination;
+    },
+    mapAssociations: function(destination, source, callback) {
+        // Map the data and return the mapped associations data
+        return callback(destination, source)
     }
-
-
 });
 //# sourceURL=metadataPlugin.js
