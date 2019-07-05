@@ -93,21 +93,65 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * @returns {Object}
      */
     mapObject: function(destination, source) {
+        console.log("gourav", source)
         var instance = this;
+        var mapObj = {};
+        mapObj.destination = destination;
+        mapObj.source = source;
+
+        instance.mapParents(fields, function(mappedParents){
+            instance.mapAssociations(mappedParents,function(associations){
+                console.log(associations);
+            })
+        })
+
         destination.forEach(function(dest) {
             source.forEach(function(src) {
                 if (dest.code === src.code) {
-                    instance.mapAssociations(dest, src, function(dest, src){
-                        dest.range = src.terms;
-                    }) 
+                    dest.range = src.terms;
                 }
             })
         });
         return destination;
     },
-    mapAssociations: function(destination, source, callback) {
-        // Map the data and return the mapped associations data
-        return callback(destination, source)
+    /**
+     * @param {Object} data
+     * 
+     * @description - return fields with mapped data
+     * 
+     * @returns {Object}
+     */
+    mapParents: function(data, callback) {
+        // create parent to all the fields 
+        _.forEach(data, function(val, index) {
+            data[index].parent = [];
+        });
+
+        // set parents 
+        _.forEach(data, function(field, index) {
+            if(field.depends){
+                _.forEach(field.depends, function(depend){
+                   _.forEach(data, function(category, index) {
+                       if (depend === category.code){
+                           data[index].parent.push(depend);
+                       }
+                    });
+                    
+                })
+            }
+        });
+        return callback(data)
+    },
+    /**
+     * @param {Object} data
+     * 
+     * @description - return mapped associations
+     * 
+     * @returns {Object}
+     */
+    mapAssociations: function(data, callback) {
+        // Mapped associations and return data
+        return callback(data)
     }
 });
 //# sourceURL=metadataPlugin.js
