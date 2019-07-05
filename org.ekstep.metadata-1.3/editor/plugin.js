@@ -93,12 +93,7 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * @returns {Object}
      */
     mapObject: function(destination, source) {
-        console.log("gourav", source)
         var instance = this;
-        var mapObj = {};
-        mapObj.destination = destination;
-        mapObj.source = source;
-
         instance.mapParents(fields, function(mappedParents){
             instance.mapAssociations(mappedParents,function(associations){
                 console.log(associations);
