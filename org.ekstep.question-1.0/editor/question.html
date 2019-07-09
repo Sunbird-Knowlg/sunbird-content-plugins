@@ -160,7 +160,7 @@
                 </button>
                 <div class="or" ng-show="!templatesScreen && questionMetadataScreen"></div>
                 <button class="ui large blue button" ng-if="questionMetadataScreen" id="save-question-button"
-                        ng-click="sendMetaData(true);generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-submit', ver: '', type: 'button'}})" ng-disabled="savingQuestion">
+                        ng-click="sendMetaData(true);generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-submit', ver: '', type: 'button'}})" ng-disabled="savingQuestion || editMode">
                     Save and Create
                 </button>
                 <div class="or" ng-show="!templatesScreen"></div>
