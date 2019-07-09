@@ -94,12 +94,9 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      */
     mapObject: function(destination, source) {
         var instance = this;
-        instance.mapParents(fields, function(mappedParents){
-            instance.mapAssociations(mappedParents,function(associations){
-                console.log(associations);
-            })
+        instance.mapParents(destination, function(mappedParents){
+            destination = mappedParents;
         })
-
         destination.forEach(function(dest) {
             source.forEach(function(src) {
                 if (dest.code === src.code) {
@@ -128,24 +125,13 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
                 _.forEach(field.depends, function(depend){
                    _.forEach(data, function(category, index) {
                        if (depend === category.code){
-                           data[index].parent.push(depend);
+                           data[index].parent.push(field.code);
                        }
                     });
                     
                 })
             }
         });
-        return callback(data)
-    },
-    /**
-     * @param {Object} data
-     * 
-     * @description - return mapped associations
-     * 
-     * @returns {Object}
-     */
-    mapAssociations: function(data, callback) {
-        // Mapped associations and return data
         return callback(data)
     }
 });
