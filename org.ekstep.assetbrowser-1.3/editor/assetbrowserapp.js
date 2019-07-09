@@ -881,8 +881,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         if (data) ecEditor.getService('telemetry').interact({
             "id": data.id,
             "type": data.type,
-            "subtype": data.subtype,
-            "target": data.target,
+            "pageid": data.pageid || "",
+            "subtype": data.subtype || "",
+            "target": data.target || {},
             "pluginid": instance.manifest.id,
             "pluginver": instance.manifest.ver,
             "objectid": "",

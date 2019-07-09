@@ -342,7 +342,7 @@
 							 </div>
 						 </div>
 						 <div class="two wide right aligned column">
-							 <div id="myVideoDropDown" class="ui floating labeled icon dropdown button video">
+							 <div id="myVideoDropDown" class="ui floating labeled icon dropdown button video" ng-click="$ctrl.generateTelemetry({type: 'feature', id:'cf:assetbrowser:filtervideo:', pageid:'uploadVideoForm'});">
 								 <i class="filter icon"></i>
 								 <span class="text" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});">All</span>
 								 <div class="menu" style="z-index: 13;">
@@ -698,7 +698,7 @@
 					<div class="column">
 						<div class="ui two column divided grid" ng-if="$ctrl.plugin == 'audio' || $ctrl.plugin == 'video'" ng-hide="$ctrl.upload || $ctrl.record || $ctrl.urlUpload">
 							   <div class="row center aligned">
-								  <div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'upload', target: 'uploadAsset'});">
+								  <div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'upload', target: 'uploadAsset'}); $ctrl.generateTelemetry({type: 'feature', id:'cf:assetbrowser:upload:local', pageid:'uploadVideoForm'});">
 									  <p><i class="huge upload icon"></i></p>
 									  UPLOAD
 								  </div>
@@ -707,7 +707,7 @@
 									<p><i class="huge unmute icon"></i></p>
 									RECORD
 									  </div>
-									 <div class="column" ng-if="$ctrl.plugin == 'video'" ng-click="$ctrl.upload = false; $ctrl.urlUpload=true; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'uploadYoutube'});">
+									 <div class="column" ng-if="$ctrl.plugin == 'video'" ng-click="$ctrl.upload = false; $ctrl.urlUpload=true; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'select', target: 'uploadYoutube'}); ">
 										 <p><i class="huge youtube icon"></i></p>
 										 YOUTUBE
 										 </div>
@@ -719,7 +719,7 @@
 						 <div class="ui fluid action input">
 							 <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'})"
 								 placeholder="Paste video URL here" ng-model="$ctrl.videoUrl" ng-change="$ctrl.hasInputChanged();">
-							 <div class="ui blue button" ng-click="$ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'})">Go</div>
+							 <div class="ui blue button" ng-click="$ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'}); $ctrl.generateTelemetry({type: 'feature', id:'cf:assetbrowser:upload:youtubelink', pageid:'uploadVideoForm'});">Go</div>
 						 </div>
 					 </div>
 				 </div>
