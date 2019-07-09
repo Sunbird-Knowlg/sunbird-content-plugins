@@ -145,7 +145,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateForm = function(object) {
         if (object.field && object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
-                // get form data to get current parent fields value
                 ecEditor.dispatchEvent("metadata:form:getdata", {target: '#'+ object.target.tempalteName, callback: function(data){
                     $scope.getParentAssociations(object.field, associations, data, function(commonAssociations){
                         $scope.applyDependencyRules(object.field, commonAssociations, true, '#'+object.target.tempalteName);
@@ -155,13 +154,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         }
     };
     $scope.getParentAssociations = function(field, associations, formData, callback) {
-        // check for parents and get parent associations
         if (field.parent && field.parent.length){
             _.forEach(field.parent, function(val) {
-                // check for parent fields associations
-                
-                // get intersection from parent associations and current field associations
-                associations = $scope.getCommonAssociations(parentAssociations, associations);
+                _.forEach($scope.fields, function(field) {
+                    if (field.code === val){
+                        _.forEach(field.range, function(range) {
+                            if (range.name === formData[val]){
+                                associations = $scope.getCommonAssociations(range.associations, associations);
+                            }
+                        });
+                    }
+                });
             })
         }  
         callback(associations);
@@ -169,8 +172,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.getCommonAssociations = function(parentAssociations, childAssociations){
         var intersectionData = [];
         if (parentAssociations && parentAssociations.length){
-            return childAssociations;// return intersection data
+            _.forEach(parentAssociations, function(category, key) {
+                _.forEach(childAssociations, function(data, key) {
+                    if (data.name === category.name){
+                        intersectionData.push(data);
+                    }
+                });
+            });
         }
+        return intersectionData;
     };
 
     /** 
@@ -255,15 +265,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.updateDropDownList = function(fieldCode, values) {
         if (values.length) {
-            // var intersectionData = [];
-            // _.forEach($scope.categoryList[fieldCode], function(category, key) {
-            //     _.forEach(values, function(data, key) {
-            //         if (data.name === category.name){
-            //             intersectionData.push(data);
-            //         }
-            //     });
-            // });
-            // values = intersectionData;
             $scope.categoryList[fieldCode] = _.unionBy(values, 'name');
         } else {
             $scope.mapMasterCategoryList($scope.fields, fieldCode);
