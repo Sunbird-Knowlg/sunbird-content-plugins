@@ -51,8 +51,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 			}
 		});
 		if (!ecEditor._.isEmpty(questionData)) {
-      $scope.showQuestionForm(questionData);
-
+			$scope.showQuestionForm(questionData);
       //Check dom is ready then only play preview
       angular.element(document).ready(function () {
         setTimeout(function(){ $scope.setPreviewData(); }, 0);
@@ -119,7 +118,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 		$scope.pluginVer = obj.ver;
 		$scope.templateId = obj.editor.template;
 		var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
-    $scope.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
+		$scope.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
 	}
 	$scope.showMetaform = function () {
 		$scope.refreshPreview = false;
