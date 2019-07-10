@@ -18,17 +18,17 @@
 
             RTL.list = [];
 
-            RTL.isTRUE = function (string) {
+            RTL.isTRUE = function(string) {
                 var returnVal;
                 this.list.forEach(function (lang) {
-                    if (lang.containsLangText(string)) {
+                    if(lang.containsLangText(string)){
                         returnVal = lang;
-                    }
+                    } 
                 })
                 return returnVal;
             }
 
-            RTL.removeStyle = function (element) {
+            RTL.removeStyle = function(element){
                 this.list.forEach(function (lang) {
                     element.classList.remove(lang.cssClass);
                 })
