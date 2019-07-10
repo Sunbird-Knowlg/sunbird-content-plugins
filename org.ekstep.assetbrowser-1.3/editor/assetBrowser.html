@@ -342,18 +342,18 @@
 							 </div>
 						 </div>
 						 <div class="two wide right aligned column">
-							 <div id="myVideoDropDown" class="ui floating labeled icon dropdown button video" ng-click="$ctrl.generateTelemetry({type: 'feature', id:'cf:assetbrowser:filtervideo:', pageid:'uploadVideoForm'});">
+							 <div id="myVideoDropDown" class="ui floating labeled icon dropdown button video">
 								 <i class="filter icon"></i>
 								 <span class="text" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});">All</span>
 								 <div class="menu" style="z-index: 13;">
-									 <div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value='all'>
+									 <div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'},{'context':{'cdata':[{type: 'feature', id:'video:filter'},{'id':'SB-9873','type':'task'}]}});" class="item" data-value='all'>
 										 All
 									 </div>
 									 <div class="divider"></div>
-									 <div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="video">
+									 <div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'},{'context':{'cdata':[{type: 'feature', id:'video:filter'},{'id':'SB-9873','type':'task'}]}});" class="item" data-value="video">
 										 Videos
 									 </div>
-									 <div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'});" class="item" data-value="youtube">
+									 <div ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'filterVideoAsset'},{'context':{'cdata':[{type: 'feature', id:'video:filter'},{'id':'SB-9873','type':'task'}]}});" class="item" data-value="youtube">
 										 Youtube
 									 </div>
 								 </div>
@@ -698,7 +698,7 @@
 					<div class="column">
 						<div class="ui two column divided grid" ng-if="$ctrl.plugin == 'audio' || $ctrl.plugin == 'video'" ng-hide="$ctrl.upload || $ctrl.record || $ctrl.urlUpload">
 							   <div class="row center aligned">
-								  <div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'upload', target: 'uploadAsset'}); $ctrl.generateTelemetry({type: 'feature', id:'cf:assetbrowser:upload:local', pageid:'uploadVideoForm'});">
+								  <div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton(); $ctrl.generateTelemetry({id: 'button', type: 'click', subtype: 'upload', target: 'uploadAsset'},{'context':{'cdata':[{type: 'feature', id:'video:localBrowse'},{'id':'SB-9873','type':'task'}]}});">
 									  <p><i class="huge upload icon"></i></p>
 									  UPLOAD
 								  </div>
@@ -719,7 +719,7 @@
 						 <div class="ui fluid action input">
 							 <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'})"
 								 placeholder="Paste video URL here" ng-model="$ctrl.videoUrl" ng-change="$ctrl.hasInputChanged();">
-							 <div class="ui blue button" ng-click="$ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'}); $ctrl.generateTelemetry({type: 'feature', id:'cf:assetbrowser:upload:youtubelink', pageid:'uploadVideoForm'});">Go</div>
+							 <div class="ui blue button" ng-click="$ctrl.addVideoAssetByURL(); $ctrl.generateTelemetry({id:'videoUrl',type: 'click', subtype: 'search', target: 'videoUrl'},{'context':{'cdata':[{type: 'feature', id:'video:youtube'},{'id':'SB-9873','type':'task'}]}});">Go</div>
 						 </div>
 					 </div>
 				 </div>
