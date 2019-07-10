@@ -80,9 +80,12 @@
                             }, {
                                     "context": {
                                         'cdata': [{
-                                            "id": `cf:ckeditor:languageUrdu`,
+                                            "id": `ckeditor:languageUrdu`,
                                             "type": "feature"
-                                        }].concat(_globalContext.cdata)
+                                        },{
+                                            "id":"SB-6814",
+                                            "type":"feature"
+                                        }]
                                     }
                                 })
 

@@ -645,7 +645,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     };
 
-    $scope.generateTelemetry = function (data) {
+    $scope.generateTelemetry = function (data, options) {
         if (data) ecEditor.getService('telemetry').interact({
             "id": data.id || "" ,
             "type": data.type || "click",
@@ -657,7 +657,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             "objectid": "",
             "targetid": "",
             "stage": ""
-        })
+        }, options)
     };
 
     $scope.fireEvent = function (event) {
