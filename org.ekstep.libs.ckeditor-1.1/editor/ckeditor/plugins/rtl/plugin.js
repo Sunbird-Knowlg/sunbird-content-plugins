@@ -80,7 +80,7 @@
                             }, {
                                     "context": {
                                         'cdata': [{
-                                            "id": `cf:ckeditor:language${rtlLang.language.charAt(0).toUpperCase()}${rtlLang.language.slice(1)}`,
+                                            "id": `cf:ckeditor:languageUrdu`,
                                             "type": "feature"
                                         }].concat(_globalContext.cdata)
                                     }
