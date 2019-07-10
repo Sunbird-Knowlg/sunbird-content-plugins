@@ -48,11 +48,11 @@
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
-                                <div class="item" ng-click="downloadToc(); generateTelemetry({ id:'button',subtype: 'downloadToc', target: 'downloadTocButton'},{context:{cdata:[{id:'cf:toc:csvDownload', type:'feature'},{id:'SB-7976', type:'task'}]}});"
+                                <div class="item" ng-click="downloadToc(); generateTelemetry({ id:'button',subtype: 'downloadToc', target: 'downloadTocButton'},{context:{cdata:[{id:'toc:csvDownload', type:'feature'},{id:'SB-7976', type:'task'}]}});"
                                     ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="download icon"></i> Download ToC Metadata
                                 </div>
-                                <div class="item" ng-click="updateToc(); generateTelemetry({ id:'button',subtype: 'uploadToc', target: 'uploadTocButton'},{context:{cdata:[{id:'cf:toc:csvUpdate', type:'feature'},{'id':'SB-7975', 'type':'task'}]}});"
+                                <div class="item" ng-click="updateToc(); generateTelemetry({ id:'button',subtype: 'uploadToc', target: 'uploadTocButton'},{context:{cdata:[{id:'toc:csvUpdate', type:'feature'},{'id':'SB-7975', 'type':'task'}]}});"
                                     ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="upload icon"></i> Update ToC Metadata</div>
                             </div>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
                                 <div class="item" ng-class="(!disableQRGenerateBtn || (qrCodeCount.request > 0 && qrCodeCount.request + 1 <= qrCodeCount.reserve) || isGeneratingQRCodes ) ? 'disabled' : ' '"><i class="qrcode icon"></i>
-                                    <span ng-if="!isGeneratingQRCodes" class="text" ng-click="openRequestPopup(); generateTelemetry({ id:'button',subtype: 'reserveDialCode', target: 'reserveDialCodeButton'},{context:{cdata:[{id:'cf:toc:qrcode:generate', type:'feature'},{id:'SB-7959', type:'task'}]}});">Generate
+                                    <span ng-if="!isGeneratingQRCodes" class="text" ng-click="openRequestPopup(); generateTelemetry({ id:'button',subtype: 'reserveDialCode', target: 'reserveDialCodeButton'},{context:{cdata:[{id:'toc:qrcode:generate', type:'feature'},{id:'SB-7959', type:'task'}]}});">Generate
                                             {{(qrCodeCount.request > 0 && qrCodeCount.request+1 > qrCodeCount.reserve)? qrCodeCount.request + ' + 1' : (qrCodeCount.reserve > 0) ? qrCodeCount.reserve-1 +' + 1' : '' }} QR Codes
                                     </span>
                                     <span ng-if="isGeneratingQRCodes" class="text">Generating {{(qrCodeCount.request > 0 )? qrCodeCount.request-1 + ' + 1' :'' }} QR codes</span>
