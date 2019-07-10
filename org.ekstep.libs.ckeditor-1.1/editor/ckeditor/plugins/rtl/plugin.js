@@ -65,6 +65,21 @@
                     var elementDir = "dir";
                     var elementRtl = "rtl";
                     if (rtlLang) {
+                        // Generate Telemetry
+                        ecEditor.getService('telemetry').interact({
+                            "type": 'feature',
+                            "id": 'cf:ckeditor:languageUrdu',
+                            "pageid": 'question-creation-form',
+                            "target": {
+                                "id": 'org.ekstep.questionunit',
+                                "ver": ecEditor.getPlugin('org.ekstep.questionunit').m.ver,
+                                "type": 'type'
+                            },
+                            "plugin": {
+                                "id": 'org.ekstep.libs.ckeditor',
+                                "ver": ecEditor.getPlugin('org.ekstep.libs.ckeditor').m.ver
+                            }
+                        })
                         if (inputTextAsElement.getAttribute(elementDir) != elementRtl) {
                             inputTextAsElement.setAttribute(elementDir, elementRtl);
                             rtlLang.addStyle(inputTextAsElement)
