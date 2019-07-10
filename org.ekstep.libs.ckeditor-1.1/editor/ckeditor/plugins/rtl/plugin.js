@@ -18,17 +18,17 @@
 
             RTL.list = [];
 
-            RTL.isTRUE = function(string) {
+            RTL.isTRUE = function (string) {
                 var returnVal;
                 this.list.forEach(function (lang) {
-                    if(lang.containsLangText(string)){
+                    if (lang.containsLangText(string)) {
                         returnVal = lang;
-                    } 
+                    }
                 })
                 return returnVal;
             }
 
-            RTL.removeStyle = function(element){
+            RTL.removeStyle = function (element) {
                 this.list.forEach(function (lang) {
                     element.classList.remove(lang.cssClass);
                 })
@@ -65,25 +65,27 @@
                     var elementDir = "dir";
                     var elementRtl = "rtl";
                     if (rtlLang) {
-                        // Generate Telemetry
-                        ecEditor.getService('telemetry').interact({
-                            "type": 'feature',
-                            "id": 'cf:ckeditor:languageUrdu',
-                            "pageid": 'question-creation-form',
-                            "target": {
-                                "id": 'org.ekstep.questionunit',
-                                "ver": ecEditor.getPlugin('org.ekstep.questionunit').m.ver,
-                                "type": 'type'
-                            },
-                            "plugin": {
-                                "id": 'org.ekstep.libs.ckeditor',
-                                "ver": ecEditor.getPlugin('org.ekstep.libs.ckeditor').m.ver
-                            }
-                        })
                         if (inputTextAsElement.getAttribute(elementDir) != elementRtl) {
                             inputTextAsElement.setAttribute(elementDir, elementRtl);
                             rtlLang.addStyle(inputTextAsElement)
                             editor.setData(inputTextAsElement.outerHTML);
+
+                            ecEditor.getService('telemetry').interact({
+                                "type": 'input',
+                                "id": `${rtlLang.language}-language`,
+                                "plugin": {
+                                    "id": 'org.ekstep.libs.ckeditor',
+                                    "ver": ecEditor.getPlugin('org.ekstep.libs.ckeditor').m.ver
+                                }
+                            }, {
+                                    "context": {
+                                        'cdata': [{
+                                            "id": `cf:ckeditor:language${rtlLang.language.charAt(0).toUpperCase()}${rtlLang.language.slice(1)}`,
+                                            "type": "feature"
+                                        }].concat(_globalContext.cdata)
+                                    }
+                                })
+
                         }
                     } else {
                         if (inputTextAsElement.getAttribute(elementDir) == elementRtl) {
