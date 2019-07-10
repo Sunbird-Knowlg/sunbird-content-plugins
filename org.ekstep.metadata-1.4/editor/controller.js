@@ -78,21 +78,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         ecEditor.dispatchEvent(event, data)
     };
 
-    $scope.ownerShipFieldConfig = {
-        "code": "ownedBy",
-        "dataType": "text",
-        "description": "Ownership Type",
-        "editable": true,
-        "inputType": "select",
-        "label": "Owner",
-        "range": {},
-        "name": "level",
-        "placeholder": "Owner",
-        "renderingHints": {},
-        "required": true,
-        "visible": true
-    };
-
     /**
      * @description     - It Initialize the dropdown with selected values
      */
@@ -315,18 +300,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var form = {};
         form.metaData = getUpdatedMetadata(object.target.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
-        if(object.target.contentMeta.ownedBy){
-            var ownerShipData = ecEditor.getContext('user');
-            form.metaData.ownedBy = object.target.contentMeta.ownedBy;
-            if(form.metaData.ownedBy == ownerShipData.id) {
-                form.metaData.ownershipType = ['createdBy'];
-                form.metaData.owner = ownerShipData.name;
-            } else {
-                var oraganizationDetails =  _.find($scope.ownership, ['value', object.target.contentMeta.ownedBy]);
-                form.metaData.ownershipType = ['createdFor'];
-                form.metaData.owner = oraganizationDetails.name;
-            }
-        }
         form.target = object.target;
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: validationStatus,
@@ -459,6 +432,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
+        $scope.licenseTermsLabel = "License Terms:";
+        $scope.license = "CC BY SA 4.0 this is a static text label";
+
         var callbackFn = function(config) {
             config.fields = config.fields.filter(function( obj ) {
                 return obj.code !== 'ownedBy';
@@ -482,8 +458,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }else{
                     $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
                 }
-                $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
-                $scope.fields.push($scope.ownerShipFieldConfig);
             }
 
             if (_.isUndefined(config.editMode)) {
@@ -507,8 +481,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             });
             $scope.contentMeta = config.model;
-        
+            $scope.contentMimeType = config.model.mimeType;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
+
+            if(!_.isUndefined($scope.originalContentMeta['collaborators'])){
+                var res = $scope.originalContentMeta['collaborators'].split(",");
+                _.forEach(res,function(val,key){
+                    $scope.originalContentMeta['attributions'].push(val);
+                });
+                $scope.contentMeta['collaborators'] = "";
+            }
+            if(!_.isUndefined($scope.originalContentMeta['creators'])){
+                var res = $scope.originalContentMeta['creators'].split(",");
+                _.forEach(res,function(val,key){
+                    $scope.originalContentMeta['attributions'].push(val);
+                });
+                $scope.contentMeta['creators'] = "";
+            }
             var layoutConfigurations = $scope.getLayoutConfigurations();
             $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
             $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
