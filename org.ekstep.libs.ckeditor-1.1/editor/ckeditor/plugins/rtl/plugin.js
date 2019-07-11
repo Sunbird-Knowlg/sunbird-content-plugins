@@ -84,7 +84,7 @@
                                             "type": "feature"
                                         },{
                                             "id":"SB-6814",
-                                            "type":"feature"
+                                            "type":"task"
                                         }]
                                     }
                                 })
