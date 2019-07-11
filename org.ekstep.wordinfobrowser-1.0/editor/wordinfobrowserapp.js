@@ -77,7 +77,8 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
             "request": {
                 "filters": {
                     "lemma": ctrl.slectedWords,
-                    "objectType": ["Word"]
+                    "objectType": ["Word"],
+                    "language_id": ['en']
                 }
             }
         };
