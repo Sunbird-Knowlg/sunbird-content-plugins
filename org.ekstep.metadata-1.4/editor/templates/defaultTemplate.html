@@ -148,11 +148,11 @@
                                         && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
                                             <dialcode ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})"></dialcode>
                                         </div>
+                                        <div id="{{dynamicField.code}} " class="field " name="{{dynamicField.code}}" ng-if="dynamicField.inputType==='label' && contentMimeType != 'video/x-youtube'">
+                                            <label>{{dynamicField.label | uppercase}}</label>
+                                            <div class=label-of-label>{{dynamicField.renderingHints.value}}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="lincense-field field" >
-                                    <label>{{licenseTermsLabel | uppercase}}</label>
-                                    <p>{{license}}</p>
                                 </div>
                             </div>
                         </div>

@@ -432,8 +432,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
-        $scope.licenseTermsLabel = "License Terms:";
-        $scope.license = "CC BY SA 4.0 this is a static text label";
 
         var callbackFn = function(config) {
             config.fields = config.fields.filter(function( obj ) {
