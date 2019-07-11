@@ -877,17 +877,20 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.uploadButton();
     }
 
-    ctrl.generateTelemetry = function(data) {
-        if (data) ecEditor.getService('telemetry').interact({
-            "id": data.id,
-            "type": data.type,
-            "subtype": data.subtype,
-            "target": data.target,
-            "pluginid": instance.manifest.id,
-            "pluginver": instance.manifest.ver,
-            "objectid": "",
-            "stage": ecEditor.getCurrentStage().id
-        })
+    ctrl.generateTelemetry = function(data,options) {
+        if (data) {
+            ecEditor.getService('telemetry').interact({
+                "id": data.id,
+                "type": data.type,
+                "pageid": data.pageid || "",
+                "subtype": data.subtype || "",
+                "target": data.target || {},
+                "pluginid": instance.manifest.id,
+                "pluginver": instance.manifest.ver,
+                "objectid": "",
+                "stage": ecEditor.getCurrentStage().id
+            },options)
+        }
     }
 
     ctrl.preFillForm = function(data) {
@@ -1316,4 +1319,3 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     }, 100);
 }]);
-

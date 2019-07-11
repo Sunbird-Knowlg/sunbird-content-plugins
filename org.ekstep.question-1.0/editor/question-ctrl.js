@@ -118,7 +118,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 		$scope.pluginVer = obj.ver;
 		$scope.templateId = obj.editor.template;
 		var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
-		$scope.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
+    $scope.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
+    
+    if($scope.assessmentId){
+      delete $scope.assessmentId;
+    }
 	}
 	$scope.showMetaform = function () {
 		$scope.refreshPreview = false;

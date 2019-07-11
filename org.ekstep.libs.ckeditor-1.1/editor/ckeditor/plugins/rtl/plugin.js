@@ -69,6 +69,26 @@
                             inputTextAsElement.setAttribute(elementDir, elementRtl);
                             rtlLang.addStyle(inputTextAsElement)
                             editor.setData(inputTextAsElement.outerHTML);
+
+                            ecEditor.getService('telemetry').interact({
+                                "type": 'input',
+                                "id": `${rtlLang.language}-language`,
+                                "plugin": {
+                                    "id": 'org.ekstep.libs.ckeditor',
+                                    "ver": ecEditor.getPlugin('org.ekstep.libs.ckeditor').m.ver
+                                }
+                            }, {
+                                    "context": {
+                                        'cdata': [{
+                                            "id": "question:ckeditor:languageUrdu",
+                                            "type": "Feature"
+                                        },{
+                                            "id":"SB-6814",
+                                            "type":"Task"
+                                        }]
+                                    }
+                                })
+
                         }
                     } else {
                         if (inputTextAsElement.getAttribute(elementDir) == elementRtl) {

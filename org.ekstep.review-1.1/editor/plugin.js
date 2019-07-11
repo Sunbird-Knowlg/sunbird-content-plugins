@@ -55,6 +55,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             className: 'ngdialog-theme-default'
         });
     },
@@ -135,6 +137,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             template: 'org.ekstep.review.editMetaDialog.html',
             controller: ['$scope', modalController],
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             className: 'ngdialog-theme-default'
         });
 
@@ -165,6 +169,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 },
             },
             showClose: false,
+            closeByEscape: false,
+            closeByDocument: false,
             className: 'ngdialog-theme-plain reviewConflict'
         });
     },

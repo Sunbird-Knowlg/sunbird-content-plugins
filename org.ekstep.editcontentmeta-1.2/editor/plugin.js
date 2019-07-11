@@ -30,7 +30,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             width: 900,
-            showClose: false
+            showClose: false,
+            closeByEscape: false,
+            closeByDocument: false
         });
     },
     newInstance: function() {}

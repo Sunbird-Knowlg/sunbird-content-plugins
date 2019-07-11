@@ -28,7 +28,9 @@ org.ekstep.contenteditor.basePlugin.extend({
             controller: 'whatsnewController',
             controllerAs: '$ctrl',
             width: 900,
-            showClose: false
+            showClose: false,
+            closeByEscape: false,
+            closeByDocument: false
         });
     },
     newInstance: function () {

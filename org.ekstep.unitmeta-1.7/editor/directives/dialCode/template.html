@@ -4,12 +4,12 @@
 
     <div class="ui radio checkbox qrCodeCheck">
         <input type="radio" value="No" ng-model="unit.dialcodeRequired" required
-            ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'});"
+        ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'},{context:{cdata:[{id:'toc:qrcode:required', type:'Feature'},{id:'SB-10691', type:'Task'}]}});"
             name="dialcodeRequired" tabindex="0">
         <label>No</label>
     </div>
     <div class="ui radio checkbox qrCodeCheck">
-        <input type="radio" value="Yes" ng-model="unit.dialcodeRequired" required ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'});"
+        <input type="radio" value="Yes" ng-model="unit.dialcodeRequired" required ng-click="generateTelemetry({id: 'qr-checkbox', type: 'click', subtype: 'input', target: 'dialcodeRequired'},{context:{cdata:[{id:'toc:qrcode:required', type:'Feature'},{id:'SB-10691', type:'Task'}]}});"
             name="dialcodeRequired" tabindex="0">
         <label>Yes</label>
     </div>
