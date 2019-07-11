@@ -38,10 +38,10 @@ angular.module('keyBoardApp', [])
             "context": {
                 'cdata': [{
                     "id": "question:keyboard:custom",
-                    "type": "feature"
+                    "type": "Feature"
                 },{
                     "id":"SB-7813",
-                    "type":"task"
+                    "type":"Task"
                 }]
             }
         };

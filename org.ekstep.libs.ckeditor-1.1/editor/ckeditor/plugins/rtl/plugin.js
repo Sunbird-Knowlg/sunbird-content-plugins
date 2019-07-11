@@ -81,10 +81,10 @@
                                     "context": {
                                         'cdata': [{
                                             "id": "question:ckeditor:languageUrdu",
-                                            "type": "feature"
+                                            "type": "Feature"
                                         },{
                                             "id":"SB-6814",
-                                            "type":"task"
+                                            "type":"Task"
                                         }]
                                     }
                                 })
