@@ -145,7 +145,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
         $scope.closeThisDialog();
     }
 
-    $scope.generateTelemetry = function (data) {
+    $scope.generateTelemetry = function (data, options) {
         if (data) ecEditor.getService('telemetry').interact({
             "id": data.id,
             "type": data.type || "click",
@@ -156,7 +156,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
             "objectid": "",
             "targetid": "",
             "stage": ""
-        })
+        }, options)
     }
 }]);
 //# sourceURL=uploadfilepluginApp.js

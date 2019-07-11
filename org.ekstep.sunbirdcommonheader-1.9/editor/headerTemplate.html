@@ -48,11 +48,11 @@
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
-                                <div class="item" ng-click="downloadToc(); generateTelemetry({ id:'button',subtype: 'downloadToc', target: 'downloadTocButton'});"
+                                <div class="item" ng-click="downloadToc(); generateTelemetry({ id:'button',subtype: 'downloadToc', target: 'downloadTocButton'},{context:{cdata:[{id:'toc:csvDownload', type:'Feature'},{id:'SB-7976', type:'Task'}]}});"
                                     ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="download icon"></i> Download ToC Metadata
                                 </div>
-                                <div class="item" ng-click="updateToc(); generateTelemetry({ id:'button',subtype: 'uploadToc', target: 'uploadTocButton'});"
+                                <div class="item" ng-click="updateToc(); generateTelemetry({ id:'button',subtype: 'uploadToc', target: 'uploadTocButton'},{context:{cdata:[{id:'toc:csvUpdate', type:'Feature'},{'id':'SB-7975', 'type':'Task'}]}});"
                                     ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="upload icon"></i> Update ToC Metadata</div>
                             </div>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
                                 <div class="item" ng-class="(!disableQRGenerateBtn || (qrCodeCount.request > 0 && qrCodeCount.request + 1 <= qrCodeCount.reserve) || isGeneratingQRCodes ) ? 'disabled' : ' '"><i class="qrcode icon"></i>
-                                    <span ng-if="!isGeneratingQRCodes" class="text" ng-click="openRequestPopup(); generateTelemetry({ id:'button',subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});">Generate
+                                    <span ng-if="!isGeneratingQRCodes" class="text" ng-click="openRequestPopup(); generateTelemetry({ id:'button',subtype: 'reserveDialCode', target: 'reserveDialCodeButton'},{context:{cdata:[{id:'toc:qrcode:generate', type:'Feature'},{id:'SB-7959', type:'Task'}]}});">Generate
                                             {{(qrCodeCount.request > 0 && qrCodeCount.request+1 > qrCodeCount.reserve)? qrCodeCount.request + ' + 1' : (qrCodeCount.reserve > 0) ? qrCodeCount.reserve-1 +' + 1' : '' }} QR Codes
                                     </span>
                                     <span ng-if="isGeneratingQRCodes" class="text">Generating {{(qrCodeCount.request > 0 )? qrCodeCount.request-1 + ' + 1' :'' }} QR codes</span>
@@ -108,7 +108,7 @@
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
-                        <div ng-show="hideCollaboratorBtn" class="icon-box popup-item" data-content="{{collaboratorTooltip}}" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
+                        <div ng-show="hideCollaboratorBtn" class="icon-box popup-item" data-content="{{collaboratorTooltip}}" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});generateTelemetry({},{context:{cdata:[{id:'content:collaborator:add', type:'Feature'},{id:'SB-1801', type:'Task'}]}});">
                             <i class="add user icon custom-icon"></i>
                         </div>
                         <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" id="saveButton" ng-class="disableSaveBtn ? 'icon-box popup-item label-icon-box disabled' : 'icon-box popup-item label-icon-box'"
