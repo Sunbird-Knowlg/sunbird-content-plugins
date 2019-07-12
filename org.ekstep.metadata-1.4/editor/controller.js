@@ -484,7 +484,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var license = _.filter(config.fields, { 'code': 'license' })[0];
             if(license){
                 $scope.licenseText = license.defaultValue;
-                if(!_.isUndefined(license.renderingHints.value) && !_.isUndefined(license.renderingHints[$scope.contentMimeType])){
+                if(!_.isUndefined(license.renderingHints.value) && !_.isUndefined(license.renderingHints.value[$scope.contentMimeType])){
                     $scope.licenseText = license.renderingHints.value[$scope.contentMimeType];
                 }
             }
