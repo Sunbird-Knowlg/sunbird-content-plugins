@@ -159,8 +159,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 _.forEach($scope.fields, function(field) {
                     if (field.code === val){
                         _.forEach(field.range, function(range) {
-                            if (range.name === formData[val]){
-                                associations = $scope.getCommonAssociations(range.associations, associations);
+                            if(_.isArray(formData[val]) && formData[val].length > 0){
+                                _.forEach(formData[val], function(metadata) {
+                                    if (range.name === metadata){
+                                        associations = $scope.getCommonAssociations(range.associations, associations);
+                                    }
+                                });
+                            }else{
+                                if (range.name === formData[val]){
+                                    associations = $scope.getCommonAssociations(range.associations, associations);
+                                }
                             }
                         });
                     }
