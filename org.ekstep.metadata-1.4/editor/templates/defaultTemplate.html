@@ -73,7 +73,7 @@
                             </div>
                             <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
                                 <div class="ui grid ">
-                                    <div class="six wide field " ng-repeat="dynamicField in dynamicLayoutConfigurations ">
+                                    <div class="{{dynamicField.renderingHints.class ? dynamicField.renderingHints.class : 'six wide field'}}" ng-repeat="dynamicField in dynamicLayoutConfigurations ">
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}
                                                     " ng-if="(dynamicField.inputType=='text') ">
                                             <label>{{dynamicField.label | uppercase}}</label>
@@ -147,6 +147,10 @@
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='dialcode'
                                         && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
                                             <dialcode ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})"></dialcode>
+                                        </div>
+                                        <div id="{{dynamicField.code}} " class="field " name="{{dynamicField.code}}" ng-if="dynamicField.inputType==='label'">
+                                            <label>{{dynamicField.label | uppercase}}</label>
+                                            <div class="m-t-5">{{licenseText}}</div>
                                         </div>
                                     </div>
                                 </div>
