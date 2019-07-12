@@ -481,18 +481,27 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.contentMeta = config.model;
             $scope.contentMimeType = config.model.mimeType;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
-
+            var license = _.filter(config.fields, { 'code': 'license' })[0];
+            if(license){
+                $scope.licenseText = license.defaultValue;
+                if(!_.isUndefined(license.renderingHints.value) && !_.isUndefined(license.renderingHints[$scope.contentMimeType])){
+                    $scope.licenseText = license.renderingHints.value[$scope.contentMimeType];
+                }
+            }
+            if(!_.isUndefined($scope.originalContentMeta['copyright']) && ecEditor.getContext('user') &&  ecEditor.getContext('user').organisations){
+                $scope.contentMeta['copyright'] = _.values(ecEditor.getContext('user').organisations).join(", ");
+            }
             if(!_.isUndefined($scope.originalContentMeta['collaborators'])){
-                var res = $scope.originalContentMeta['collaborators'].split(",");
+                var res = $scope.originalContentMeta['collaborators'].split(", ");
                 _.forEach(res,function(val,key){
-                    $scope.originalContentMeta['attributions'].push(val);
+                    $scope.contentMeta['attributions'].push(val);
                 });
                 $scope.contentMeta['collaborators'] = "";
             }
             if(!_.isUndefined($scope.originalContentMeta['creators'])){
-                var res = $scope.originalContentMeta['creators'].split(",");
+                var res = $scope.originalContentMeta['creators'].split(", ");
                 _.forEach(res,function(val,key){
-                    $scope.originalContentMeta['attributions'].push(val);
+                    $scope.contentMeta['attributions'].push(val);
                 });
                 $scope.contentMeta['creators'] = "";
             }
