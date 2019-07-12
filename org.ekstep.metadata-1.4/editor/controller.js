@@ -130,9 +130,37 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateForm = function(object) {
         if (object.field && object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
-                $scope.applyDependencyRules(object.field, associations, true, '#'+object.target.tempalteName);
+                var data = $scope.getScopeMeta("", {target: '#'+ object.target.tempalteName});
+                $scope.getParentAssociations(object.field, associations, data, function(commonAssociations){
+                    $scope.applyDependencyRules(object.field, commonAssociations, true, '#'+object.target.tempalteName);
+                })
             });
         }
+    };
+
+    $scope.getParentAssociations = function(field, associations, formData, callback) {
+        if (field.parent && field.parent.length){
+            _.forEach(field.parent, function(val) {
+                _.forEach($scope.fields, function(field) {
+                    if (field.code === val){
+                        _.forEach(field.range, function(range) {
+                            if (range.name === formData[val]){
+                                associations = $scope.getCommonAssociations(range.associations, associations);
+                            }
+                        });
+                    }
+                });
+            })
+        }  
+        callback(associations);
+    };
+
+    $scope.getCommonAssociations = function(parentAssociations, childAssociations){
+        var intersectionData = [];
+        if (parentAssociations && parentAssociations.length){
+            intersectionData = _.filter(parentAssociations, function(e) { return _.find(childAssociations, e)});
+        }
+        return intersectionData;
     };
 
     /** 
