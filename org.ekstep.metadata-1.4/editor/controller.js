@@ -527,7 +527,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
                 $scope.contentMeta['copyright'] = $scope.originalContentMeta['copyright'];
             }else if(ecEditor.getContext('user') &&  ecEditor.getContext('user').organisations){
-                $scope.contentMeta['copyright'] = _.values(ecEditor.getContext('user').organisations).join(", ");
+                $scope.contentMeta['copyright'] = config.editMode ? _.values(ecEditor.getContext('user').organisations).join(", ") : "";
             }
             if(!_.isUndefined($scope.originalContentMeta['collaborators'])){
                 var res = $scope.originalContentMeta['collaborators'].split(", ");
