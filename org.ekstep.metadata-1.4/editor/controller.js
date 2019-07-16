@@ -516,7 +516,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             });
             $scope.contentMeta = config.model;
             $scope.contentMimeType = config.model.mimeType;
-            $scope.originalContentMeta = _.clone($scope.contentMeta);
+            $scope.originalContentMeta = _.cloneDeep($scope.contentMeta);
+            if(_.isUndefined($scope.contentMeta['attributions'])){
+                $scope.contentMeta['attributions'] = [];
+            }
             var license = _.filter(config.fields, { 'code': 'license' })[0];
             if(license){
                 $scope.licenseText = license.defaultValue;
@@ -529,19 +532,19 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }else if(ecEditor.getContext('user') &&  ecEditor.getContext('user').organisations){
                 $scope.contentMeta['copyright'] = config.editMode ? _.values(ecEditor.getContext('user').organisations).join(", ") : "";
             }
-            if(!_.isUndefined($scope.originalContentMeta['contributors'])){
-                var res = $scope.originalContentMeta['contributors'].split(", ");
+            if(!_.isUndefined($scope.originalContentMeta['contributors']) && !_.isEmpty($scope.originalContentMeta['contributors'])){
+                var res = $scope.contentMeta['contributors'].split(", ");
                 _.forEach(res,function(val,key){
                     $scope.contentMeta['attributions'].push(val);
                 });
-                $scope.contentMeta['contributors'] = "";
+                $scope.contentMeta['contributors'] = null;
             }
-            if(!_.isUndefined($scope.originalContentMeta['creators'])){
-                var res = $scope.originalContentMeta['creators'].split(", ");
+            if(!_.isUndefined($scope.originalContentMeta['creators']) && !_.isEmpty($scope.originalContentMeta['creators'])){
+                var res = $scope.contentMeta['creators'].split(", ");
                 _.forEach(res,function(val,key){
                     $scope.contentMeta['attributions'].push(val);
                 });
-                $scope.contentMeta['creators'] = "";
+                $scope.contentMeta['creators'] = null;
             }
             var layoutConfigurations = $scope.getLayoutConfigurations();
             $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
