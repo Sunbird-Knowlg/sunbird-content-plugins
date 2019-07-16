@@ -529,12 +529,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }else if(ecEditor.getContext('user') &&  ecEditor.getContext('user').organisations){
                 $scope.contentMeta['copyright'] = config.editMode ? _.values(ecEditor.getContext('user').organisations).join(", ") : "";
             }
-            if(!_.isUndefined($scope.originalContentMeta['collaborators'])){
-                var res = $scope.originalContentMeta['collaborators'].split(", ");
+            if(!_.isUndefined($scope.originalContentMeta['contributors'])){
+                var res = $scope.originalContentMeta['contributors'].split(", ");
                 _.forEach(res,function(val,key){
                     $scope.contentMeta['attributions'].push(val);
                 });
-                $scope.contentMeta['collaborators'] = "";
+                $scope.contentMeta['contributors'] = "";
             }
             if(!_.isUndefined($scope.originalContentMeta['creators'])){
                 var res = $scope.originalContentMeta['creators'].split(", ");
