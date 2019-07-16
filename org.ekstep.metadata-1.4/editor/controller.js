@@ -516,6 +516,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             });
             $scope.contentMeta = config.model;
             $scope.contentMimeType = config.model.mimeType;
+            if(_.isUndefined($scope.contentMeta['attributions'])){
+                $scope.contentMeta['attributions'] = [];
+            }
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var license = _.filter(config.fields, { 'code': 'license' })[0];
             if(license){
