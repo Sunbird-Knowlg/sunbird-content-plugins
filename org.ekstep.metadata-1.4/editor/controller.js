@@ -517,9 +517,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.contentMeta = config.model;
             $scope.contentMimeType = config.model.mimeType;
             $scope.originalContentMeta = _.cloneDeep($scope.contentMeta);
-            if(_.isUndefined($scope.contentMeta['attributions'])){
-                $scope.contentMeta['attributions'] = [];
-            }
             var license = _.filter(config.fields, { 'code': 'license' })[0];
             if(license){
                 $scope.licenseText = license.defaultValue;
@@ -534,15 +531,25 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }
             if(!_.isUndefined($scope.originalContentMeta['contributors']) && !_.isEmpty($scope.originalContentMeta['contributors'])){
                 var res = $scope.contentMeta['contributors'].split(", ");
+                if(_.isUndefined($scope.contentMeta['attributions'])){
+                    $scope.contentMeta['attributions'] = [];
+                }
                 _.forEach(res,function(val,key){
-                    $scope.contentMeta['attributions'].push(val);
+                    if(_.indexOf($scope.contentMeta['attributions'], val) === -1){
+                        $scope.contentMeta['attributions'].push(val);
+                    }
                 });
                 $scope.contentMeta['contributors'] = null;
             }
             if(!_.isUndefined($scope.originalContentMeta['creators']) && !_.isEmpty($scope.originalContentMeta['creators'])){
                 var res = $scope.contentMeta['creators'].split(", ");
+                if(_.isUndefined($scope.contentMeta['attributions'])){
+                    $scope.contentMeta['attributions'] = [];
+                }
                 _.forEach(res,function(val,key){
-                    $scope.contentMeta['attributions'].push(val);
+                    if(_.indexOf($scope.contentMeta['attributions'], val) === -1){
+                        $scope.contentMeta['attributions'].push(val);
+                    }
                 });
                 $scope.contentMeta['creators'] = null;
             }

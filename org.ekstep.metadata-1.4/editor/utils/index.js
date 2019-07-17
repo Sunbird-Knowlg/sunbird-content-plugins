@@ -72,6 +72,16 @@ function logTelemetry(data, plugin) {
     })
 }
 
+function difference(object, base) {
+    function changes(object, base) {
+        return _.transform(object, function(result, value, key) {
+            if (!_.isEqual(value, base[key])) {
+                result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+            }
+        });
+    }
+    return changes(object, base);
+}
 
 function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
     var metadata = {};
@@ -80,13 +90,15 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
             metadata[key] = value;
         });
     } else {
-        _.forEach(currentMetadata, function(value, key) {
-            if (_.isUndefined(originalMetadata[key])) {
-                metadata[key] = value;
-            } else if (value != originalMetadata[key]) {
-                metadata[key] = value;
-            }
-        });
+        var result = this.difference(currentMetadata, originalMetadata);
+        _.merge(metadata, result);
+        // _.forEach(currentMetadata, function(value, key) {
+        //     if (_.isUndefined(originalMetadata[key])) {
+        //         metadata[key] = value;
+        //     } else if (value != originalMetadata[key]) {
+        //         metadata[key] = value;
+        //     }
+        // });
     }
     if (metadata.keywords) {
         metadata.keywords = getArrayOfKeywords(metadata.keywords);
@@ -97,11 +109,5 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
     !metadata['mimeType'] && (metadata['mimeType'] = originalMetadata['mimeType']);
     return getUpdateDataType(metadata, fields)
 }
-
-
-
-
-
-
 
 //# sourceURL=metaDataUtil.js
