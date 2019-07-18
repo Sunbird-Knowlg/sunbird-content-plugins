@@ -71,6 +71,14 @@ describe("Video plugin", function() {
         video.isYoutubeURL(url)
         expect(video.isYoutubeURL(url)).toBe(false);
     })
+    it('should getYoutube', function(){
+        var video = stage.children[0];
+        spyOn(video, "getYoutube").and.callThrough();
+        //expect(ecEditor._.).toBeUndefined('org.ekstep.video');
+        video.getYoutube('myVideo',20,5,(a,b)=>{ this.myTest = 'test'});
+        expect(this.myTest).toBe('test');
+    })
+
     it('should return pragma value', function(){
         spyOn(video, "getPragmaValue").and.callThrough();
         expect(video.getPragmaValue()).toBe(null)
@@ -82,6 +90,22 @@ describe("Video plugin", function() {
         spyOn(video, "getPragmaValue").and.callThrough();
         expect(video.getPragmaValue()).toBe(null)
         expect(video.getPragmaValue).toHaveBeenCalled();
+    })
+
+    it('should copy asset attributes', function(){
+        var video = stage.children[0];
+        spyOn(video, "getCopy").and.callThrough();
+        video.getCopy();
+        expect(video.getCopy()).toBe(videoData.assetMedia);
+        expect(video.getCopy).toHaveBeenCalled();
+    })
+
+    it('should getConfigManifest', function(){
+        var video = stage.children[0];
+        spyOn(video, "getConfigManifest").and.callThrough();
+        expect(video.getConfigManifest().id).toBe('org.ekstep.video');
+        video.getConfigManifest();
+        expect(video.getConfigManifest).toHaveBeenCalled();
     })
 
 });
