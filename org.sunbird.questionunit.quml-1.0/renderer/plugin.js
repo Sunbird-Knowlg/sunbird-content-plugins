@@ -50,7 +50,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
               <div class='sb-question-content-card'>" + questionData.question + "</div> \
             </div> \
             <div class='page-section answer-bg' id='answer'> \
-              <div class='sb-answer'>Solution</div> \
+              <div class='sb-answer'>" + buttonLabel + "</div> \
               <div  class='sb-question-content-card'>" + questionData.solution[0] + "</div> \
             </div>\
             </div></div>";
