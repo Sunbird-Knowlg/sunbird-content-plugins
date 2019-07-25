@@ -73,10 +73,13 @@ function logTelemetry(data, plugin) {
 }
 
 function difference(object, base) {
-    function changes(object, base) {
-        return _.transform(object, function(result, value, key) {
+   function changes(object, base) {
+        let arrayIndexCounter = 0;
+        return _.transform(object, function (result, value, key) {
             if (!_.isEqual(value, base[key])) {
-                result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+                let resultKey = _.isArray(base) ? arrayIndexCounter++ : key;
+                result[resultKey] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+                console.log("Result: " + JSON.stringify(result));
             }
         });
     }
