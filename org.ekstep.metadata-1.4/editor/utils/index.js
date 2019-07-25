@@ -79,7 +79,6 @@ function difference(object, base) {
             if (!_.isEqual(value, base[key])) {
                 let resultKey = _.isArray(base) ? arrayIndexCounter++ : key;
                 result[resultKey] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
-                console.log("Result: " + JSON.stringify(result));
             }
         });
     }
