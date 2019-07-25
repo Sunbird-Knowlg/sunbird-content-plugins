@@ -29,18 +29,24 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
 			if (/(\^\\textdegree)/.test(questionData.solution[0])) {
 				questionData.solution[0] = questionData.solution[0].replace(/(\^\\textdegree)/gm, "^\\degree")
 			}
-		}
+        }
         event.target._currentQuestion.data.__cdata = JSON.stringify(questionData);
         this._super(event);
+        var buttonLabel = "Solution"
+        var starDiv = "<span class='sb-star-icon'><i class='star outline icon'></i></span>";
+        if(this._question.config.metadata.category == 'CuriosityQuestion') {
+            buttonLabel = "Explanation";
+            starDiv = "";
+        }
         if (this._question.data.solution && this._question.data.solution[0].length > 0) {
             this._question.template = "<div class='sb-question-dsp-body'> \
             <div class='sb-question-header question-bg'> \
                 <button  class='sb-btn sb-btn-primary sb-btn-normal' id='questionBtn' style='display: none;' type='button'>Question</button> \
-                <button  class='sb-btn sb-btn-secondary sb-btn-normal mr-0' id='answerBtn' type='button' style='display: inline-block;'>Solution</button> \
+                <button  class='sb-btn sb-btn-secondary sb-btn-normal mr-0' id='answerBtn' type='button' style='display: inline-block;'>"+ buttonLabel +"</button> \
             </div> \
             <div class='sb-question-content'> \
             <div class='page-section question-bg' id='question'> \
-              <div class='sb-question'>Question<span class='sb-star-icon'><i class='star outline icon'></i></span></div>\
+              <div class='sb-question'>Question" + starDiv + "</div>\
               <div class='sb-question-content-card'>" + questionData.question + "</div> \
             </div> \
             <div class='page-section answer-bg' id='answer'> \
