@@ -46,7 +46,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
       {
         "identifier": "org.ekstep.questionunit.mcq",
         "appIcon": ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/mcq_app_icon.jpg'),
-        "semanticVersion": "1.2",
+        "semanticVersion": "1.3",
         "contentType": "Plugin",
         "objectType": "Content"
       },
