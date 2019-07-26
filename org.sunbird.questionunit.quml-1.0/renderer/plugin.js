@@ -33,7 +33,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
         event.target._currentQuestion.data.__cdata = JSON.stringify(questionData);
         this._super(event);
         var buttonLabel = "Solution"
-        var starDiv = "<span class='sb-star-icon'><i class='star outline icon'></i></span>";
+        var starDiv = "<span class='sb-star-icon'>&#9733;</span>";
         if(this._question.config.metadata.category == 'CuriosityQuestion') {
             buttonLabel = "Explanation";
             starDiv = "";

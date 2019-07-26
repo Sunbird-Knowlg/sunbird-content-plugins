@@ -119,6 +119,7 @@
     margin-left: 8px;
     text-align: center;
     display: inline-block;
+    color:#fff;font-size:16px;text-align: center;
 }
 .sb-question-dsp-container .sb-question-content .sb-star-icon i.icon {
     color: white;
@@ -451,7 +452,7 @@
        line-height: normal;
 }
 .sb-question-dsp-body .sb-btn.sb-btn-normal{
-    font-size:calc(var(--fontS) - 2px);padding: 6px 16px;
+    font-size:calc(var(--fontS) + 2px);padding: 0px 16px;
 }
 
 @media screen and (max-width:768px) {
