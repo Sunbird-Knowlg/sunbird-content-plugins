@@ -455,6 +455,19 @@
     font-size:calc(var(--fontS) + 2px);padding: 0px 16px;
 }
 
+#questionset .mcq-horizontal .mcq-title{
+    text-align: center;
+}
+#questionset .mcq-horizontal .mcq-options .mcq-option, 
+#questionset .mcq-vertical .mcq-options .mcq-option, 
+#questionset .mcq-grid .mcq-options .mcq-option,
+#questionset .mcq-vertical .mcq-title, 
+#questionset .mcq-grid .mcq-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @media screen and (max-width:768px) {
     .sb-question-dsp-container .sb-question-content .sb-question,
     .sb-question-dsp-container .sb-question-content .sb-answer, #questionset .mcq-horizontal .mcq-title, #questionset .mcq-vertical .mcq-title, #questionset .mcq-grid .mcq-title  {
