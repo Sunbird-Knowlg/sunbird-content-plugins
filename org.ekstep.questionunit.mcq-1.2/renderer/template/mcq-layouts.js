@@ -560,6 +560,128 @@ MCQController.getMaxWidthHeight = function (options, height, width) {
 
     return size;
 }
+/** imageGrid */
+MCQController.imagegrid = MCQController.imagegrid || jQuery.extend({}, MCQController.layout);
+
+/**
+ * returns the HTML template for the `imageGrid` layout
+ * @param {object} question
+ */
+MCQController.imagegrid.getTemplate = function (question) {
+    var questionTemplate = MCQController.imagegrid.getQuestionTemplate(question);
+    var optionsTemplate = MCQController.imagegrid.getOptionsTemplate(question.data.options)
+    return "<div class='mcq-imagegrid-content-container plugin-content-container'>" +
+        questionTemplate +
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase())
+       + "<div class='imagegrid-parent'><div class='mcq-imagegrid-options' style='margin-top: 3%;'>" + optionsTemplate + "</div></div>" +
+        "</div></div>";
+}
+
+/**
+ * adjusts the option's CSS properties for `imageGrid` layout
+ * @param {object} question the question object
+ */
+MCQController.imagegrid.adjustOptions = function (question) {
+    var optLength = question.data.options.length;
+    if (optLength == 2) {
+        $(".mcq2-2-option").css("margin-top", "28%");
+    } else if (optLength == 3) {
+        $(".mcq2-2-option3").css("margin-left", "30.15%");
+
+    }
+}
+
+/**
+ * called after the DOM is updated with the question template HTML
+ * @param {object} question the question object
+ */
+MCQController.imagegrid.postRender = function (question) {
+    MCQController.onImageDomLoad(".mcq2-2-option", question);
+    if(question.config.layout.toLowerCase() === 'imagegrid'){
+        $(".mcq2-2-option").css("width", "40%", "margin-top", "3%", "margin-bottom", "3%");
+    }
+    if (question.data.options.length < 4) {
+        MCQController.imagegrid.adjustOptions(question);
+    }
+ }
+
+/**
+ * returns the HTML template for options for `imageGrid` layout
+ * @param {array} options
+ */
+MCQController.imagegrid.getOptionsTemplate = function (options) {
+    var optionTemplate = ''
+    _.each(options, function (val, key, index) {
+        optionTemplate += MCQController.imagegrid.getOption(val, key);
+    });
+    return optionTemplate;
+}
+
+/**
+ * returns the HTML template of the option in `imageGrid` template
+ * @param {object} option the option object
+ * @param {number} key the index of the option
+ * @param {size} maxHeight and width for layout
+ */
+MCQController.imagegrid.getOption = function (option, key) {
+    var optTemplate = " <div class='org-ekstep-questionunit-mcq-option-element mcq2-2-option-imagegird mcq2-2-option-imagegrid<%=key+1%>' onClick=MCQController.imagegrid.onOptionSelected(event,<%= key %>)>\
+    <% if (option.audio){ %> \
+        <div class='mcq-imagegrid-option-audio'>\
+          <img src='<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png') %>' style='width: 25%;'  onclick=MCQController.pluginInstance.playAudio({src:\'<%= option.audio %>\'}) />\
+        </div>\
+      <% } %> \
+    <%if(option.image){%>\
+        <div class='position-relative' style='width: 100%;height: 72%;top: -21%;' onclick='MCQController.showImageModel(event)'><img class='mcq2-2-option-image mcq-option-imgagegrid'\
+        src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> /></div>\
+     <%}%>\
+     <%if(option.text){%>\
+        <div class='imagegrid-option-text'><%= option.text %></div>\
+     <%}%>\
+    </div>";
+    return _.template(optTemplate)({
+        "option": option,
+        "key": key
+    });
+}
+
+MCQController.imagegrid.optionStyleUponClick = function (element) {
+    $('.mcq2-2-option-imagegird').removeClass('opt-selected');
+    var optElt = $(element).closest('.mcq2-2-option-imagegird');
+    if (optElt) optElt.addClass('opt-selected');
+}
+/**
+ * called when the option in `imageGrid` layout is selected
+ * @param {object} event
+ * @param {number} index
+ */
+MCQController.imagegrid.onOptionSelected = function (event, index) {
+    var optElt = $(event.target);
+    MCQController.imagegrid.optionStyleUponClick(optElt);
+    MCQController.pluginInstance.onOptionSelected(event, index);
+    if (MCQController.pluginInstance._question.data.options[index].audio)
+        MCQController.pluginInstance.playAudio({
+            src: MCQController.pluginInstance._question.data.options[index].audio
+        });
+}
+MCQController.imagegrid.getQuestionTemplate = function (question) {
+    var qTemplate = "<div class='mcq-imagegrid-question-container'>\
+                <div class='mcq-imagegrid-question-image'>\
+                <% if(question.data.question.image){%>\
+                <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
+                <%}%>\
+                <% if(question.data.question.text){%>\
+                    <div class='question-text'\><%= question.data.question.text %></div>\
+                    <%}%>\
+                </div>\
+                <% if ( question.data.question.audio.length > 0 ){ %> \
+                <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon2.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
+                <% } %> \
+              </div>\
+              ";
+    return _.template(qTemplate)({
+        "question": question
+    });
+}
 
 MCQController.backgroundComponent = {
     settings: {
@@ -572,6 +694,11 @@ MCQController.backgroundComponent = {
             return '\
             <div class="bg-graphics-2 left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
              <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+            '
+        } else if(layoutType == 'imagegrid' || layoutType == 'imagehorizontal'){
+                return '\
+            <div class="bg-graphics-3" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+                <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
             '
         } else {
             return '\

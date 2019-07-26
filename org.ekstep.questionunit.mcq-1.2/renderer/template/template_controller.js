@@ -40,7 +40,7 @@ MCQController.renderTemplateLayout = function (question) {
   MCQController.isMediaAsset(question);
   var layout = question.config.layout;
   MCQController[layout.toLowerCase()].preRender(question);
-  var strTemplate = MCQController[layout.toLowerCase()].getTemplate(question)
+  var strTemplate = MCQController[layout.toLowerCase()].getTemplate(question);
   var template = _.template(strTemplate);
   $("#mcq-question-container").append(template({
     question: question
