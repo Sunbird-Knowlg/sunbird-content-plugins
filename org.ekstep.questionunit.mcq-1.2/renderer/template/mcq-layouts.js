@@ -561,6 +561,38 @@ MCQController.getMaxWidthHeight = function (options, height, width) {
     return size;
 }
 
+MCQController.imagehorizontal = MCQController.imagehorizontal || jQuery.extend({}, MCQController.layout);
+
+MCQController.imagehorizontal.getTemplate = function (question) {
+    var wrapperEnd = '</div>';
+    var layout = "imagehorizontal";
+    var layoutTemplate = MCQController.imagehorizontal.getOptionLayout(layout, question);
+    return '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
+        org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) +
+        MCQController.backgroundComponent.getBackgroundGraphics(layout) +  
+            layoutTemplate + wrapperEnd +wrapperEnd+
+        wrapperEnd;
+}
+MCQController.imagehorizontal.onOptionSelected = function (event, index) { 
+
+}
+MCQController.imagehorizontal.optionStyleUponClick = function (element) { 
+
+}
+MCQController.imagehorizontal.getOption = function (option, key) {
+
+}
+MCQController.imagehorizontal.getOptionLayout = function (options) { 
+    return '<div style="background":"lightgreen;height:40%;with:100%;"> \
+    </div>';
+}
+MCQController.imagehorizontal.postRender = function (question) { 
+    
+}
+MCQController.imagehorizontal.adjustOptions = function (question) { 
+
+}
+
 MCQController.backgroundComponent = {
     settings: {
         bgColors: ["#5DC4F5", "#FF7474", "#F9A817", "#48DCB6", "#D2D2D2"],
@@ -572,6 +604,11 @@ MCQController.backgroundComponent = {
             return '\
             <div class="bg-graphics-2 left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
              <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+            '
+        } else if (layoutType == 'imagegrid' || layoutType == 'imagehorizontal') {
+            return '\
+            <div class="bg-graphics-3" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
+                <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
             '
         } else {
             return '\
