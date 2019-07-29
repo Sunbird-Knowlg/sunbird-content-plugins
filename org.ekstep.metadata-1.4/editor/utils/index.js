@@ -103,6 +103,12 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
     if (metadata.keywords) {
         metadata.keywords = getArrayOfKeywords(metadata.keywords);
     }
+    if(metadata.children){
+        delete metadata.children;
+    }
+    if(metadata.childNodes){
+        delete metadata.childNodes;
+    }
     // Passing mandatory fields when save is invoked
     !metadata['name'] && (metadata['name'] = originalMetadata['name']);
     !metadata['contentType'] && (metadata['contentType'] = originalMetadata['contentType']);
