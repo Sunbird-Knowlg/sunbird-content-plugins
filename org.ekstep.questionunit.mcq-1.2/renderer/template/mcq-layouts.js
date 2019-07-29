@@ -648,7 +648,7 @@ MCQController.imagegrid.getOption = function (option, key) {
         </div>\
       <% } %> \
     <%if(option.image){%>\
-        <div class='position-relative' style='width: 100%;height: 72%;margin-top: -20%;text-align: center;' onclick='MCQController.showImageModel(event)'><img class='mcq2-2-option-image mcq-option-imgagegrid'\
+        <div class='position-relative' style='width: 100%;height: 72%;margin-top: -20%;text-align: center;' onclick='MCQController.showImageModel(event)'><img class='mcq2-2-option-grid-image mcq-option-imgagegrid'\
         src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> /></div>\
      <%}%>\
      <%if(option.text){%>\

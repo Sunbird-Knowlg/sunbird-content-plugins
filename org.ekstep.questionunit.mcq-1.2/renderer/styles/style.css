@@ -1174,6 +1174,12 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option-image {
+    margin-top: 0%;
+    position: absolute;
+    overflow: hidden;
+    object-fit: contain;
+}
+.mcq2-2-option-grid-image {
     margin-top: 26%;
     max-height: 100%;
     max-width: 100%;
