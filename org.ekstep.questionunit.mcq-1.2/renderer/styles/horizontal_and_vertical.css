@@ -299,14 +299,11 @@
     height: 100%;
     position: relative;
     top: -17%;
-    /* background: rebeccapurple; */
 }
 .mcq-imagegrid-question-container{
     height: 48%;
-    /* background: red; */
 }
 .mcq-imagegrid-options{
-    /* background: yellow; */
     display: flex;
     flex-wrap: wrap;
     margin-left: 7%;
@@ -320,25 +317,20 @@
     margin: 5px;
     height: 77%;
     background-color: white;
-    /* margin-top: 3%; */
     border-radius: 10px;
-    flex-basis: 23%;
-    flex-grow: 0;
 }
 .imagegrid-option-text{
     text-align: center;
-    font-size: larger;
-    line-height: 110px;
-    /* margin-top: -65%; */
-    /* margin: -41px auto 0; */
+    margin-top: 26%;
+    font-size: large;
 }
 .mcq-imagegrid-option-audio{
     position: absolute;
     z-index: 10;
     height: 10vh;
     text-align: center;
-    margin-left: -4%;
-    top: -5%;
+    margin-left: -3%;
+    top: -15%;
 }
 .imagegrid-parent{
     overflow: hidden;
@@ -348,3 +340,31 @@
     width: 0px;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
  }
+ .bg-graphics-3 {
+    position: relative;
+    height: 50%;
+    background-color: #F9A817;
+    top: 6%;
+}
+.bg-graphics-3 .bg-circle.circle-left {
+    left: -20vw;
+    top: 0vh;
+}
+
+.bg-graphics-3 .bg-circle.circle-right {
+    right: -20vw;
+    top: 30vh;
+}
+.bg-graphics-3 .bg-circle {
+    position: fixed;
+    width: 60vw;
+    height: 106.6662vh;
+    border-radius: 50%;
+    opacity: 0.15;
+    background-color: #ffffff;
+}
+
+.opt-selected-imagegrid {
+    background-color: #7AB4EE;
+    border: solid 2px #024F9D;
+}
