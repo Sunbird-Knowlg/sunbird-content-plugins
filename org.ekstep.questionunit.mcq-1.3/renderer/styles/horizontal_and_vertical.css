@@ -304,20 +304,21 @@
     height: 48%;
 }
 .mcq-imagegrid-options{
-    margin-top: 1%;
+    margin-top: 0%;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-left: 7%;
     margin-right: 7%;
-    width: 92%;
-    overflow: scroll;
+    width: 90%;
     height: 100%;
     justify-content: center;
+    overflow-x: scroll;
+    justify-content: left;
 }
 .mcq2-2-option-imagegird{
-    width: 23%;
-    margin: 5px 5px 5px 0px;
-    height: 77%;
+    min-width: 23.5%;
+    margin: 2px 0px 0px 6px;
+    height: 83%;
     background-color: white;
     border-radius: 10px;
 }
@@ -338,15 +339,11 @@
     overflow: hidden;
     height: 100%;
 }
-.mcq2-2-option-imagegird::-webkit-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
- }
  .bg-graphics-3 {
     position: relative;
     height: 50%;
     background-color: #F9A817;
-    top: 6%;
+    top: 2%;
 }
 .bg-graphics-3 .bg-circle.circle-left {
     left: -20vw;
@@ -370,3 +367,4 @@
     background-color: #7AB4EE;
     border: solid 2px #024F9D;
 }
+
