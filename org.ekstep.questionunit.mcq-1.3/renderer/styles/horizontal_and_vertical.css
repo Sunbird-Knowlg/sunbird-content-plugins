@@ -294,16 +294,16 @@
     margin-bottom: 0%;
 }
 
-.mcq-imagegrid-content-container{
+.mcq-imagehorizontal-content-container{
     width: 100%;
     height: 100%;
     position: relative;
     top: -17%;
 }
-.mcq-imagegrid-question-container{
+.mcq-imagehorizontal-question-container{
     height: 48%;
 }
-.mcq-imagegrid-options{
+.mcq-imagehorizontal-options{
     margin-top: 0%;
     display: flex;
     flex-wrap: nowrap;
@@ -322,12 +322,12 @@
     background-color: white;
     border-radius: 10px;
 }
-.imagegrid-option-text{
+.imagehorizontal-option-text{
     text-align: center;
     margin-top: 26%;
     font-size: large;
 }
-.mcq-imagegrid-option-audio{
+.mcq-imagehorizontal-option-audio{
     position: absolute;
     z-index: 10;
     height: 10vh;
@@ -335,7 +335,7 @@
     margin-left: -3%;
     top: -15%;
 }
-.imagegrid-parent{
+.imagehorizontal-parent{
     overflow: hidden;
     height: 100%;
 }
@@ -363,7 +363,7 @@
     background-color: #ffffff;
 }
 
-.opt-selected-imagegrid {
+.opt-selected-imagehorizontal {
     background-color: #7AB4EE;
     border: solid 2px #024F9D;
 }
