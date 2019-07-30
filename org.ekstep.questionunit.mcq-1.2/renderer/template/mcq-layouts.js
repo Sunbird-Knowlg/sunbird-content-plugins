@@ -618,8 +618,9 @@ MCQController.imagegrid.getOptionsTemplate = function (options) {
 }
 MCQController.imagegrid.playAudioImageGrid = function(index, action, src){
     _.each(MCQController.pluginInstance._question.data.options,function(val,key){
-        $("#mcq-imagegird-audio-play"+key).css('display','block');
-        $("#mcq-imagegird-audio-stop"+key).css('display','none');
+        var k = key + 1;
+        $("#mcq-imagegird-audio-play"+k).css('display','block');
+        $("#mcq-imagegird-audio-stop"+k).css('display','none');
     });
     if(action == 'play'){
         $("#mcq-imagegird-audio-play"+index).css('display','none');
@@ -679,6 +680,10 @@ MCQController.imagegrid.onOptionSelected = function (event, index) {
         MCQController.pluginInstance.playAudio({
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
+        MCQController.imagegrid.playAudioImageGrid(index+1, 'play', {
+            src: MCQController.pluginInstance._question.data.options[index].audio
+        });
+
 }
 MCQController.imagegrid.getQuestionTemplate = function (question) {
     var qTemplate = "<div class='mcq-imagegrid-question-container'>\
@@ -715,7 +720,7 @@ MCQController.backgroundComponent = {
         } else if(layoutType == 'imagegrid' || layoutType == 'imagehorizontal'){
                 return '\
             <div class="bg-graphics-3" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
-                <div class="bg-circle circle-left" style="top:<%= _.random(-6, 6)*10%>vh" ></div ><div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
+                <div class="bg-circle circle-left"></div ><div class="bg-circle circle-right"></div>\
             '
         } else {
             return '\
