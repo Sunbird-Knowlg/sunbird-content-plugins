@@ -1181,6 +1181,11 @@ span.qc-option-txt {
     overflow: hidden;
     object-fit: contain;
 }
+.mcq2-2-option-grid-image {
+    margin-top: 26%;
+    max-height: 100%;
+    max-width: 100%;
+}
 
 .mcq2-2-option-text {
     padding-top: 2%;
