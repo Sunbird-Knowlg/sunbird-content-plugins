@@ -304,6 +304,7 @@
     height: 48%;
 }
 .mcq-imagegrid-options{
+    margin-top: 1%;
     display: flex;
     flex-wrap: wrap;
     margin-left: 7%;
@@ -311,10 +312,11 @@
     width: 92%;
     overflow: scroll;
     height: 100%;
+    justify-content: center;
 }
 .mcq2-2-option-imagegird{
-    flex: 1 0 21%;
-    margin: 5px;
+    width: 23%;
+    margin: 5px 5px 5px 0px;
     height: 77%;
     background-color: white;
     border-radius: 10px;

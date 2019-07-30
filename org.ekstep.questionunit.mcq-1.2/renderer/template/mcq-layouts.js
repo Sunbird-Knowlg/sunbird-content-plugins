@@ -573,7 +573,7 @@ MCQController.imagegrid.getTemplate = function (question) {
     return "<div class='mcq-imagegrid-content-container plugin-content-container'>" +
         questionTemplate +
         MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase())
-       + "<div class='imagegrid-parent'><div class='mcq-imagegrid-options' style='margin-top: 1%;'>" + optionsTemplate + "</div></div>" +
+       + "<div class='imagegrid-parent'><div class='mcq-imagegrid-options'>" + optionsTemplate + "</div></div>" +
         "</div></div>";
 }
 
@@ -638,7 +638,7 @@ MCQController.imagegrid.playAudioImageGrid = function(index, action, src){
  * @param {size} maxHeight and width for layout
  */
 MCQController.imagegrid.getOption = function (option, key) {
-    var optTemplate = " <div style='position: relative;top:7%' class='org-ekstep-questionunit-mcq-option-element mcq2-2-option-imagegird mcq2-2-option-imagegrid<%=key+1%>' onClick=MCQController.imagegrid.onOptionSelected(event,<%= key %>)>\
+    var optTemplate = " <div style='position: relative;top:10%;' class='org-ekstep-questionunit-mcq-option-element mcq2-2-option-imagegird mcq2-2-option-imagegrid<%=key+1%>' onClick=MCQController.imagegrid.onOptionSelected(event,<%= key %>)>\
     <% if (option.audio){ %> \
         <div class='mcq-imagegrid-option-audio' id='mcq-imagegird-audio-play<%=key+1%>' style='display:block;'>\
           <img src='<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png') %>' style='width: 30%;'  onclick=MCQController.imagegrid.playAudioImageGrid(<%=key+1%>,'play',{src:\'<%= option.audio %>\'}) />\
