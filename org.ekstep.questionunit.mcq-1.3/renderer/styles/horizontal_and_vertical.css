@@ -381,13 +381,4 @@
     border-radius: 10px;
     max-height: 30px;
 }
-::-webkit-scrollbar{
-    height: 4px;
-    width: 4px;
-    background: gray;
-}
-::-webkit-scrollbar-thumb:horizontal{
-    background: #000;
-    border-radius: 10px;
-}
 

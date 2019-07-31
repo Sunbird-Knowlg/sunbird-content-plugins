@@ -311,11 +311,11 @@ body {
 }
 
 .question-container-big .text-image-container .hiding-container .expand-container {
-    max-height: 31vh;
+    text-align: center;
+    max-height: 61vh;
     z-index: 2;
     background: white;
     margin-bottom: 8vh;
-    text-align: center;
 }
 
 .question-container-big.no-qimage .text-image-container .hiding-container .expand-container {
@@ -327,11 +327,11 @@ body {
 
 .question-container-big .text-image-container .expand-button {
     position: absolute;
-    bottom: 8%;
-    right: -46%;
+    bottom: 10%;
+    right: 7%;
     z-index: 2;
     cursor: pointer;
-    width: 100%;
+    display:none;
 }
 
 .question-container-big .text-image-container .expand-button img {
@@ -365,6 +365,7 @@ body {
 .question-container-big .text-image-container .image-container.no-text {
     height: 85%;
     margin-top: 3vh;
+    z-index: 3;
 }
 
 .question-container-big .audio-container {
