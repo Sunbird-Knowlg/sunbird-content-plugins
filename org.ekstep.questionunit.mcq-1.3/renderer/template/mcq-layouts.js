@@ -568,10 +568,10 @@ MCQController.imagehorizontal = MCQController.imagehorizontal || jQuery.extend({
  * @param {object} question
  */
 MCQController.imagehorizontal.getTemplate = function (question) {
-    var questionTemplate = MCQController.imagehorizontal.getQuestionTemplate(question);
+    // var questionTemplate = MCQController.imagehorizontal.getQuestionTemplate(question);
     var optionsTemplate = MCQController.imagehorizontal.getOptionsTemplate(question.data.options)
     return "<div class='mcq-imagehorizontal-content-container plugin-content-container'>" +
-        questionTemplate +
+    org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) +
         MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase())
        + "<div class='imagehorizontal-parent'><div class='mcq-imagehorizontal-options'>" + optionsTemplate + "</div></div>" +
         "</div></div>";
@@ -649,8 +649,11 @@ MCQController.imagehorizontal.getOption = function (option, key) {
         </div>\
       <% } %> \
     <%if(option.image){%>\
-        <div class='position-relative' style='width: 100%;height: 72%;margin-top: -20%;text-align: center;' onclick='MCQController.showImageModel(event)'><img class='mcq2-2-option-grid-image mcq-option-imgagegrid'\
-        src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> /></div>\
+        <div class='position-relative' style='width: 100%;height: 72%;margin-top: -20%;text-align: center;'>\
+        <img class='mcq2-2-option-grid-image mcq-option-imgagegrid'\
+        src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
+       </div> <img class='zoom-image-horizontal'\
+       src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> onclick=MCQController.zoomImage('<%=option.image%>') />\
      <%}%>\
      <%if(option.text){%>\
         <div class='imagehorizontal-option-text'><%= option.text %></div>\
@@ -689,6 +692,7 @@ MCQController.imagehorizontal.getQuestionTemplate = function (question) {
     var qTemplate = "<div class='mcq-imagehorizontal-question-container'>\
                 <div class='mcq-imagehorizontal-question-image' style='text-align:center;'>\
                 <% if(question.data.question.image){%>\
+                <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <%}%>\
                 <% if(question.data.question.text){%>\

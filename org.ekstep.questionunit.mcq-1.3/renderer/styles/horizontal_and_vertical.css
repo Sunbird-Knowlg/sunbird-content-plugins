@@ -298,7 +298,7 @@
     width: 100%;
     height: 100%;
     position: relative;
-    top: -17%;
+    top: 0%;
 }
 .mcq-imagehorizontal-question-container{
     height: 48%;
@@ -314,6 +314,8 @@
     justify-content: center;
     overflow-x: scroll;
     justify-content: left;
+    max-width: 87%;
+    overflow-y: hidden;
 }
 .mcq2-2-option-imagegird{
     min-width: 23.5%;
@@ -324,7 +326,7 @@
 }
 .imagehorizontal-option-text{
     text-align: center;
-    margin-top: 26%;
+    margin-top: 24%;
     font-size: large;
 }
 .mcq-imagehorizontal-option-audio{
@@ -337,13 +339,13 @@
 }
 .imagehorizontal-parent{
     overflow: hidden;
-    height: 100%;
+    height: 91%;
 }
  .bg-graphics-3 {
     position: relative;
     height: 50%;
     background-color: #F9A817;
-    top: 2%;
+    top: 3%;
 }
 .bg-graphics-3 .bg-circle.circle-left {
     left: -20vw;
@@ -366,5 +368,26 @@
 .opt-selected-imagehorizontal {
     background-color: #7AB4EE;
     border: solid 2px #024F9D;
+}
+
+.zoom-image-horizontal{
+    position: absolute;
+    bottom: 22%;
+    right: 2%;
+    width: 25%;
+}
+.mcq-imagehorizontal-options ::-webkit-scrollbar-thumb {
+    background: #8080804a;
+    border-radius: 10px;
+    max-height: 30px;
+}
+::-webkit-scrollbar{
+    height: 4px;
+    width: 4px;
+    background: gray;
+}
+::-webkit-scrollbar-thumb:horizontal{
+    background: #000;
+    border-radius: 10px;
 }
 

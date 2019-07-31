@@ -67,6 +67,21 @@ MCQController.showImageModel = function () {
   })
   $("#mcq-question-container").append(templateData);
 };
+MCQController.zoomImage = function (img) {
+  var eventData = img;
+  var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
+    <div class='popup-full-body'> \
+      <div class='font-lato assess-popup assess-goodjob-popup'> \
+        <img class='qc-question-fullimage' src=<%= src %> /> \
+        <div onclick='MCQController.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
+      </div>\
+    </div>";
+  var template = _.template(modelTemplate);
+  var templateData = template({
+    src: eventData
+  });
+  $("#mcq-question-container").append(templateData);
+};
 /**
  * onclick overlay or X button the popup will be hide
  * @memberof org.ekstep.questionunit.mcq.template_controller
