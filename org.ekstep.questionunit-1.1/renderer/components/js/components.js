@@ -65,7 +65,7 @@ org.ekstep.questionunit.questionComponent = {
                     <% if(question.data.question.image) { %>\
                         <div onclick="org.ekstep.questionunit.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')" class="image-container <% if(!question.data.question.text){ %> no-text <% } %> \ "> \
                             <img  data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage" class="qimage" src="" /> \
-                            <img class="zoom-icon" src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg"> \
+                            <img onclick="org.ekstep.questionunit.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')" class="zoom-icon" src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg"> \
                         </div> \
                     <% } %>\
                 </div> \
