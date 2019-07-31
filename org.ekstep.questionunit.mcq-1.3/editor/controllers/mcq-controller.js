@@ -214,6 +214,24 @@ angular.module('mcqApp', ['org.ekstep.question']).controller('mcqQuestionFormCon
       assetId: "org.ekstep.questionset.default-imgageicon",
       type: "image",
       preload: true
+    }, {
+      id: "org.ekstep.questionset.audio-icon3",
+      src: ecEditor.resolvePluginResource($scope.mcqPluginInstance.id, $scope.mcqPluginInstance.ver, 'renderer/assets/audio-icon3.png'),
+      assetId: "org.ekstep.questionset.audio-icon3",
+      type: "image",
+      preload: true
+    }, {
+      id: "org.ekstep.questionset.audio_stop",
+      src: ecEditor.resolvePluginResource($scope.mcqPluginInstance.id, $scope.mcqPluginInstance.ver, 'renderer/assets/audio_stop.png'),
+      assetId: "org.ekstep.questionset.audio_stop",
+      type: "image",
+      preload: true
+    }, {
+      id: "org.ekstep.questionset.zoom",
+      src: ecEditor.resolvePluginResource($scope.mcqPluginInstance.id, $scope.mcqPluginInstance.ver, 'renderer/assets/zoom.png'),
+      assetId: "org.ekstep.questionset.zoom",
+      type: "image",
+      preload: true
     }];
     addAllMedia.forEach(function (obj) {
       $scope.mcqFormData.media.push(obj);
