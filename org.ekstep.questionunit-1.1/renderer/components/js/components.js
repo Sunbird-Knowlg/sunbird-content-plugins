@@ -59,7 +59,7 @@ org.ekstep.questionunit.questionComponent = {
                             <%= question.data.question.text %>\
                         </div>\
                         <div class="expand-button" onclick="org.ekstep.questionunit.questionComponent.toggleQuestionText({layout:\'qcontainer-big\'})">\
-                            <img \ src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-downArwImg"" /> \
+                            <img \ class="exp-button" src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-downArwImg"" /> \
                         </div> \
                     </div> \
                     <% if(question.data.question.image) { %>\
@@ -71,7 +71,7 @@ org.ekstep.questionunit.questionComponent = {
                 </div> \
                 <% if(question.data.question.audio) { %>\
                     <div class="audio-container"> \
-                        <img onclick="org.ekstep.questionunit.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" class="exp-button-qcontainer-big" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg"/> \
+                        <img onclick="org.ekstep.questionunit.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg"/> \
                     </div> \
                 <% } %>\
             </div><script>org.ekstep.questionunit.questionComponent.onDomReady();</script>'
@@ -113,7 +113,7 @@ org.ekstep.questionunit.questionComponent = {
             }
         })
 
-        $('.exp-button-qcontainer-big').on("load", function(){
+        $('.question-container-big .exp-button').on("load", function(){
             if ($('.hiding-container').height() > $('.expand-container').height()) {
                 $('.expand-button').css('display', 'none');
             } else {
@@ -127,24 +127,28 @@ org.ekstep.questionunit.questionComponent = {
         
                 if($('.question-container-big').hasClass('no-qimage')){
                     $('.hiding-container').css('height', '100%'); //this is not static
-                    $('.expand-container').css('height', '100%'); //this is not static
+                    $('.expand-container').css('height', '100%');
                 }else{
                     $('.hiding-container').css('height', '30.7%'); //this is not static
                 }
                 $('.hiding-container').removeClass('expanded')
                 $(".expand-button img").toggleClass('flip');
+                $('.expand-button').css('bottom', '10%');
                 $('.hiding-container').css('padding-bottom', '0px');
                 $('.expand-container').css('overflow-y', '');
+                $('.expand-container').css('margin-bottom', '');
             } else {
                 if($('.question-container-big').hasClass('no-qimage')){
                     $('.expand-container').css('height', '100%');
                 }
                 var expandButtonBottom = parseFloat($('.expand-button').css('bottom'));
                 $('.hiding-container').addClass('expanded')
-                $('.hiding-container').css('height', '100%');
+                $('.hiding-container').css('height', 'auto');
+                $('.expand-button').css('bottom', '5%');
                 $(".expand-button img").toggleClass('flip');
                 $('.hiding-container').css('padding-bottom', $(".expand-button").height()+'px');
                 $('.expand-container').css('overflow-y', 'scroll');
+                $('.expand-container').css('margin-bottom', '8vh');
                 
             }
         }else{
