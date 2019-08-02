@@ -92,16 +92,22 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
     } else {
         var result = this.difference(currentMetadata, originalMetadata);
         _.merge(metadata, result);
-        // _.forEach(currentMetadata, function(value, key) {
-        //     if (_.isUndefined(originalMetadata[key])) {
-        //         metadata[key] = value;
-        //     } else if (value != originalMetadata[key]) {
-        //         metadata[key] = value;
-        //     }
-        // });
+        _.forEach(currentMetadata, function(value, key) {
+            if (_.isUndefined(originalMetadata[key])) {
+                metadata[key] = value;
+            } else if (value != originalMetadata[key]) {
+                metadata[key] = value;
+            }
+        });
     }
     if (metadata.keywords) {
         metadata.keywords = getArrayOfKeywords(metadata.keywords);
+    }
+    if(metadata.children){
+        delete metadata.children;
+    }
+    if(metadata.childNodes){
+        delete metadata.childNodes;
     }
     // Passing mandatory fields when save is invoked
     !metadata['name'] && (metadata['name'] = originalMetadata['name']);

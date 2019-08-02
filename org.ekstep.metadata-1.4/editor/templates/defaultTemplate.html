@@ -178,12 +178,12 @@
                             <tr class="top aligned" ng-repeat="fixedField in fixedLayoutConfigurations" ng-hide="fixedField.code == 'appicon'">
                                 <td class="two wide first-letter-capitalize"><b>{{fixedField.label}}</b></td>
                                 <td class="one wide">:</td>
-                                <td class="six wide">{{contentMeta[fixedField.code].join(', ') || contentMeta[fixedField.code] || '--'}}</td>
+                                <td class="six wide">{{displayValue(contentMeta[fixedField.code])}}</td>
                             </tr>
                             <tr class="top aligned" ng-repeat="dynamicField in dynamicLayoutConfigurations">
                                 <td class="two wide first-letter-capitalize"><b>{{dynamicField.label}}</b></td>
                                 <td class="one wide">:</td>
-                                <td class="six wide" ng-if="dynamicField.code !== 'dialcode' && dynamicField.code !== 'ownedBy'">{{contentMeta[dynamicField.code].join(', ') || contentMeta[dynamicField.code] || '--'}}</td>
+                                <td class="six wide" ng-if="dynamicField.code !== 'dialcode' && dynamicField.code !== 'ownedBy'">{{displayValue(contentMeta[dynamicField.code])}}</td>
                                 <td ng-if="dynamicField.code === 'dialcode'">
                                     {{contentMeta['dialcodes'].join(', ') || '--'}}
                                 </td>

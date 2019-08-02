@@ -608,6 +608,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.$safeApply();
         });
     }
+
+    $scope.displayValue = function(value){
+        if(_.isArray(value)){
+            value = _.compact(value);
+            return value.length > 0 ? value.join(', ') : '--';
+        }else{
+            return _.isEmpty(value) ? '--' : value;
+        }
+    }
+
     $scope.init()
 
 }]);
