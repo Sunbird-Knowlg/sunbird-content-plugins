@@ -49,6 +49,18 @@
                 "assetId": "org.ekstep.questionunit.renderer.downarrow"
             },
             {
+                "type": "image",
+                "src": "renderer/assets/zoom.png",
+                "id": "org.ekstep.questionunit.renderer.zoom",
+                "assetId": "org.ekstep.questionunit.renderer.zoom"
+            },
+            {
+                "type": "image",
+                "src": "renderer/assets/audio-icon1.png",
+                "id": "org.ekstep.questionunit.renderer.audio-icon1",
+                "assetId": "org.ekstep.questionunit.renderer.audio-icon1"
+            },
+            {
                 "type": "js",
                 "src": "renderer/components/js/components.js"
             },
