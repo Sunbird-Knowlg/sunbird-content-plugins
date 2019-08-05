@@ -267,7 +267,15 @@ MCQController.horizontal.onSelectOption = function (element, index) {
         });
     }
 }
-
+MCQController.onSelectingOption = function (element, index) {
+    MCQController.horizontal.optionStyleUponClick(element);
+    if (MCQController.pluginInstance._question.data.options[index].audio) {
+        MCQController.pluginInstance.playAudio({
+            src: MCQController.pluginInstance._question.data.options[index].audio
+        });
+    }
+    MCQController.imagegrid.playAudioHorizontal(index,'play');
+}
 /** Vertical */
 /* vertical layout is exactly same as horizontal */
 MCQController.vertical = MCQController.vertical || jQuery.extend({}, MCQController.layout, MCQController.horizontal);
@@ -560,15 +568,14 @@ MCQController.getMaxWidthHeight = function (options, height, width) {
 
     return size;
 }
-/** imageGrid */
+/** imageHorizontal */
 MCQController.imagehorizontal = MCQController.imagehorizontal || jQuery.extend({}, MCQController.layout);
 
 /**
- * returns the HTML template for the `imageGrid` layout
+ * returns the HTML template for the `imageHorizontal` layout
  * @param {object} question
  */
 MCQController.imagehorizontal.getTemplate = function (question) {
-    // var questionTemplate = MCQController.imagehorizontal.getQuestionTemplate(question);
     var optionsTemplate = MCQController.imagehorizontal.getOptionsTemplate(question.data.options)
     return "<div class='mcq-imagehorizontal-content-container plugin-content-container'>" +
     org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) +
@@ -578,7 +585,7 @@ MCQController.imagehorizontal.getTemplate = function (question) {
 }
 
 /**
- * adjusts the option's CSS properties for `imageGrid` layout
+ * adjusts the option's CSS properties for `imageHorizontal` layout
  * @param {object} question the question object
  */
 MCQController.imagehorizontal.adjustOptions = function (question) {
@@ -606,7 +613,7 @@ MCQController.imagehorizontal.postRender = function (question) {
  }
 
 /**
- * returns the HTML template for options for `imageGrid` layout
+ * returns the HTML template for options for `imageHorizontal` layout
  * @param {array} options
  */
 MCQController.imagehorizontal.getOptionsTemplate = function (options) {
@@ -616,7 +623,176 @@ MCQController.imagehorizontal.getOptionsTemplate = function (options) {
     });
     return optionTemplate;
 }
-MCQController.imagehorizontal.playAudioImageGrid = function(index, action, src){
+MCQController.imagehorizontal.playAudioHorizontal = function(index, action, src){
+    _.each(MCQController.pluginInstance._question.data.options,function(val,key){
+        var k = key + 1;
+        $("#mcq-imagehorizontal-audio-play"+k).css('display','block');
+        $("#mcq-imagehorizontal-audio-stop"+k).css('display','none');
+    });
+    if(action == 'play'){
+        $("#mcq-imagehorizontal-audio-play"+index).css('display','none');
+        $("#mcq-imagehorizontal-audio-stop"+index).css('display','block');
+    }else if(action == 'stop'){
+        $("#mcq-imagehorizontal-audio-play"+index).css('display','block');
+        $("#mcq-imagehorizontal-audio-stop"+index).css('display','none');
+    }
+}
+
+/**
+ * returns the HTML template of the option in `imageHorizontal` template
+ * @param {object} option the option object
+ * @param {number} key the index of the option
+ * @param {size} maxHeight and width for layout
+ */
+MCQController.imagehorizontal.getOption = function (option, key) {
+    var optTemplate = " <div style='position: relative;top:10%;max-width:24%' class='org-ekstep-questionunit-mcq-option-element mcq2-2-option-imagehorizontal mcq2-2-option-imagehorizontal<%=key+1%>' onClick=MCQController.imagehorizontal.onOptionSelected(event,<%= key %>)>\
+    <% if (option.audio){ %> \
+        <div class='mcq-imagehorizontal-option-audio' id='mcq-imagehorizontal-audio-play<%=key+1%>' style='display:block;'>\
+          <img src='<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png') %>' style='width: 30%;'  onclick=MCQController.imagehorizontal.playAudioHorizontal(<%=key+1%>,'play',{src:\'<%= option.audio %>\'}) />\
+        </div>\
+        <div class='mcq-imagehorizontal-option-audio' id='mcq-imagehorizontal-audio-stop<%=key+1%>' style='display:none;'>\
+          <img src='<%= MCQController.pluginInstance.getDefaultAsset('audio_stop.png') %>' style='width: 30%;'  onclick=MCQController.imagehorizontal.playAudioHorizontal(<%=key+1%>,'stop',{src:\'<%= option.audio %>\'}) />\
+        </div>\
+      <% } %> \
+    <%if(option.image){%>\
+        <div class='position-relative' style='width: 100%;height: 100%;text-align: center;'>\
+        <img class='mcq2-2-option-grid-image mcq-option-imagehorizontal'\
+        src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
+       </div> <img class='zoom-image-horizontal'\
+       src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> onclick=MCQController.zoomImage('<%=option.image%>') />\
+     <%}%>\
+     <%if(option.text){%>\
+        <div class='imagehorizontal-option-text'><%= option.text %></div>\
+     <%}%>\
+    </div>";
+    return _.template(optTemplate)({
+        "option": option,
+        "key": key
+    });
+}
+
+MCQController.imagehorizontal.optionStyleUponClick = function (element) {
+    $('.mcq2-2-option-imagehorizontal').removeClass('opt-selected-imagehorizontal');
+    var optElt = $(element).closest('.mcq2-2-option-imagehorizontal');
+    if (optElt) optElt.addClass('opt-selected-imagehorizontal');
+}
+/**
+ * called when the option in `imageHorizontal` layout is selected
+ * @param {object} event
+ * @param {number} index
+ */
+MCQController.imagehorizontal.onOptionSelected = function (event, index) {
+    var optElt = $(event.target);
+    MCQController.imagehorizontal.optionStyleUponClick(optElt);
+    MCQController.pluginInstance.onOptionSelected(event, index);
+    if (MCQController.pluginInstance._question.data.options[index].audio)
+        MCQController.pluginInstance.playAudio({
+            src: MCQController.pluginInstance._question.data.options[index].audio
+        });
+        MCQController.imagehorizontal.playAudioHorizontal(index+1, 'play', {
+            src: MCQController.pluginInstance._question.data.options[index].audio
+        });
+
+}
+MCQController.imagehorizontal.getQuestionTemplate = function (question) {
+    var qTemplate = "<div class='mcq-imagehorizontal-question-container'>\
+                <div class='mcq-imagehorizontal-question-image' style='text-align:center;'>\
+                <% if(question.data.question.image){%>\
+                <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
+                <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
+                <%}%>\
+                <% if(question.data.question.text){%>\
+                    <div class='question-text'\><%= question.data.question.text %></div>\
+                    <%}%>\
+                </div>\
+                <% if ( question.data.question.audio.length > 0 ){ %> \
+                <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon2.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
+                <% } %> \
+              </div>\
+              ";
+    return _.template(qTemplate)({
+        "question": question
+    });
+}
+/** imageGrid */
+MCQController.imagegrid = MCQController.imagegrid || jQuery.extend({}, MCQController.layout);
+
+/**
+ * returns the HTML template for the `imageGrid` layout
+ * @param {object} question
+ */
+MCQController.imagegrid.getTemplate = function (question) {
+    var wrapperStartQuestionComponent = '<div class="question-content-container">';
+    var wrapperEndQuestionComponent = '</div>';
+    var wrapperEnd = '</div>';
+    var layoutTemplate = MCQController.imagegrid.getOptionsTemplate(question);
+    return '<div class="mcq-content-container mcq-imagegrid-content-container plugin-content-container">' +
+        wrapperStartQuestionComponent +
+        '<div class="imagegrid-mcq-question-head">' + org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagegrid'}) + '</div>' +
+        wrapperEndQuestionComponent +
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +  
+            layoutTemplate + wrapperEnd +wrapperEnd+
+        wrapperEnd;
+}
+
+/**
+ * adjusts the option's CSS properties for `imageGrid` layout
+ * @param {object} question the question object
+ */
+MCQController.imagegrid.adjustOptions = function (question) {
+    var optLength = question.data.options.length;
+    if (optLength == 2) {
+        $(".mcq2-2-option").css("margin-top", "28%");
+    } else if (optLength == 3) {
+        $(".mcq2-2-option3").css("margin-left", "30.15%");
+
+    }
+}
+
+/**
+ * called after the DOM is updated with the question template HTML
+ * @param {object} question the question object
+ */
+MCQController.imagegrid.postRender = function (question) {
+    MCQController.onImageDomLoad(".mcq2-2-option", question);
+    if(question.config.layout.toLowerCase() === 'imagegrid'){
+        $(".mcq2-2-option").css("width", "40%", "margin-top", "3%", "margin-bottom", "3%");
+    }
+    if (question.data.options.length < 4) {
+        MCQController.imagegrid.adjustOptions(question);
+    }
+ }
+
+/**
+ * returns the HTML template for options for `imageGrid` layout
+ * @param {array} options
+ */
+MCQController.imagegrid.getOptionsTemplate = function (question) {
+    var layout = "horizontal";
+    var audioIcon = 'audio-icon3.png';
+    var audioStop = 'audio_stop.png';
+    return '<div class="outer-option-container ' + layout + ' imagegrid-mcq">\
+    <div class="option-container ' + layout + '">\
+    <div class="option-block-container">\
+    <% _.each(question.data.options,function(val,key){ %>\
+        <div class="option-width-50 option-block org-ekstep-questionunit-mcq-option-element<% if(val.isCorrect) { %> mcq-correct-answer<% } %>" onclick="MCQController.onSelectingOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
+            <%  if(val.audio) { %>\
+              <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioIcon + '") %>" class="audio-icon" id="mcq-imagegird-audio-play<%=key+1%>" style="display:block"/>\
+              <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioStop + '") %>" class="audio-icon" id="mcq-imagegird-audio-stop<%=key+1%>" style="display:none" />\
+            <% } %>\
+            <div class="option-text-container" style="width: 70vw">\
+          <%  if(val.text) { %>\
+              <span><%= val.text %></span>\
+          <% } %>\
+            </div>\
+        </div>\
+      <% }) %>\
+    </div>\
+    </div>\
+  </div>';
+}
+MCQController.imagegrid.playAudioHorizontal = function(index, action, src){
+    var index = index + 1;
     _.each(MCQController.pluginInstance._question.data.options,function(val,key){
         var k = key + 1;
         $("#mcq-imagegird-audio-play"+k).css('display','block');
@@ -638,59 +814,58 @@ MCQController.imagehorizontal.playAudioImageGrid = function(index, action, src){
  * @param {number} key the index of the option
  * @param {size} maxHeight and width for layout
  */
-MCQController.imagehorizontal.getOption = function (option, key) {
-    var optTemplate = " <div style='position: relative;top:10%;' class='org-ekstep-questionunit-mcq-option-element mcq2-2-option-imagegird mcq2-2-option-imagehorizontal<%=key+1%>' onClick=MCQController.imagehorizontal.onOptionSelected(event,<%= key %>)>\
-    <% if (option.audio){ %> \
-        <div class='mcq-imagehorizontal-option-audio' id='mcq-imagegird-audio-play<%=key+1%>' style='display:block;'>\
-          <img src='<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png') %>' style='width: 30%;'  onclick=MCQController.imagehorizontal.playAudioImageGrid(<%=key+1%>,'play',{src:\'<%= option.audio %>\'}) />\
+MCQController.imagegrid.getOption = function (option, key) {
+    var optTemplate = '<div class="outer-option-container-horizontal">\
+    <div class="option-container-horizontal">\
+    <div class="option-block-container">\
+        <div class="option-block option-width-50 org-ekstep-questionunit-mcq-option-element<% if(option.isCorrect) { %> mcq-correct-answer<% } %>" onclick="MCQController.horizontal.onSelectOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
+            <div class="option-image-container <% if(!option.image) { %> no-image<% } %>" \>\
+            </div>\
+            <%  if(option.audio) { %>\
+              <img src="<%= MCQController.pluginInstance.getDefaultAsset("audio-icon3.png") %>" class="audio <% if(option.image) { %>with-image<% } %>" />\
+            <% } %>\
+            <div class="option-text-container<% if(option.audio) { %> with-audio <% } %> <% if(option.image) { %>with-image<% } %>">\
+          <%  if(option.text) { %>\
+              <span><%= option.text %></span>\
+          <% } %>\
+            </div>\
         </div>\
-        <div class='mcq-imagehorizontal-option-audio' id='mcq-imagegird-audio-stop<%=key+1%>' style='display:none;'>\
-          <img src='<%= MCQController.pluginInstance.getDefaultAsset('audio_stop.png') %>' style='width: 30%;'  onclick=MCQController.imagehorizontal.playAudioImageGrid(<%=key+1%>,'stop',{src:\'<%= option.audio %>\'}) />\
-        </div>\
-      <% } %> \
-    <%if(option.image){%>\
-        <div class='position-relative' style='width: 100%;height: 72%;margin-top: -20%;text-align: center;'>\
-        <img class='mcq2-2-option-grid-image mcq-option-imgagegrid'\
-        src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
-       </div> <img class='zoom-image-horizontal'\
-       src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> onclick=MCQController.zoomImage('<%=option.image%>') />\
-     <%}%>\
-     <%if(option.text){%>\
-        <div class='imagehorizontal-option-text'><%= option.text %></div>\
-     <%}%>\
-    </div>";
+      </div>\
+    </div>\
+    </div>\
+  </div>';
     return _.template(optTemplate)({
         "option": option,
         "key": key
     });
 }
 
-MCQController.imagehorizontal.optionStyleUponClick = function (element) {
-    $('.mcq2-2-option-imagegird').removeClass('opt-selected-imagehorizontal');
+MCQController.imagegrid.optionStyleUponClick = function (element) {
+    $('.mcq2-2-option-imagegird').removeClass('opt-selected-imagegrid');
     var optElt = $(element).closest('.mcq2-2-option-imagegird');
-    if (optElt) optElt.addClass('opt-selected-imagehorizontal');
+    if (optElt) optElt.addClass('opt-selected-imagegrid');
 }
 /**
  * called when the option in `imageGrid` layout is selected
  * @param {object} event
  * @param {number} index
  */
-MCQController.imagehorizontal.onOptionSelected = function (event, index) {
+MCQController.imagegrid.onOptionSelected = function (event, index) {
     var optElt = $(event.target);
-    MCQController.imagehorizontal.optionStyleUponClick(optElt);
+    MCQController.imagegrid.optionStyleUponClick(optElt);
     MCQController.pluginInstance.onOptionSelected(event, index);
     if (MCQController.pluginInstance._question.data.options[index].audio)
         MCQController.pluginInstance.playAudio({
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
-        MCQController.imagehorizontal.playAudioImageGrid(index+1, 'play', {
+        MCQController.imagegrid.playAudioImageGrid(index+1, 'play', {
             src: MCQController.pluginInstance._question.data.options[index].audio
         });
 
 }
-MCQController.imagehorizontal.getQuestionTemplate = function (question) {
-    var qTemplate = "<div class='mcq-imagehorizontal-question-container'>\
-                <div class='mcq-imagehorizontal-question-image' style='text-align:center;'>\
+MCQController.imagegrid.getQuestionTemplate = function (question) {
+    var qTemplate = "<div class='mcq-imagegrid-question-container'>\
+                <div class='mcq-imagegrid-question-image' style='text-align:center;'>\
                 <% if(question.data.question.image){%>\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
@@ -721,7 +896,7 @@ MCQController.backgroundComponent = {
             <div class="bg-graphics-2 left2" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
              <div class="bg-circle circle-right" style="top:<%= _.random(-6, 6)*10%>vh"></div>\
             '
-        } else if(layoutType == 'imagehorizontal' || layoutType == 'imagehorizontal'){
+        } else if(layoutType == 'imagehorizontal' || layoutType == 'imagegrid'){
                 return '\
             <div class="bg-graphics-3" style="background-color:<%= org.ekstep.questionunit.backgroundComponent.settings.bgColor %>">\
                 <div class="bg-circle circle-left"></div ><div class="bg-circle circle-right"></div>\
