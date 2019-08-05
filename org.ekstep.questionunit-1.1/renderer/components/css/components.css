@@ -265,6 +265,12 @@ body {
     height: 50%;
     background: white;
 }
+.imagegrid-mcq-question-head{
+    height: 100%;
+}
+.imagegrid-mcq-question-head .question-container-big {
+    height: 100%;
+}
 
 .question-container-big .expand-button img.flip {
     transform: rotate(180deg);
@@ -279,7 +285,7 @@ body {
 }
 
 .question-container-big .text-image-container .hiding-container {
-    line-height: 1.9em;
+    line-height: 1.4em;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     padding-bottom: 30px;
@@ -288,7 +294,7 @@ body {
     /* Handle */
     background:white;
     padding: 1.5% 5% 0% 5%;
-    height: 30.7%;
+    height: 35.7%;
     position: absolute;
     overflow: hidden;
     z-index: 2;
@@ -311,8 +317,8 @@ body {
 }
 
 .question-container-big .text-image-container .hiding-container .expand-container {
-    text-align: center;
-    max-height: 61vh;
+    text-align: left;
+    max-height: 41vh;
     z-index: 2;
     background: white;
     margin-bottom: 8vh;
