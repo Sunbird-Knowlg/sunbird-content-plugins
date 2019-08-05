@@ -11,7 +11,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 	$scope.templatesNotFound = '';
 	$scope.selectedTemplatePluginData = {};
   $scope.savingQuestion = false;
-	$scope.templatesType = ['Horizontal', 'Vertical', 'Grid', 'Grid2', 'Vertical2'];
+	$scope.templatesType = ['Horizontal', 'Vertical', 'Grid', 'Grid2', 'Vertical2', 'imageHorizontal','imageGrid'];
 	$scope._constants = {
     formName: 'questionForm',
     EVENT_FORM_SUCCESS: 'editor:form:success',

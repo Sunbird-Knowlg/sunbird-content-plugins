@@ -40,7 +40,7 @@ MCQController.renderTemplateLayout = function (question) {
   MCQController.isMediaAsset(question);
   var layout = question.config.layout;
   MCQController[layout.toLowerCase()].preRender(question);
-  var strTemplate = MCQController[layout.toLowerCase()].getTemplate(question)
+  var strTemplate = MCQController[layout.toLowerCase()].getTemplate(question);
   var template = _.template(strTemplate);
   $("#mcq-question-container").append(template({
     question: question
@@ -65,6 +65,21 @@ MCQController.showImageModel = function () {
   var templateData = template({
     src: eventData
   })
+  $("#mcq-question-container").append(templateData);
+};
+MCQController.zoomImage = function (img) {
+  var eventData = img;
+  var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
+    <div class='popup-full-body'> \
+      <div class='font-lato assess-popup assess-goodjob-popup'> \
+        <img class='qc-question-fullimage' src=<%= src %> /> \
+        <div onclick='MCQController.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
+      </div>\
+    </div>";
+  var template = _.template(modelTemplate);
+  var templateData = template({
+    src: eventData
+  });
   $("#mcq-question-container").append(templateData);
 };
 /**
