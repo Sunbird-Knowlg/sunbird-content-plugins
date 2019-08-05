@@ -5,6 +5,10 @@
 describe('Image Plugin', function () {
 
     var pluginInstance, ImageInstance, stage;
+    var imageData = {
+        "asset": "do_1126964504967577601106",
+        "assetMedia": { "id": "do_1126964504967577601106", "src": "https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1126964504967577601106/artifact/images-9_1548236433043.thumb_1549859679975.jpg", "type": "image" }, "x": 20, "y": 200, "w": 50, "h": 50, "from": "plugin"
+    }
 
     beforeAll(function () {        
         pluginInstance = ecEditor.instantiatePlugin("org.ekstep.assetbrowser");
@@ -66,11 +70,7 @@ describe('Image Plugin', function () {
     it("testing onConfigChange", function () {
         ImageInstance = stage.children[0];
 
-        spyOn(ImageInstance, "getDisplayName");
-        spyOn(ImageInstance, "onConfigChange");
-        spyOn(ImageInstance, "getCopy");
-        ImageInstance.getDisplayName();
-        expect(ImageInstance.getDisplayName).toHaveBeenCalled();
+        spyOn(ImageInstance, "onConfigChange").and.callThrough();
 
         ImageInstance.onConfigChange("browser", {
             "asset": "do_1126964504967577601106",
@@ -78,8 +78,19 @@ describe('Image Plugin', function () {
         });
         expect(ImageInstance.onConfigChange).toHaveBeenCalled();
 
+    })
+    it('should copy asset attributes', function(){
+        var ImageInstance = stage.children[0];
+        spyOn(ImageInstance, "getCopy").and.callThrough();
         ImageInstance.getCopy();
+        expect(ImageInstance.getCopy()).toBe(imageData.assetMedia);
         expect(ImageInstance.getCopy).toHaveBeenCalled();
+    })
+    it('should return image plugin name', function(){
+        var ImageInstance = stage.children[0];
+        spyOn(ImageInstance, "getDisplayName").and.callThrough();
+        ImageInstance.getCopy();
+        expect(ImageInstance.getDisplayName()).toBe('Image');
     })
 
 })
