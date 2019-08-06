@@ -68,7 +68,7 @@ MCQController.showImageModel = function () {
   $("#mcq-question-container").append(templateData);
 };
 MCQController.zoomImage = function (img) {
-  var eventData = img;
+  var eventData = MCQController.pluginInstance.getAssetUrl(img);
   var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
     <div class='popup-full-body'> \
       <div class='font-lato assess-popup assess-goodjob-popup'> \

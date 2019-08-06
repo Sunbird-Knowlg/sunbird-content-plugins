@@ -122,7 +122,7 @@ org.ekstep.questionunit.questionComponent = {
         })
     },
     toggleQuestionText: function (option) {
-        if(option.layout = "qcontainer-big"){
+        if(option && option.layout == "qcontainer-big"){
             if($('.hiding-container').hasClass('expanded')){
         
                 if($('.question-container-big').hasClass('no-qimage')){
