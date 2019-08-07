@@ -34,6 +34,21 @@ angular.module('keyBoardApp', [])
         scope.data.keyboardType = scope.keyboardType;
         if (scope.keyboardType == 'Custom') {
           scope.customTag = true;
+          var optionsData = {
+            "context": {
+                'cdata': [{
+                    "id": "question:keyboard:custom",
+                    "type": "Feature"
+                },{
+                    "id":"SB-7813",
+                    "type":"Task"
+                }]
+            }
+        };
+          scope.generateTelemetry({
+            'type' : 'select',
+            'id':'keyboard-select-type-custom'
+          },optionsData)
         } else {
           scope.customTag = false;
         }
@@ -54,6 +69,17 @@ angular.module('keyBoardApp', [])
           scope.editorKeys = [];
         }
       };
+
+      scope.generateTelemetry = function(data, options){
+        ecEditor.getService('telemetry').interact({
+          "type": data.type || '',
+          "id": data.id || '',
+          "plugin": {
+              "id": 'org.ekstep.keyboard',
+              "ver": ecEditor.getPlugin('org.ekstep.keyboard').m.ver
+          }
+      }, options)
+      }
     }
   };
 });
