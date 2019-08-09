@@ -149,6 +149,14 @@
     justify-content: center;
 }
 
+.mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container>span>p {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
 .mcq-content-container .option-container.vertical .option-block:last-child {
     margin-right: 0%;
 }
