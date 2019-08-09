@@ -933,6 +933,7 @@ span.qc-option-txt {
     height: 70.56vh;
     margin: auto;
     padding-top: 0.1vh;
+    margin-top: 2%;
 }
 
 .mcq-grid-option-container>div {
@@ -941,8 +942,9 @@ span.qc-option-txt {
 }
 
 .mcq-grid-options-row {
-    height: 33.27vh;
+    height: 30.27vh;
     margin-top: 2vh;
+    margin-bottom: 4%;
 }
 
 .mcq-grid-option-outer {
@@ -954,10 +956,12 @@ span.qc-option-txt {
 
 .mcq-grid-option {
     width: 100%;
-    height: 33.27vh;
+    height: 34.27vh;
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    background: white;
+    border-radius: 7px;
 }
 
 .mcq-grid-option-wrapper {
@@ -996,10 +1000,26 @@ span.qc-option-txt {
     width: 100%;
     display: table;
     height: 10vh;
-    opacity: 0.6;
+    opacity: 1.6;
     color: black;
     z-index: 1;
     font-size: 14px;
+}
+
+.mcq-grid-option-text-no-image {
+    position: unset;
+}
+.mcq-grid-option-text-only {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    font-weight: bold;
+    margin-left: 11%;
+    font-size: 1.1em;
+    white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mcq-grid-option-text>div {
@@ -1017,6 +1037,7 @@ span.qc-option-txt {
     width: 100%;
     height: 9vh;
     text-align: center;
+    margin-top: -16%;
 }
 
 .mcq-grid-option-audio>img {
@@ -1151,6 +1172,7 @@ span.qc-option-txt {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: white;
 }
 
 .mcq2-2-check-image-holder {
@@ -1200,19 +1222,42 @@ span.qc-option-txt {
     font-size: 14px;
 }
 
+.mcq2-2-option-text-text-only {
+    padding-top: 2%;
+    padding:0% 2%;
+    margin-top: 0%;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    object-fit: contain;
+    overflow: hidden;
+    font-size: 14px;
+    background: white; 
+}
+
 .mcq-qLeft-question-container .q-image {
     max-height: 100%;
     max-width: 100%;
     position: relative;
     object-fit: contain;
     overflow: hidden;
+    margin-top: 10%;
+}
+
+.mcq-qLeft-question-container .zoom-image {
+    width: 21%;
+    position: absolute;
+    bottom: 0px;
+    cursor: pointer;
+    top: 54%;
+    left: 70%;
 }
 
 .mcq-qLeft-question-container .audio-image {
-    height: 9.83%;
-    width: 13.5846%;
-    left: 82.61%;
-    top: 70%;
+    height: 17%;
+    width: 21%;
+    left: 41.61%;
+    top: -1%;
     position: absolute;
     object-fit: contain;
 }
@@ -1347,14 +1392,14 @@ span.qc-option-txt {
 }
 
 .mcq-2-options-container-vertical .audio-option-image-container {
-    width: 5vw;
-    height: 8vh;
+    width: 6vw;
+    height: 10vh;
     display: table-cell;
-    top:0.5vh;
+    top: 13.5vh;
     vertical-align: middle;
     position: relative;
     z-index: 2;
-    left: 3vw;
+    left: 36vw;
 }
 
 .mcq-2-options-container-vertical .tick-icon-holder {
@@ -1397,7 +1442,6 @@ span.qc-option-txt {
 }
 
 .border-solid {
-    border: 2px solid #777777;
 }
 .position-relative {
     position: relative;
@@ -1406,4 +1450,20 @@ span.qc-option-txt {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.mcq-vertical{
+    width: 100%;
+    height: 100%;
+}
+
+.mcq-grid {
+    width: 100%;
+    height: 100%;
+}
+
+.grid-option-image-zoom-icon {
+    width: 25%;
+    position: relative;
+    top: 64%;
+    left: 75%;
 }

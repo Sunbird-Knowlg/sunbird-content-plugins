@@ -105,20 +105,24 @@ body {
     max-height: 100%;
     float: left;
     right: 0;
-    cursor: pointer;
 }
 
 .question-container .image-container img.audio {
-    width: 30%;
-    float: left;
-    right: -13%;
+    width: 55%;
+    float: right;
+    margin-left: 9px;
+    margin-bottom: 37%;
+    left: 81vw;
     cursor: pointer;
 }
 
 .question-container .image-container img.audio.no-q-image {
-    width: 50%;
-    float: left;
-    right: 18%;
+    width: 55%;
+    float: right;
+    margin-left: 9px;
+    margin-bottom: 37%;
+    left: 81vw;
+    cursor: pointer;
 }
 
 .question-container .hiding-container {
@@ -161,12 +165,11 @@ body {
 
 .question-container .expand-button {
     position: absolute;
-    background-color: #E3E3E3;
     width: 9%;
     border-radius: 9px;
     height: 21.8%;
     bottom: 5%;
-    right: 2%;
+    right: -1%;
     z-index: 2;
     cursor: pointer;
     display: none;
@@ -184,6 +187,14 @@ body {
 
 .question-container .expand-button img.flip {
     transform: rotate(180deg);
+}
+
+.question-container .question-zoom-img {
+    width: 30%;
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    cursor: pointer;
 }
 
 .bg-graphics {
