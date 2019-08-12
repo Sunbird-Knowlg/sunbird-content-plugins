@@ -81,11 +81,13 @@ org.ekstep.questionunit.questionComponent = {
         <% if(question.data.question.image || question.data.question.audio){ %> \
             <div class="image-container">\
             <% if(question.data.question.image && question.data.question.audio){ %> \
-                <img data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage" onclick="org.ekstep.questionunit.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')" class="q-image" src="" />\
+                <img data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage" class="q-image" src="" />\
                 <img onclick="org.ekstep.questionunit.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" class="audio" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg" />\
-            <% }else if(question.data.question.image){ %> \
-                <img data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage" onclick="org.ekstep.questionunit.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')" class="q-image" src="" />\
-            <% }else { %>\
+                <img class="question-zoom-img" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg" onclick="org.ekstep.questionunit.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')"/>\
+                <% }else if(question.data.question.image){ %> \
+                <img data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage"  class="q-image" src="" />\
+                <img src="" class="question-zoom-img" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg" onclick="org.ekstep.questionunit.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')"/>\
+                <% }else { %>\
                 <img onclick="org.ekstep.questionunit.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" class="audio no-q-image" src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg"/>\
             <% } %>\
             </div>\
