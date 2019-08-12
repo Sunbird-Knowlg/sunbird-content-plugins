@@ -154,7 +154,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 0.8em;
 }
 
 .mcq-content-container .option-container.vertical .option-block:last-child {
@@ -350,7 +350,7 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     text-overflow: ellipsis;
     top: 26%;
 }
-..mcq-content-container .option-container.horizontal .option-block:last-child {
+.mcq-content-container .option-container.horizontal .option-block:last-child {
     margin-bottom: 0%;
 }
 
