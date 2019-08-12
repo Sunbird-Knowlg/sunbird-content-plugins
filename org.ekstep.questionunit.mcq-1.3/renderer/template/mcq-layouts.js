@@ -671,7 +671,7 @@ MCQController.imagehorizontal.getOption = function (option, key) {
         </div>\
       <% } %> \
     <%if(option.image){%>\
-        <div class='position-relative' style='width: 100%;height: 100%;text-align: center;'>\
+        <div class='position-relative' style='width: 100%;height: 80%;text-align: center;'>\
         <img class='mcq2-2-option-grid-image mcq-option-imagehorizontal'\
         src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
        </div> <img class='zoom-image-horizontal'\
@@ -796,7 +796,7 @@ MCQController.imagegrid.getOptionsTemplate = function (question) {
               <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioIcon + '") %>" class="audio-icon" id="mcq-imagegird-audio-play<%=key+1%>" style="display:block"/>\
               <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioStop + '") %>" class="audio-icon" id="mcq-imagegird-audio-stop<%=key+1%>" style="display:none" />\
             <% } %>\
-            <div class="option-text-container" style="width: 70vw">\
+            <div class="option-text-container-mcq mcq-imagegrid-text" style="width: 70vw;max-width: 65%;left: 7%;font-weight: bold;max-height: 90%;position: absolute;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;top: 26%;">\
           <%  if(val.text) { %>\
               <span><%= val.text %></span>\
           <% } %>\
