@@ -107,21 +107,21 @@ body {
     right: 0;
 }
 
-.question-container .image-container img.audio {
-    width: 55%;
-    float: right;
-    margin-left: 9px;
-    margin-bottom: 37%;
-    left: 81vw;
+.question-container img.audio {
+    position: absolute;
+    right: 1%;
+    top: 3%;
+    height: 50%;
+    z-index: 9;
     cursor: pointer;
 }
 
-.question-container .image-container img.audio.no-q-image {
-    width: 55%;
-    float: right;
-    margin-left: 9px;
-    margin-bottom: 37%;
-    left: 81vw;
+.question-container img.audio.no-q-image {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 50%;
+    z-index: 9;
     cursor: pointer;
 }
 
