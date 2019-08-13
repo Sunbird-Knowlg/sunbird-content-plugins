@@ -1030,16 +1030,16 @@ span.qc-option-txt {
     display: table-cell;
     vertical-align: middle;
     padding-left: 1vw;
-    padding-right: 1vw;
+    padding-right: 1vw;  
 }
 
 .mcq-grid-option-text>div>p {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: 10%;
-    font-size: 1.1em;
-    font-weight: bold
+    width: 100%;
+    font-size: 1em;
+    font-weight: bold; 
 }
 
 .mcq-grid-option-audio {
