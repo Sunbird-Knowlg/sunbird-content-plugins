@@ -381,19 +381,21 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     height: 83%;
     background-color: white;
     border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 .imagehorizontal-option-text{
     position: relative;
     max-width: 9%;
-    left: 7%;
     font-weight: bold;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
     max-width: 65%;
+}
+.imagehorizontal-option-text p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .mcq-imagehorizontal-option-audio{
     position: absolute;

@@ -639,18 +639,18 @@ MCQController.imagehorizontal.getOptionsTemplate = function (options) {
     return optionTemplate;
 }
 MCQController.imagehorizontal.playAudioHorizontal = function(index, action, src){
-    _.each(MCQController.pluginInstance._question.data.options,function(val,key){
-        var k = key + 1;
-        $("#mcq-imagehorizontal-audio-play"+k).css('display','block');
-        $("#mcq-imagehorizontal-audio-stop"+k).css('display','none');
-    });
-    if(action == 'play'){
-        $("#mcq-imagehorizontal-audio-play"+index).css('display','none');
-        $("#mcq-imagehorizontal-audio-stop"+index).css('display','block');
-    }else if(action == 'stop'){
-        $("#mcq-imagehorizontal-audio-play"+index).css('display','block');
-        $("#mcq-imagehorizontal-audio-stop"+index).css('display','none');
-    }
+    // _.each(MCQController.pluginInstance._question.data.options,function(val,key){
+    //     var k = key + 1;
+    //     $("#mcq-imagehorizontal-audio-play"+k).css('display','block');
+    //     $("#mcq-imagehorizontal-audio-stop"+k).css('display','none');
+    // });
+    // if(action == 'play'){
+    //     $("#mcq-imagehorizontal-audio-play"+index).css('display','none');
+    //     $("#mcq-imagehorizontal-audio-stop"+index).css('display','block');
+    // }else if(action == 'stop'){
+    //     $("#mcq-imagehorizontal-audio-play"+index).css('display','block');
+    //     $("#mcq-imagehorizontal-audio-stop"+index).css('display','none');
+    // }
 }
 
 /**
@@ -673,8 +673,9 @@ MCQController.imagehorizontal.getOption = function (option, key) {
         <div class='position-relative' style='width: 100%;height: 80%;text-align: center;'>\
         <img class='mcq2-2-option-grid-image mcq-option-imagehorizontal'\
         src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
-       </div> <img class='zoom-image-horizontal'\
+        <img class='zoom-image-horizontal'\
        src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> onclick=MCQController.zoomImage('<%=option.image%>') />\
+       </div>\
      <%}%>\
      <%if(option.text){%>\
         <div class='imagehorizontal-option-text'><%= option.text %></div>\
