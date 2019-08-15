@@ -201,7 +201,7 @@ MCQController.horizontal.getTemplateForLayout = function (layout, question) {
         wrapperStartQuestionComponent +
         org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
-        MCQController.backgroundComponent.getBackgroundGraphics(layout) +  
+        MCQController.backgroundComponent.getBackgroundGraphics(layout) +
             layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
 }
@@ -673,8 +673,9 @@ MCQController.imagehorizontal.getOption = function (option, key) {
         <div class='position-relative' style='width: 100%;height: 80%;text-align: center;'>\
         <img class='mcq2-2-option-grid-image mcq-option-imagehorizontal'\
         src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
-       </div> <img class='zoom-image-horizontal'\
+        <img class='zoom-image-horizontal'\
        src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> onclick=MCQController.zoomImage('<%=option.image%>') />\
+       </div> \
      <%}%>\
      <%if(option.text){%>\
         <div class='imagehorizontal-option-text'><%= option.text %></div>\
@@ -745,7 +746,7 @@ MCQController.imagegrid.getTemplate = function (question) {
         wrapperStartQuestionComponent +
         '<div class="imagegrid-mcq-question-head">' + org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagegrid'}) + '</div>' +
         wrapperEndQuestionComponent +
-        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +  
+        MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +
             layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
 }

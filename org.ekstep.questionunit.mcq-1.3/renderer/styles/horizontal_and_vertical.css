@@ -50,13 +50,10 @@
 .mcq-content-container .option-container.vertical .option-block-container .option-block {
     cursor: pointer;
     width: 24.93%;
-    /* height: 65.5161290323%; */
+    height: 65.5161290323%;
     margin-right: 0.9%;
     position: relative;
     float: left;
-    background: white;
-    border-radius: 7px;
-    height: 50%;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block.selected {
@@ -71,7 +68,7 @@
 
 #mcq-question-container .mcq-question-container-grid .mcq-grid-option-container .mcq-grid-options-row .mcq-grid-option-wrapper .mcq-grid-option-outer .selected {
     background-color: #7AB4EE;
-    border: solid 2px #024F9D; 
+    border: solid 2px #024F9D;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block img.audio {
@@ -90,10 +87,10 @@
     width: 100%;
     position: relative;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }
 
-.mcq-content-container .option-container.vertical .option-block-container .option-block .option-image-container img {
+.mcq-content-container .option-container.vertical .option-block-container .option-block .option-image-container .mcq-option-img {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     cursor: pointer;
@@ -150,7 +147,7 @@
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container>span>p {
-    white-space: nowrap; 
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: bold;
@@ -231,10 +228,13 @@
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .audio-icon {
-    width: 18%;
-    left: 80%;
-    top: 4%;
+    cursor: pointer;
     position: absolute;
+    top: 0%;
+    bottom: 0%;
+    right: 3%;
+    margin: auto;
+    width: 8%;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block.selected {
@@ -247,7 +247,7 @@
     position: absolute;
     top: 0%;
     bottom: 0%;
-    left: 89%;
+    right: 3%;
     margin: auto;
     width: 10%;
     z-index: 1;
@@ -259,7 +259,7 @@
     bottom: 0%;
     left: 89%;
     margin: auto;
-    width: 10%;
+    width: 8%;
     z-index: 1;
 }
 
@@ -268,23 +268,24 @@
     width: 10vw;
     float: left;
     position: relative;
-    display: table-cell; 
-    cursor: default  
+    display: table-cell;
+    cursor: default
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container.no-image {
     display: none;
 }
 
-.mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container img {
+.mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container .mcq-option-img {
     max-height: 100%;
     max-width: 100%;
     position: absolute;
+    border-radius: 2px;
+    margin: auto;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
-    margin: auto;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block img.tick {
@@ -431,23 +432,25 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     position: absolute;
     bottom: 0%;
     right: 0%;
-    width: 25%;
-}
-
-.mcq-content-container .option-container.vertical .option-block-container .option-block .option-image-container .option-image-zoom-icon  {
-    width: 28%;
-    left: 69%;
-    top: 50%;
+    width: 40%;
     cursor: pointer;
 }
 
-.mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container .option-image-zoom-icon {
+.option-image-zoom-icon  {
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    width: 40%;
+    cursor: pointer;
+}
+
+/* .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container .option-image-zoom-icon {
     width: 40%;
     top: 47%;
     cursor: pointer;
     left: 60%;
     bottom: -3%;
-}
+} */
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-image-container.no-image {
     height: 0;
