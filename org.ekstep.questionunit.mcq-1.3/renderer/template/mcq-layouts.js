@@ -670,7 +670,7 @@ MCQController.imagehorizontal.getOption = function (option, key) {
         </div>\
       <% } %> \
     <%if(option.image){%>\
-        <div class='position-relative' style='width: 100%;height: 80%;text-align: center;'>\
+        <div class='position-relative <% if(!option.text) { %> image-only <% } else { %> image-with-text <%} %> '>\
         <img class='mcq2-2-option-grid-image mcq-option-imagehorizontal'\
         src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
         <img class='zoom-image-horizontal'\
