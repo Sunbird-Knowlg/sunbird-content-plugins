@@ -999,7 +999,7 @@ span.qc-option-txt {
     bottom: 0;
     text-align: center;
     width: 100%;
-    display: table;
+    display: flex;
     height: 10vh;
     opacity: 1.6;
     color: black;
@@ -1028,7 +1028,7 @@ span.qc-option-txt {
 }
 
 .mcq-grid-option-text>div {
-    display: table-cell;
+    width: 100%;
     vertical-align: middle;
     padding-left: 1vw;
     padding-right: 1vw;
@@ -1097,6 +1097,19 @@ span.qc-option-txt {
     border-radius: 4px;
     position: relative;
     overflow: hidden;
+    padding-top: 5%;
+}
+
+.mcq-qleft-img-container {
+    max-width: 100%;
+    max-height: 50%;
+    text-align: center;
+    margin: auto;
+    position: relative;
+}
+
+.mcq-qLeft-question-container .image-container {
+    position: relative;
 }
 
 .mcq-qLeft-question-container .mcq-question-image {
@@ -1251,34 +1264,31 @@ span.qc-option-txt {
 }
 
 .mcq2-2-option-text-text-only {
-    padding-top: 2%;
-    padding:0% 2%;
-    margin-top: 0%;
-    height: 100%;
-    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
     position: absolute;
-    object-fit: contain;
-    overflow: hidden;
-    font-size: 14px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     /* background: white; */
 }
 
-.mcq-qLeft-question-container .q-image {
-    max-height: 100%;
+.mcq-qleft-img-container .q-image {
     max-width: 100%;
-    position: relative;
     object-fit: contain;
     overflow: hidden;
-    margin-top: 10%;
+    max-height: 100%;
 }
 
 .mcq-qLeft-question-container .zoom-image {
     width: 21%;
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     cursor: pointer;
-    top: 70.2%;
-    left: 79%;
+    right: 0;
+    margin: auto;
 }
 
 .mcq-qLeft-question-container .audio-image {
@@ -1474,17 +1484,11 @@ span.qc-option-txt {
 }
 
 .question-text {
-    max-height: 27%;
+    max-height: 30%;
     overflow: hidden;
     word-break: break-all;
     margin-top: 10%;
     width: 100%;
-}
-
-.question-text>p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .border-solid {

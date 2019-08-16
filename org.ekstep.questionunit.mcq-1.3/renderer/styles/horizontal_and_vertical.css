@@ -432,7 +432,8 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     position: absolute;
     bottom: 0%;
     right: 0%;
-    width: 40%;
+    width: 50%;
+    max-width: 35px;
     cursor: pointer;
 }
 
@@ -440,7 +441,8 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     position: absolute;
     bottom: 0%;
     right: 0%;
-    width: 40%;
+    width: 50%;
+    max-width: 35px;
     cursor: pointer;
 }
 

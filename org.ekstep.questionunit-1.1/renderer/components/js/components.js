@@ -105,8 +105,8 @@ org.ekstep.questionunit.questionComponent = {
         $('.exp-button').on("load", function () {
             if ($('.hiding-container').height() > $('.expand-container').height()) {
                 $('.expand-button').css('display', 'none');
-                $('.hiding-container').addClass('absolute-center');
-                $('.hiding-container').css('height', '35%');
+                // $('.hiding-container').addClass('absolute-center');
+                // $('.hiding-container').css('height', '35%');
             } else {
                 $('.expand-button').css('display', 'block');
             }
@@ -123,7 +123,7 @@ org.ekstep.questionunit.questionComponent = {
     toggleQuestionText: function (option) {
         if(option && option.layout == "qcontainer-big"){
             if($('.hiding-container').hasClass('expanded')){
-        
+
                 if($('.question-container-big').hasClass('no-qimage')){
                     $('.hiding-container').css('height', '100%'); //this is not static
                     $('.expand-container').css('height', '100%');
@@ -148,7 +148,7 @@ org.ekstep.questionunit.questionComponent = {
                 $('.hiding-container').css('padding-bottom', $(".expand-button").height()+'px');
                 $('.expand-container').css('overflow-y', 'scroll');
                 $('.expand-container').css('margin-bottom', '8vh');
-                
+
             }
         }else{
             if ($('.hiding-container').hasClass('expanded')) {
