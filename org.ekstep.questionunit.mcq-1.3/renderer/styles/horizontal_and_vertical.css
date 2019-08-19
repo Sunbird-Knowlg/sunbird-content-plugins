@@ -19,6 +19,7 @@
 .mcq-imageHzt .option-block.org-ekstep-questionunit-mcq-option-element {
     background: white;
     border-radius: 8px;
+    min-width: 21%;
 }
 
 .mcq-imagegrid-content-container .question-content-container {
@@ -47,7 +48,7 @@
 }
 
 .mcq-imageHzt .outer-option-container.vertical {
-    width: 82%;
+    width: 95%;
     margin: -2% 9%;
     height: 60%;
 }
@@ -62,7 +63,7 @@
     bottom: 0;
     right: 0;
     left: 0;
-    justify-content: center;
+    justify-content: end;
     display: flex;
     align-items: center;
     vertical-align: middle;
@@ -75,6 +76,7 @@
     margin-right: 0.9%;
     position: relative;
     float: left;
+    max-width: 24%;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block.selected {
@@ -158,6 +160,7 @@
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container.text-only>span>p {
     white-space: normal;
     height: 100%;
+    display: contents;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container>span {
