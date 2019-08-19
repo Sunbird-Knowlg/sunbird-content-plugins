@@ -11,6 +11,16 @@
     font-size: 14px;
     line-height: 6.7vh;
 }
+
+.mcq-imageHzt .question-content-container {
+    height: 50%;
+}
+
+.mcq-imageHzt .option-block.org-ekstep-questionunit-mcq-option-element {
+    background: white;
+    border-radius: 8px;
+}
+
 .mcq-imagegrid-content-container .question-content-container {
     height: 50vh;
     font-size: 14px;
@@ -27,12 +37,23 @@
     height: 100%;
     width: 85%;
 }
+
 .mcq-content-container .outer-option-container.vertical {
     height: 77.5%;
     width: 78.2%;
     position: relative;
     margin-right: 10.40%;
     margin-left: 10.40%;
+}
+
+.mcq-imageHzt .outer-option-container.vertical {
+    width: 82%;
+    margin: -2% 9%;
+    height: 60%;
+}
+
+.mcq-imageHzt .mcq-vertical {
+    border: 0;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container {
@@ -78,7 +99,7 @@
     left: 0;
     right: 0;
     margin: auto;
-    width: 40%;
+    width: 35%;
     border-radius: 50%;
 }
 
@@ -127,11 +148,16 @@
     position: relative;
 }
 
-.mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container.text-only{
+.mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container.text-only {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container.text-only>span>p {
+    white-space: normal;
+    height: 100%;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container>span {
@@ -234,7 +260,7 @@
     bottom: 0%;
     right: 3%;
     margin: auto;
-    width: 8%;
+    width: 15%;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block.selected {
@@ -249,7 +275,7 @@
     bottom: 0%;
     right: 3%;
     margin: auto;
-    width: 10%;
+    width: 9%;
     z-index: 1;
 }
 .mcq-content-container .option-container.horizontal .option-block-container .option-block img.audio.with-image {
@@ -259,7 +285,7 @@
     bottom: 0%;
     left: 89%;
     margin: auto;
-    width: 8%;
+    width: 9%;
     z-index: 1;
 }
 
@@ -432,7 +458,7 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
 
 .zoom-image-horizontal{
     position: absolute;
-    bottom: 0%;
+    bottom: -2%;
     right: 0%;
     width: 50%;
     max-width: 35px;
@@ -441,7 +467,7 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
 
 .option-image-zoom-icon  {
     position: absolute;
-    bottom: 0%;
+    bottom: -2%;
     right: 0%;
     width: 50%;
     max-width: 35px;
@@ -458,4 +484,10 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-image-container.no-image {
     height: 0;
+}
+
+.mcq-content-container .option-container.vertical .option-block-container .option-block .option-image-container.image-only {
+    width: 100%;
+    height: 100%;
+    text-align: center;
 }

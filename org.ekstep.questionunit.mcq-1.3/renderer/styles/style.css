@@ -1283,9 +1283,10 @@ span.qc-option-txt {
 }
 
 .mcq-qLeft-question-container .zoom-image {
-    width: 21%;
+    width: 50%;
+    max-width: 32px;
     position: absolute;
-    bottom: 0;
+    bottom: -2%;
     cursor: pointer;
     right: 0;
     margin: auto;
@@ -1515,7 +1516,7 @@ span.qc-option-txt {
 
 .grid-option-image-zoom-icon {
     position: absolute;
-    bottom: 0%;
+    bottom: -2%;
     right: 0%;
     width: 40%;
     cursor: pointer;

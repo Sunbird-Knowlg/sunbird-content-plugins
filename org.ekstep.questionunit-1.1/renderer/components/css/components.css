@@ -379,7 +379,8 @@ body {
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 7%;
+    width: 50%;
+    max-width: 32px;
 }
 
 .question-container-big .text-image-container .image-container.no-text {
