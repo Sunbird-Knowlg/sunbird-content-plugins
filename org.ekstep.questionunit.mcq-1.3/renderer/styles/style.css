@@ -1499,6 +1499,18 @@ span.qc-option-txt {
 .position-relative {
     position: relative;
 }
+
+.image-only {
+width: 100%;
+height: 100%;
+text-align: center;
+}
+
+.image-with-text {
+width: 100%;
+height: 80%;
+text-align: center;
+}
 .center-aligned {
     display: flex;
     align-items: center;
