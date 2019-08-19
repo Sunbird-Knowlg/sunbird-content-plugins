@@ -681,6 +681,7 @@ MCQController.imagehorizontal.getOption = function (option, key) {
         <div class='imagehorizontal-option-text'><%= option.text %></div>\
      <%}%>\
     </div>";
+
     return _.template(optTemplate)({
         "option": option,
         "key": key

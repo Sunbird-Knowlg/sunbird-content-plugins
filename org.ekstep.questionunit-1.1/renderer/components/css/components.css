@@ -83,7 +83,6 @@ body {
 }
 
 .question-container {
-    padding: 1% 0%;
     height: 100%;
     background-color: #FFFFFF;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
@@ -245,6 +244,7 @@ body {
     right: -20vw;
     top: 30vh;
 }
+
 .bg-graphics-2 .bg-circle {
     position: fixed;
     width: 60vw;
