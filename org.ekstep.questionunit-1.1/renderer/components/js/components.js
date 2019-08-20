@@ -125,7 +125,7 @@ org.ekstep.questionunit.questionComponent = {
             if($('.hiding-container').hasClass('expanded')){
 
                 if($('.question-container-big').hasClass('no-qimage')){
-                    $('.hiding-container').css('height', '100%'); //this is not static
+                    $('.hiding-container').css('height', '89%'); //this is not static
                     $('.expand-container').css('height', '100%');
                 }else{
                     $('.hiding-container').css('height', '30.7%'); //this is not static
