@@ -152,7 +152,7 @@ org.ekstep.questionunit.questionComponent = {
             }
         }else{
             if ($('.hiding-container').hasClass('expanded')) {
-                $('.hiding-container').css('height', '100%');
+                $('.hiding-container').css('height', '90%');
                 $('.hiding-container').css('box-shadow', 'none');
                 $('.hiding-container').removeClass('expanded')
                 $(".expand-button img").toggleClass('flip');
