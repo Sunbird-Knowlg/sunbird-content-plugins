@@ -383,8 +383,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         org.ekstep.collectioneditor.api.getService('collection').clearCache();
         $('#collection-tree').remove();
         $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
-        var mode;
-        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        var mode = "edit";
+        // if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             org.ekstep.services.collectionService.fromCollection(res.data.result.content);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
