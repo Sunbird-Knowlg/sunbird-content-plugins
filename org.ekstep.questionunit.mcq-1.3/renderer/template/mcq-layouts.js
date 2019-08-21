@@ -315,12 +315,12 @@ MCQController.vertical2.getTemplate = function (question) {
  */
 MCQController.vertical2.getQuestionTemplate = function (question) {
     var qTemplate = "<div class='mcq-qLeft-question-container'>\
-                <div class='image-container border-solid mcq-qleft-img-container'>\
                 <% if(question.data.question.image){%>\
+                <div class='image-container border-solid mcq-qleft-img-container'>\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <img onclick=MCQController.zoomImage('<%=question.data.question.image%>') class='zoom-image' src=<%= MCQController.pluginInstance.getDefaultAsset('"+zoomIcon+"') %>>\
-                <%}%>\
                 </div>\
+                <%}%>\
                 <% if(question.data.question.text){%>\
                     <div class='question-text'\><%= question.data.question.text %></div>\
                     <%}%>\
