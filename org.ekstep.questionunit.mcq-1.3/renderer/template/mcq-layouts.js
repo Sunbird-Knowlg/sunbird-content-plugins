@@ -600,7 +600,7 @@ MCQController.imagehorizontal.getTemplate = function (question) {
             wrapperStartQuestionComponent +
             '<div class="imagegrid-mcq-question-head">' + org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) + '</div>' +
             wrapperEndQuestionComponent +
-            MCQController.backgroundComponent.getBackgroundGraphics(layout) +
+            MCQController.backgroundComponent.getBackgroundGraphics('imagehorizontal') +
             layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
     // return MCQController.horizontal.getTemplateForLayout('vertical', question);
