@@ -406,16 +406,24 @@ MCQController.vertical2.postRender = function (question) {
 
 MCQController.onImageDomLoad = function (container, question) {
     var domLoaded = false;
-    $('.mcq-option-img').on("load", function () {
-        if(domLoaded) return;
+    if ($(".mcq-option-img").length){
+        $('.mcq-option-img').on("load", function () {
+            if(domLoaded) return;
 
+            var defaultMaxHeight = $(container).outerHeight();
+            var defaultMaxWidth = $(container).width();
+            var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
+            $(".border-solid").css("height", size.maxHeight);
+            $(".border-solid").css("width", size.maxWidth);
+            domLoaded = true;
+        })
+    }else{
         var defaultMaxHeight = $(container).outerHeight();
         var defaultMaxWidth = $(container).width();
         var size = MCQController.getMaxWidthHeight(question.data.options, defaultMaxHeight, defaultMaxWidth);
         $(".border-solid").css("height", size.maxHeight);
         $(".border-solid").css("width", size.maxWidth);
-        domLoaded = true;
-    })
+    }
 }
 
 MCQController.grid.postRender = function (question) {
