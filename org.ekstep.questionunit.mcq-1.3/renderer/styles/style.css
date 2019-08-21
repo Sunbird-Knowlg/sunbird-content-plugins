@@ -1106,6 +1106,8 @@ span.qc-option-txt {
     text-align: center;
     margin: auto;
     position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 .mcq-qLeft-question-container .image-container {
