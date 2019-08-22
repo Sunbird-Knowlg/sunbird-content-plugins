@@ -175,7 +175,7 @@ MCQController.grid.getTemplate = function (question) {
     var template =
         '<div class="mcq-question-container-grid plugin-content-container mcq-content-container">\
     <div class="mcq-grid-question-container question-content-container">' +
-        org.ekstep.questionunit.questionComponent.generateQuestionComponent() +
+        org.ekstep.mcq.questionComponent.generateQuestionComponent() +
         wrapperEnd +
         MCQController.backgroundComponent.getBackgroundGraphics() +
      '<div class="mcq-grid-option-container"><div>' +
@@ -199,7 +199,7 @@ MCQController.horizontal.getTemplateForLayout = function (layout, question) {
     var layoutTemplate = MCQController.horizontal.getOptionLayout(layout, question);
     return '<div class="mcq-content-container plugin-content-container" id="mcq-question-container">' +
         wrapperStartQuestionComponent +
-        org.ekstep.questionunit.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
+        org.ekstep.mcq.questionComponent.generateQuestionComponent(MCQController.pluginInstance._manifest.id) +
         wrapperEndQuestionComponent +
         MCQController.backgroundComponent.getBackgroundGraphics(layout) +
             layoutTemplate + wrapperEnd +wrapperEnd+
@@ -606,7 +606,7 @@ MCQController.imagehorizontal.getTemplate = function (question) {
     var layoutTemplate = MCQController.horizontal.getOptionLayout(layout, question);
     return '<div class="mcq-content-container plugin-content-container mcq-imageHzt" id="mcq-question-container">' +
             wrapperStartQuestionComponent +
-            '<div class="imagegrid-mcq-question-head">' + org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) + '</div>' +
+            '<div class="imagegrid-mcq-question-head">' + org.ekstep.mcq.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) + '</div>' +
             wrapperEndQuestionComponent +
             MCQController.backgroundComponent.getBackgroundGraphics('imagehorizontal') +
             layoutTemplate + wrapperEnd +wrapperEnd+
@@ -628,7 +628,7 @@ MCQController.imagegrid.getTemplate = function (question) {
     var layoutTemplate = MCQController.imagegrid.getOptionsTemplate(question);
     return '<div class="mcq-content-container mcq-imagegrid-content-container plugin-content-container">' +
         wrapperStartQuestionComponent +
-        '<div class="imagegrid-mcq-question-head">' + org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagegrid'}) + '</div>' +
+        '<div class="imagegrid-mcq-question-head">' + org.ekstep.mcq.questionComponent.generateQuestionComponent({'layout': 'imagegrid'}) + '</div>' +
         wrapperEndQuestionComponent +
         MCQController.backgroundComponent.getBackgroundGraphics(question.config.layout.toLowerCase()) +
             layoutTemplate + wrapperEnd +wrapperEnd+
