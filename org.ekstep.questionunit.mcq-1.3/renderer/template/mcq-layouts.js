@@ -315,20 +315,20 @@ MCQController.vertical2.getTemplate = function (question) {
  */
 MCQController.vertical2.getQuestionTemplate = function (question) {
     var qTemplate = "<div class='mcq-qLeft-question-container'>\
-                <div class='mcq-question-image'>\
-                <div class='image-container border-solid mcq-qleft-img-container'>\
+    <div class='mcq-question-image'>\
                 <% if(question.data.question.image){%>\
+                <div class='image-container border-solid mcq-qleft-img-container'>\
                 <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
                 <img onclick=MCQController.zoomImage('<%=question.data.question.image%>') class='zoom-image' src=<%= MCQController.pluginInstance.getDefaultAsset('"+zoomIcon+"') %>>\
-                <%}%>\
                 </div>\
+                <%}%>\
                 <% if(question.data.question.text){%>\
                     <div class='question-text'\><%= question.data.question.text %></div>\
                     <%}%>\
                 <% if ( question.data.question.audio.length > 0 ){ %> \
                 <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
                 <% } %> \
-                </div>\
+              </div>\
               </div>\
               ";
     return _.template(qTemplate)({
@@ -610,7 +610,7 @@ MCQController.imagehorizontal.getTemplate = function (question) {
             wrapperStartQuestionComponent +
             '<div class="imagegrid-mcq-question-head">' + org.ekstep.questionunit.questionComponent.generateQuestionComponent({'layout': 'imagehorizontal'}) + '</div>' +
             wrapperEndQuestionComponent +
-            MCQController.backgroundComponent.getBackgroundGraphics(layout) +
+            MCQController.backgroundComponent.getBackgroundGraphics('imagehorizontal') +
             layoutTemplate + wrapperEnd +wrapperEnd+
         wrapperEnd;
     // return MCQController.horizontal.getTemplateForLayout('vertical', question);
