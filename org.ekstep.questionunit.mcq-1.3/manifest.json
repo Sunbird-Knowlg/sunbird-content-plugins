@@ -71,6 +71,10 @@
                 "src": "renderer/template/template_controller.js"
             },
             {
+                "type": "js",
+                "src": "renderer/template/question-component.js"
+            },
+            {
                 "type": "image",
                 "src":"renderer/assets/tick_icon.png",
                 "assetId":"org.ekstep.questionunit.mcq.tick_icon.png"
