@@ -382,6 +382,11 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     text-overflow: ellipsis;
     top: 26%;
 }
+.mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .option-text-container-mcq>span>p{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 .mcq-content-container .option-container.horizontal .option-block:last-child {
     margin-bottom: 0%;
 }
