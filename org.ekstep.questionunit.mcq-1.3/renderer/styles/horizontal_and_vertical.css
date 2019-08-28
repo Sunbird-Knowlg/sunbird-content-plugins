@@ -475,12 +475,12 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
 }
 
 .option-image-zoom-icon  {
-    position: absolute;
-    bottom: -2%;
-    right: 0%;
     width: 50%;
     max-width: 35px;
-    cursor: pointer;
+    position: absolute;
+    margin: auto;
+    top: 58%;
+    right: 0;
 }
 
 /* .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container .option-image-zoom-icon {
