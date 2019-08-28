@@ -242,9 +242,11 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
                         </div>\
                   <% } %>\
                   <%  if(!MCQController.horizontal.isVerticalLayout) { %>\
+                    <div class="zoom-icon-set">\
                     <img class="mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
                     <img onclick=MCQController.zoomImage("<%=val.image%>") class="option-image-zoom-icon"  src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
-                  <% } %>\
+                    </div>\
+                    <% } %>\
                   <% } %>\
                     </div>\
                     <%  if(val.audio) { %>\
