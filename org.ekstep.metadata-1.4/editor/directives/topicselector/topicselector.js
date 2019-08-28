@@ -4,7 +4,6 @@
  */
 formApp.directive('topicSelector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
-   
     var topicController = ['$scope', '$rootScope', '$controller', '$timeout', function($scope, $rootScope, $controller, $timeout) {
         $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected';
@@ -22,7 +21,6 @@ formApp.directive('topicSelector', function() {
                 framework: $scope.framework
             });
         }
-        
         $scope.callbackFn = function(data) {
             console.log("Length", data)
             $scope.topicSelectorMessage = '(' + data.length + ') topics selected';
