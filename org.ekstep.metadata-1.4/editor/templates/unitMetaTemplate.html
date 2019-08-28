@@ -37,7 +37,7 @@
                                 <div class="ui sub header paraHeading">
                                     <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                 </div>
-                                <topic-selector class="concept-field" config=dynamicField></topic-selector>
+                                <topic-selector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#unitMetaTemplate', field:dynamicField, form:metaForm})"></topic-selector>
                             </div>
                             <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && dynamicField.required  && isSubmit), 'required': dynamicField.required} "
                                 name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
