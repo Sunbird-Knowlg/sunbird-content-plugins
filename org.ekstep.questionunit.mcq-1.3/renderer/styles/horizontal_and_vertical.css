@@ -161,6 +161,7 @@
     white-space: normal;
     height: 100%;
     display: contents;
+    line-height: 1;
 }
 
 .mcq-content-container .option-container.vertical .option-block-container .option-block .option-text-container>span {
@@ -380,6 +381,11 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     white-space: nowrap;
     text-overflow: ellipsis;
     top: 26%;
+}
+.mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .option-text-container-mcq>span>p{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .mcq-content-container .option-container.horizontal .option-block:last-child {
     margin-bottom: 0%;
