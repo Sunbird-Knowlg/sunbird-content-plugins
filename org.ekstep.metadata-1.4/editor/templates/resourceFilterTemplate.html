@@ -78,7 +78,7 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
-                                    <topic-selector data-tooltip="{{contentMeta[dynamicField.code].length ? contentMeta[dynamicField.code].join(', ') : dynamicField.placeholder}}" class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm})"></topic-selector>
+                                    <topic-selector data-tooltip="{{contentMeta[dynamicField.code].length ? contentMeta[dynamicField.code].join(', ') : dynamicField.placeholder}}" class="concept-field" config=dynamicField></topic-selector>
                                 </div>
                             </div>
                         </div>

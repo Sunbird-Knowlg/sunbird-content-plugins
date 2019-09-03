@@ -242,9 +242,11 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
                         </div>\
                   <% } %>\
                   <%  if(!MCQController.horizontal.isVerticalLayout) { %>\
+                    <div class="zoom-icon-set">\
                     <img class="mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
                     <img onclick=MCQController.zoomImage("<%=val.image%>") class="option-image-zoom-icon"  src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
-                  <% } %>\
+                    </div>\
+                    <% } %>\
                   <% } %>\
                     </div>\
                     <%  if(val.audio) { %>\
@@ -680,7 +682,7 @@ MCQController.imagegrid.getOptionsTemplate = function (question) {
               <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioIcon + '") %>" class="audio-icon" id="mcq-imagegird-audio-play<%=key+1%>" style="display:block"/>\
               <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioStop + '") %>" class="audio-icon" id="mcq-imagegird-audio-stop<%=key+1%>" style="display:none" />\
             <% } %>\
-            <div class="option-text-container-mcq mcq-imagegrid-text" style="width: 70vw;max-width: 65%;left: 7%;font-weight: bold;max-height: 90%;position: absolute;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;top: 26%;">\
+            <div class="option-text-container-mcq mcq-imagegrid-text" style="width: 70vw;max-width: 65%;left: 7%;font-weight: bold;max-height: 50%;position: absolute;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;top: 26%;">\
           <%  if(val.text) { %>\
               <span><%= val.text %></span>\
           <% } %>\

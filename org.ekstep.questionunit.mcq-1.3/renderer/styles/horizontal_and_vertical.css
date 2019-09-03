@@ -309,13 +309,19 @@
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container .mcq-option-img {
     max-height: 100%;
     max-width: 100%;
-    position: absolute;
+    position: relative;
     border-radius: 2px;
     margin: auto;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
+}
+.zoom-icon-set{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block img.tick {
