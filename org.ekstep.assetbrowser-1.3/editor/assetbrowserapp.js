@@ -1092,6 +1092,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         var videoID = 'ID' + Math.random().toString(36).substring(3);
         videoElement.id = videoID;
         videoElement.className = 'video-js vjs-default-skin';
+        videoElement.controlsList="nodownload";
         ctrl.showPreview = true;
         if (provider == "youtube") {
             videojs(videoID, {
@@ -1109,7 +1110,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 });
             })
         } else if (provider == "file") {
-            videojs(videoID).ready(function () {
+            videojs(videoID, {"controls": true, "autoplay": true, "preload": "auto",
+                "nativeControlsForTouch": true}).ready(function () {
                 this.load();
                 this.play();
             });
