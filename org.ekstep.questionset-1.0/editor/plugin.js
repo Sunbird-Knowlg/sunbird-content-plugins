@@ -220,7 +220,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
         var questionECML = {};
         if (question.version == 1) {
           questionECML = {
-            id: UUID(),
+            id: _.isUndefined(question.identifier) ? UUID() : question.identifier,
             type: question.type,
             pluginId: instance._constants.v1PluginId,
             pluginVer: (question.version === 1) ? '1.0' : question.version.toString(),
@@ -245,7 +245,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
           var questionBody = JSON.parse(question.body);
           // Build Question ECML for each question that is added.
           questionECML = {
-            id: UUID(),
+            id: _.isUndefined(question.identifier) ? UUID() : question.identifier,
             type: question.type,
             pluginId: questionBody.data.plugin.id,
             pluginVer: questionBody.data.plugin.version,
