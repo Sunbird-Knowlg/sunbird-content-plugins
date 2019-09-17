@@ -76,6 +76,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             $('.chevron').toggleClass('icon-active');
             e.preventDefault();
         });
+        instance.responseValueMap = {};
         $('.mcq-options .mcq-option').on('click', function(e) {
             $(".mcq-options .mcq-option").removeClass("mcq-options-select");
             if (this.attributes.hasOwnProperty('data-simple-choice-interaction') === true) {
