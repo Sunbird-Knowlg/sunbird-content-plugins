@@ -14,6 +14,7 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
         var hideDefaultNext = function () {
           $timeout(function () {
             jQuery('next-navigation').hide();
+            jQuery("#nav-next").hide();
           }, 50);
         };
         switch (event.type) {
@@ -64,6 +65,7 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
         var hideDefaultPrevious = function () {
           $timeout(function () {
             jQuery('previous-navigation').hide();
+            jQuery("#nav-previous").hide();
           }, 50);
         };
         var disablePrevious = function () {
@@ -178,6 +180,8 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
     $timeout(function () {
       jQuery('previous-navigation').hide();
       jQuery('next-navigation').hide();
+      jQuery("#nav-next").hide();
+      jQuery("#nav-previous").hide();
       EkstepRendererAPI.dispatchEvent("renderer:previous:disable");
     }, 50);
   };
