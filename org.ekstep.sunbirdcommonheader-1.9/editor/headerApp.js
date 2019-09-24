@@ -367,8 +367,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.validateUnitsDialcodes = function(rootNode){
         var dialCodeMisssing = false;
-        rootNode.visit(function (iterateNodes) {
-            if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
+        rootNode.visit(function (iterateNodes) {            
+            if(iterateNodes.data.metadata.dialcodeRequired == 'Yes' && !_.includes(org.ekstep.services.collectionService.dialcodeList, iterateNodes.data.metadata.dialcodes)){
+                dialCodeMisssing = true;
+                org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id);
+            }else if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
             }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes) && iterateNodes.data.metadata.dialcodes != "")){
@@ -378,7 +381,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         })
         if (dialCodeMisssing) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: "Please fill in missing QR codes or remove QR code where not required",
+                message: "Please fill in missing QR codes or remove QR code which are not required",
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             })
