@@ -381,7 +381,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         })
         if (dialCodeMisssing) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: "Please fill in missing QR codes or remove QR code which are not required",
+                message: "Errors found in linked QR Codes. Please check and correct.",
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             })
