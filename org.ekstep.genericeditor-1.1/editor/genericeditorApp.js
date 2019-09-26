@@ -24,6 +24,10 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         $scope.$safeApply();
     }
 
+    //On title change / Metadata changes listen event to change PDF header title
+    ecEditor.addEventListener('editor:form:success', function(){
+        ecEditor.dispatchEvent("org.ekstep.genericeditor:preview");
+    });
     org.ekstep.contenteditor.canvasManager.initialize({ loadNgModules: $scope.loadNgModules, scope: $scope });
 
     //canvasarea scope ends
