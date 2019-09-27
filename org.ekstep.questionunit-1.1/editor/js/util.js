@@ -5,7 +5,8 @@
  * 
  * @author: Siva K (sivashanmugam.kannan@funtoot.com), Ram J (ram.j@funtoot.com)
  */
-angular.module('org.ekstep.question').service('questionServices', ['$http', function ($http) {
+var orgEkstepQuestion = angular.module('orgEkstepQuestion',[]);
+orgEkstepQuestion.service('questionServices', ['$http', function ($http) {
     this.invokeAssetBrowser = function (callbackObj) {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', callbackObj);
     }
