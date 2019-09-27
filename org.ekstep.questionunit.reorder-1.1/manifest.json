@@ -14,11 +14,7 @@
   }],
   "editor": {
     "main": "editor/plugin.js",
-    "dependencies": [{
-        "type": "plugin",
-        "plugin": "org.ekstep.questionunit",
-        "ver": "1.1"
-      },
+    "dependencies": [
       {
         "type": "css",
         "src": "editor/styles/style.css"

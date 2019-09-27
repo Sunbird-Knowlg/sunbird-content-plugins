@@ -22,11 +22,6 @@
         "main": "editor/plugin.js",
         "dependencies": [
             {
-                "type": "plugin",
-                "plugin": "org.ekstep.questionunit",
-                "ver": "1.1"
-            },
-            {
                 "type": "js",
                 "src": "editor/controllers/mcq-controller.js"
             },
