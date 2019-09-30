@@ -278,8 +278,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     //Header scope ends
 
     $scope.loadContent = function(event, showToc = true, callback) {      
-        var mode;
-        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        var mode = "edit"; // Content always will open in edit mode in editor
+        //if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
@@ -383,8 +383,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         org.ekstep.collectioneditor.api.getService('collection').clearCache();
         $('#collection-tree').remove();
         $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
-        var mode;
-        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        var mode = "edit";
+        // if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             org.ekstep.services.collectionService.fromCollection(res.data.result.content);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();

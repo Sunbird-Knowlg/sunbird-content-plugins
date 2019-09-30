@@ -4,7 +4,6 @@
  */
 formApp.directive('topicSelector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
-
     var topicController = ['$scope', '$rootScope', '$controller', '$timeout', function($scope, $rootScope, $controller, $timeout) {
         $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected';
@@ -28,6 +27,7 @@ formApp.directive('topicSelector', function() {
             $scope.contentMeta.topic = _.map(data, function(topic) {
                 return  topic.name;
             });
+            $scope.$parent.onConfigChange({target: "#"+$scope.templateId, field:$scope.$parent.$parent.dynamicField, form:$scope.$parent.$parent.metaForm, value: $scope.contentMeta.topic})
             ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic, templateId: $scope.templateId});
             $rootScope.$safeApply();
         }
