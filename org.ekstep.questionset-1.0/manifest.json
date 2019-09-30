@@ -15,6 +15,11 @@
       },
       {
         "type": "plugin",
+        "plugin": "org.ekstep.questionunit",
+        "ver": "1.1"
+      },
+      {
+        "type": "plugin",
         "plugin": "org.ekstep.questionbank",
         "ver": "1.0"
       },
