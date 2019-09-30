@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitreorder:reorderingQuestionFormController
  * Amit Dawar <amit.dawar@funtoot.com>
  */
-angular.module('reorderingApp', ['org.ekstep.question']).controller('reorderingQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) { // eslint-disable-line no-unused-vars
+angular.module('orgEkstepQuestion').controller('reorderingQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) { // eslint-disable-line no-unused-vars
   $scope.keyboardConfig = {
     keyboardType: 'Device',
     customKeys: []

@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitsequence:seqQuestionFormController
  * Sivashanmugam Kannan<sivashanmugam.kannan@funtoot.com>
  */
-angular.module('seqApp', ['org.ekstep.question']).controller('seqQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) {
+angular.module('orgEkstepQuestion').controller('seqQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) {
   var generalDataObj = {
     'text': '',
     'image': '',
