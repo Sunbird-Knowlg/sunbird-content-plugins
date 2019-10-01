@@ -171,11 +171,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      */
     $scope.readExistingQrCode = function () {
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-        org.ekstep.services.collectionService.veriFiedDialcodes = [] ;
+        org.ekstep.services.collectionService.dialcodeList = [] ;
 
         rootNode.visit( function( node ) { 
             if( !_.isUndefined(node.data.metadata.dialcodes) && node.data.metadata.dialcodes !== ''){
-                org.ekstep.services.collectionService.veriFiedDialcodes.push(node.data.metadata.dialcodes[0]);
+                org.ekstep.services.collectionService.dialcodeList.push(node.data.metadata.dialcodes[0]);
             }            
         })    
     }

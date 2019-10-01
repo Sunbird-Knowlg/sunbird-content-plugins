@@ -72,8 +72,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                                 stateService.setState('dialCodeMap', node.data.id, instance.dialcodes);
                             }
                             node.data.metadata.dialcodes = instance.dialcodes;                            
-                            $scope.editFlag = true;
-                            org.ekstep.services.collectionService.veriFiedDialcodes.push(instance.dialcodes);
+                            $scope.editFlag = true;                            
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                             $scope.$safeApply();
                         }else{
