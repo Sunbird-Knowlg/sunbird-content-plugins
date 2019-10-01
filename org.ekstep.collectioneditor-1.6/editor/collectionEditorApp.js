@@ -17,6 +17,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.isCollection = false;
     $scope.collectionCache = [];
     $scope.isChildren = false;
+    $scope.setVerifiedCode = true;
     $scope.CONSTANTS = {
         tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
         tocUploadDescription: 'Please upload the CSV file in the required format',
@@ -165,6 +166,19 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             initializeRenderer();
         }
     }
+    /**
+     * read the existing vefiried QR 
+     */
+    $scope.readExistingQrCode = function () {
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        org.ekstep.services.collectionService.veriFiedDialcodes = [] ;
+
+        rootNode.visit( function( node ) { 
+            if( !_.isUndefined(node.data.metadata.dialcodes) && node.data.metadata.dialcodes !== ''){
+                org.ekstep.services.collectionService.veriFiedDialcodes.push(node.data.metadata.dialcodes[0]);
+            }            
+        })    
+    }
 
     /**
      * Function will be triggured on selecting node & initialization of drag & drop
@@ -175,6 +189,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         if (data.data.objectType) {
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
+        }
+        if($scope.setVerifiedCode){
+            $scope.setVerifiedCode = false;
+            $scope.readExistingQrCode();
         }
     };
 
@@ -370,7 +388,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                     pageid: ecEditor.getContext('env') || 'collectioneditor',
                     uri: encodeURIComponent(location.href),
                     duration: (new Date()).getTime() - startTime
-                })
+                })                
             } else {
                 ecEditor.jQuery('.loading-message').remove();
                 ecEditor.jQuery('.sk-cube-grid').remove();
