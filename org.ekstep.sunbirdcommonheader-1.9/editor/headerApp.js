@@ -367,7 +367,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.validateUnitsDialcodes = function(rootNode){
         var dialCodeMisssing = false;
-        rootNode.visit(function (iterateNodes) {            
+        rootNode.visit(function (iterateNodes) {    
+            
+            var unitDialCode = (typeof(iterateNodes.data.metadata.dialcodes) === 'object') ?  iterateNodes.data.metadata.dialcodes[0] :  iterateNodes.data.metadata.dialcodes ;            
             if(iterateNodes.data.metadata.dialcodeRequired == 'Yes' && !_.includes(org.ekstep.services.collectionService.dialcodeList, iterateNodes.data.metadata.dialcodes)){
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id);
