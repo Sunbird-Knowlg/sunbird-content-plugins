@@ -370,7 +370,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         rootNode.visit(function (iterateNodes) {    
             
             var unitDialCode = (typeof(iterateNodes.data.metadata.dialcodes) === 'object') ?  iterateNodes.data.metadata.dialcodes[0] :  iterateNodes.data.metadata.dialcodes ;            
-            if(iterateNodes.data.metadata.dialcodeRequired == 'Yes' && !_.includes(org.ekstep.services.collectionService.dialcodeList, iterateNodes.data.metadata.dialcodes)){
+            if(iterateNodes.data.metadata.dialcodeRequired == 'Yes' && !_.includes(org.ekstep.services.collectionService.dialcodeList, unitDialCode)){
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id);
             }else if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
