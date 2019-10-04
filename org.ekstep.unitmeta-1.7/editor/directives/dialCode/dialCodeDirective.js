@@ -49,7 +49,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialcodes"] = this.dialcodes;
                 }
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1 ) {
-                    $scope.status = true;
+                    $scope.status = true;    
                     _.has(stateService.state.invaliddialCodeMap, node.data.id) ? _.unset(stateService.state.invaliddialCodeMap, node.data.id) : "";
                     if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                         if (!stateService.state.dialCodeMap) {
@@ -71,8 +71,8 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                                 }
                                 stateService.setState('dialCodeMap', node.data.id, instance.dialcodes);
                             }
-                            node.data.metadata.dialcodes = instance.dialcodes;
-                            $scope.editFlag = true;
+                            node.data.metadata.dialcodes = instance.dialcodes;                            
+                            $scope.editFlag = true;                            
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                             $scope.$safeApply();
                         }else{
@@ -81,7 +81,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                             }
                             _.has(stateService.state.dialCodeMap, node.data.id) ? _.unset(stateService.state.dialCodeMap, node.data.id) : "";
                             stateService.setState('invaliddialCodeMap', node.data.id, instance.dialcodes);
-                            node.data.metadata.dialcodes = instance.dialcodes;
+                            node.data.metadata.dialcodes = instance.dialcodes;                            
                             $scope.status = response.isValid;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
