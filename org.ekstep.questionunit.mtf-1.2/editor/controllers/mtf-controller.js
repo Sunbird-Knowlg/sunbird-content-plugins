@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mtfQuestionFormController
  * Sachin<sachin.kumar@goodworklabs.com>
  */
-angular.module('mtfApp', ['org.ekstep.question']).controller('mtfQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) {
+angular.module('orgEkstepQuestion').controller('mtfQuestionFormController', ['$scope', '$rootScope', 'questionServices', function ($scope, $rootScope, questionServices) {
   $scope.mtfConfiguartion = {
     'questionConfig': {
       'isText': true,

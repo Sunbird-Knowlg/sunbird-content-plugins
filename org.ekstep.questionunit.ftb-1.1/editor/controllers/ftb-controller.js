@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mcqQuestionFormController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
-angular.module('ftbApp', ['org.ekstep.question']).controller('ftbQuestionFormController', ['$scope', '$rootScope', 'questionServices', function($scope, $rootScope, questionServices) { // eslint-disable-line no-unused-vars
+angular.module('orgEkstepQuestion').controller('ftbQuestionFormController', ['$scope', '$rootScope', 'questionServices', function($scope, $rootScope, questionServices) { // eslint-disable-line no-unused-vars
   var questionInput;
   $scope.keyboardConfig = {
     keyboardType: 'Device',
