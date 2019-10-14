@@ -524,7 +524,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     });
 
     ctrl.setPublic = function(task) {
-        ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
+        ctrl.assetMeta.license = "CC-BY 4.0 For details: https://creativecommons.org/licenses/by/4.0/legalcode";
         ctrl.asset.requiredField = 'required';
         ctrl.optional = false;
         if(task == 'hide') {

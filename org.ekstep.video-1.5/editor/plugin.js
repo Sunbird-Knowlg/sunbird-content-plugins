@@ -84,7 +84,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "objectType": "Content",
                 "mimeType": "video/x-youtube",
                 "status": ["Live"],
-                "license": "Creative Commons Attribution (CC BY)"
+                "license": "CC-BY 4.0 For details: https://creativecommons.org/licenses/by/4.0/legalcode"
               },
               "limit" : limit,
               "offset": offset
