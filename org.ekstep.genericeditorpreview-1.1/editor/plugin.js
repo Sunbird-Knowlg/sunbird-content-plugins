@@ -65,7 +65,7 @@ org.ekstep.genericeditor.basePlugin.extend({
                     configuration.config = defaultPreviewConfig;
                 }
                 configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-                console.log('metadata ', metadata);
+                console.log('metadata ', configuration.metadata);
                 configuration.data = {};
                 previewContentIframe.contentWindow.initializePreview(configuration);
             };
