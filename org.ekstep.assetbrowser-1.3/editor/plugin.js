@@ -79,7 +79,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                             "mimeType": (mediaType == 'video') ? new Array('video/x-youtube', 'video/mp4', 'video/webm') : mediaType,
                             "contentType": (_.includes(contentType, 'Asset')) ? new Array('Asset') : new Array('Resource'),
                             "status": new Array("Live", "Review", "Draft"),
-                            "license": "CC-BY 4.0 For details: https://creativecommons.org/licenses/by/4.0/legalcode",
+                            "license": "Creative Commons Attribution (CC BY)",
                         },
                         "limit": 50,
                         "offset": offset
@@ -108,7 +108,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         // Public assets only
         if (org.ekstep.contenteditor.api._.isUndefined(createdBy)) {
-            requestObj.request.filters.license = "CC-BY 4.0 For details: https://creativecommons.org/licenses/by/4.0/legalcode";
+            requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
             allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         } else {
             // All assets
