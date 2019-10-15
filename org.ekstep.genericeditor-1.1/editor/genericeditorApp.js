@@ -26,7 +26,9 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
 
     //On title change / Metadata changes listen event to change PDF header title
     ecEditor.addEventListener('org.ekstep.contenteditor:save:meta', function(event,data){
-        ecEditor.dispatchEvent("org.ekstep.genericeditor:preview");
+        setTimeout(function(){
+            ecEditor.dispatchEvent("atpreview:show");
+        }, 500);
     });
     
     org.ekstep.contenteditor.canvasManager.initialize({ loadNgModules: $scope.loadNgModules, scope: $scope });
