@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mcqQuestionFormController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
-angular.module('mcqApp', ['org.ekstep.question']).controller('mcqQuestionFormController', ['$scope', '$rootScope', 'questionServices', '$timeout', function ($scope, rootScope, questionServices, $timeout) {
+angular.module('orgEkstepQuestion').controller('mcqQuestionFormController', ['$scope', '$rootScope', 'questionServices', '$timeout', function ($scope, rootScope, questionServices, $timeout) {
   $scope.formVaild = false;
   $scope.mcqConfiguartion = {
     'questionConfig': {
