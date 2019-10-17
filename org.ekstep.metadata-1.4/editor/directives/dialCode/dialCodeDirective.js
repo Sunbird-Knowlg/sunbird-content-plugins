@@ -43,7 +43,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         // validate the dialCode
         $scope.validateDialCode = function() {
             var instance = this;
-            if (String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) {
+            if (String(this.dialcodes).match(/^[A-Z0-9]{2,0}$/)) {
                 $scope.errorMessage = "";
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
                 if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]) {
