@@ -24,6 +24,13 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         $scope.$safeApply();
     }
 
+    //On title change / Metadata changes listen event to change PDF header title
+    ecEditor.addEventListener('org.ekstep.contenteditor:save:meta', function(event,data){
+        setTimeout(function(){
+            ecEditor.dispatchEvent("atpreview:show");
+        }, 500);
+    });
+    
     org.ekstep.contenteditor.canvasManager.initialize({ loadNgModules: $scope.loadNgModules, scope: $scope });
 
     //canvasarea scope ends
@@ -91,6 +98,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
                 ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
             }
         });
+        $scope.$safeApply()
     }, $scope);
 
     ecEditor.addEventListener('org.ekstep.genericeditor:preview', function() {

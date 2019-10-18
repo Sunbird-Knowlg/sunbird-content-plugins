@@ -116,6 +116,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         contentMeta.assets = ecEditor._.compact(org.ekstep.contenteditor.stageManager.assets);
         contentMeta.editorState = JSON.stringify(this.editorState);
         contentMeta.pragma = org.ekstep.contenteditor.stageManager.getPragma();
+        contentMeta.plugins = org.ekstep.contenteditor.stageManager.plugins_used;
         this._patchContent(contentMeta, contentBody, options);
     },
     _patchContent: function(contentMeta, contentBody, options) {
