@@ -112,7 +112,7 @@
                                             </div>
                                         </div>
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}}
-                                                    " ng-if="dynamicField.inputType=='select' && (dynamicField.code!='year' || dynamicField.code =='copyrightYear') ">
+                                                    " ng-if="dynamicField.inputType=='select' && (dynamicField.code!='year') ">
                                             <label>{{dynamicField.label | uppercase}}</label>
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#metadataForm',index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) "
                                                 ng-required="{{dynamicField.required}} ">
@@ -125,7 +125,7 @@
 
                                         </div>
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}}
-                                                    " ng-if="dynamicField.code =='year' || dynamicField.code =='copyrightYear' " ng-required=" {{dynamicField.required}} ">
+                                                    " ng-if="dynamicField.code =='year' " ng-required=" {{dynamicField.required}} ">
                                             <label>{{dynamicField.label | uppercase}}</label>
                                             <year config=dynamicField ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:{}})"></year>
                                         </div>
