@@ -112,7 +112,7 @@
                                             </div>
                                         </div>
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}}
-                                                    " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
+                                                    " ng-if="dynamicField.inputType=='select' && (dynamicField.code!='year' || dynamicField.code =='copyrightYear') ">
                                             <label>{{dynamicField.label | uppercase}}</label>
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#metadataForm',index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) "
                                                 ng-required="{{dynamicField.required}} ">
