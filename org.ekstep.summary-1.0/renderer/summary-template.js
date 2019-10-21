@@ -5,7 +5,7 @@ summaryTemplate.showTemplate = function(){
     return template;
 }
 summaryTemplate.getTemplate = function () {
-    var summaryTemplateHTML = '<div style="width: 100%;position: absolute;top: 19%;left: 0px;height: 100%;">\
+    var summaryTemplateHTML = '<div style="width: 100%;position: absolute;top: 14%;left: 0px;height: 100%;">\
     <div class="assessment-content assessment-result-content">\
     <div class="assessment-content-title mt-32">Submit your assessment to check your score.</div>\
     <div class="assessment-content-description mt-16">\
