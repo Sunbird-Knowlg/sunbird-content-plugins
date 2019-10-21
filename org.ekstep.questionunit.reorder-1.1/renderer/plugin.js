@@ -27,6 +27,7 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
    */
   preQuestionShow: function (event) {
     this._super(event);
+    this._questionData = event.target._currentQuestion;
     this._question.template = ReorderingController.getQuestionTemplate(); // eslint-disable-line no-undef
     if (this._question.state) {
       this._question.data.sentence.tabs = this._question.state.keys;
@@ -119,6 +120,9 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       totalAns: 1,
       type: "reorder"
     };
+
+    result.questionID = this._questionData.id;
+    result.attempted = _.isEmpty(result.state.val) ? false : true;
 
     var callback = event.target;
     /*istanbul ignore else*/

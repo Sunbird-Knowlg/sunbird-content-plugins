@@ -189,6 +189,8 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     var instance = this;
     if (!this._displayedPopup) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
+        //Get question attempted or not data
+        EkstepRendererAPI.dispatchEvent("org.ekstep.questionset:addSummary",result);
         if(!result.eval && !_.isUndefined(result.evalRequired) && !result.evalRequired){
           instance.renderNextQuestion();
         }else{

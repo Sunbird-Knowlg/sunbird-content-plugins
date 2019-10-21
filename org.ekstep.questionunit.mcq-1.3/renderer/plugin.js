@@ -34,6 +34,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    */
   preQuestionShow: function (event) {
     this._super(event);
+    this._questionData = event.target._currentQuestion;
     if (this._question.state && _.has(this._question.state, 'val')) {
       this._question.data.options = this._question.state.options;
     }else{
@@ -91,7 +92,9 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       params: instance.getTelemetryParams(),
       values: instance.getTelemetryResValues(),
       type: "mcq"
-    };
+    }; 
+    result.questionID = this._questionData.id;
+    result.attempted = _.isUndefined(result.state.val) ? false : true;
     if (_.isFunction(callback)) {
       callback(result);
     }

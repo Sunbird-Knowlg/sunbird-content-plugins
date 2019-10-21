@@ -26,6 +26,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
    */
   preQuestionShow: function (event) {
     this._super(event);
+    this._questionData = event.target._currentQuestion;
     this._question.data = FTBController.generateHTML(this._question.data); // eslint-disable-line no-undef
   },
   /**
@@ -114,7 +115,9 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: this._question.data.answer.length,
       type: "ftb"
     };
-
+    result.questionID = this._questionData.id;
+    //Find question attempted or not
+    result.attempted = _.isEmpty(result.values) ? false : true;
     var callback = event.target;
     /*istanbul ignore else*/
     if (_.isFunction(callback)) {
