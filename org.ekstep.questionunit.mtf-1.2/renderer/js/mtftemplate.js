@@ -1,4 +1,5 @@
 var MTFController = MTFController || {};
+
 MTFController.constant = {
   qsMTFElement: ".mtf-container"
 };
@@ -124,11 +125,7 @@ MTFController.touchConvertInit = function() {
 MTFController.onDomReady = function(){
     $(document).ready(function(){
         MTFController.touchConvertInit();
-        $(".rhs-container").sortable({
-          stop: function(evt,ui){
-            MTFController.pluginInstance.setAttempt(true);
-          }
-        }); 
+        $(".rhs-container").sortable();
         $(".rhs-container").disableSelection();
     }) 
 }

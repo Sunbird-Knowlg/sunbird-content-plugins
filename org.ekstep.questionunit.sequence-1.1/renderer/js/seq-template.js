@@ -79,7 +79,6 @@ SEQController.onDomReady = function () {
     SEQController.touchConvertInit();
     $(".option-block-container").sortable({
       stop: function(evt,ui){
-        SEQController.pluginInstance.setAttempt(true);
         SEQController.logTelemetryInteract(evt);
       }
     });

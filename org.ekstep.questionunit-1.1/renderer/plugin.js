@@ -1,7 +1,6 @@
 org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   _type: 'org.ekstep.questionUnitPlugin',
   _render: true,
-  _attempted: false,
   _question: {
     template: undefined,
     data: {},
@@ -276,14 +275,6 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     if(!_.isUndefined(data.image) && data.image.length > 0) valueObj.image = data.image;
     if(!_.isUndefined(data.audio) && data.audio.length > 0) valueObj.audio = data.audio;
     return JSON.stringify(valueObj);
-  },
-  getAttempt: function(){
-    var instance = this;
-    return instance._attempted;
-  },
-  setAttempt: function(attempted){
-    var instance = this;
-    instance._attempted = attempted;
   }
 });
 //# sourceURL=questionUnitRenderer.js

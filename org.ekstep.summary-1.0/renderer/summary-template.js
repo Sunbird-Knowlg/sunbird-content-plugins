@@ -11,7 +11,7 @@ summaryTemplate.getTemplate = function () {
     <div class="assessment-content-description mt-16">\
       <div class="text-center">\
         <div>Total questions: <span class="score"><%= summaryTemplate._QSSummary.attempted.length +  summaryTemplate._QSSummary.skipped.length%></span></div>\
-        <div>Questions answered: <span class="score"><%= summaryTemplate._QSSummary.attempted.length %></span></div>\
+        <div>Questions attempted: <span class="score"><%= summaryTemplate._QSSummary.attempted.length %></span></div>\
         <div>Questions skipped: <span class="score"><%= summaryTemplate._QSSummary.skipped.length %></span></div>\
       </div>\
     </div>\

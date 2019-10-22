@@ -23,7 +23,6 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
 
   preQuestionShow: function (event) {
     this._super(event);
-    this._questionData = event.target._currentQuestion;
     this._question.template = SEQController.getQuestionTemplate(this._question.config.layout, this._constant);
     _.each(this._question.data.options, function (option, index) {
       option.sequenceOrder = index + 1;
@@ -101,9 +100,6 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: totalOptions,
       type: "sequence"
     };
-    result.questionID = this._questionData.id;
-    //Find question attempted or not
-    result.attempted = instance.getAttempt();
     if (_.isFunction(callback)) {
       callback(result);
     }

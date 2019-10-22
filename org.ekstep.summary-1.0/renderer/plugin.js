@@ -11,37 +11,68 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
   _totalAttempted: 0,
   _totalSkipped: 0,
   _totalQuestions:0,
-  initialize: function(){
-    var instance = this;
-    instance._qsSummary = {"attempted":[],"skipped":[]};
-    //Question summary from questionSet plugin 
-    EkstepRendererAPI.addEventListener('org.ekstep.questionset:addSummary', instance.addSummary,instance);
-  },
   initPlugin: function(data) {
     var instance = this;
+    instance._qsSummary = {"attempted":[],"skipped":[]};
+    instance.addSummary();
     var summaryElement = summaryTemplate.showTemplate();
     summaryTemplate.pluginInstance = instance;
     $("#gameArea").append(summaryElement);
   },
-  addSummary: function(result){
+  addSummary: function(){
     var instance = this;
-    var attempted = result.target.attempted;
-    var questionId = result.target.questionID;
-    var isAttemptDefined = _.isUndefined(attempted) ? false : true;
-    var isQuestionIdDefined = _.isUndefined(questionId) ? false : true;
-    if(isAttemptDefined && isQuestionIdDefined)
-    if(attempted){
-      if(!_.includes(instance._qsSummary.attempted, questionId))
+    var assessTelemetryData = org.ekstep.service.content.getTelemetryEvents();
+    _.forEach(assessTelemetryData.assess, function(value,key) {
+      var item = value.edata.item;
+      switch(item.type){
+        case 'ftb': if(_.isEmpty(value.edata.resvalues)){
+                      instance.setSkippedQuestion(key);                        
+                    }else{
+                      instance.setAttemptedQuestion(key);
+                    }
+                    break;
+        case 'mcq': if(_.isEmpty(value.edata.resvalues[0])){
+                      instance.setSkippedQuestion(key);
+                    }else{
+                      instance.setAttemptedQuestion(key);
+                    }
+                    break;
+        case 'reorder': if(_.isEmpty(value.edata.resvalues)){
+                      instance.setSkippedQuestion(key);
+                    }else{
+                      instance.setAttemptedQuestion(key);
+                    }
+                    break;
+        case 'mtf': if(_.isEqual(item.params[1], value.edata.resvalues[1])){
+                      instance.setSkippedQuestion(key);                        
+                    }else{
+                      instance.setAttemptedQuestion(key);
+                    }
+                    break;
+        // case 'sequence': delete item.params[2];
+        //             if(_.isEqual(item.params, value.edata.resvalues)){
+        //               instance.setSkippedQuestion(key);                        
+        //             }else{
+        //               instance.setAttemptedQuestion(key);
+        //             }
+        //             break;
+      }
+    });
+    summaryTemplate._QSSummary = instance._qsSummary;
+  },
+  setAttemptedQuestion: function(questionId){
+    var instance = this;
+    if(!_.includes(instance._qsSummary.attempted, questionId))
       instance._qsSummary.attempted.push(questionId);
       var index = instance._qsSummary.skipped.indexOf(questionId);
       if (index !== -1) instance._qsSummary.skipped.splice(index, 1);
-    }else{
-      if(!_.includes(instance._qsSummary.skipped, questionId))
+  },
+  setSkippedQuestion: function(questionId){
+    var instance = this;
+    if(!_.includes(instance._qsSummary.skipped, questionId))
       instance._qsSummary.skipped.push(questionId);
       var index = instance._qsSummary.attempted.indexOf(questionId);
       if (index !== -1) instance._qsSummary.attempted.splice(index, 1);
-    }
-    summaryTemplate._QSSummary = instance._qsSummary;
   },
   submitSummary: function(summary){
     var attemptedQ = summaryTemplate._QSSummary.attempted.length;

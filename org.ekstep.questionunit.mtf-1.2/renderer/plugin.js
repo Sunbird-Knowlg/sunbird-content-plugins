@@ -24,7 +24,6 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
 
   preQuestionShow: function (event) {
     this._super(event);
-    this._questionData = event.target._currentQuestion;
     var inst = this;
 
     // If the any of the lhs or rhs had a image then the layout is vertical
@@ -116,9 +115,6 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: totalLHS,
       type: "mtf"
     };
-    result.questionID = this._questionData.id;
-    //Find question attempted or not
-    result.attempted = instance.getAttempt();    
     if (_.isFunction(callback)) {
       callback(result);
     }
