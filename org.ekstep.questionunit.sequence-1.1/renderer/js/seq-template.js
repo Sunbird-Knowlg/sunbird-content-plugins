@@ -1,4 +1,5 @@
 var SEQController = SEQController || {};
+SEQController.attempted = false;
 /**
  * intializes renderer template html controller and provides renderer plugin data with controller, 
  * @param {Object} pluginInstance
@@ -79,6 +80,7 @@ SEQController.onDomReady = function () {
     SEQController.touchConvertInit();
     $(".option-block-container").sortable({
       stop: function(evt,ui){
+        SEQController.attempted = true;
         SEQController.logTelemetryInteract(evt);
       }
     });
