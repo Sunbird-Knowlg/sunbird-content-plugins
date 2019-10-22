@@ -16,7 +16,6 @@ summaryTemplate.getTemplate = function () {
       </div>\
     </div>\
     <div class="assessment-action-buttons mt-40">\
-      <button type="button" class="sb-btn sb-btn-normal sb-btn-outline-primary sb-btn-responsive mr-24"> Go Back </button>\
       <button type="submit" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick=summaryTemplate.pluginInstance.submitSummary()> Submit </button>\
     </div>\
     </div>\

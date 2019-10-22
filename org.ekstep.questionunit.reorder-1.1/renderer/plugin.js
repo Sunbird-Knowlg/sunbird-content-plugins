@@ -120,10 +120,10 @@ org.ekstep.questionunitReorder.RendererPlugin = org.ekstep.contentrenderer.quest
       totalAns: 1,
       type: "reorder"
     };
-
+    var attempt = _.isEmpty(result.state.val) ? false : true;
+    this.setAttempt(attempt);
     result.questionID = this._questionData.id;
-    result.attempted = _.isEmpty(result.state.val) ? false : true;
-
+    result.attempted = this.getAttempt();
     var callback = event.target;
     /*istanbul ignore else*/
     if (_.isFunction(callback)) {

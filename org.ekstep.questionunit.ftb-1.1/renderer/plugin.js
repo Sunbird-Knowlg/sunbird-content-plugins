@@ -115,9 +115,11 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: this._question.data.answer.length,
       type: "ftb"
     };
+    var attempt = _.isEmpty(result.values) ? false : true;
+    instance.setAttempt(attempt);
     result.questionID = this._questionData.id;
     //Find question attempted or not
-    result.attempted = _.isEmpty(result.values) ? false : true;
+    result.attempted = instance.getAttempt();
     var callback = event.target;
     /*istanbul ignore else*/
     if (_.isFunction(callback)) {

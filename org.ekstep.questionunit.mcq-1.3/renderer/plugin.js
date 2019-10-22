@@ -93,8 +93,10 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       values: instance.getTelemetryResValues(),
       type: "mcq"
     }; 
+    var attempt = _.isUndefined(result.state.val) ? false : true;
+    instance.setAttempt(attempt);
     result.questionID = this._questionData.id;
-    result.attempted = _.isUndefined(result.state.val) ? false : true;
+    result.attempted = instance.getAttempt();
     if (_.isFunction(callback)) {
       callback(result);
     }

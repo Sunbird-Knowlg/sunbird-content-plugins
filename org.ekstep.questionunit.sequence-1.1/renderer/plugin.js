@@ -103,7 +103,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     };
     result.questionID = this._questionData.id;
     //Find question attempted or not
-    result.attempted = SEQController.attempted;
+    result.attempted = instance.getAttempt();
     if (_.isFunction(callback)) {
       callback(result);
     }

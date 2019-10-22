@@ -50,7 +50,6 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     summary.totalQuestions = attemptedQ + skippedQ;
     summary.attemptedQuestions = attemptedQ;
     summary.skippedQuestions = skippedQ; 
-    console.log("Final summary data",summary);
     EkstepRendererAPI.dispatchEvent('question:score:submit',summary);
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");

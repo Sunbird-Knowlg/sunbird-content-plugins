@@ -118,7 +118,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     };
     result.questionID = this._questionData.id;
     //Find question attempted or not
-    result.attempted = MTFController.attempted;
+    result.attempted = instance.getAttempt();    
     if (_.isFunction(callback)) {
       callback(result);
     }
