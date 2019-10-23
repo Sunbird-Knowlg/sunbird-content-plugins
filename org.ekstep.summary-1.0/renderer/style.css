@@ -39,7 +39,7 @@
       font-weight: bold;
   }
   .assessment-content-title{
-    font-size: 1em;
+    font-size: 0.9em;
     color: #024F9D;
     text-align: center;
   }
@@ -102,9 +102,15 @@
     background-color: #024f9d;
     color: #fff;
 }
-.mt-40 {
-    margin-top: 40px !important;
+.mt-32 {
+    margin-top: 32px;
  }
  .mr-24 {
-    margin-right: 24px !important;
+    margin-right: 24px;
  }
+.mt-16{
+  padding-top: 16px;
+}
+.pt-8{
+  padding-top: 8px;
+}
