@@ -114,7 +114,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: this._question.data.answer.length,
       type: "ftb"
     };
-    
+  
     var callback = event.target;
     /*istanbul ignore else*/
     if (_.isFunction(callback)) {
