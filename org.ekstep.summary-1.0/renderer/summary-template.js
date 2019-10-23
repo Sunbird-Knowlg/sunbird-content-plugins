@@ -10,9 +10,9 @@ summaryTemplate.getTemplate = function () {
     <div class="assessment-content-title">Submit your assessment to check your score.</div>\
     <div class="assessment-content-description mt-16">\
       <div class="text-center">\
-        <div>Total questions: <span class="score"><%= summaryTemplate._QSSummary.attempted.length +  summaryTemplate._QSSummary.notAttempted.length%></span></div>\
+        <div>Total questions: <span class="score"><%= summaryTemplate._QSSummary.attempted.length +  summaryTemplate._QSSummary.nonAttempted.length%></span></div>\
         <div class="pt-8">Questions Attempted: <span class="score"><%= summaryTemplate._QSSummary.attempted.length %></span></div>\
-        <div class="pt-8">Questions Not Attempted: <span class="score"><%= summaryTemplate._QSSummary.notAttempted.length %></span></div>\
+        <div class="pt-8">Questions Non Attempted: <span class="score"><%= summaryTemplate._QSSummary.nonAttempted.length %></span></div>\
       </div>\
     </div>\
     <div class="assessment-action-buttons mt-32">\
