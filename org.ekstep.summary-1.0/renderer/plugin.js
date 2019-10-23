@@ -9,11 +9,11 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
   _render: true,
   _qsSummary: {},
   _totalAttempted: 0,
-  _totalSkipped: 0,
+  _totalNotAttempted: 0,
   _totalQuestions:0,
   initPlugin: function(data) {
     var instance = this;
-    instance._qsSummary = {"attempted":[],"skipped":[]};
+    instance._qsSummary = {"attempted":[],"notAttempted":[]};
     instance.addSummary();
     var summaryElement = summaryTemplate.showTemplate();
     summaryTemplate.pluginInstance = instance;
@@ -26,32 +26,32 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
       var item = value.edata.item;
       switch(item.type){
         case 'ftb': if(_.isEmpty(value.edata.resvalues)){
-                      instance.setSkippedQuestion(key);                        
+                      instance.setNotAttemptedQuestion(key);                        
                     }else{
                       instance.setAttemptedQuestion(key);
                     }
                     break;
         case 'mcq': if(_.isEmpty(value.edata.resvalues[0])){
-                      instance.setSkippedQuestion(key);
+                      instance.setNotAttemptedQuestion(key);
                     }else{
                       instance.setAttemptedQuestion(key);
                     }
                     break;
         case 'reorder': if(_.isEmpty(value.edata.resvalues)){
-                      instance.setSkippedQuestion(key);
+                      instance.setNotAttemptedQuestion(key);
                     }else{
                       instance.setAttemptedQuestion(key);
                     }
                     break;
         case 'mtf': if(_.isEqual(item.params[1], value.edata.resvalues[1])){
-                      instance.setSkippedQuestion(key);                        
+                      instance.setNotAttemptedQuestion(key);                        
                     }else{
                       instance.setAttemptedQuestion(key);
                     }
                     break;
         case 'sequence': item.params.pop(); 
                       if(_.isEqual(item.params, value.edata.resvalues)){
-                        instance.setSkippedQuestion(key);                        
+                        instance.setNotAttemptedQuestion(key);                        
                       }else{
                         instance.setAttemptedQuestion(key);
                       }
@@ -64,23 +64,23 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var instance = this;
     if(!_.includes(instance._qsSummary.attempted, questionId))
       instance._qsSummary.attempted.push(questionId);
-      var index = instance._qsSummary.skipped.indexOf(questionId);
-      if (index !== -1) instance._qsSummary.skipped.splice(index, 1);
+      var index = instance._qsSummary.notAttempted.indexOf(questionId);
+      if (index !== -1) instance._qsSummary.notAttempted.splice(index, 1);
   },
-  setSkippedQuestion: function(questionId){
+  setNotAttemptedQuestion: function(questionId){
     var instance = this;
-    if(!_.includes(instance._qsSummary.skipped, questionId))
-      instance._qsSummary.skipped.push(questionId);
+    if(!_.includes(instance._qsSummary.notAttempted, questionId))
+      instance._qsSummary.notAttempted.push(questionId);
       var index = instance._qsSummary.attempted.indexOf(questionId);
       if (index !== -1) instance._qsSummary.attempted.splice(index, 1);
   },
   submitSummary: function(summary){
     var attemptedQ = summaryTemplate._QSSummary.attempted.length;
-    var skippedQ = summaryTemplate._QSSummary.skipped.length;
+    var notAttemptedQ = summaryTemplate._QSSummary.notAttempted.length;
     var summary = {};
-    summary.totalQuestions = attemptedQ + skippedQ;
+    summary.totalQuestions = attemptedQ + notAttemptedQ;
     summary.attemptedQuestions = attemptedQ;
-    summary.skippedQuestions = skippedQ; 
+    summary.notAttemptedQuestions = notAttemptedQ; 
     EkstepRendererAPI.dispatchEvent('question:score:submit',summary);
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");
