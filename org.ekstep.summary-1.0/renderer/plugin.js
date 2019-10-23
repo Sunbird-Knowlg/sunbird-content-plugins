@@ -49,13 +49,13 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
                       instance.setAttemptedQuestion(key);
                     }
                     break;
-        // case 'sequence': delete item.params[2];
-        //             if(_.isEqual(item.params, value.edata.resvalues)){
-        //               instance.setSkippedQuestion(key);                        
-        //             }else{
-        //               instance.setAttemptedQuestion(key);
-        //             }
-        //             break;
+        case 'sequence': item.params.pop(); 
+                      if(_.isEqual(item.params, value.edata.resvalues)){
+                        instance.setSkippedQuestion(key);                        
+                      }else{
+                        instance.setAttemptedQuestion(key);
+                      }
+                      break;
       }
     });
     summaryTemplate._QSSummary = instance._qsSummary;
