@@ -80,8 +80,9 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var summary = {};
     summary.totalQuestions = attemptedQ + nonAttemptedQ;
     summary.attemptedQuestions = attemptedQ;
-    summary.nonAttemptedQuestions = nonAttemptedQ; 
-    EkstepRendererAPI.dispatchEvent('question:score:submit',summary);
+    summary.nonAttemptedQuestions = nonAttemptedQ;
+    var event = new Event("question:score:submit", summary);
+    window.parent.document.getElementById('contentPlayer').dispatchEvent(event);
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");
   }
