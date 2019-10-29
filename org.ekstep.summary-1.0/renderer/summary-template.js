@@ -5,7 +5,7 @@ summaryTemplate.showTemplate = function(){
     return template;
 }
 summaryTemplate.getTemplate = function () {
-    var summaryTemplateHTML = '<div class="popup" style="z-index: 9999999;top:0%;">\
+    var summaryTemplateHTML = '<div class="popup" style="z-index: 9999999;top:0%;background-color: #fff4f4;">\
     <div class="popup-overlay">\
     </div>\
     <div class="popup-full-body-summary">\
@@ -17,8 +17,8 @@ summaryTemplate.getTemplate = function () {
                     <div class="text-center">\
                         <div>Total questions: <span class="score"><%= summaryTemplate._QSSummary.attempted.length +  summaryTemplate._QSSummary.nonAttempted.length%></span>\
                         </div>\
-                        <div class="pt-8">Questions Attempted: <span class="score"><%= summaryTemplate._QSSummary.attempted.length %></span></div>\
-                        <div class="pt-8">Questions Non Attempted: <span class="score"><%= summaryTemplate._QSSummary.nonAttempted.length %></span></div>\
+                        <div class="pt-8">Questions answered: <span class="score"><%= summaryTemplate._QSSummary.attempted.length %></span></div>\
+                        <div class="pt-8">Questions skipped: <span class="score"><%= summaryTemplate._QSSummary.nonAttempted.length %></span></div>\
                     </div>\
                 </div>\
                 <div class="assessment-action-buttons mt-32">\
