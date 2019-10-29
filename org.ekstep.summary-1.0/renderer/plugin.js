@@ -18,6 +18,7 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var summaryElement = summaryTemplate.showTemplate();
     summaryTemplate.pluginInstance = instance;
     $("#gameArea").append(summaryElement);
+    $("#qs-feedback-model-popup").show();
   },
   addSummary: function(){
     var instance = this;
@@ -85,6 +86,10 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     window.parent.document.getElementById('contentPlayer').dispatchEvent(event);
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");
+  },
+  goBackSummary: function(){
+    EventBus.dispatch("actionNavigatePrevious", "previous");
+    EventBus.dispatch("previousClick");
   }
 });
 
