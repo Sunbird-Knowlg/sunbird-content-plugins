@@ -84,6 +84,10 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     window.postMessage('renderer:question:sumbitscore');
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");
+  },
+  goBackSummary: function(){
+    EventBus.dispatch("actionNavigatePrevious", "previous");
+    EventBus.dispatch("previousClick");
   }
 });
 
