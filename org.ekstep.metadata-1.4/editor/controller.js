@@ -368,6 +368,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     case "maxlength": // When input validation of type is max
                         scope.validation[value.code]["errorMessage"] = value.validation.max.message;
                         break;
+                    case "minlength": // When input validation of type is min
+                        scope.validation[value.code]["errorMessage"] = value.validation.min.message;
+                        break;
                     default:
                         scope.validation[value.code]["errorMessage"] = "Invalid Input";
                 }
