@@ -18,7 +18,6 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var summaryElement = summaryTemplate.showTemplate();
     summaryTemplate.pluginInstance = instance;
     $("#gameArea").append(summaryElement);
-    $("#qs-feedback-model-popup").show();
   },
   addSummary: function(){
     var instance = this;
