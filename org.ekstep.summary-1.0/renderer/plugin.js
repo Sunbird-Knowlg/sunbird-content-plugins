@@ -81,7 +81,7 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     summary.totalQuestions = attemptedQ + nonAttemptedQ;
     summary.attemptedQuestions = attemptedQ;
     summary.nonAttemptedQuestions = nonAttemptedQ;
-    window.postMessage('renderer:question:sumbitscore');
+    window.postMessage('renderer:question:submitscore');
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");
   },
