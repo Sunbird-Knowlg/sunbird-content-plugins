@@ -554,6 +554,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.resolveReviewBtnStatus();
         $scope.getQRCodeRequestCount();
         $scope.resolveQRDownloadBtn();
+        $scope.readExistingQrCode();
         $scope.$safeApply();
     };
     $scope.resolveQRDownloadBtn = function () {
