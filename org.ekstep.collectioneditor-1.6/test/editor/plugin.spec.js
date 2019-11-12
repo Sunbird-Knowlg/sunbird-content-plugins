@@ -127,4 +127,9 @@ describe("collection editor plugin", function() {
         var iframe = document.getElementById('previewContentIframe');
         expect(iframe.src).not.toBeUndefined();
     });
+    it('should call on reload content', function(){
+        $scope.reloadContent ();
+        expect($scope.setSelectedNode).toHaveBeenCalled();
+        expect($scope.setVerifiedCode).toBe(true)
+    });
 });
