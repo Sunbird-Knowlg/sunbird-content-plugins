@@ -407,6 +407,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             org.ekstep.services.collectionService.fromCollection(res.data.result.content);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
             $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
+            $scope.setVerifiedCode = true;
             setTimeout(function() {
                 ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                 ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
