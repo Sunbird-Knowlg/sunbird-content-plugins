@@ -59,7 +59,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.breadcrumb-1.1"
                 "org.ekstep.sunbirdmetadata-1.1"
                 "org.ekstep.editcontentmeta-1.1"
-                "org.ekstep.metadata-1.4"
+                "org.ekstep.metadata-1.5"
                 "org.ekstep.collectionkeyboardshortcuts-1.0"
                 "org.ekstep.topicselector-1.1"
                 "org.ekstep.contentmeta-1.5"
@@ -89,8 +89,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.questionunit.reorder-1.1"
                 "org.ekstep.questionunit.sequence-1.0"
                 "org.ekstep.questionunit.sequence-1.1"
-                "org.sunbird.questionunit.quml-1.0"
-                "org.ekstep.summary-1.0");
+                "org.sunbird.questionunit.quml-1.0");
 
 for i in "${coreplugins[@]}"
 do
