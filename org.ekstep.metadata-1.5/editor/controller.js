@@ -518,9 +518,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var licensemessage = _.filter(config.fields, { 'code': 'licensemessage' })[0];
             if(licensemessage){
-                $scope.licenseText = license.defaultValue;
-                if(!_.isUndefined(license.renderingHints.value) && !_.isUndefined(license.renderingHints.value[$scope.contentMimeType])){
-                    $scope.licenseText = license.renderingHints.value[$scope.contentMimeType];
+                $scope.licenseText = licensemessage.defaultValue;
+                if(!_.isUndefined(licensemessage.renderingHints.value) && !_.isUndefined(licensemessage.renderingHints.value[$scope.contentMimeType])){
+                    $scope.licenseText = licensemessage.renderingHints.value[$scope.contentMimeType];
                 }
             }
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
