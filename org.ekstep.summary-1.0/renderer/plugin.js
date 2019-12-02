@@ -86,8 +86,8 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     EventBus.dispatch("nextClick");
   },
   goBackSummary: function(){
-    EventBus.dispatch("actionNavigatePrevious", "previous");
-    EventBus.dispatch("previousClick");
+    EkstepRendererAPI.hideEndPage();
+    EkstepRendererAPI.dispatchEvent('renderer:content:replay');
   }
 });
 
