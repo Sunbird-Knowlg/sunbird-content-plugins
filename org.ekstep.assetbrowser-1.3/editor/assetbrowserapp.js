@@ -192,7 +192,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
+                      //  license: obj.license,
                         contentType: obj.contentType
                     });
                 }
@@ -523,8 +523,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }
     });
 
-    ctrl.DefaultTanantLicense = ((ecEditor.getContext("defaultLicense")) ? ecEditor.getContext("defaultLicense") : "");
-    ctrl.assetMeta.license = ctrl.DefaultTanantLicense;
+    // ctrl.DefaultTanantLicense = ((ecEditor.getContext("defaultLicense")) ? ecEditor.getContext("defaultLicense") : "");
+    // ctrl.assetMeta.license = ctrl.DefaultTanantLicense;
 
     // ctrl.setPublic = function(task) {
     //     ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
@@ -650,8 +650,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         "createdFor": ecEditor._.keys(ecEditor.getContext('user').organisations),
                         "contentType": "Asset",
                         "osId": "org.ekstep.quiz.app",
-                        "language": content.language,
-                        "license": content.license
+                        "language": content.language
+                        // "license": content.license
                     }
                 }
             }
@@ -985,7 +985,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
+                        //license: obj.license,
                         contentType: obj.contentType
                     });
                 }else if(mediaType == 'video'){
@@ -994,7 +994,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
+                        // license: obj.license,
                         contentType: obj.contentType
                     });
                 }
