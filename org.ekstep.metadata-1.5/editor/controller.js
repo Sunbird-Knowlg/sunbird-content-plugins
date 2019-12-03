@@ -516,6 +516,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.contentMeta = config.model;
             $scope.contentMimeType = config.model.mimeType;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
+
             var licensemessage = _.filter(config.fields, { 'code': 'licensemessage' })[0];
             if(licensemessage){
                 $scope.licenseText = licensemessage.defaultValue;
@@ -523,6 +524,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     $scope.licenseText = licensemessage.renderingHints.value[$scope.contentMimeType];
                 }
             }
+
+
+            
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
                 $scope.contentMeta['copyright'] = $scope.originalContentMeta['copyright'];
             }else if(ecEditor.getContext('user') &&  ecEditor.getContext('user').organisations){

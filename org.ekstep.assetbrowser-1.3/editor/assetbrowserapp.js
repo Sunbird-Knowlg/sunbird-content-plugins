@@ -523,14 +523,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }
     });
 
-    ctrl.setPublic = function(task) {
-        ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
-        ctrl.asset.requiredField = 'required';
-        ctrl.optional = false;
-        if(task == 'hide') {
-            ctrl.hideLicenseField = true;
-        }
-    }
+    ctrl.DefaultTanantLicense = ((ecEditor.getContext("defaultLicense")) ? ecEditor.getContext("defaultLicense") : "");
+    ctrl.assetMeta.license = ctrl.DefaultTanantLicense;
+
+    // ctrl.setPublic = function(task) {
+    //     ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
+    //     ctrl.asset.requiredField = 'required';
+    //     ctrl.optional = false;
+    //     if(task == 'hide') {
+    //         ctrl.hideLicenseField = true;
+    //     }
+    // }
 
     ctrl.viewMore = function() {
         ecEditor.jQuery('.removeError').each(function() {
@@ -539,11 +542,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.hideField = false;
     }
 
-    ctrl.setPrivate = function() {
-        delete ctrl.assetMeta.license;
-        ctrl.asset.requiredField = '';
-        ctrl.optional = true;
-    }
+    // ctrl.setPrivate = function() {
+    //     delete ctrl.assetMeta.license;
+    //     ctrl.asset.requiredField = '';
+    //     ctrl.optional = true;
+    // }
 
     ctrl.showFileInfo = function() {
         var file;
@@ -1240,7 +1243,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
         ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
         ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
-        ecEditor.jQuery("#ccByContribution1").click();
+        // ecEditor.jQuery("#ccByContribution1").click();
 
         ecEditor.jQuery(document).one('change', '#assetName, #assetfile', function() {
             ctrl.uploadBtnDisabled = false;

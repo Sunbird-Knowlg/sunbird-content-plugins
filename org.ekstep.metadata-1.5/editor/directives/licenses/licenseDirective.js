@@ -5,7 +5,7 @@
  */
 formApp.directive('licenses', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
-    var licensesController = ['$scope', '$controller', function($scope, $controller) {
+    var licensesController = ['$scope', '$rootScope','$controller', function($scope, $rootScope , $controller) {
         $scope.data = {};
         $scope.licenseData= "";
         $scope.contentMeta = $scope.$parent.contentMeta;
@@ -23,7 +23,25 @@ formApp.directive('licenses', function() {
             var payload={"request":{"filters":{"objectType":"license","status":["Live"]}}}
             if (_.isFunction(ecEditor.getService('search').search)) {
                 ecEditor.getService('search').search(payload, function(err, resp) {
-                    (!err && (_.has(resp.data.result, "License"))) ? ($scope.data.availableOptions = resp.data.result.License) : ($scope.toggleLicenseDetails = true)
+                    if(!err && (_.has(resp.data.result, "License"))){
+                        $scope.licenseList = [];
+                        _.forEach(resp.data.result.License, function(license){
+                            $scope.licenseList.push(license);
+                        });
+                        if(!$scope.contentMeta.license){
+                            $scope.contentMeta.license = $scope.defaultLicense;
+                        }
+                        $rootScope.$safeApply();
+                    }else{
+                        $scope.toggleLicenseDetails = true
+                    }
+                    setTimeout(function() {
+                        $(".ui.dropdown").dropdown({
+                            useLabels: false,
+                            forceSelection: false
+                        });
+                        $rootScope.$safeApply();
+                    }, 0)
                 })
             }
         }
@@ -50,17 +68,16 @@ formApp.directive('licenses', function() {
                     $scope.isDisableSelection = true
                 }
             }
+            $scope.$root.$safeApply();
         }
-        $scope.getLicenseData();
-        $scope.getContentOrigin();
-        $scope.data.selectedOption = {
-            name: $scope.defaultLicense,
-            node_id: 0 
-        };
-        $scope.contentMeta.license = $scope.defaultLicense;
 
+        $scope.getLicenseData();
+
+        $scope.getContentOrigin();
+        
         $scope.OnLicenseChange = function() {
-            $scope.contentMeta.license = $scope.data.selectedOption.name;   
+            $scope.contentMeta.license = $scope.contentMeta.license;
+            $rootScope.$safeApply();
         }
     }]
     return {

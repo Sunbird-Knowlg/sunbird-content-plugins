@@ -139,7 +139,7 @@
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}}
                                                     " ng-if="dynamicField.code=='license' " ng-required=" {{dynamicField.required}} ">
                                             
-                                                <licenses config=dynamicField ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:{}})"></licenses>
+                                                <licenses config=dynamicField ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})"></licenses>
                                         </div>
 
 
