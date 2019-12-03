@@ -517,15 +517,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.contentMimeType = config.model.mimeType;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
 
-            var licensemessage = _.filter(config.fields, { 'code': 'licensemessage' })[0];
-            if(licensemessage){
-                $scope.licenseText = licensemessage.defaultValue;
-                if(!_.isUndefined(licensemessage.renderingHints.value) && !_.isUndefined(licensemessage.renderingHints.value[$scope.contentMimeType])){
-                    $scope.licenseText = licensemessage.renderingHints.value[$scope.contentMimeType];
+            var licenseterms = _.filter(config.fields, { 'code': 'licenseterms' })[0];
+            if(licenseterms){
+                $scope.licenseText = licenseterms.defaultValue;
+                if(!_.isUndefined(licenseterms.renderingHints.value) && !_.isUndefined(licenseterms.renderingHints.value[$scope.contentMimeType])){
+                    $scope.licenseText = licenseterms.renderingHints.value[$scope.contentMimeType];
                 }
             }
-
-
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
                 $scope.contentMeta['copyright'] = $scope.originalContentMeta['copyright'];
