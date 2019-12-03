@@ -78,8 +78,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                             "objectType": "Content",
                             "mimeType": (mediaType == 'video') ? new Array('video/x-youtube', 'video/mp4', 'video/webm') : mediaType,
                             "contentType": (_.includes(contentType, 'Asset')) ? new Array('Asset') : new Array('Resource'),
-                            "status": new Array("Live", "Review", "Draft"),
-                            "license": "Creative Commons Attribution (CC BY)",
+                            "status": new Array("Live", "Review", "Draft")
                         },
                         "limit": 50,
                         "offset": offset
@@ -108,8 +107,8 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         // Public assets only
         if (org.ekstep.contenteditor.api._.isUndefined(createdBy)) {
-            requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
-            allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
+            // requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
+            allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'limit']);
         } else {
             // All assets
             requestObj.request.filters.createdBy = createdBy;
