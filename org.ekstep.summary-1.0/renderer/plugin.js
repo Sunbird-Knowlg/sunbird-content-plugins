@@ -99,7 +99,7 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
         //GOTO the First Slide using ID
         Renderer.theme.invokeStage(stageItem.id);
         $(".popup").remove();
-        EkstepRendererAPI.dispatchEvent('renderer:content:review',{"data":'soft'});
+        EkstepRendererAPI.dispatchEvent('renderer:plugin:reset',{"data":'true'});
        }
     });
   }
