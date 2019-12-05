@@ -104,8 +104,8 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     var question = undefined;
     var savedQSState = this.getQuestionSetState();
 
-    EkstepRendererAPI.addEventListener('renderer:content:review', function() {
-      this.reInstateQuestionsOnReview("soft");
+    EkstepRendererAPI.addEventListener("renderer:content:review", function(e) {
+      this.reInstateQuestionsOnReview(e.target.data);
     }, this);
     
     var savedCurrentQuestion = this.questionExistInQS(savedQSState);
