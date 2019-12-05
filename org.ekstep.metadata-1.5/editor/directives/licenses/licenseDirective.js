@@ -23,9 +23,9 @@ formApp.directive('licenses', function() {
             var payload={"request":{"filters":{"objectType":"license","status":["Live"]}}}
             if (_.isFunction(ecEditor.getService('search').search)) {
                 ecEditor.getService('search').search(payload, function(err, resp) {
-                    if(!err && (_.has(resp.data.result, "License"))){
+                    if(!err && (_.has(resp.data.result, "license"))){
                         $scope.licenseList = [];
-                        _.forEach(resp.data.result.License, function(license){
+                        _.forEach(resp.data.result.license, function(license){
                             $scope.licenseList.push(license);
                         });
                         if(!$scope.contentMeta.license){
