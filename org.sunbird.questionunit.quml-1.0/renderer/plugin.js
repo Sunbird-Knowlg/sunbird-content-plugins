@@ -100,6 +100,12 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                     scrollTop: $('#answer').offset().top
                 });
                 instance.logTelemetryInteract({target : { id : 'answerBtn' }});
+                QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { // eslint-disable-line no-undef
+                    "type": "SELECT",
+                    "values": [{
+                        "option": "solution"
+                      }]
+                });
             }
             document.getElementById('questionBtn').onclick = function() {
                 $('.sb-question-content').animate({
