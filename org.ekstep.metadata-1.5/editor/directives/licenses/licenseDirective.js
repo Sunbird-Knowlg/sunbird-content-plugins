@@ -36,7 +36,7 @@ formApp.directive('licenses', function() {
                         $scope.toggleLicenseDetails = true
                     }
                     setTimeout(function() {
-                        $(".ui.dropdown").dropdown({
+                        $(".ui.dropdown.license").dropdown({
                             useLabels: false,
                             forceSelection: false
                         });
