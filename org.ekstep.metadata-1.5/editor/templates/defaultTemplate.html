@@ -96,7 +96,7 @@
                                             <label>{{dynamicField.label | uppercase}}</label>
                                             <div>
                                                 <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
-                                                    <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="number" ng-pattern="dynamicField.validation.regex['value']" ng-maxlength="{{dynamicField.validation.max[ 'value']}}"
+                                                    <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="number" ng-pattern="dynamicField.validation.regex['value']" ng-minlength="{{dynamicField.validation.min[ 'value']}}" ng-maxlength="{{dynamicField.validation.max[ 'value']}}"
                                                         ng-required="{{dynamicField.required}} " ng-keyup="onConfigChange({target: '#metadataForm',form:metaForm})" ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})">
                                                 </div>
                                                 <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
