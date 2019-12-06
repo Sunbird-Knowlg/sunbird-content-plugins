@@ -86,8 +86,22 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     EventBus.dispatch("nextClick");
   },
   goBackSummary: function(){
-    EventBus.dispatch("actionNavigatePrevious", "previous");
-    EventBus.dispatch("previousClick");
+    // EkstepRendererAPI.hideEndPage();
+    // EkstepRendererAPI.dispatchEvent('renderer:content:replay');
+    const allStagesList = EkstepRendererAPI.getAllStages();
+    const firstContentStage = EkstepRendererAPI.getContentData();
+
+    /* Check the getAllStages ID equal to the firstContentStage ID,
+     * GOTO the first Assessment Slide 
+     */
+     allStagesList.forEach((stageItem) => {
+       if(firstContentStage.startStage === stageItem.id) {
+        //GOTO the First Slide using ID
+        Renderer.theme.invokeStage(stageItem.id);
+        $(".popup").remove();
+        EkstepRendererAPI.dispatchEvent('renderer:plugin:reset',{"data":'true'});
+       }
+    });
   }
 });
 
