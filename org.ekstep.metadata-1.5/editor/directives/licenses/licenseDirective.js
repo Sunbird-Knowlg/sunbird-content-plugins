@@ -38,8 +38,8 @@ formApp.directive('licenses', function() {
                     setTimeout(function() {
                         $(".ui.dropdown.license").dropdown({
                             useLabels: false,
-                            forceSelection: false
-                        });
+                            forceSelection: true,
+                        }) .dropdown('set selected', $scope.contentMeta.license);
                         $rootScope.$safeApply();
                     }, 0)
                 })
