@@ -66,10 +66,14 @@ formApp.directive('licenses', function() {
                 if(_.findIndex($scope.contentMimeType, mimeType) > 0){
                     ($scope.defaultLicense = ((ecEditor.getContext("defaultLicense")) ? ecEditor.getContext("defaultLicense") : ""));
                     $scope.isDisableSelection = true
+                } else if( mimeType == "video/x-youtube" ){
+                    $scope.isDisableSelection = true
                 }
             }
             $scope.$root.$safeApply();
         }
+
+        
 
         $scope.getLicenseData();
 
