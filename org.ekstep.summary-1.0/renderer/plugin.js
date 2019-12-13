@@ -75,6 +75,10 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
       if (index !== -1) instance._qsSummary.attempted.splice(index, 1);
   },
   submitSummary: function(summary){
+    EkstepRendererAPI.getTelemetryService().interact("TOUCH", "Submit_button", "TOUCH", {
+      stageId: Renderer.theme._currentStage,
+      subtype: ''
+    });
     var attemptedQ = summaryTemplate._QSSummary.attempted.length;
     var nonAttemptedQ = summaryTemplate._QSSummary.nonAttempted.length;
     var summary = {};
@@ -86,6 +90,11 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     EventBus.dispatch("nextClick");
   },
   goBackSummary: function(){
+
+    EkstepRendererAPI.getTelemetryService().interact("TOUCH", "Review_button", "TOUCH", {
+      stageId: Renderer.theme._currentStage,
+      subtype: ''
+    });
     const allStagesList = EkstepRendererAPI.getAllStages();
     const firstContentStage = EkstepRendererAPI.getContentData();
 
