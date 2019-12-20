@@ -9,26 +9,28 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
     responseValueMap: {},
     _selectedIndex: undefined,
     preQuestionShow: function(event) {
+        this._question.overrideFeedbackPopUp = true; // Overriding Feedback popup
         if(isbrowserpreview && (Renderer.theme._basePath === "/assets/")){
             Renderer.theme._basePath = "/";
         }
         var questionData = JSON.parse(event.target._currentQuestion.data.__cdata);
+        var questionConfig = JSON.parse(event.target._currentQuestion.config.__cdata);
         questionData.question = this.replaceAssetWithBaseURL(questionData.question);
         if (/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.question)) {
-			questionData.question = questionData.question.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
-		}
-		if (/(\^\\textdegree)/.test(questionData.question)) {
-			questionData.question = questionData.question.replace(/(\^\\textdegree)/gm, "^\\degree")
-		}
+            questionData.question = questionData.question.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
+        }
+        if (/(\^\\textdegree)/.test(questionData.question)) {
+            questionData.question = questionData.question.replace(/(\^\\textdegree)/gm, "^\\degree")
+        }
 
-		if (questionData.solution) {
-			questionData.solution[0] = this.replaceAssetWithBaseURL(questionData.solution[0])
-			if (/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.solution[0])) {
-				questionData.solution[0] = questionData.solution[0].replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
-			}
-			if (/(\^\\textdegree)/.test(questionData.solution[0])) {
-				questionData.solution[0] = questionData.solution[0].replace(/(\^\\textdegree)/gm, "^\\degree")
-			}
+        if (questionData.solution && questionConfig.metadata.type == 'reference') {
+            questionData.solution[0].value = this.replaceAssetWithBaseURL(questionData.solution[0].value)
+            if (/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.solution[0].value)) {
+                questionData.solution[0].value = questionData.solution[0].value.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
+            }
+            if (/(\^\\textdegree)/.test(questionData.solution[0].value)) {
+                questionData.solution[0].value = questionData.solution[0].replace(/(\^\\textdegree)/gm, "^\\degree")
+            }
         }
         event.target._currentQuestion.data.__cdata = JSON.stringify(questionData);
         this._super(event);
@@ -38,7 +40,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             buttonLabel = "Explanation";
             starDiv = "";
         }
-        if (this._question.data.solution && this._question.data.solution[0].length > 0) {
+        if (this._question.config.metadata.type == 'reference' && this._question.data.solution && this._question.data.solution[0].value.length > 0) {
             this._question.template = "<div class='sb-question-dsp-body'> \
             <div class='sb-question-header question-bg'> \
                 <button  class='sb-btn sb-btn-primary sb-btn-normal' id='questionBtn' style='display: none;' type='button'>Question</button> \
@@ -51,7 +53,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             </div> \
             <div class='page-section answer-bg' id='answer'> \
               <div class='sb-answer'>" + buttonLabel + "</div> \
-              <div  class='sb-question-content-card'>" + questionData.solution[0] + "</div> \
+              <div  class='sb-question-content-card'>" + questionData.solution[0].value + "</div> \
             </div>\
             </div></div>";
         } else {
@@ -60,7 +62,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
     },
     /**
      * Listen event after display the question
-     * @memberof org.ekstep.questionunit.mcq
+     * @memberof org.ekstep.questionunit.quml
      * @param {Object} event from question set.
      */
     postQuestionShow: function() {
@@ -92,7 +94,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                 });
             }
         });
-        if (this._question.data.solution && this._question.data.solution[0].length > 0) {
+        if (this._question.config.metadata.type == 'reference' && this._question.data.solution && this._question.data.solution[0].value.length > 0) {
             document.getElementById('questionset').className = 'sb-question-dsp-container'
             document.getElementById('answerBtn').display = 'none'
             document.getElementById('answerBtn').onclick = function() {
@@ -129,16 +131,17 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
     },
     /**
      * Question evalution
-     * @memberof org.ekstep.questionunit.mcq
+     * @memberof org.ekstep.questionunit.quml
      * @param {Object} event from question set.
      */
     evaluateQuestion: function(event) {
         var instance = this;
-        var callback = event.target;
+        QuMLFeedbackPopup._callback = event.target;
+        QuMLFeedbackPopup._questionData = instance._question.data;
         var telValues = {},
             result = {},
             correctAnswer = false;
-        if (this._question.data.responseDeclaration) {
+        if (this._question.config.metadata.type == 'mcq') {
             var responseDeclaration = this._question.data.responseDeclaration;
             var key = _.keys(instance.responseValueMap);
             if (key.length > 0 && responseDeclaration[key[0]].correct_response.value === instance.responseValueMap[key[0]]) {
@@ -169,21 +172,38 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                 score: correctAnswer ? instance._question.config.max_score : 0,
                 values: [telValues],
                 params: params,
-                type: instance._question.config.metadata.type
+                type: instance._question.config.metadata.type,
             }
+            // Generate ASSESS EVENT
+            QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
+            //Show feedback
+            this.showQumlFeedback(result);
+            
         } else {
             result = {
                 eval: correctAnswer,
                 evalRequired: false
             }
-        }
-        if (_.isFunction(callback)) {
-            callback(result);
+            if (_.isFunction(QuMLFeedbackPopup._callback)) {
+                QuMLFeedbackPopup._callback(result);
+            }
+        }      
+    },
+    /**
+     * provide evaluated result
+     * @memberof org.ekstep.questionunit.quml
+     */
+    showQumlFeedback: function(result){
+        QuMLFeedbackPopup.result = result;
+        if (result.eval) {
+            QuMLFeedbackPopup.showGoodJob();
+        }else{
+            QuMLFeedbackPopup.showTryAgain();
         }
     },
     /**
      * provide media url to asset
-     * @memberof org.ekstep.questionunit.mcq
+     * @memberof org.ekstep.questionunit.quml
      * @param {String} url from question set.
      * @returns {String} url.
      */

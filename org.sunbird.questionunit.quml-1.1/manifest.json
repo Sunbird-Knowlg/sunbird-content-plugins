@@ -23,6 +23,10 @@
         "dependencies": [{
             "type": "css",
             "src": "renderer/styles/style.css"
+        },
+        {
+            "type": "js",
+            "src": "renderer/utils/quml_feedback_popup.js"
         }]
     },
     "dependencies": [{
