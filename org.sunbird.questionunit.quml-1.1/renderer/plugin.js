@@ -78,6 +78,10 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             $('.chevron').toggleClass('icon-active');
             e.preventDefault();
         });
+        //Retain previous state to question
+        var preSelected = $('.mcq-options').children()[this._selectedIndex];
+        $(preSelected).addClass('mcq-options-select');
+
         instance.responseValueMap = {};
         $('.mcq-options .mcq-option').on('click', function(e) {
             $(".mcq-options .mcq-option").removeClass("mcq-options-select");
@@ -167,7 +171,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             result = {
                 eval: correctAnswer,
                 state: {
-                    val: instance.responseValueMap[key[0]]
+                    val: _.isUndefined(instance.responseValueMap[key[0]]) ? instance._selectedIndex : instance.responseValueMap[key[0]]
                 },
                 score: correctAnswer ? instance._question.config.max_score : 0,
                 values: [telValues],
