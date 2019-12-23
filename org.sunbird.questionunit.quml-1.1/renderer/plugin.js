@@ -147,6 +147,11 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             correctAnswer = false;
         if (this._question.config.metadata.type == 'mcq') {
             var responseDeclaration = this._question.data.responseDeclaration;
+            if(_.isEmpty(instance.responseValueMap)){
+                if(instance._selectedIndex){
+                    instance.responseValueMap['responseValue'] = instance._selectedIndex;
+                }
+            }
             var key = _.keys(instance.responseValueMap);
             if (key.length > 0 && responseDeclaration[key[0]].correct_response.value === instance.responseValueMap[key[0]]) {
                 correctAnswer = true;
