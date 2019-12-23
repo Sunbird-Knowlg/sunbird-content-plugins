@@ -26,6 +26,7 @@ QuMLFeedbackPopup.showGoodJob = function() {
  */
 QuMLFeedbackPopup.hidePopup = function() {
   $("#qs-feedback-model-popup").hide();
+  QuMLFeedbackPopup.logTelemetry('feedback_popup');
 }
 /**
  * Hide the solution model popup on done/close
@@ -33,6 +34,7 @@ QuMLFeedbackPopup.hidePopup = function() {
  */
 QuMLFeedbackPopup.hideSolutionPopup = function(){
   $("#quml-solution-model-popup").hide();
+  QuMLFeedbackPopup.logTelemetry('close_solution');
 }
 /**
  * move to next stage or next question
