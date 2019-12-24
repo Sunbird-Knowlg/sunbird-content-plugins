@@ -107,6 +107,10 @@ and collection is using 16 grid layout so
 
 #content-meta-form label {
     color: rgba(27, 28, 29, 0.75);
+    font-size: .82857143em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 .28571429rem;
 }
 
 #content-meta-form input::placeholder,
