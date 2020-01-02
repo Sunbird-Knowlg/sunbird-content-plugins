@@ -746,6 +746,13 @@ MCQController.imagegrid.optionStyleUponClick = function (element) {
     $('.mcq2-2-option-imagegird').removeClass('opt-selected-imagegrid');
     var optElt = $(element).closest('.mcq2-2-option-imagegird');
     if (optElt) optElt.addClass('opt-selected-imagegrid');
+    $(element).addClass('selected');
+}
+MCQController.imagehorizontal.optionStyleUponClick = function (element) {
+    $('.mcq2-2-option-imagegird').removeClass('opt-selected-imagegrid');
+    var optElt = $(element).closest('.mcq2-2-option-imagegird');
+    if (optElt) optElt.addClass('opt-selected-imagegrid');
+    $(element).addClass('selected');
 }
 /**
  * called when the option in `imageGrid` layout is selected
