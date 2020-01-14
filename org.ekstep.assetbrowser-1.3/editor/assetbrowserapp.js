@@ -1187,7 +1187,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 });
             } else if(res.data.result.license.valid){
                 ctrl.previewVideo(request.url, ctrl.plugin, request.provider)
-                ctrl.setPublic('hide');
+                // ctrl.setPublic('hide');
                 $scope.$safeApply();
             }else{
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
