@@ -48,7 +48,6 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             <div class='sb-question-header question-bg'> \
                 <button  class='sb-btn sb-btn-primary sb-btn-normal' id='questionBtn' style='display: none;' type='button'>Question</button> \
                 <button  class='sb-btn sb-btn-secondary sb-btn-normal mr-0' id='answerBtn' type='button' style='display: inline-block;'>Answer</button> \
-                <button  class='sb-btn sb-btn-secondary sb-btn-normal mr-0' id='solutionBtn' type='button' style='display: none;'>"+ buttonLabel +"</button> \
             </div> \
             <div class='sb-question-content'> \
             <div class='page-section question-bg' id='question'> \
@@ -146,7 +145,6 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             if (!_.isEmpty(this._question.data.solutions)) {
 
                 document.getElementById('questionset').className = 'sb-question-dsp-container'
-                // document.getElementById('answerBtn').display = 'none'
                 document.getElementById('answerBtn').onclick = function() {
                     $('.sb-question-content').animate({
                         scrollTop: $('#answer').offset().top - 200
@@ -157,19 +155,6 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                         "type": "SELECT",
                         "values": [{
                             "option": "answer"
-                        }]
-                    });
-                }
-
-                document.getElementById('solutionBtn').onclick = function() {
-                    $('.sb-question-content').animate({
-                        scrollTop: $(document).height()
-                    });
-                    instance.logTelemetryInteract({target : { id : 'solutionBtn' }});
-                    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { // eslint-disable-line no-undef
-                        "type": "SELECT",
-                        "values": [{
-                             "option": "solution"
                         }]
                     });
                 }
@@ -186,20 +171,13 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                     });
                 }
                 $('.sb-question-content').scroll(function() {
-
-                    if($('#solution').position().top <= ($('.sb-question-content').height()) / 3){
-                        $('#answerBtn').css('display', 'none');
-                        $('#solutionBtn').css('display', 'none');
-                        $('#questionBtn').css('display', 'inline-block');
-                    } else if ($('#answer').position().top <= ($('.sb-question-content').height()) / 3){
-                        $('#answerBtn').css('display', 'none');
-                        $('#solutionBtn').css('display', 'inline-block');
-                        $('#questionBtn').css('display', 'none');
-                    } else if ($('#question').position().top <= ($('.sb-question-content').height()) / 3){
-                        $('#answerBtn').css('display', 'inline-block');
-                        $('#questionBtn').css('display', 'none');
-                        $('#solutionBtn').css('display', 'none');
-                    }
+                if ($('#answer').position().top <= ($('.sb-question-content').height()) / 2) {
+                    $('#answerBtn').css('display', 'none')
+                    $('#questionBtn').css('display', 'inline-block')
+                } else {
+                    $('#answerBtn').css('display', 'inline-block')
+                    $('#questionBtn').css('display', 'none')
+                }
                 })
              }
         else {
