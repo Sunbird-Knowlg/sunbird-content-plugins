@@ -15,7 +15,7 @@ QuMLFeedbackPopup.createSolutionPopUpElement = function(){
  * @memberof org.ekstep.questionunit.quml.quml_feedback_popup#
  */
 QuMLFeedbackPopup.showGoodJob = function() {
-  var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="feedback-popup-solution"><div class="feedback-overlay"><div class="feedback-content feedback-popup-content correct-answer-popup"><div class="left-section"><div class="result"><div class="banner"><img height="100%" width="100%" src="assets/icons/banner3.png"></div><div class="empty-layer"></div><div class="sign-board"><img width="40%" src="assets/icons/check.png"></div></div></div><div class="right-section"><button type="button" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hidePopup();QuMLFeedbackPopup.moveToNextStage();">Next</button><% if(QuMLFeedbackPopup._questionData && QuMLFeedbackPopup._questionData.solution && QuMLFeedbackPopup._questionData.solution.length > 0) { %><button type="button" class="sb-btn sb-btn-normal sb-btn-outline-primary sb-btn-responsive" onclick="QuMLFeedbackPopup.showSolution();">Solution</button><% } %></div></div></div></div></div> </div>');
+  var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="feedback-popup-solution"><div class="feedback-overlay"><div class="feedback-content feedback-popup-content correct-answer-popup"><div class="left-section"><div class="result"><div class="banner"><img height="100%" width="100%" src="assets/icons/banner3.png"></div><div class="empty-layer"></div><div class="sign-board"><img width="40%" src="assets/icons/check.png"></div></div></div><div class="right-section"><button type="button" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hidePopup();QuMLFeedbackPopup.moveToNextStage();">Next</button><% if(QuMLFeedbackPopup._questionData && QuMLFeedbackPopup._questionData.solutions && QuMLFeedbackPopup._questionData.solutions.length > 0) { %><button type="button" class="sb-btn sb-btn-normal sb-btn-outline-primary sb-btn-responsive" onclick="QuMLFeedbackPopup.showSolution();">Solution</button><% } %></div></div></div></div></div> </div>');
   $("#qs-feedback-model-popup").html(goodJobTemplate);
   $("#qs-feedback-model-popup").show();
   QuMLFeedbackPopup.createSolutionPopUpElement();
@@ -53,16 +53,16 @@ QuMLFeedbackPopup.moveToNextStage = function() {
  * @memberof org.ekstep.questionunit.quml.quml_feedback_popup#
  */
 QuMLFeedbackPopup.showTryAgain = function() {
-  var tryAgainTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="feedback-popup-solution"><div class="feedback-overlay"><div class="feedback-content feedback-popup-content wrong-answer-popup"><div class="left-section"><div class="result"><div class="banner"><img height="100%" width="100%" src="assets/icons/banner1.png"></div><div class="empty-layer"></div><div class="sign-board"><img width="40%" src="assets/icons/incorrect.png"></div></div></div><div class="right-section"><button type="button" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hidePopup();QuMLFeedbackPopup.moveToNextStage();">Next</button><button type="button" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hidePopup();QuMLFeedbackPopup.showRetry();">Try Again</button><% if(QuMLFeedbackPopup._questionData && QuMLFeedbackPopup._questionData.solution &&QuMLFeedbackPopup._questionData.solution.length > 0) { %><button type="button" class="sb-btn sb-btn-normal sb-btn-outline-primary sb-btn-responsive" onclick="QuMLFeedbackPopup.showSolution();">Solution</button><% } %></div></div></div></div></div> </div>');
+  var tryAgainTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="feedback-popup-solution"><div class="feedback-overlay"><div class="feedback-content feedback-popup-content wrong-answer-popup"><div class="left-section"><div class="result"><div class="banner"><img height="100%" width="100%" src="assets/icons/banner1.png"></div><div class="empty-layer"></div><div class="sign-board"><img width="40%" src="assets/icons/incorrect.png"></div></div></div><div class="right-section"><button type="button" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hidePopup();QuMLFeedbackPopup.moveToNextStage();">Next</button><button type="button" class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hidePopup();QuMLFeedbackPopup.showRetry();">Try Again</button><% if(QuMLFeedbackPopup._questionData && QuMLFeedbackPopup._questionData.solutions &&QuMLFeedbackPopup._questionData.solutions.length > 0) { %><button type="button" class="sb-btn sb-btn-normal sb-btn-outline-primary sb-btn-responsive" onclick="QuMLFeedbackPopup.showSolution();">Solution</button><% } %></div></div></div></div></div> </div>');
   $("#qs-feedback-model-popup").html(tryAgainTemplate);
   $("#qs-feedback-model-popup").show();
   QuMLFeedbackPopup.createSolutionPopUpElement();
 }
 QuMLFeedbackPopup.getHtmlAsSolutionTemplate = function(){
-  return '<div class="feedback-content"><div class="close-btn"> <img src="assets/icons/feedback-close.svg" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-content-questions">'+ QuMLFeedbackPopup._questionData.solution[0].value  +'</div>    <div class="feedback-action-buttons"> <button class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> Done </button> </div> </div>';
+  return '<div class="feedback-content"><div class="close-btn"> <img src="renderer/assets/feedback-close.svg" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-content-questions">'+ QuMLFeedbackPopup._questionData.solutions[0].value  +'</div>    <div class="feedback-action-buttons"> <button class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> Done </button> </div> </div>';
 }
-QuMLFeedbackPopup.getVideoAsSolutionTemplate = function(){
-  return '<div class="feedback-gallery-view"> <div class="close-btn"> <img src="assets/icons/feedback-close.svg" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-gallery"> <video class="w-100 video-section" controls=""> <source src="mov_bbb.mp4" type="video/mp4"> </video> </div> </div>';
+QuMLFeedbackPopup.getVideoAsSolutionTemplate = function(videoPath){
+  return '<div class="feedback-gallery-view"> <div class="close-btn"> <img src="renderer/assets/feedback-close.svg" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-gallery"> <video class="w-100 video-section" controls=""> <source src="'+ videoPath +'" type="video/mp4"> </video> </div> </div>';
 }
 /**
  * show solution model popup
@@ -71,10 +71,15 @@ QuMLFeedbackPopup.getVideoAsSolutionTemplate = function(){
 QuMLFeedbackPopup.showSolution = function() {
   QuMLFeedbackPopup.logTelemetry('solution_btn');
   var template;
-  if(QuMLFeedbackPopup._questionData.solution[0].type == 'html'){
+  if(QuMLFeedbackPopup._questionData.solutions[0].type == 'html'){
     template = QuMLFeedbackPopup.getHtmlAsSolutionTemplate();
-  }else{
-    template = QuMLFeedbackPopup.getVideoAsSolutionTemplate();
+  }else if(QuMLFeedbackPopup._questionData.solutions[0].type == 'video'){
+    var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video'; });
+    if(index >= 0){
+      var videoPath = QuMLFeedbackPopup._questionData.media[index].src;
+      template = QuMLFeedbackPopup.getVideoAsSolutionTemplate(videoPath);
+    }
+    
   }
   $("#quml-solution-model-popup").html(template);
   $("#quml-solution-model-popup").show();

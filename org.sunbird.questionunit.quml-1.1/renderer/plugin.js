@@ -24,17 +24,18 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
         }
 
         /* check for if questiondata solution is not empty and question type is reference */
-        if (questionData.solution.length != 0 && questionConfig.metadata.type == 'reference') {
-            questionData.solution[0].value = this.replaceAssetWithBaseURL(questionData.solution[0].value)
+        if (!_.isEmpty(questionData.solutions) && questionConfig.metadata.type == 'reference') {
+            questionData.solutions[0].value = this.replaceAssetWithBaseURL(questionData.solutions[0].value)
 
-            if (/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.solution[0].value)) {
-                questionData.solution[0].value = questionData.solution[0].value.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
+            if (/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.solutions[0].value)) {
+                questionData.solutions[0].value = questionData.solutions[0].value.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
             }
-            if (/(\^\\textdegree)/.test(questionData.solution[0].value)) {
-                questionData.solution[0].value = questionData.solution[0].replace(/(\^\\textdegree)/gm, "^\\degree")
+            if (/(\^\\textdegree)/.test(questionData.solutions[0].value)) {
+                questionData.solutions[0].value = questionData.solutions[0].replace(/(\^\\textdegree)/gm, "^\\degree")
             }
         }
         event.target._currentQuestion.data.__cdata = JSON.stringify(questionData);
+        QuMLFeedbackPopup._questionData = questionData;
         this._super(event);
         var buttonLabel = "Solution"
         var starDiv = "<span class='sb-star-icon'>&#9733;</span>";
@@ -59,11 +60,43 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
               <div  class='sb-question-content-card'>" + questionData.answer + "</div> \
             </div>";
             var solution = "";
-            if(questionData.solution.length != 0 && this._question.data.solution && this._question.data.solution[0].value.length > 0) {
+            if(!_.isEmpty(questionData.solutions)) {
+             if(questionData.solutions[0].type == 'video'){
+                var thumbnail = '';
+                var videoName = '';
+                var index = _.findIndex(questionData.media, function(o) { return o.type == 'video'; });
+                if(index >= 0){
+                  thumbnail = questionData.media[index].thumbnail;
+                  videoName = questionData.media[index].name;
+                }
+                QuMLFeedbackPopup.createSolutionPopUpElement();
+                var videoDiv = '<div class="sbcard-solution-content">\
+                    <div class="solution-container">\
+                      <div class="sb-solution-card">\
+                        <img src="'+thumbnail+'" alt="image">\
+                      </div>\
+                      <div class="sb-solution-card-overlay">\
+                        <div class="play-btn">\
+                        <img src="renderer/assets/player-play-button.png" onclick="QuMLFeedbackPopup.showSolution()">\
+                        </div>\
+                      </div>\
+                    </div>\
+                    <div class="solution-content">\
+                      <button class="sb-btn sb-btn-normal sb-btn-outline-primary sb-btn-responsive" type="button" onclick="QuMLFeedbackPopup.showSolution()">Play\
+                          Video</button>\
+                          <p>'+ videoName +'</p>\
+                    </div>\
+                </div>';
                 solution = "<div class='page-section answer-bg' id='solution'> \
-               <div class='sb-answer'>" + buttonLabel + "</div> \
-               <div  class='sb-question-content-card'>" + questionData.solution[0].value + "</div> \
-             </div>";
+                <div class='sb-answer'>" + buttonLabel + "</div> \
+                <div  class='sb-question-content-card'>" + videoDiv + "</div> \
+                </div>";
+             }else if(questionData.solutions[0].type == 'html'){
+                solution = "<div class='page-section answer-bg' id='solution'> \
+                <div class='sb-answer'>" + buttonLabel + "</div> \
+                <div  class='sb-question-content-card'>" + questionData.solutions[0].value + "</div> \
+                </div>";
+             }
             }   
             this._question.template = questionAnswer + solution + "</div></div>";
              
@@ -110,7 +143,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             }
         });
         if(this._question.config.metadata.type == 'reference'){
-            if (this._question.data.solution.length != 0 && this._question.data.solution && this._question.data.solution[0].value.length > 0) {
+            if (!_.isEmpty(this._question.data.solutions)) {
 
                 document.getElementById('questionset').className = 'sb-question-dsp-container'
                 // document.getElementById('answerBtn').display = 'none'

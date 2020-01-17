@@ -547,7 +547,7 @@ body{
 .feedback-content .close-btn {
   width: 2.3em;
   height: 2.3em;
-  position: fixed;
+  position: absolute;
   right: 1em;
   top: 1em;
   cursor: pointer;
@@ -826,4 +826,44 @@ color: #fff;
 }
 .w-100{
   width:100%;
+}
+.sbcard-solution-content {
+  display: flex;
+  font-size: 0.8em;
+}
+.solution-container {
+  margin-right: 24px;
+  position: relative;
+}
+.sb-solution-card {
+  min-width: 13.375em;
+  width: 100%;
+  height: 100%;
+}
+.sb-solution-card img {
+  width: 100%;
+}
+.sb-solution-card-overlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.sb-solution-card-overlay .play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sb-solution-card-overlay .play-btn img {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
