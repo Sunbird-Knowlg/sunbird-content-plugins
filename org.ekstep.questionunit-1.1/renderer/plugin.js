@@ -5,7 +5,8 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     template: undefined,
     data: {},
     config: {},
-    state: undefined
+    state: undefined,
+    overrideFeedbackPopUp: false
   },
   /**
    * Initialize the plugin

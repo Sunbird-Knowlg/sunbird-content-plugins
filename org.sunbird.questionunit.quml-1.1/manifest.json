@@ -23,7 +23,22 @@
         "dependencies": [{
             "type": "css",
             "src": "renderer/styles/style.css"
-        }]
+        },
+        {
+            "type": "js",
+            "src": "renderer/utils/quml_feedback_popup.js"
+        },
+        {
+            "type": "image",
+            "src": "renderer/assets/feedback-close.svg",
+            "assetId":"org.ekstep.questionunit.quml.close"
+        },
+        {
+            "type": "image",
+            "src": "renderer/assets/player-play-button.png",
+            "assetId":"org.ekstep.questionunit.quml.play"
+        }
+    ]
     },
     "dependencies": [{
         "plugin": "org.ekstep.questionunit",
