@@ -291,7 +291,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
     },
     /**
    * provide media url to audio image
-   * @memberof org.ekstep.questionunit.mcq
+   * @memberof org.sunbird.questionunit.quml
    * @returns {String} url.
    * @param {String} icon from question set.
    */
@@ -307,7 +307,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
   },
   /**
   * provide media url to asset
-  * @memberof org.ekstep.questionunit.mcq
+  * @memberof org.sunbird.questionunit.quml
   * @param {String} url from question set.
   * @returns {String} url.
   */
