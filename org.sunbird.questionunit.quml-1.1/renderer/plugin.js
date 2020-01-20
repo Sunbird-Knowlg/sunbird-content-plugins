@@ -8,6 +8,9 @@ org.ekstep.questionunit.quml = {};
 org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questionUnitPlugin.extend({
     responseValueMap: {},
     _selectedIndex: undefined,
+    setQuestionTemplate: function () {
+        QuMLFeedbackPopup.initTemplate(this);// eslint-disable-line no-undef
+    },
     preQuestionShow: function(event) {
         this._question.overrideFeedbackPopUp = true; // Overriding Feedback popup
         if(isbrowserpreview && (Renderer.theme._basePath === "/assets/")){
@@ -76,7 +79,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                       </div>\
                       <div class="sb-solution-card-overlay">\
                         <div class="play-btn">\
-                        <img src="renderer/assets/player-play-button.png" onclick="QuMLFeedbackPopup.showSolution()">\
+                        <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('player-play-button.png') + '" onclick="QuMLFeedbackPopup.showSolution()">\
                         </div>\
                       </div>\
                     </div>\
@@ -286,6 +289,36 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             }
         }      
     },
+    /**
+   * provide media url to audio image
+   * @memberof org.sunbird.questionunit.quml
+   * @returns {String} url.
+   * @param {String} icon from question set.
+   */
+  getDefaultAsset: function (icon) {
+    //In browser and device base path is different so we have to check
+    if (isbrowserpreview) {// eslint-disable-line no-undef
+      return this.getAssetUrl(org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/assets/" + icon));
+    }
+    else {
+      //static url
+      return this.getAssetUrl("/content-plugins/" + this._manifest.id + "-" + this._manifest.ver + "/renderer/assets/" + icon);
+    }
+  },
+  /**
+  * provide media url to asset
+  * @memberof org.sunbird.questionunit.quml
+  * @param {String} url from question set.
+  * @returns {String} url.
+  */
+  getAssetUrl: function (url) {
+    if (isbrowserpreview) {// eslint-disable-line no-undef
+      return url;
+    }
+    else {
+      return  EkstepRendererAPI.getBaseURL() + url;
+    }
+  },
     /**
      * provide evaluated result
      * @memberof org.ekstep.questionunit.quml
