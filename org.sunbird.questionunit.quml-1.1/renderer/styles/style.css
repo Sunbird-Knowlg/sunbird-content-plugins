@@ -1,3 +1,7 @@
+ol {
+  list-style-type: decimal;
+  list-style-position: inside;
+}
 .sb-question-dsp-container {
   height: 100%;
   /* padding-top: 24px; */
