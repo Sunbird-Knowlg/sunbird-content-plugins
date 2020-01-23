@@ -1,4 +1,5 @@
-ol, ul {
+ol {
+  list-style-type: decimal;
   list-style-position: inside;
 }
 .sb-question-dsp-container {
