@@ -133,13 +133,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
   } 
   catch(e) {
       org.ekstep.pluginframework.eventManager.dispatchEvent('plugin:error', { plugin: manifest.id, version: manifest.ver, action: 'load', err: e })
-      TelemetryService.error(
-        { 
-          'err': e.error, 
-          'errtype': 'SYSTEM',
-          'stacktrace': e.stackTrace,
-          'plugin': e.pluginType,
-        }); 
+      TelemetryService.error({ 'err': e.error, 'errtype': 'SYSTEM', 'stacktrace': e.stackTrace, 'plugin': e.pluginType }); 
     }
   },
   renderQuestion: function(question) {
