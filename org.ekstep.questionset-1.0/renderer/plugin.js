@@ -45,13 +45,8 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     qsQuizPlugin: 'org.ekstep.questionset.quiz'
   },
   _questionUnitPlugins: [],
-  initPlugin: function(err,data) {
-    if(err) {
-      org.ekstep.pluginframework.eventManager.dispatchEvent('plugin:error', { plugin: manifest.id, version: manifest.ver, action: 'load', err: e })
-      TelemetryService.error({ 'err': e.error, 'errtype': 'SYSTEM', 'stacktrace': e.stackTrace, 'plugin': e.pluginType}); 
-    }
-    else{
-      try {
+  initPlugin: function(data) {
+    try {
       var instance = this;
 
       /**
@@ -145,7 +140,6 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
           'stacktrace': e.stackTrace,
           'plugin': e.pluginType,
         }); 
-      }
     }
   },
   renderQuestion: function(question) {
