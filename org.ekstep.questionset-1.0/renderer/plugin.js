@@ -45,89 +45,108 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     qsQuizPlugin: 'org.ekstep.questionset.quiz'
   },
   _questionUnitPlugins: [],
-  initPlugin: function(data) {
-    var instance = this;
+  initPlugin: function(err,data) {
+    if(err) {
+      org.ekstep.pluginframework.eventManager.dispatchEvent('plugin:error', { plugin: manifest.id, version: manifest.ver, action: 'load', err: e })
+      TelemetryService.error({ 'err': e.error, 'errtype': 'SYSTEM', 'stacktrace': e.stackTrace, 'plugin': e.pluginType}); 
+    }
+    else{
+      try {
+      var instance = this;
 
-    /**
-     * TODO: Remove the following FIX.
-     * The following fix is applied to remove duplicate naviagtion registrations by questionset plugin.
-     * This can be removed after https://github.com/ekstep/CE-Core-Plugins/pull/1262 is deployed.
-     */
-
-    org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins = org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins.filter(function(p) {
-      return p && (p.id != instance._data.id);
-    });
-
-    /**
-     * End of FIX
-     */
-
-    // De-Register for any existing navigation hooks (replay scenario)
-    this.deregisterNavigation(instance);
-
-    // On content replay, reset all question set information.
-    EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
-      instance.resetQS();
-    }, instance);
-    // Remove duplicate event listener
-    EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
-    EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function() {
-      this._displayedPopup = false;
-    }, instance);
-    // Event handler to save question state
-    EventBus.listeners['org.ekstep.questionset:saveQuestionState'] = undefined;
-    /*EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
-      var state = event.target;
-      if (instance._currentQuestion) {
-        instance.saveQuestionState(instance._currentQuestion.id, state);
+      /**
+       * TODO: Remove the following FIX.
+       * The following fix is applied to remove duplicate naviagtion registrations by questionset plugin.
+       * This can be removed after https://github.com/ekstep/CE-Core-Plugins/pull/1262 is deployed.
+       */
+  
+      org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins = org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins.filter(function(p) {
+        return p && (p.id != instance._data.id);
+      });
+  
+      /**
+       * End of FIX
+       */
+  
+      // De-Register for any existing navigation hooks (replay scenario)
+      this.deregisterNavigation(instance);
+  
+      // On content replay, reset all question set information.
+      EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
+        instance.resetQS();
+      }, instance);
+      // Remove duplicate event listener
+      EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
+      EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function() {
+        this._displayedPopup = false;
+      }, instance);
+      // Event handler to save question state
+      EventBus.listeners['org.ekstep.questionset:saveQuestionState'] = undefined;
+      /*EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
+        var state = event.target;
+        if (instance._currentQuestion) {
+          instance.saveQuestionState(instance._currentQuestion.id, state);
+        }
+      }, this);*/
+      // Load the DOM container that houses the unit templates
+      this.loadTemplateContainer();
+      this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
+      if(this._questionSetConfig.shuffle_questions){
+        this._questionSetConfig.max_score = this._questionSetConfig.total_items;
       }
-    }, this);*/
-    // Load the DOM container that houses the unit templates
-    this.loadTemplateContainer();
-    this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
-    if(this._questionSetConfig.shuffle_questions){
-      this._questionSetConfig.max_score = this._questionSetConfig.total_items;
-    }
-    QSTelemetryLogger.qsConfig = this._questionSetConfig;
-    if(data.isQuestionPreview){
-      // get navigation plugin instance & empty all customNavigation object of it
-      org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins=[]
-    }
-    // this.setupNavigation();
-    // Get all questions in the question set
-    var quesArray = JSON.parse(JSON.stringify(data[this._constants.questionPluginId]));
-    //if question set have one question then convert from object to array for device issue
-    this._masterQuestionSet = _.isArray(quesArray) ? quesArray : [quesArray];
-    // If this isn't the first time the question set is being rendered, restore its earlier state
-    this._questionStates = {};
-    this._renderedQuestions = [];
-    var question = undefined;
-    var savedQSState = this.getQuestionSetState();
+      QSTelemetryLogger.qsConfig = this._questionSetConfig;
+      if(data.isQuestionPreview){
+        // get navigation plugin instance & empty all customNavigation object of it
+        org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins=[]
+      }
+      // this.setupNavigation();
+      // Get all questions in the question set
+      var quesArray = JSON.parse(JSON.stringify(data[this._constants.questionPluginId]));
+      //if question set have one question then convert from object to array for device issue
+      this._masterQuestionSet = _.isArray(quesArray) ? quesArray : [quesArray];
+      // If this isn't the first time the question set is being rendered, restore its earlier state
+      this._questionStates = {};
+      this._renderedQuestions = [];
+      var question = undefined;
+      var savedQSState = this.getQuestionSetState();
+  
+      EkstepRendererAPI.addEventListener("renderer:plugin:reset", function(e) {
+        this.reInstateQuestionsOnReview(e.target.data);
+      }, this);
+      
+      var savedCurrentQuestion = this.questionExistInQS(savedQSState);
+      if (savedQSState && savedCurrentQuestion) {
+        this._renderedQuestions = savedQSState.renderedQuestions;
+        question = savedQSState.currentQuestion;
+        this._questionStates = savedQSState.questionStates;
+        this._currentQuestionState = this.getQuestionState(question.id);
+        this._itemIndex = savedQSState.itemIndex >= 0 ? savedQSState.itemIndex : -1;
+      } else {
+        question = this.getNextQuestion();
+      }
+      if(this._itemIndex > 0){
+          EventBus.dispatch("renderer:previous:enable");
+      }
+  
+      // Register for navigation hooks
+      this.registerNavigation(instance);
+  
+      this.saveQuestionSetState();
+      // Render the question
+      this.renderQuestion(question);
 
-    EkstepRendererAPI.addEventListener("renderer:plugin:reset", function(e) {
-      this.reInstateQuestionsOnReview(e.target.data);
-    }, this);
-    
-    var savedCurrentQuestion = this.questionExistInQS(savedQSState);
-    if (savedQSState && savedCurrentQuestion) {
-      this._renderedQuestions = savedQSState.renderedQuestions;
-      question = savedQSState.currentQuestion;
-      this._questionStates = savedQSState.questionStates;
-      this._currentQuestionState = this.getQuestionState(question.id);
-      this._itemIndex = savedQSState.itemIndex >= 0 ? savedQSState.itemIndex : -1;
-    } else {
-      question = this.getNextQuestion();
+  } 
+  catch(e) {
+      org.ekstep.pluginframework.eventManager.dispatchEvent('plugin:error', { plugin: manifest.id, version: manifest.ver, action: 'load', err: e })
+      TelemetryService.error(
+        { 
+          'err': e.error, 
+          'errtype': 'SYSTEM',
+          'stacktrace': e.stackTrace,
+          'plugin': e.pluginType,
+        }); 
+      }
     }
-    if(this._itemIndex > 0){
-        EventBus.dispatch("renderer:previous:enable");
-    }
-
-    // Register for navigation hooks
-    this.registerNavigation(instance);
-
-    this.saveQuestionSetState();
-    // Render the question
-    this.renderQuestion(question);
   },
   renderQuestion: function(question) {
     var instance = this;
