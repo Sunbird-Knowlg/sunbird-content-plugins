@@ -72,14 +72,13 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                   videoName = questionData.media[index].name;
                 }
                 QuMLFeedbackPopup.createSolutionPopUpElement();
+                var thumbnailDiv = thumbnail ? '<div class="sb-solution-card"><img src="'+thumbnail+'" alt="image"></div>' :  '<div class="sb-solution-card"></div>';
+
                 var videoDiv = '<div class="sbcard-solution-content">\
-                    <div class="solution-container">\
-                      <div class="sb-solution-card">\
-                        <img src="'+thumbnail+'" alt="image">\
-                      </div>\
+                    <div class="solution-container" onclick="QuMLFeedbackPopup.showSolution()">' + thumbnailDiv + '\
                       <div class="sb-solution-card-overlay">\
                         <div class="play-btn">\
-                        <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('player-play-button.png') + '" onclick="QuMLFeedbackPopup.showSolution()">\
+                        <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('player-play-button.png') + '">\
                         </div>\
                       </div>\
                     </div>\
