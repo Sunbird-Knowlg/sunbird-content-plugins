@@ -28,8 +28,6 @@ QuMLFeedbackPopup.showGoodJob = function() {
  */
 QuMLFeedbackPopup.hidePopup = function() {
   $("#qs-feedback-model-popup").hide();
-  var vid = document.getElementById("solutionVideo");
-  vid && vid.pause();
   QuMLFeedbackPopup.logTelemetry('feedback_popup');
 }
 /**
@@ -38,6 +36,8 @@ QuMLFeedbackPopup.hidePopup = function() {
  */
 QuMLFeedbackPopup.hideSolutionPopup = function(){
   $("#quml-solution-model-popup").hide();
+  var vid = document.getElementById("solutionVideo");
+  vid && vid.pause();
   QuMLFeedbackPopup.logTelemetry('close_solution');
 }
 /**
