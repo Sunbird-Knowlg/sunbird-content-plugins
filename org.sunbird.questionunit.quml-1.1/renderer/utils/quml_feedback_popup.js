@@ -78,7 +78,7 @@ QuMLFeedbackPopup.showSolution = function() {
   if(QuMLFeedbackPopup._questionData.solutions[0].type == 'html'){
     template = QuMLFeedbackPopup.getHtmlAsSolutionTemplate();
   }else if(QuMLFeedbackPopup._questionData.solutions[0].type == 'video'){
-    var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video'; });
+    var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video' && o.id === QuMLFeedbackPopup._questionData.solutions[0].value; });
     if(index >= 0){
       var videoPath = QuMLFeedbackPopup._questionData.media[index].src;
       template = QuMLFeedbackPopup.getVideoAsSolutionTemplate(videoPath);

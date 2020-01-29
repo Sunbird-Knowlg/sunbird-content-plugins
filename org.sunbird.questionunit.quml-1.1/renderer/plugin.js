@@ -66,7 +66,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
              if(questionData.solutions[0].type == 'video'){
                 var thumbnail = '';
                 var videoName = '';
-                var index = _.findIndex(questionData.media, function(o) { return o.type == 'video'; });
+                var index = _.findIndex(questionData.media, function(o) { return o.type == 'video' && o.id === questionData.solutions[0].value; });
                 if(index >= 0){
                   thumbnail = questionData.media[index].thumbnail;
                   videoName = questionData.media[index].name;
