@@ -66,20 +66,19 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
              if(questionData.solutions[0].type == 'video'){
                 var thumbnail = '';
                 var videoName = '';
-                var index = _.findIndex(questionData.media, function(o) { return o.type == 'video'; });
+                var index = _.findIndex(questionData.media, function(o) { return o.type == 'video' && o.id === questionData.solutions[0].value; });
                 if(index >= 0){
                   thumbnail = questionData.media[index].thumbnail;
                   videoName = questionData.media[index].name;
                 }
                 QuMLFeedbackPopup.createSolutionPopUpElement();
+                var thumbnailDiv = thumbnail ? '<div class="sb-solution-card"><img src="'+thumbnail+'" alt="image"></div>' :  '<div class="sb-solution-card"></div>';
+
                 var videoDiv = '<div class="sbcard-solution-content">\
-                    <div class="solution-container">\
-                      <div class="sb-solution-card">\
-                        <img src="'+thumbnail+'" alt="image">\
-                      </div>\
+                    <div class="solution-container" onclick="QuMLFeedbackPopup.showSolution()">' + thumbnailDiv + '\
                       <div class="sb-solution-card-overlay">\
                         <div class="play-btn">\
-                        <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('player-play-button.png') + '" onclick="QuMLFeedbackPopup.showSolution()">\
+                        <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('player-play-button.png') + '">\
                         </div>\
                       </div>\
                     </div>\

@@ -5,11 +5,9 @@
  */
 var QuMLFeedbackPopup = {};
 QuMLFeedbackPopup._questionData = {};
-
 QuMLFeedbackPopup.initTemplate = function (pluginInstance) {
   QuMLFeedbackPopup.pluginInstance = pluginInstance;
 };
-
 QuMLFeedbackPopup.createSolutionPopUpElement = function(){
   var solutionFeedback = '<div id="quml-solution-model-popup" style="position:absolute;width:100%;height:100%;z-index:999999;top:0;display:none;"></div>'
   $("#gameArea").append(solutionFeedback);
@@ -38,6 +36,8 @@ QuMLFeedbackPopup.hidePopup = function() {
  */
 QuMLFeedbackPopup.hideSolutionPopup = function(){
   $("#quml-solution-model-popup").hide();
+  var vid = document.getElementById("solutionVideo");
+  vid && vid.pause();
   QuMLFeedbackPopup.logTelemetry('close_solution');
 }
 /**
@@ -66,7 +66,7 @@ QuMLFeedbackPopup.getHtmlAsSolutionTemplate = function(){
   return '<div class="feedback-content"><div class="close-btn"> <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('feedback-close.svg') + '" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-content-questions">'+ QuMLFeedbackPopup._questionData.solutions[0].value  +'</div>    <div class="feedback-action-buttons"> <button class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> Done </button> </div> </div>';
 }
 QuMLFeedbackPopup.getVideoAsSolutionTemplate = function(videoPath){
-  return '<div class="feedback-gallery-view"> <div class="close-btn"> <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('feedback-close.svg') + '" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-gallery"> <video class="w-100 video-section" controls=""> <source src="'+ videoPath +'" type="video/mp4"> </video> </div> </div>';
+  return '<div class="feedback-gallery-view"> <div class="close-btn"> <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('feedback-close.svg') + '" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-gallery"> <video class="w-100 video-section" controls="" id="solutionVideo"> <source src="'+ videoPath +'" type="video/mp4"> </video> </div> </div>';
 }
 /**
  * show solution model popup
@@ -78,12 +78,11 @@ QuMLFeedbackPopup.showSolution = function() {
   if(QuMLFeedbackPopup._questionData.solutions[0].type == 'html'){
     template = QuMLFeedbackPopup.getHtmlAsSolutionTemplate();
   }else if(QuMLFeedbackPopup._questionData.solutions[0].type == 'video'){
-    var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video'; });
+    var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video' && o.id === QuMLFeedbackPopup._questionData.solutions[0].value; });
     if(index >= 0){
       var videoPath = QuMLFeedbackPopup._questionData.media[index].src;
       template = QuMLFeedbackPopup.getVideoAsSolutionTemplate(videoPath);
     }
-    
   }
   $("#quml-solution-model-popup").html(template);
   $("#quml-solution-model-popup").show();
