@@ -301,7 +301,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
           "framework": ecEditor.getContext('framework')
         };
         for (var key in $scope.questionMetaData) {
-          metadata[key] = $scope.questionMetaData[key];
+          // metadata[key] = $scope.questionMetaData[key];
+          (key !== 'data') ? (metadata[key] = $scope.questionMetaData[key]) : '';
+
         }
         var dynamicOptions = [{"answer": true, "value": {"type": "text", "asset": "1"}}];
         var mtfoptions = [{
