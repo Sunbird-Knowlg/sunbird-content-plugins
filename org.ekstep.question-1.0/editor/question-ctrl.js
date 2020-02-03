@@ -266,7 +266,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 
         for (var property in object.formData.metaData) {
           if (!_.isUndefined(metaDataObject[property])) {
-            if(property !== 'data' || property !== 'questionTitle' || property !== 'topicData'){
+            if(property !== 'data' && property !== 'questionTitle' && property !== 'topicData'){
               $scope.questionMetaData[property] = metaDataObject[property];
             } 
           }
