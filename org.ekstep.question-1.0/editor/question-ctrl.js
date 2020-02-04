@@ -263,11 +263,17 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
      	if(object.isValid){
         var metaDataObject = object.formData.metaData;
         _.extend(metaDataObject, {'title': metaDataObject.name});
+
         for (var property in object.formData.metaData) {
-          if (metaDataObject[property]) {
-            $scope.questionMetaData[property] = metaDataObject[property];
+          if (!_.isUndefined(metaDataObject[property])) {
+            if(property !== 'data' && property !== 'questionTitle' && property !== 'topicData'){
+              $scope.questionMetaData[property] = metaDataObject[property];
+            } else {
+              delete $scope.questionMetaData[property];
+            }
           }
         }
+
         delete $scope.questionMetaData.level;
         var questionFormData = {};
         var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
@@ -301,7 +307,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
           "framework": ecEditor.getContext('framework')
         };
         for (var key in $scope.questionMetaData) {
-          metadata[key] = $scope.questionMetaData[key];
+          // metadata[key] = $scope.questionMetaData[key];
+          (key !== 'data') ? (metadata[key] = $scope.questionMetaData[key]) : '';
+
         }
         var dynamicOptions = [{"answer": true, "value": {"type": "text", "asset": "1"}}];
         var mtfoptions = [{
