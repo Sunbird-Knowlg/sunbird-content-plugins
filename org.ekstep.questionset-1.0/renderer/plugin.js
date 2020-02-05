@@ -200,7 +200,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
         }else{
           if(!pluginInstance._question.overrideFeedbackPopUp){
             QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
-            instance._displayedPopup = true;
+            // instance._displayedPopup = true;
           }
           if(instance._currentQuestionState && _.isEqual(instance._currentQuestionState.val, result.state.val)){
             instance.renderNextQuestion();
