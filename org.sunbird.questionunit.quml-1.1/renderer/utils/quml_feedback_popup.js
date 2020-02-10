@@ -81,12 +81,17 @@ QuMLFeedbackPopup.showSolution = function() {
     var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video' && o.id === QuMLFeedbackPopup._questionData.solutions[0].value; });
     if(index >= 0){
       var videoPath = QuMLFeedbackPopup._questionData.media[index].src;
+      videoPath = QuMLFeedbackPopup.replaceAssetWithBaseURL(videoPath);
       template = QuMLFeedbackPopup.getVideoAsSolutionTemplate(videoPath);
     }
   }
   $("#quml-solution-model-popup").html(template);
   $("#quml-solution-model-popup").show();
 }
+QuMLFeedbackPopup.replaceAssetWithBaseURL = function(questionData) {
+  return  (questionData) && questionData.split('/assets/public/').join(EkstepRendererAPI.getBaseURL() + 'assets/public/');
+}
+
 /**
  * hide try again model popup on navigation
  * @memberof org.ekstep.questionunit.quml.quml_feedback_popup#
