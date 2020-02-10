@@ -47,6 +47,14 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
             starDiv = "";
         }
         if (this._question.config.metadata.type == 'reference') {
+            questionData.answer = this.replaceAssetWithBaseURL(questionData.answer);
+            if (/<div\s(?:class="mathText")>(.*?)<\/div>/.test(questionData.answer)) {
+                questionData.answer = questionData.answer.replace(/<div\s(?:class="mathText")>(.*?)<\/div>/gm, "<span class=\"mathText\">$1</span>")
+            }
+            if (/(\^\\textdegree)/.test(questionData.answer)) {
+                questionData.answer = questionData.answer.replace(/(\^\\textdegree)/gm, "^\\degree")
+            }
+
             var questionAnswer = "<div class='sb-question-dsp-body'> \
             <div class='sb-question-header question-bg'> \
                 <button  class='sb-btn sb-btn-primary sb-btn-normal' id='questionBtn' style='display: none;' type='button'>Question</button> \
@@ -302,7 +310,7 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
     }
     else {
       //static url
-      return this.getAssetUrl("/content-plugins/" + this._manifest.id + "-" + this._manifest.ver + "/renderer/assets/" + icon);
+      return this.getAssetUrl("content-plugins/" + this._manifest.id + "-" + this._manifest.ver + "/renderer/assets/" + icon);
     }
   },
   /**
