@@ -254,7 +254,9 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    top: 26%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .audio-icon {
@@ -386,7 +388,9 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    top: 26%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .option-text-container-mcq>span>p{
     overflow: hidden;
