@@ -87,6 +87,11 @@ org.ekstep.contenteditor.basePlugin.extend({
             'dims': userData.etags.dims || [],
             'partner': userData.etags.partner || []
         };
+        /* istanbul ignore else */
+        if(meta.contentType === 'SelfAssess') {
+            configuration.context.endPage = [{"contentType":["SelfAssess"],"template":"assessment"}];
+        }
+
         if (ecEditor.getConfig('previewConfig')) {
             configuration.config = ecEditor.getConfig('previewConfig');
         } else {
