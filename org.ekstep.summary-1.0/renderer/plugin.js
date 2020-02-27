@@ -23,39 +23,10 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var instance = this;
     var assessTelemetryData = org.ekstep.service.content.getTelemetryEvents();
     _.forEach(assessTelemetryData.assess, function(value,key) {
-      var item = value.edata.item;
-      switch(item.type){
-        case 'ftb': if(_.isEmpty(value.edata.resvalues)){
-                      instance.setNonAttemptedQuestion(key);                        
-                    }else{
-                      instance.setAttemptedQuestion(key);
-                    }
-                    break;
-        case 'mcq': if(_.isEmpty(value.edata.resvalues[0])){
-                      instance.setNonAttemptedQuestion(key);
-                    }else{
-                      instance.setAttemptedQuestion(key);
-                    }
-                    break;
-        case 'reorder': if(_.isEmpty(value.edata.resvalues)){
-                      instance.setNonAttemptedQuestion(key);
-                    }else{
-                      instance.setAttemptedQuestion(key);
-                    }
-                    break;
-        case 'mtf': if(_.isEqual(item.params[1], value.edata.resvalues[1])){
-                      instance.setNonAttemptedQuestion(key);                        
-                    }else{
-                      instance.setAttemptedQuestion(key);
-                    }
-                    break;
-        case 'sequence': item.params.pop(); 
-                      if(_.isEqual(item.params, value.edata.resvalues)){
-                        instance.setNonAttemptedQuestion(key);                        
-                      }else{
-                        instance.setAttemptedQuestion(key);
-                      }
-                      break;
+      if(_.isEmpty(value.edata.resvalues)){
+        instance.setNonAttemptedQuestion(key);
+      }else{
+        instance.setAttemptedQuestion(key);
       }
     });
     summaryTemplate._QSSummary = instance._qsSummary;

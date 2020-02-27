@@ -115,9 +115,11 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     var resValues = [];
     var selectedIndex = MCQController.pluginInstance._selectedIndex;
     var value = {};
-    if (!_.isUndefined(selectedIndex))
+    if (!_.isUndefined(selectedIndex)){
       value[selectedIndex + 1] = this.getTelemetryParamsValue(MCQController.pluginInstance._question.data.options[selectedIndex]);
-    resValues.push(value);
+      resValues.push(value);
+    }
+      
     return resValues;
   },
   /**

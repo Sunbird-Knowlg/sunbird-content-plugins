@@ -10,6 +10,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
   _type: 'org.ekstep.questionunit.sequence',
   _isContainer: true,
   _render: true,
+  _attempted:false,
   _selectedAnswers: [],
   _dragulaContainers: [],
   _constant: {
@@ -23,12 +24,13 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
 
   preQuestionShow: function (event) {
     this._super(event);
+    this._attempted = false;
     this._question.template = SEQController.getQuestionTemplate(this._question.config.layout, this._constant);
     _.each(this._question.data.options, function (option, index) {
       option.sequenceOrder = index + 1;
     })
     if (!this._question.state) {
-      this._question.data.options = _.shuffle(this._question.data.options);
+      this._question.data.options = this.shuffleOptions(this._question.data.options);
     } else {
       //BASED on the rearranged order update in seqeuence
       var renderedOptions = this._question.state.seq_rendered;
@@ -94,7 +96,7 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
       },
       score: questionScore,
       max_score: this._question.config.max_score,
-      values: instance.getTelemetryResValues(),
+      values: (questionScore > 0 || instance._attempted) ? instance.getTelemetryResValues() : [],
       params: instance.getTelemetryParams(),
       noOfCorrectAns: correctAnswersCount,
       totalAns: totalOptions,
@@ -161,6 +163,32 @@ org.ekstep.questionunitseq.RendererPlugin = org.ekstep.contentrenderer.questionU
     if (values.hasOwnProperty('hint')) {
       delete values.hint;
     }
-  }
+  },
+  /**
+   * shuffles the options array
+   */
+  shuffleOptions: function (options) {
+    var shuffled = [];
+    var selected = this.derange(_.range(0, options.length));
+    _.each(selected, function (i) {
+      shuffled.push(options[i]);
+    });
+    return shuffled;
+  },
+  /**
+   * deranges (shuffles such that no element will remain in its original index) 
+   * the elements the given array. This is a JavaScript implementation of
+   * Sattolo's algorithm [https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#Sattolo's_algorithm]
+   */
+  derange: function (array) {
+    var m = array.length, t, i;
+    _.each(_.range(0, m - 1), function (i, k) {
+      var j = _.random(i + 1, m - 1); // note: i+1
+      t = array[i];
+      array[i] = array[j];
+      array[j] = t;
+    });
+    return array;
+  },
 });
 //# sourceURL=questionunit.sequence.renderer.plugin.js

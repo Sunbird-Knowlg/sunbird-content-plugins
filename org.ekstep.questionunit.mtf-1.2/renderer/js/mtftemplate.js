@@ -10,6 +10,7 @@ MTFController.constant = {
  */
 MTFController.initTemplate = function (pluginInstance) {
   MTFController.pluginInstance = pluginInstance;
+  MTFController.pluginInstance._attempted = false;
 };
 
 
@@ -125,7 +126,11 @@ MTFController.touchConvertInit = function() {
 MTFController.onDomReady = function(){
     $(document).ready(function(){
         MTFController.touchConvertInit();
-        $(".rhs-container").sortable();
+        $(".rhs-container").sortable({
+          stop: function(evt,ui){
+            MTFController.pluginInstance._attempted = true;
+          }
+        }); 
         $(".rhs-container").disableSelection();
     }) 
 }
