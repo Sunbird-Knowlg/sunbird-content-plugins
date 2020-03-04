@@ -114,7 +114,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     stateService.create('dialCodeMap');
                 }
                 stateService.setState('dialCodeMap', currentNode.id, "");
-                currentNode.metadata.dialcodes = undefined;
+                currentNode.metadata.dialcodes = null;
             }
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
         }
