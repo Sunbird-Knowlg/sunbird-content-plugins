@@ -526,7 +526,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
         var dialcodesUpdated = false;
         ecEditor._.forIn(nodesModified, function(node) {
-            if(node.metadata.dialcodes || node.metadata.dialcodes === null && !dialcodesUpdated){
+            if((node.metadata.dialcodes || node.metadata.dialcodes === null) && !dialcodesUpdated){
                 dialcodesUpdated = true;
             }else{
                 var dialObj =  _.find(mapArr,function(Obj){
