@@ -15,7 +15,8 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   _questionPlugin: 'org.ekstep.question',
   _constants: {
     v1PluginId: "org.ekstep.questionset.quiz",
-    templateId: "horizontalMCQ"
+    templateId: "horizontalMCQ",
+    questionUnitId: "org.ekstep.questionunit"
   },
   _dependencyPlugin: "org.ekstep.questionbank",
   /**
@@ -245,11 +246,12 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
           var questionBody = JSON.parse(question.body);
 
           // Verify question and options font size, And change font-size if requires while Republishing content
-          if(questionBody){
+          if(questionBody && questionBody.data && questionBody.data.data){
             try {
-              questionBody.data.data.question.text = instance.changeFontSize(questionBody.data.data.question);
-              questionBody.data = instance.questionFontSizeChange(questionBody.data);
-
+              // Dispatch event to quetion Unit to change font style
+              ecEditor.dispatchEvent(instance._constants.questionUnitId + ":changeFontSize",function(data){
+                questionBody = data;
+              },questionBody);
             } catch (e) {
               console.log(e);
             }
@@ -460,57 +462,6 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   getplugins: function(event, callback){
     var instance = this;
     callback(instance._plugins);
-  },
-  questionFontSizeChange: function(item){
-    var instance = this;
-    var questionItem = item;
-    var questionOptionsData = item;
-
-    switch (item.plugin.id) {
-      case 'org.ekstep.questionunit.mcq':
-      case 'org.ekstep.questionunit.sequence':
-            questionOptionsData.data.options = instance.optionsTextFontChange(questionOptionsData.data.options,item.config.metadata.category);
-            item = questionOptionsData;
-            break;
-      case 'org.ekstep.questionunit.mtf':
-            questionOptionsData.data.option.optionsLHS = instance.optionsTextFontChange(questionOptionsData.data.option.optionsLHS,item.config.metadata.category);
-            questionOptionsData.data.option.optionsRHS = instance.optionsTextFontChange(questionOptionsData.data.option.optionsRHS,item.config.metadata.category);
-            item = questionOptionsData;
-            break;
-      default: break;
-
-    }
-    return questionItem;
-  },
-  optionsTextFontChange: function(options,type){
-    var instance = this;
-    var optionsData = options;
-
-    if(type == 'mcq' || type == 'MCQ'){
-      _.each(options,function(option,key){
-        optionsData[key].text = instance.changeFontSize(option);
-      });
-    }else if(type == 'mtf'){
-      _.each(options,function(option,key){
-        optionsData[key].text = '<p style="font-size:1.28em">' + optionsData[key].text + '</p>';
-      });
-    }
-    return optionsData;
-  },
-  changeFontSize: function(data){
-      var index = data.text.indexOf("<p><span");
-      
-      if(index == 0){
-          var element = $($.parseHTML(data.text));
-          var size = $(element)[0].children[0].style.fontSize;
-          if(parseFloat(size) < 1.285){
-            $(element)[0].children[0].style.fontSize = '1.285em';
-            data.text = $(element).prop('outerHTML');
-          }
-          return data.text;
-      }else if(index == -1){
-        return data.text.replace(/<p>/g, "<p style='font-size:1.285em;'>");
-      }
   }
 });
 //# sourceURL=questionsetPlugin.js
