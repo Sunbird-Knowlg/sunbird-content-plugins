@@ -59,7 +59,6 @@ org.ekstep.contenteditor.questionUnitPlugin = org.ekstep.contenteditor.basePlugi
     });
   },
   questionUnitFontChange: function(event,callback){
-    console.log("Jags event",event);
     var instance = this;
     var questionBody = event.target;
     questionBody.data.data.question.text = instance.changeFontSize(questionBody.data.data.question);
