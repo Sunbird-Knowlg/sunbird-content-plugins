@@ -227,7 +227,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // get filters value
         $scope.getFiltersValue = function(data) {
             ecEditor._.forEach(data, function(value, key) {
-                if (value && value.length){
+                if (value && value.length && !(key === 'copyright')){
                     $scope.filterSelection[key] = value;
                 }else{
                     delete $scope.filterSelection[key];
