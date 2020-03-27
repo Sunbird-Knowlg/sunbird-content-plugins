@@ -528,6 +528,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     $scope.licenseText = licenseterms.renderingHints.value[$scope.contentMimeType];
                 }
             }
+
+            if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'Resource'){  
+                $scope.contentMeta['contentType'] = '';
+            }
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
                 $scope.contentMeta['copyright'] = $scope.originalContentMeta['copyright'];
