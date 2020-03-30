@@ -275,7 +275,7 @@ body.article-editor,  body.cke_editable {
 
 .cke_editable
 {
-	font-size: 13px;
+	font-size: 18px;
 	line-height: 1.6;
 
 	/* Fix for missing scrollbars with RTL texts. (#10488) */

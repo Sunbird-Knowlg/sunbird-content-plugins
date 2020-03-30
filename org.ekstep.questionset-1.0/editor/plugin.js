@@ -15,7 +15,8 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   _questionPlugin: 'org.ekstep.question',
   _constants: {
     v1PluginId: "org.ekstep.questionset.quiz",
-    templateId: "horizontalMCQ"
+    templateId: "horizontalMCQ",
+    questionUnitId: "org.ekstep.questionunit"
   },
   _dependencyPlugin: "org.ekstep.questionbank",
   /**
@@ -243,6 +244,19 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
 
         } else {
           var questionBody = JSON.parse(question.body);
+
+          // Verify question and options font size, And change font-size if requires while Republishing content
+          if(questionBody && questionBody.data && questionBody.data.data){
+            try {
+              // Dispatch event to quetion Unit to change font style
+              ecEditor.dispatchEvent(instance._constants.questionUnitId + ":changeFontSize",function(data){
+                questionBody = data;
+              },questionBody);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
           // Build Question ECML for each question that is added.
           questionECML = {
             id: _.isUndefined(question.identifier) ? UUID() : question.identifier,

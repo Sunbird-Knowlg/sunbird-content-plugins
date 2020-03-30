@@ -82,3 +82,7 @@
   height: 100%;
   text-align: center;
 }
+.cke_editable
+{
+	font-size: 18px;
+}

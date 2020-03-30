@@ -38,9 +38,9 @@ CKEDITOR.editorConfig = function (config) {
     {name: 'cleanup'}
   ];
   // Font pixel to wm conversion done based on taking 14px = 1em;
-  config.fontSize_sizes = '10/0.714em;12/0.857em;14/1em;16/1.142em;18/1.285714285em;20/1.428571428em;22/1.571428571em;24/1.714285714em;26/1.857142857em;28/2em;';
+  config.fontSize_sizes = '18/1.285714285em;20/1.428571428em;22/1.571428571em;24/1.714285714em;26/1.857142857em;28/2em;';
 
-  // config.fontSize_defaultLabel = '18';
+  config.fontSize_defaultLabel = '18/1.285714285em';
 
   config.removePlugins = 'stylescombo, magicline';
 
