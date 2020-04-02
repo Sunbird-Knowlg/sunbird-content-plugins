@@ -230,16 +230,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 if (groupdFields.length) {
                     _.forEach(groupdFields, function(value, key) {
                         $scope.updateDropDownList(value.category, _.map(value.name, i => _.pick(i, 'name')));
-                        $scope.$safeApply();
                     })
                 } else {
                     $scope.updateDropDownList(id, [])
-                    $scope.$safeApply();
                 }
             });
+            $scope.$safeApply();
         }
-
-
     }
 
 
