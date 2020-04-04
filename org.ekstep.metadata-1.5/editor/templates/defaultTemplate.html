@@ -170,7 +170,8 @@
                                                     <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} "
                                                     ng-checked="contentMeta[dynamicField.code] ? 'checked' : ''"
                                                     ng-model="contentMeta[dynamicField.code] " type="checkbox" ng-required="{{dynamicField.required}} " 
-                                                    ng-click="onConfigChange({target: '#metadataForm', field:dynamicField, form:metaForm})" >
+                                                    ng-click="onConfigChange({target: '#metadataForm', field:dynamicField, form:metaForm})"
+                                                    ng-change="onConfigChange({target: '#metadataForm', field:dynamicField, form:metaForm})" >
                                                     <label>&nbsp;</label>
                                                 </div>
                                             </div>
