@@ -541,6 +541,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     return obj.code !== 'displayScore';
                 });
             } else {
+                var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
+                if(_.undefined(displayScore)){
+                    config.fields.push({
+                        "code": "displayScore",
+                        "dataType": "toggle",
+                        "description": "Display Score",
+                        "editable": true,
+                        "inputType": "checkbox",
+                        "label": "Display Score",
+                        "name": "Display Score",
+                        "placeholder": "Display Score",
+                        "renderingHints": {},
+                        "required": false,
+                        "visible": true,
+                        "index": 20
+                        })
+                }
                 $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? $scope.contentMeta['displayScore'] : true;
             }
             
