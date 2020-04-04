@@ -542,7 +542,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     return obj.code !== 'displayScore';
                 });
                 $scope.fields = config.fields;
-            } else {
+            } else if(config.tempalteName === 'defaultTemplate'){
                 var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
                 if(_.isUndefined(displayScore)){
                     config.fields.push({
