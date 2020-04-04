@@ -135,7 +135,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 })
             });
         }
-        if(object.field.inputType == 'checkbox'){
+        if(object.field.inputType == 'checkbox' && !_.isUndefined(object.target.contentMeta[object.field.code])){
             object.target.contentMeta[object.field.code] = !object.target.contentMeta[object.field.code];
         }
         $scope.$safeApply();
