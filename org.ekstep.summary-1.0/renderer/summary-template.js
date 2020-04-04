@@ -8,7 +8,7 @@ summaryTemplate.getTemplate = function () {
     var summaryTemplateHTML = '<div class="popup" id="assess-summary"style="z-index: 9999999;top:0%;background-color: #fff4f4;">\
     <div class="assessment-overlay">\
     <div class="assessment-content assessment-result-content">\
-      <div class="assessment-content-title">Submit your assessment to check your score.</div>\
+      <div class="assessment-content-title">Submit to continue.</div>\
       <div class="assessment-content-description">\
         <div class="assessment-scorelist text-center">\
           <div class="assessment-scoreitem">Total questions: <span class="score"><%= summaryTemplate._QSSummary.attempted.length +  summaryTemplate._QSSummary.nonAttempted.length%></span></div>\
