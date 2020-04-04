@@ -165,13 +165,11 @@
                                         <!-- TOGGLE BUTTON START-->
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!contentMeta[dynamicField.code].length && fixedField.required  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="(dynamicField.inputType=='checkbox') ">
                                             <div class="ui fluid labeled input">
-                                                <label>{{dynamicField.label | uppercase}}</label>
-                                                <div class="ui fluid input toggle checkbox filter-toggle-button" ng-class="{ 'disabled':!dynamicField.editable} ">
+                                                <label class="togglecheckbox">{{dynamicField.label | uppercase}}</label>
+                                                <div class="ui fluid input toggle checkbox" ng-click="onConfigChange({target: '#metadataForm', field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm})" ng-class="{ 'disabled':!dynamicField.editable} ">
                                                     <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} "
                                                     ng-checked="contentMeta[dynamicField.code] ? 'checked' : ''"
-                                                    ng-model="contentMeta[dynamicField.code] " type="checkbox" ng-required="{{dynamicField.required}} " 
-                                                    ng-click="onConfigChange({target: '#metadataForm', field:dynamicField, form:metaForm})"
-                                                    ng-change="onConfigChange({target: '#metadataForm', field:dynamicField, form:metaForm})">
+                                                    ng-model="contentMeta[dynamicField.code] " type="checkbox" ng-required="{{dynamicField.required}} " >
                                                     <label>&nbsp;</label>
                                                 </div>
                                             </div>
