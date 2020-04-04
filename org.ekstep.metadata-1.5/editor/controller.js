@@ -542,7 +542,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 });
             } else {
                 var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
-                if(_.undefined(displayScore)){
+                if(_.isUndefined(displayScore)){
                     config.fields.push({
                         "code": "displayScore",
                         "dataType": "toggle",
