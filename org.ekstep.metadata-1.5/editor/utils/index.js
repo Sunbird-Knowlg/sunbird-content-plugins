@@ -34,7 +34,7 @@ function convertToDataType(targetType, data) {
             return (_.isArray(data) || _.isNumber(data)) ? data.toString() : data;
             break;
         case 'BOOLEAN':
-                return Boolean(data);
+                return typeof data === 'string'  ? ( data === 'false' ? false : true) : data;
                 break;
     }
 }

@@ -118,7 +118,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             !validationStatus && $scope.updateErrorMessage(object);
         }
         if(object.field.inputType == 'select' && object.field.dataType === 'boolean'){
-            $scope.contentMeta[object.field.code] = Boolean(object.value);
+            $scope.contentMeta[object.field.code] = (object.value === 'false') ? false : true;
         }
         $scope.updateForm(object);
         
