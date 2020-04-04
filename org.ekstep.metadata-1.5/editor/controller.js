@@ -532,6 +532,26 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'Resource'){  
                 $scope.contentMeta['contentType'] = '';
             }
+
+            if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'SelfAssess'){  
+                var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
+                if(_.undefined(displayScore)){
+                    config.fields.push({
+                        "code": "displayScore",
+                        "dataType": "toggle",
+                        "description": "Display Score",
+                        "editable": true,
+                        "inputType": "checkbox",
+                        "label": "Display Score",
+                        "name": "Display Score",
+                        "placeholder": "Display Score",
+                        "renderingHints": {},
+                        "required": false,
+                        "visible": true,
+                        "index": 20
+                      })
+                }
+            }
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
                 $scope.contentMeta['copyright'] = $scope.originalContentMeta['copyright'];
