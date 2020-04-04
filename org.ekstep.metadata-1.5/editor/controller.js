@@ -457,6 +457,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
+            $('.ui.checkbox').checkbox();
             // _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
             $scope.$safeApply();
         }, 0)
@@ -535,7 +536,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
             if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'SelfAssess'){  
                 var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
-                if(_.undefined(displayScore)){
+                if(_.isUndefined(displayScore)){
                     config.fields.push({
                         "code": "displayScore",
                         "dataType": "toggle",
