@@ -33,6 +33,9 @@ function convertToDataType(targetType, data) {
         case 'TEXT':
             return (_.isArray(data) || _.isNumber(data)) ? data.toString() : data;
             break;
+        case 'BOOLEAN':
+                return typeof data === 'string'  ? ( data === 'false' ? false : true) : data;
+                break;
     }
 }
 

@@ -108,9 +108,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         }
-        if(object.field.inputType == 'checkbox'){
-            $scope.contentMeta[object.field.code] = !$scope.contentMeta[object.field.code];
-        }
         if(object.target) {
             object.target = $(object.target).find('#content-meta-form').scope();
         } else {
@@ -119,6 +116,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if(object.target.isSubmit){
             var validationStatus = $scope.isValidInputs(object);
             !validationStatus && $scope.updateErrorMessage(object);
+        }
+        if(object.field.inputType == 'select' && object.field.dataType === 'boolean'){
+            $scope.contentMeta[object.field.code] = (object.value === 'false') ? false : true;
         }
         $scope.updateForm(object);
         
@@ -138,6 +138,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 })
             });
         }
+        $scope.$safeApply();
     };
 
     $scope.getParentAssociations = function(field, associations, formData, callback) {
@@ -546,10 +547,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 if(_.isUndefined(displayScore)){
                     config.fields.push({
                         "code": "displayScore",
-                        "dataType": "toggle",
+                        "dataType": "boolean",
                         "description": "Display Score",
                         "editable": true,
-                        "inputType": "checkbox",
+                        "inputType": "select",
+                        "range": [{
+                            "name": "Yes",
+                            "value": true
+                        },{
+                            "name": "No",
+                            "value": false 
+                        }
+                        ],
                         "label": "Display Score",
                         "name": "Display Score",
                         "placeholder": "Display Score",
@@ -559,7 +568,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         "index": 20
                         })
                 }
-                $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? $scope.contentMeta['displayScore'] : true;
+                $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? ($scope.contentMeta['displayScore']).toString() : "true";
             }
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){

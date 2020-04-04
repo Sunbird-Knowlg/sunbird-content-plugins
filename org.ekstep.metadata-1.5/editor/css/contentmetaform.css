@@ -195,11 +195,11 @@ form .ui.grid.form-bottom-allign{
     margin-top: 2%;
 }
 
-.ui.checkbox {
+.togglecheckbox {
     padding: 0 15px;
     display: flex;
     align-items: center;
 }
-.togglecheckbox{
+.togglecheckboxlbl{
     width: 100%;
 }
