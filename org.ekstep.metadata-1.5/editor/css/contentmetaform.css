@@ -194,3 +194,9 @@ form .ui.grid.form-bottom-allign{
 .m-t-5{
     margin-top: 2%;
 }
+
+.ui.checkbox.filter-toggle-button {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+}
