@@ -108,9 +108,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         }
-        if(object.field.inputType == 'checkbox'){
-            $scope.contentMeta[object.field.code] = !$scope.contentMeta[object.field.code];
-        }
         if(object.target) {
             object.target = $(object.target).find('#content-meta-form').scope();
         } else {
@@ -138,6 +135,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 })
             });
         }
+        if(object.field.inputType == 'checkbox'){
+            object.target.contentMeta[object.field.code] = !object.target.contentMeta[object.field.code];
+        }
+        $scope.$safeApply();
     };
 
     $scope.getParentAssociations = function(field, associations, formData, callback) {
