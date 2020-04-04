@@ -536,8 +536,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'Resource'){  
                 $scope.contentMeta['contentType'] = '';
             }
-
-            if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'SelfAssess'){  
+            if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] !== 'SelfAssess'){
+                config.fields = config.fields.filter(function( obj ) {
+                    return obj.code !== 'displayScore';
+                });
+                $scope.fields = config.fields;
+            } else {
                 var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
                 if(_.isUndefined(displayScore)){
                     config.fields.push({
@@ -553,9 +557,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         "required": false,
                         "visible": true,
                         "index": 20
-                      })
-                      $scope.contentMeta['displayScore'] = true;
+                        })
                 }
+                $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? $scope.contentMeta['displayScore'] : true;
             }
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
