@@ -117,6 +117,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var validationStatus = $scope.isValidInputs(object);
             !validationStatus && $scope.updateErrorMessage(object);
         }
+        if(object.field.inputType == 'select' && object.field.dataType === 'boolean'){
+            $scope.contentMeta[object.field.code] = Boolean(object.value);
+        }
         $scope.updateForm(object);
         
     }
@@ -134,9 +137,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     $scope.applyDependencyRules(object.field, commonAssociations, true, '#'+object.target.tempalteName);
                 })
             });
-        }
-        if(object.field.inputType == 'checkbox' && !_.isUndefined(object.target.contentMeta[object.field.code])){
-            object.target.contentMeta[object.field.code] = !object.target.contentMeta[object.field.code];
         }
         $scope.$safeApply();
     };
@@ -547,10 +547,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 if(_.isUndefined(displayScore)){
                     config.fields.push({
                         "code": "displayScore",
-                        "dataType": "toggle",
+                        "dataType": "boolean",
                         "description": "Display Score",
                         "editable": true,
-                        "inputType": "checkbox",
+                        "inputType": "select",
+                        "range": [{
+                            "name": "Yes",
+                            "value": true
+                        },{
+                            "name": "No",
+                            "value": false 
+                        }
+                        ],
                         "label": "Display Score",
                         "name": "Display Score",
                         "placeholder": "Display Score",
@@ -560,7 +568,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         "index": 20
                         })
                 }
-                $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? $scope.contentMeta['displayScore'] : true;
+                $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? ($scope.contentMeta['displayScore']).toString() : "true";
             }
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
