@@ -462,9 +462,19 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     TelemetryService.navigate(stageid, stageTo, data); // eslint-disable-line no-undef
   },
   handleNext: function() {
+    var instance = this;
+    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
+    if(audioUrl){
+      HTMLAudioPlayer.stop(url);
+    }
     this.nextQuestion();
   },
   handlePrevious: function() {
+    var instance = this;
+    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
+    if(audioUrl){
+      HTMLAudioPlayer.stop(url);
+    }
     this.prevQuestion();
   },
   removeDuplicateEventListeners: function(event, id) {
