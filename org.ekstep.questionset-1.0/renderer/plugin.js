@@ -485,12 +485,18 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
       return false;
     }
    },
-  stopAudio: function(){
+   stopAudio: function(){
     var instance = this;
     var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
+    var optionsUrl = JSON.parse(instance._currentQuestion.data.__cdata).options;
     if(audioUrl){
       HTMLAudioPlayer.stop(audioUrl);
     }
+    optionsUrl.forEach(function(optionAudio) {
+      if(optionAudio.audio){
+        HTMLAudioPlayer.stop(optionAudio.audio);
+      }
+    })
    }
 });
 //# sourceURL=questionSetRenderer.js
