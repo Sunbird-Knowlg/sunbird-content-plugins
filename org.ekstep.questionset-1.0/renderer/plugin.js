@@ -487,10 +487,16 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
    },
   stopAudio: function(){
     var instance = this;
-    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
-    if(audioUrl){
-      HTMLAudioPlayer.stop(audioUrl);
+    var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
+    var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
+    if(questionAudio.audio){
+      HTMLAudioPlayer.stop(questionAudio.audio);
     }
+    questionOptions.forEach(function(optAudio) {
+      if(optAudio.audio){
+        HTMLAudioPlayer.stop(optAudio.audio);
+      }
+    })
    }
 });
 //# sourceURL=questionSetRenderer.js
