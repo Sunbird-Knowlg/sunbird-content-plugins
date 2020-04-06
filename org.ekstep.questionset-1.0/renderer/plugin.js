@@ -488,15 +488,30 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
   stopAudio: function(){
     var instance = this;
     var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
-    var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
-    if(questionAudio.audio){
+    //Question title audio stop
+    if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
       HTMLAudioPlayer.stop(questionAudio.audio);
     }
-    questionOptions.forEach(function(optAudio) {
-      if(optAudio.audio){
+    //Question options audio stop
+    var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
+    if((category).toLowerCase() == 'mtf'){
+      var lhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsLHS;
+      var rhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsRHS;
+      this.optionsAudioStop(lhsOptions);
+      this.optionsAudioStop(rhsOptions);
+    } else {
+      var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
+      if(questionOptions){
+        this.optionsAudioStop(questionOptions);
+      }
+    }
+  },
+  optionsAudioStop: function(options){
+    options.forEach(function(optAudio) {
+      if( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio))) {
         HTMLAudioPlayer.stop(optAudio.audio);
       }
     })
-   }
+  }
 });
 //# sourceURL=questionSetRenderer.js
