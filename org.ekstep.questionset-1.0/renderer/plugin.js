@@ -471,12 +471,14 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     this.prevQuestion();
   },
   removeDuplicateEventListeners: function(event, id) {
-    EventBus.listeners[event] = EventBus.listeners[event].filter(function(e) {
-      if(e.scope && e.scope.id) {
-        return e.scope.id != id;
+    var indexVal = EventBus.listeners[event].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === id;
       }
-      return true;
     });
+    if(indexVal > -1){
+      EventBus.listeners[event].splice(indexVal, 1);
+    }
   },
   questionExistInQS: function(savedQSState){
     if(savedQSState) {
