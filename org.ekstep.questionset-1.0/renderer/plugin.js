@@ -487,10 +487,31 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
    },
   stopAudio: function(){
     var instance = this;
-    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
-    if(audioUrl){
-      HTMLAudioPlayer.stop(audioUrl);
+    var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
+    //Question title audio stop
+    if(questionAudio.audio.length > 0){
+      HTMLAudioPlayer.stop(questionAudio.audio);
     }
-   }
+    //Question options audio stop
+    var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
+    if(category == 'mtf'){
+      var lhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsLHS;
+      var rhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsRHS;
+      this.optionsAudioStop(lhsOptions);
+      this.optionsAudioStop(rhsOptions);
+    }else{
+      var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
+      if(questionOptions){
+        this.optionsAudioStop(questionOptions);
+      }
+    }
+  },
+  optionsAudioStop: function(options){
+    options.forEach(function(optAudio) {
+      if(optAudio.audio.length > 0){
+        HTMLAudioPlayer.stop(optAudio.audio);
+      }
+    })
+  }
 });
 //# sourceURL=questionSetRenderer.js
