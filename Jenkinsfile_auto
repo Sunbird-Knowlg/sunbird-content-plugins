@@ -19,7 +19,8 @@ node() {
             stage('Checkout') {
                 cleanWs()
                 dir('content-plugins'){
-                    checkout scm 
+                    def scmVars = checkout scm
+                    checkout scm: [$class: 'GitSCM', branches: [[name: "refs/tags/$tag_name"]], userRemoteConfigs: [[url: scmVars.GIT_URL]]]
                     artifact_version = tag_name 
                 }
             }   
