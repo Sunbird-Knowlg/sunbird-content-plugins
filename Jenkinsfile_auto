@@ -42,8 +42,7 @@ node() {
                     archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
                     currentBuild.description = "${artifact_version}"
                 }
-            }
-        
+            } 
         currentBuild.result = "SUCCESS"    
         slack_notify(currentBuild.result, tag_name)
         email_notify()  
