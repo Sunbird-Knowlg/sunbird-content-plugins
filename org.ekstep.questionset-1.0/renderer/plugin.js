@@ -485,7 +485,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
       return false;
     }
    },
-   stopAudio: function(){
+  stopAudio: function(){
     var instance = this;
     var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
     var optionsUrl = JSON.parse(instance._currentQuestion.data.__cdata).options;
