@@ -71,6 +71,8 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
           instance.stopAudio();
           instance.resetQS();
         }, instance);
+        // add mute and unmute events
+        this.addMuteUnmuteEvents(instance)
         // Remove duplicate event listener
         EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
         EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function() {
@@ -514,6 +516,28 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
         HTMLAudioPlayer.stop(optAudio.audio);
       }
     })
+  },
+  addMuteUnmuteEvents: function(instance){
+    var muteIndex = EventBus.listeners['renderer:overlay:mute'].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === instance._data.id;
+      }
+    });
+    if(muteIndex === -1){
+      EkstepRendererAPI.addEventListener('renderer:overlay:mute', function() {
+        HTMLAudioPlayer.mute();
+      }, instance);
+    }
+    var unmuteIndex = EventBus.listeners['renderer:overlay:unmute'].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === instance._data.id;
+      }
+    });
+    if(muteIndex === -1){
+      EkstepRendererAPI.addEventListener('renderer:overlay:unmute', function() {
+        HTMLAudioPlayer.unmute();
+      }, instance);
+    }
   }
 });
 //# sourceURL=questionSetRenderer.js
