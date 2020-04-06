@@ -68,6 +68,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
         
         // On content replay, reset all question set information.
         EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
+          instance.stopAudio();
           instance.resetQS();
         }, instance);
         // Remove duplicate event listener
@@ -462,19 +463,11 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     TelemetryService.navigate(stageid, stageTo, data); // eslint-disable-line no-undef
   },
   handleNext: function() {
-    var instance = this;
-    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
-    if(audioUrl){
-      HTMLAudioPlayer.stop(audioUrl);
-    }
+    this.stopAudio();
     this.nextQuestion();
   },
   handlePrevious: function() {
-    var instance = this;
-    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
-    if(audioUrl){
-      HTMLAudioPlayer.stop(audioUrl);
-    }
+    this.stopAudio();
     this.prevQuestion();
   },
   removeDuplicateEventListeners: function(event, id) {
@@ -490,6 +483,13 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
       return _.any(savedQSState.masterQuestionSet, function(item){ return _.isEqual(item.id, savedQSState.currentQuestion.id); })
     } else {
       return false;
+    }
+   },
+  stopAudio: function(){
+    var instance = this;
+    var audioUrl = JSON.parse(instance._currentQuestion.data.__cdata).question.audio;
+    if(audioUrl){
+      HTMLAudioPlayer.stop(audioUrl);
     }
    }
 });
