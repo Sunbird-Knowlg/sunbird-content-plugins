@@ -488,31 +488,30 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
   stopAudio: function(){
     var instance = this;
     var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
-    if(questionAudio.audio){
+    //Question title audio stop
+    if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
       HTMLAudioPlayer.stop(questionAudio.audio);
     }
-    /** istanbul ignore else */
-    if ((instance._currentQuestion.type).toLowerCase() === "mcq") {
+    //Question options audio stop
+    var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
+    if((category).toLowerCase() == 'mtf'){
+      var lhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsLHS;
+      var rhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsRHS;
+      this.optionsAudioStop(lhsOptions);
+      this.optionsAudioStop(rhsOptions);
+    } else {
       var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
-      questionOptions.forEach(function(optAudio) {
-        if ( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio)) ){
-          HTMLAudioPlayer.stop(optAudio.audio);
-        }
-      })
-    } else if ((instance._currentQuestion.type).toLowerCase() === "mtf") {
-      var questionLHSOptions = JSON.parse(instance._currentQuestion.data.__cdata).options.optionsLHS;
-      var questionRHSOptions = JSON.parse(instance._currentQuestion.data.__cdata).options.optionsRHS;
-      questionLHSOptions.forEach(function(optAudio){
-        if ( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio)) ){
-          HTMLAudioPlayer.stop(optAudio.audio);
-        }
-      })
-      questionRHSOptions.forEach(function(optAudio){
-        if ( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio)) ){
-          HTMLAudioPlayer.stop(optAudio.audio);
-        }
-      })
+      if(questionOptions){
+        this.optionsAudioStop(questionOptions);
+      }
     }
-   }
+  },
+  optionsAudioStop: function(options){
+    options.forEach(function(optAudio) {
+      if( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio))) {
+        HTMLAudioPlayer.stop(optAudio.audio);
+      }
+    })
+  }
 });
 //# sourceURL=questionSetRenderer.js
