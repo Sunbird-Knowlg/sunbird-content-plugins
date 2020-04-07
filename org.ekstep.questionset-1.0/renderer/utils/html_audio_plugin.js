@@ -52,6 +52,18 @@ var HTMLAudioPlayer = {
                 audioIns.pause();
             }
         })
+    },
+    mute: function() {
+        _.each(this._audios, function(audioIns){
+            audioIns.muted = true;
+        })
+    },
+    unmute: function() {
+        _.each(this._audios, function(audioIns){
+            if(audioIns.muted){
+                audioIns.muted = false;
+            }
+        })
     }
 }
-
+//# sourceURL=html_audio_plugin.js
