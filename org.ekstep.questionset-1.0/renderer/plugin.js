@@ -494,7 +494,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
     //Question title audio stop
     if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
-      HTMLAudioPlayer.stop(questionAudio.audio);
+      HTMLAudioPlayer.stop(instance.getAssetUrl(questionAudio.audio));
     }
     //Question options audio stop
     var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
@@ -511,9 +511,10 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     }
   },
   optionsAudioStop: function(options){
+    var instance = this;
     options.forEach(function(optAudio) {
       if( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio))) {
-        HTMLAudioPlayer.stop(optAudio.audio);
+        HTMLAudioPlayer.stop(instance.getAssetUrl(optAudio.audio));
       }
     })
   },
@@ -538,6 +539,38 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
         HTMLAudioPlayer.unmute();
       }, instance);
     }
+  },
+  getAssetUrl: function (url) {
+    if (isbrowserpreview) {
+      return this.validateUrl(url);
+    } else if (EkstepRendererAPI.isStreamingContent()) {
+            // mobile online streaming
+          if(url)
+          return this.validateUrl(EkstepRendererAPI.getBaseURL() + url.substring(1, url.length));
+    } else {
+          // Loading content from mobile storage ( OFFLINE )
+          return this.validateUrl(EkstepRendererAPI.getBaseURL() + url);
+    }
+  },
+  validateUrl: function(url){
+    if(!url){
+        return
+    }
+    var regex = new RegExp("^(http|https)://", "i");
+    if(regex.test(url)){
+        var tempUrl = url.split("://")
+        if (tempUrl.length > 1){
+            var validString = tempUrl[1].split("//").join("/");
+            return [tempUrl[0], validString].join("://");
+        }
+    }else{
+        var tempUrl = url.split(":///")
+        if (tempUrl.length > 1){
+            var validString = tempUrl[1].split("//").join("/");;
+            return [tempUrl[0], validString].join(":///");
+        }
+    }
+    return url.split("//").join("/");
   }
 });
 //# sourceURL=questionSetRenderer.js
