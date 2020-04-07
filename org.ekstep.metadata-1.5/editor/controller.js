@@ -311,6 +311,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         } else {
             object.target = $('#content-meta-form').scope();
         }
+        //update scope with seleted form
+        $scope = object.target;
         var validationStatus = $scope.isValidInputs(object);
         if(!validationStatus){
             $scope.updateErrorMessage(object);
