@@ -43,8 +43,10 @@ var HTMLAudioPlayer = {
     },
     stop: function(url) {
         var audioIns = this.getInstance(url);
-        audioIns.pause();
-        audioIns.currentTime = 0;
+        if(audioIns) {
+            audioIns.pause();
+            audioIns.currentTime = 0;
+        }
     },
     pauseAll: function() {
         _.each(this._audios, function(audioIns){
