@@ -421,7 +421,8 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	$scope.questionData.description = questionData1.data.config.metadata.description;
   	$scope.questionData.max_score = questionData1.data.config.metadata.max_score;
   	$scope.conceptsCheck = true;
-  	$scope.topicsCheck = true;
+    $scope.topicsCheck = true;
+    $scope.questionData.questionType = qData.questionType ? qData.questionType : undefined;
   	var pluginID = questionData1.data.plugin.id;
   	var pluginTemplateId = questionData1.data.plugin.templateId;
   	var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
