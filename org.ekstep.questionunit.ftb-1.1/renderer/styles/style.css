@@ -122,11 +122,11 @@ input.ans-field.highlightInput {
   border: 1px solid blue;
 }
 
-/* @media (min-width:801px) {
+@media (min-width:801px) {
   .qs-ftb-container {
     margin-top: 20%;
   }
-} */
+} 
 
 .image-model-popup{
   position: fixed;
