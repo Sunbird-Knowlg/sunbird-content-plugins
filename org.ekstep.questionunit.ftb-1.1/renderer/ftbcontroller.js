@@ -179,6 +179,24 @@ window.addEventListener('native.keyboardhide', function () {
 });
 
 /**
+ * renderer:questionunit.ftb:show keyboard in device.
+ * @event renderer:questionunit.ftb:click
+ * @memberof org.ekstep.questionunit.ftb
+ */
+window.parent.addEventListener('native.keyboardshow', function () { // eslint-disable-line no-unused-vars
+  $(FTBController.constant.qsFtbContainer).addClass("align-question");
+});
+
+/**
+ * renderer:questionunit.ftb:hide keyboard in device.
+ * @event renderer:questionunit.ftb:click
+ * @memberof org.ekstep.questionunit.ftb
+ */
+window.parent.addEventListener('native.keyboardhide', function () {
+  $(FTBController.constant.qsFtbContainer).removeClass("align-question");
+});
+
+/**
  * logs telemetry 
  * @memberof org.ekstep.questionunit.ftb.ftbcontroller
  * @param {Object} event js event object
