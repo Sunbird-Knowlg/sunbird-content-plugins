@@ -38,7 +38,11 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
 
     $(FTBController.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
     $(FTBController.constant.qsFtbElement).on('click', '.ans-field', FTBController.invokeKeyboard); // eslint-disable-line no-undef
-
+    $('.ans-field').focusout(function(){
+      if (!(isbrowserpreview && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
+        $(FTBController.constant.qsFtbContainer).removeClass("align-question");
+      }
+    });
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
     /*istanbul ignore else*/
     if (this._question.state && this._question.state.val) {
