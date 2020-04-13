@@ -78,7 +78,9 @@ FTBController.invokeKeyboard = function (event) { // eslint-disable-line no-unus
   $('.ans-field').removeClass("highlightInput");
   var target = $('#' + event.target.id);
   target.addClass("highlightInput");
-
+  setTimeout(function(){
+    document.querySelector('.highlightInput').scrollIntoView({ behavior: 'smooth' });
+  }, 200)
   EkstepRendererAPI.dispatchEvent(FTBController.constant.keyboardPlugin + ":invoke", keyboardConfig, FTBController.keyboardCallback);
 };
 

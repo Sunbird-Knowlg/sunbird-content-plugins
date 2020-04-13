@@ -42,7 +42,6 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     $('.ans-field').focusin(function() {
       if (!(isbrowserpreview && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
         $(FTBController.constant.qsFtbContainer).addClass("align-question");
-        document.querySelector('.ans-field.highlightInput').scrollIntoView({ behavior: 'smooth' });
       }
     }).add('.ans-field').focusout(function(){
         if ( !$('.ans-field').is(':focus') ) {
