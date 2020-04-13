@@ -99,8 +99,9 @@
 
 .align-question {
   margin: 13px 0px 0px 2px;
-  height: 30vh;
+  /* height: 30vh; */
   overflow-y: auto;
+  padding-bottom: 200px;
 }
 
 input#answer {
