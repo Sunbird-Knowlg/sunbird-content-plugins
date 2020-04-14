@@ -43,8 +43,10 @@ var HTMLAudioPlayer = {
     },
     stop: function(url) {
         var audioIns = this.getInstance(url);
-        audioIns.pause();
-        audioIns.currentTime = 0;
+        if(audioIns) {
+            audioIns.pause();
+            audioIns.currentTime = 0;
+        }
     },
     pauseAll: function() {
         _.each(this._audios, function(audioIns){
@@ -52,6 +54,18 @@ var HTMLAudioPlayer = {
                 audioIns.pause();
             }
         })
+    },
+    mute: function() {
+        _.each(this._audios, function(audioIns){
+            audioIns.muted = true;
+        })
+    },
+    unmute: function() {
+        _.each(this._audios, function(audioIns){
+            if(audioIns.muted){
+                audioIns.muted = false;
+            }
+        })
     }
 }
-
+//# sourceURL=html_audio_plugin.js

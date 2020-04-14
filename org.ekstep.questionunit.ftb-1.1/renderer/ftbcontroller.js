@@ -75,10 +75,12 @@ FTBController.invokeKeyboard = function (event) { // eslint-disable-line no-unus
   if (!(isbrowserpreview && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
     $(FTBController.constant.qsFtbContainer).addClass("align-question");
   }
+  $('.ans-field').removeClass("highlightInput");
   var target = $('#' + event.target.id);
   target.addClass("highlightInput");
-  target.siblings().removeClass("highlightInput");
-
+  setTimeout(function(){
+    document.querySelector('.highlightInput').scrollIntoView({ behavior: 'smooth' });
+  }, 200)
   EkstepRendererAPI.dispatchEvent(FTBController.constant.keyboardPlugin + ":invoke", keyboardConfig, FTBController.keyboardCallback);
 };
 

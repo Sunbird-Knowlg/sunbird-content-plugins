@@ -194,3 +194,12 @@ form .ui.grid.form-bottom-allign{
 .m-t-5{
     margin-top: 2%;
 }
+
+.togglecheckbox {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+}
+.togglecheckboxlbl{
+    width: 100%;
+}
