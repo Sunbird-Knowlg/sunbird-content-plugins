@@ -33,6 +33,9 @@ function convertToDataType(targetType, data) {
         case 'TEXT':
             return (_.isArray(data) || _.isNumber(data)) ? data.toString() : data;
             break;
+        case 'BOOLEAN':
+                return typeof data === 'string'  ? ( data === 'false' ? false : true) : data;
+                break;
     }
 }
 
@@ -48,7 +51,7 @@ function getUpdateDataType(selectedFields, configurations) {
         _.forEach(selectedFields, function(selectedValue, selectedKey) {
             if (configureValue.code === selectedKey) {
                 result = convertToDataType(configureValue.dataType, selectedValue);
-                result && (selectedFields[selectedKey] = result);
+                !_.isUndefined(result) && (selectedFields[selectedKey] = result);
             }
         })
     })

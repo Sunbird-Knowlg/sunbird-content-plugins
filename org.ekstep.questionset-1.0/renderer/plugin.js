@@ -68,8 +68,11 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
         
         // On content replay, reset all question set information.
         EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
+          instance.stopAudio();
           instance.resetQS();
         }, instance);
+        // add mute and unmute events
+        this.addMuteUnmuteEvents(instance)
         // Remove duplicate event listener
         EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
         EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function() {
@@ -462,18 +465,22 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     TelemetryService.navigate(stageid, stageTo, data); // eslint-disable-line no-undef
   },
   handleNext: function() {
+    this.stopAudio();
     this.nextQuestion();
   },
   handlePrevious: function() {
+    this.stopAudio();
     this.prevQuestion();
   },
   removeDuplicateEventListeners: function(event, id) {
-    EventBus.listeners[event] = EventBus.listeners[event].filter(function(e) {
-      if(e.scope && e.scope.id) {
-        return e.scope.id != id;
+    var indexVal = EventBus.listeners[event].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === id;
       }
-      return true;
     });
+    if(indexVal > -1){
+      EventBus.listeners[event].splice(indexVal, 1);
+    }
   },
   questionExistInQS: function(savedQSState){
     if(savedQSState) {
@@ -481,6 +488,89 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     } else {
       return false;
     }
-   }
+   },
+  stopAudio: function(){
+    var instance = this;
+    var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
+    //Question title audio stop
+    if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
+      HTMLAudioPlayer.stop(instance.getAssetUrl(questionAudio.audio));
+    }
+    //Question options audio stop
+    var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
+    if((category).toLowerCase() == 'mtf'){
+      var lhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsLHS;
+      var rhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsRHS;
+      this.optionsAudioStop(lhsOptions);
+      this.optionsAudioStop(rhsOptions);
+    } else {
+      var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
+      if(questionOptions){
+        this.optionsAudioStop(questionOptions);
+      }
+    }
+  },
+  optionsAudioStop: function(options){
+    var instance = this;
+    options.forEach(function(optAudio) {
+      if( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio))) {
+        HTMLAudioPlayer.stop(instance.getAssetUrl(optAudio.audio));
+      }
+    })
+  },
+  addMuteUnmuteEvents: function(instance){
+    var muteIndex = EventBus.listeners['renderer:overlay:mute'].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === instance._data.id;
+      }
+    });
+    if(muteIndex === -1){
+      EkstepRendererAPI.addEventListener('renderer:overlay:mute', function() {
+        HTMLAudioPlayer.mute();
+      }, instance);
+    }
+    var unmuteIndex = EventBus.listeners['renderer:overlay:unmute'].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === instance._data.id;
+      }
+    });
+    if(muteIndex === -1){
+      EkstepRendererAPI.addEventListener('renderer:overlay:unmute', function() {
+        HTMLAudioPlayer.unmute();
+      }, instance);
+    }
+  },
+  getAssetUrl: function (url) {
+    if (isbrowserpreview) {
+      return this.validateUrl(url);
+    } else if (EkstepRendererAPI.isStreamingContent()) {
+            // mobile online streaming
+          if(url)
+          return this.validateUrl(EkstepRendererAPI.getBaseURL() + url.substring(1, url.length));
+    } else {
+          // Loading content from mobile storage ( OFFLINE )
+          return this.validateUrl(EkstepRendererAPI.getBaseURL() + url);
+    }
+  },
+  validateUrl: function(url){
+    if(!url){
+        return
+    }
+    var regex = new RegExp("^(http|https)://", "i");
+    if(regex.test(url)){
+        var tempUrl = url.split("://")
+        if (tempUrl.length > 1){
+            var validString = tempUrl[1].split("//").join("/");
+            return [tempUrl[0], validString].join("://");
+        }
+    }else{
+        var tempUrl = url.split(":///")
+        if (tempUrl.length > 1){
+            var validString = tempUrl[1].split("//").join("/");;
+            return [tempUrl[0], validString].join(":///");
+        }
+    }
+    return url.split("//").join("/");
+  }
 });
 //# sourceURL=questionSetRenderer.js
