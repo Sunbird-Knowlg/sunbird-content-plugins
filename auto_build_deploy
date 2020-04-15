@@ -26,13 +26,12 @@ node() {
             }   
                 echo "artifact_version: " + artifact_version
 
-                stage('Build') {
+         //       stage Build
                     sh """
                         zip -r content-plugins.zip content-plugins                     
                     """
-                }
-      
-               
+         
+         //        stage archive artifacts
                     sh """
                         mkdir content-plugins-artifacts
                         cp content-plugins.zip content-plugins-artifacts
