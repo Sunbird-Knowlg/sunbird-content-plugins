@@ -64,11 +64,6 @@
                                         <label>{{fixedField.label | uppercase}}</label>
                                         <keywords config=fixedField ng-click="onConfigChange({target: '#metadataForm',field:fixedField,form:metaForm})"></keywords>
                                     </div>
-
-                                  
-                                
-
-                                   
                                 </div>
                             </div>
                         </div>
@@ -110,7 +105,7 @@
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown " multiple=" " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
                                                     " ng-change="onConfigChange({target: '#metadataForm',index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) " ng-required="{{dynamicField.required}} ">
                                                     <option value = "">{{dynamicField.placeholder}}</option>
-                                                    <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
+                                                    <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] track by $index">{{category.name || category}}</option>
                                             </select>
                                             <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                                 Please Select
@@ -122,7 +117,7 @@
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#metadataForm',index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) "
                                                 ng-required="{{dynamicField.required}} ">
                                                     <option value = "">{{dynamicField.placeholder}}</option>
-                                                    <option value="{{category.value ||category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.value && (contentMeta[dynamicField.code] == category.value) || category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                                    <option value="{{category.value ||category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] track by $index" ng-selected="category.value && (contentMeta[dynamicField.code] == category.value) || category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
                                             </select>
                                             <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                                 Please Select
