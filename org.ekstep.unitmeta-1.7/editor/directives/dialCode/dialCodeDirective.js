@@ -13,6 +13,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         $scope.editFlag = false;
         $scope.errorMessage = "";
         $scope.status = true;
+        $scope.status_msg = "Invalid QR code";
 
     var stateService = org.ekstep.services.stateService;  
 
@@ -39,13 +40,33 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             });
         }
 
+        // check for duplicate QR code used in any node or children
+        $scope.checkDuplicateDialCode = function(activeQRCode) {
+            var getAllNodes = org.ekstep.services.collectionService.getTreeObject()
+            let findValuesDeepByKey = (obj, key, res = []) => (
+                _.cloneDeepWith(obj, (v,k) => {k==key && res.push(v)}) && res
+            )
+            var dialcodeArray = _.flattenDeep(findValuesDeepByKey(getAllNodes, 'dialcodes'))
+            if(_.includes(dialcodeArray, activeQRCode)) {
+                return true
+            }
+            return false
+        }
+
         // validate the dialCode
         $scope.validateDialCode = function() {
+            $scope.status_msg = "Invalid QR code";
             var instance = this;
-            if (String(this.dialcodes).match(/^[A-Z0-9]{2,}$/)) {
+            if ($scope.checkDuplicateDialCode(this.dialcodes)) {
+                $scope.editFlag = true;
+                $scope.status = false;
+                $scope.status_msg = "Duplicate QR code";
+                $scope.$safeApply();
+                return
+            } else if (String(this.dialcodes).match(/^[A-Z0-9]{2,}$/)) {
                 $scope.errorMessage = "";
                 var node = org.ekstep.services.collectionService.getActiveNode();
-                if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]) {
+                if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]) { 
                     org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialcodes"] = this.dialcodes;
                 }
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1 ) {
