@@ -36,7 +36,7 @@
                                             <div class="ui label filter-input-label">{{dynamicField.label | uppercase}}</div>
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterMetaDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.searchQuestions(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
                                                 <option value="">{{dynamicField.placeholder}}</option>
-                                                <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                                <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code] track by $index" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
                                             </select>
                                         </div>
                                         <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
@@ -49,7 +49,7 @@
                                             <div class="ui label filter-input-label">{{dynamicField.label | uppercase}}</div>
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterMetaDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.searchQuestions(contentMeta);" ng-required="{{dynamicField.required}} ">
                                                 <option value="">{{dynamicField.placeholder}}</option>
-                                                <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                                <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code] track by $index" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
                                             </select>
                                         </div>
                                         <div ng-show="!metaForm[dynamicField.code].$valid  " class="ui pointing red basic label ">
