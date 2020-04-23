@@ -552,10 +552,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         "inputType": "select",
                         "range": [{
                             "name": "Yes",
-                            "value": true
+                            "value": "true"
                         },{
                             "name": "No",
-                            "value": false 
+                            "value": "false" 
                         }
                         ],
                         "label": "Display Score",
