@@ -543,31 +543,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 $scope.fields = config.fields;
             } else if($scope.tempalteName === 'defaultTemplate'){
                 var displayScore = _.filter(config.fields, { 'code': 'displayScore' })[0];
-                if(_.isUndefined(displayScore)){
-                    config.fields.push({
-                        "code": "displayScore",
-                        "dataType": "boolean",
-                        "description": "Display Score",
-                        "editable": true,
-                        "inputType": "select",
-                        "range": [{
-                            "name": "Yes",
-                            "value": "true"
-                        },{
-                            "name": "No",
-                            "value": "false" 
-                        }
-                        ],
-                        "label": "Display Score",
-                        "name": "Display Score",
-                        "placeholder": "Display Score",
-                        "renderingHints": {},
-                        "required": false,
-                        "visible": true,
-                        "index": 20
-                        })
+                if(!_.isUndefined(displayScore)){
+                    $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? ($scope.contentMeta['displayScore']).toString() : "true";
                 }
-                $scope.contentMeta['displayScore'] = !_.isUndefined($scope.contentMeta['displayScore']) ? ($scope.contentMeta['displayScore']).toString() : "true";
             }
             
             if(!_.isUndefined($scope.originalContentMeta['copyright'])){
