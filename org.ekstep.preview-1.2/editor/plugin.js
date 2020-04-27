@@ -61,6 +61,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "preload": true
             });
         }
+        this.contentBody.theme['plugin-manifest'].plugin.push({"id":"org.ekstep.mathfunction","ver":"1.0","type":"plugin"});
         this.showPreview(data);
     },
     getConfiguration: function() {
