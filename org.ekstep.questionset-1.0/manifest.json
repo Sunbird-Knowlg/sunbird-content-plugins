@@ -131,6 +131,12 @@
       "scope": "renderer"
     },
     {
+      "plugin": "org.ekstep.mathfunction",
+      "ver": "1.0",
+      "type": "plugin",
+      "scope": "all"
+    },
+    {
       "type": "plugin",
       "plugin": "org.ekstep.iterator",
       "ver": "1.0",

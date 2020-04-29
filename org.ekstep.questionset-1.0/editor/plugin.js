@@ -255,8 +255,8 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
             } catch (e) {
               console.log(e);
             }
-          }
-
+          }         
+           
           // Build Question ECML for each question that is added.
           questionECML = {
             id: _.isUndefined(question.identifier) ? UUID() : question.identifier,
