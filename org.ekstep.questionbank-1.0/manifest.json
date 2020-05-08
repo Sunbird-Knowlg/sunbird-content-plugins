@@ -39,6 +39,11 @@
       "type": "plugin",
       "plugin": "org.ekstep.questionset.preview",
       "ver": "1.0"
+    },{
+      "plugin": "org.ekstep.mathfunction",
+      "ver": "1.0",
+      "type": "plugin",
+      "scope": "all"
     }
     ]
   }
