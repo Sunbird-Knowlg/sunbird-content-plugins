@@ -8,36 +8,24 @@
 org.ekstep.questionsetPreview = {};
 org.ekstep.questionsetPreview.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
   type: "org.ekstep.questionset.preview",
-
   initialize: function () {},
   newInstance: function () {},
   getQuestionPreviwContent: function (questionSet) {
     var qAndMediaObj, questionMedia, pluginIds, pluginsUsed, pluginMedia;
-    var story = {
-      "theme": {
-        "startStage": "splash",
-        "id": "theme",
-        "ver": 0.3,
-        "stage": [{
-          "id": "splash",
-          "org.ekstep.questionset": {
-            "x": 9,
-            "y": 6,
-            "w": 80,
-            "h": 85
-          },
-          "x": 0,
-          "y": 0,
-          "w": 100,
-          "h": 100
-        }],
-        "manifest": {
-          "media": []
-        },
-        "plugin-manifest": {}
-      }
-    };
+    var katexTemplate =  {"manifest":{"media":[{"id":"org.ekstep.mathfunction_min_js","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/katex.min.js","type":"js"},{"id":"org.ekstep.mathfunction_min_css","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/katex.min.css","type":"css"},{"id":"org.ekstep.mathfunction_font_mainbold","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-bold.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_bolditalic","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-bolditalic.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_mainitalic","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-italic.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_mainregular","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-regular.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_bolditalic","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-bolditalic.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_mathitalic","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-italic.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_mathregular","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-regular.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_size1regular","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size1-regular.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_size2regular","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size2-regular.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_size3regular","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size3-regular.ttf","type":"js"},{"id":"org.ekstep.mathfunction_font_size4regular","plugin":"org.ekstep.mathfunction","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size4-regular.ttf","type":"js"}]},"pluginManifest":{"depends":"","id":"org.ekstep.mathfunction","type":"plugin","ver":"1.0"}};
+    var story = {"theme":{"id":"theme","manifest":{"media":[]},"plugin-manifest":{},"stage":[{"h":100,"id":"splash","org.ekstep.questionset":{"h":85,"w":80,"x":9,"y":6},"w":100,"x":0,"y":0}],"startStage":"splash","ver":0.3}};
     qAndMediaObj = this.getQuestionList(questionSet['org.ekstep.question']);
+    
+    pluginsUsed = {};
+    // check if selected questions are using Math formula
+    // Add mathfunction plugin and it's media assests
+    var qsData = JSON.stringify(qAndMediaObj['org.ekstep.question']);
+    /* istanbul ignore else */
+    if(!((_.isEmpty(qsData.match(/data-math/g))) && (_.isEmpty(qsData.match(/math-text/g))))) {
+      pluginsUsed["org.ekstep.mathfunction"] = "org.ekstep.mathfunction"; //Adding Question set plugin into plugin-manifest
+      story.theme.manifest.media = katexTemplate.manifest.media;
+    }
+
     _.each(qAndMediaObj['org.ekstep.question'], function (questionArray, v) {
       if (_.has(questionArray.data, "__cdata"))
         var qdata = JSON.parse(questionArray.data.__cdata);
@@ -54,21 +42,18 @@ org.ekstep.questionsetPreview.EditorPlugin = org.ekstep.contenteditor.basePlugin
     story.theme.stage[0]['org.ekstep.questionset']['org.ekstep.question'] = qAndMediaObj["org.ekstep.question"];
     questionMedia = _.uniqBy(qAndMediaObj.media);
     pluginIds = _.uniqBy(qAndMediaObj.pluginIds);
-    pluginsUsed = {};
     _.forEach(pluginIds, function (plugin) {
       pluginsUsed[plugin] = plugin;
     });
     pluginsUsed["org.ekstep.questionset"] = "org.ekstep.questionset"; //Adding Question set plugin into plugin-manifest
-
     ManifestGenerator.generate(pluginsUsed); // eslint-disable-line no-undef
     pluginMedia = _.uniqBy(ManifestGenerator.getMediaManifest()); // eslint-disable-line no-undef
-    if (questionMedia.length > 0) {
-      story.theme.manifest.media.push(questionMedia);
+   if (questionMedia.length > 0) {
+      story.theme.manifest.media.concat(questionMedia);
     }
     if (pluginMedia.length > 0) {
-      story.theme.manifest.media.push(pluginMedia);
+      story.theme.manifest.media.concat(pluginMedia);
     }
-
     story.theme['plugin-manifest'].plugin = ManifestGenerator.getPluginManifest(); // eslint-disable-line no-undef
     return story;
   },
@@ -78,7 +63,6 @@ org.ekstep.questionsetPreview.EditorPlugin = org.ekstep.contenteditor.basePlugin
       "media": [],
       "pluginIds": []
     };
-
     data.forEach(function (question) {
       var obj;
       obj = {
