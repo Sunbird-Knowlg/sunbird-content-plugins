@@ -26,7 +26,7 @@
       {
         "type": "plugin",
         "plugin": "org.ekstep.questionunit",
-        "ver": "1.1"
+        "ver": "1.2"
       },
       {
         "type": "css",
@@ -85,7 +85,7 @@
   "dependencies": [
     {
       "plugin": "org.ekstep.questionunit",
-      "ver": "1.1",
+      "ver": "1.2",
       "type": "plugin",
       "scope": "all"
     }

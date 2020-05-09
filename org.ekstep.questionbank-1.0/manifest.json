@@ -16,7 +16,7 @@
       }, {
         "type": "plugin",
         "plugin": "org.ekstep.questionset.preview",
-        "ver": "1.0"
+        "ver": "1.1"
       },{
         "type": "plugin",
         "plugin": "org.ekstep.toaster",
@@ -38,7 +38,7 @@
     "dependencies": [{
       "type": "plugin",
       "plugin": "org.ekstep.questionset.preview",
-      "ver": "1.0"
+      "ver": "1.1"
     }
     ]
   }
