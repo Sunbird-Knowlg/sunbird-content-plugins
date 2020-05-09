@@ -1,6 +1,6 @@
 {
     "id": "org.ekstep.questionunit",
-    "ver": "1.1",
+    "ver": "1.2",
     "author": "Jagadish Pujari, Rahul Shukla",
     "type": "plugin",
     "title": "Question Unit Base Plugin",
@@ -67,14 +67,6 @@
             {
                 "type": "css",
                 "src": "renderer/components/css/components.css"
-            },
-            {
-                "type": "js",
-                "src": "renderer/libs/katex/katex.min.js"
-            },
-            {
-                "type": "css",
-                "src": "renderer/libs/katex/katex.min.css"
             }
         ]
     }
