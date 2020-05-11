@@ -29,6 +29,8 @@ angular.module('createquestionapp', [])
     $scope.framework = ecEditor.getContext('framework');
     $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
     $scope.configScore = false;
+    $scope.contentMetaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+    $scope.contentType = $scope.contentMetaData.contentType;
     $scope.questionTypes = [{
       "name": "Multiple Choice Questions",
       "value": "mcq"
