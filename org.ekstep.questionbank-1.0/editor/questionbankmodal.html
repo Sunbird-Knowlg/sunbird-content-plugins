@@ -41,7 +41,7 @@
                 <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" ng-disabled="true" />
               </div>
             </div>
-            <div class="field">
+            <div class="field" ng-if="contentType != 'SelfAssess' ">
               <div class="ui fluid labeled input displayCount">
                 <div class="ui label">Display</div>
                 <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
