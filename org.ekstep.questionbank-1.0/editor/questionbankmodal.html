@@ -44,7 +44,7 @@
             <div class="field" ng-if="contentType != 'SelfAssess' ">
               <div class="ui fluid labeled input displayCount">
                 <div class="ui label">Display</div>
-                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
+                <select class="ui fluid dropdown questionCount" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
                 </select>
               </div>
             </div>
