@@ -1,0 +1,106 @@
+{
+    "id": "org.ekstep.mathfunction",
+    "ver": "1.0",
+    "author": "Rahul Shukla",
+    "type": "plugin",
+    "title": "mathfunction",
+    "description": "This plugin loads Katex assets for math font dependencies",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/init.js" }
+        ],
+        "menu": [],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": [
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/katex.min.js",
+                "id": "org.ekstep.mathfunction.renderer.katex_min_js",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_min_js"
+            },
+            {
+                "type": "css",
+                "src": "renderer/libs/katex/katex.min.css",
+                "id": "org.ekstep.mathfunction.renderer.katex_min_css",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_min_css"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-bold.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_main_bold",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_main_bold"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-bolditalic.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_main_bolditalic",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_main_bolditalic"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-italic.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_main_italic",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_main_italic"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-regular.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_main_regular",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_main_regular"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_math-bolditalic.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_math_bolditalic",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_math_bolditalic"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_math-italic.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_math_italic",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_math_italic"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_math-regular.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_math_regular",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_math_regular"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size1-regular.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_size1_regular",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_size1_regular"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size2-regular.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_size2_regular",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_size2_regular"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size3-regular.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_size3_regular",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_size3_regular"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size4-regular.ttf",
+                "id": "org.ekstep.mathfunction.renderer.katex_size4_regular",
+                "assetId": "org.ekstep.mathfunction.renderer.katex_size4_regular"
+            }               
+        ]
+    },
+    "icon": "assets/icon.png",
+    "languages": ["English"],
+    "categories": ["supportPlugin"],
+    "keywords": ["mathFont","CkEditor"]
+}
