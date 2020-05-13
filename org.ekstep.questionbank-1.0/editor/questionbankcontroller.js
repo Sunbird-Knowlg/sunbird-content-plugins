@@ -479,6 +479,13 @@ angular.module('createquestionapp', [])
         score = score + $scope.selectedQuestions[i].max_score;
       }
       $scope.questionSetConfigObj.max_score = score;
+      setTimeout(function() {
+                        $(".questionCount").dropdown({
+                            useLabels: false,
+                            forceSelection: true,
+                        }) .dropdown('set selected', length);
+                        $rootScope.$safeApply();
+      }, 0);
       $scope.$safeApply();
       $scope.createTotalItemRange();
     }
