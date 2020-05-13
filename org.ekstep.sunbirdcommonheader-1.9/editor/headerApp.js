@@ -307,7 +307,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
             var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-            return rootNodeConfig.type
+            return (rootNodeConfig.type == "Course" && meta.courseType && meta.courseType.toLowerCase() == "curriculumcourse") ?  "CurriculumCourse" : rootNodeConfig.type;
         } else {
             return 'resource'
         }
