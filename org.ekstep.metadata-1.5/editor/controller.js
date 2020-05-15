@@ -533,6 +533,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             }
 
+            if(_.isUndefined($scope.originalContentMeta['board']) && ecEditor.getContext('board')){
+                $scope.contentMeta['board'] = ecEditor.getContext('board').toString();
+            }
+            
             if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'Resource'){  
                 $scope.contentMeta['contentType'] = '';
             }
@@ -553,6 +557,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }else if(ecEditor.getContext('user') &&  ecEditor.getContext('user').organisations){
                 $scope.contentMeta['copyright'] = config.editMode ? _.values(ecEditor.getContext('user').organisations).join(", ") : "";
             }
+
             if(!_.isUndefined($scope.originalContentMeta['contributors']) && !_.isEmpty($scope.originalContentMeta['contributors'])){
                 var res = $scope.contentMeta['contributors'].split(", ");
                 if(_.isUndefined($scope.contentMeta['attributions'])){
