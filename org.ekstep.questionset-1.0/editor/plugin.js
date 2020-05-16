@@ -77,19 +77,15 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   },
   checkContentType : function(instance)
   {
-    let contentMeta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+    var contentMeta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
     if(contentMeta) {
-      let contentType = contentMeta.contentType;
-      if(contentType === 'SelfAssess') {
-        for( var i = 0; i < instance.manifest.editor.configManifest.length; i++) {
-          if ( instance.manifest.editor.configManifest[i].title === 'Display') {
-          instance.manifest.editor.configManifest.splice(i, 1);
-         }
-        }
+      var contentType = contentMeta.contentType;
+      if(_.toLower(contentType) === 'selfassess') {
+        instance.manifest.editor.configManifest =  _.remove(instance.manifest.editor.configManifest, function(o){ return o.title != 'Display'})
       }
     }
     return instance;
-  },
+ },
   newInstance: function () {
     var instance = this;
     instance = this.checkContentType(instance);
