@@ -75,8 +75,24 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
     ];
     instance.pluginsRespHandler(pluginsData);
   },
+  checkContentType : function(instance)
+  {
+    let contentMeta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+    if(contentMeta) {
+      let contentType = contentMeta.contentType;
+      if(contentType === 'SelfAssess') {
+        for( var i = 0; i < instance.manifest.editor.configManifest.length; i++) {
+          if ( instance.manifest.editor.configManifest[i].title === 'Display') {
+          instance.manifest.editor.configManifest.splice(i, 1);
+         }
+        }
+      }
+    }
+    return instance;
+  },
   newInstance: function () {
     var instance = this;
+    instance = this.checkContentType(instance);
     delete this.configManifest;
     instance.config.btn_edit = "Edit";
     var _parent = this.parent;
