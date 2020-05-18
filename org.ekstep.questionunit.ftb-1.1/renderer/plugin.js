@@ -37,7 +37,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     FTBController.question = this._question; // eslint-disable-line no-undef
 
     $(FTBController.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
-    if(_.toLower(FTBController.question.data.question.keyboardConfig) != 'device')
+    if(_.toLower(FTBController.question.data.question.keyboardConfig.keyboardType) != 'device')
     {
       $(FTBController.constant.qsFtbElement).on('click', '.ans-field', FTBController.invokeKeyboard); // eslint-disable-line no-undef  
     }
