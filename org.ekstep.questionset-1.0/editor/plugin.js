@@ -19,6 +19,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
     questionUnitId: "org.ekstep.questionunit"
   },
   _dependencyPlugin: "org.ekstep.questionbank",
+  katexTemplate: {"manifest":{"media":[{"id": "org.ekstep.mathfunction_min_js","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/katex.min.js"},{"id":"org.ekstep.mathfunction_min_css","plugin": "org.ekstep.mathfunction","type": "css","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/katex.min.css"},{"id":"org.ekstep.mathfunction_font_mainbold","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-bold.ttf"},{"id":"org.ekstep.mathfunction_font_bolditalic","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-bolditalic.ttf"},{"id":"org.ekstep.mathfunction_font_mainitalic","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-italic.ttf"},{"id":"org.ekstep.mathfunction_font_mainregular","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-regular.ttf"},{"id":"org.ekstep.mathfunction_font_bolditalic","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-bolditalic.ttf"},{"id":"org.ekstep.mathfunction_font_mathitalic","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-italic.ttf"},{"id":"org.ekstep.mathfunction_font_mathregular","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-regular.ttf"},{"id":"org.ekstep.mathfunction_font_size1regular","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size1-regular.ttf"},{"id":"org.ekstep.mathfunction_font_size2regular","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size2-regular.ttf"},{"id":"org.ekstep.mathfunction_font_size3regular","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size3-regular.ttf"},{"id":"org.ekstep.mathfunction_font_size4regular","plugin": "org.ekstep.mathfunction","type": "js","src": "/plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size4-regular.ttf"}]},"pluginManifest":{"id":"org.ekstep.mathfunction","type":"plugin","ver":"1.0","depends":""}},
   /**
    * Register events.
    * @memberof questionset
@@ -462,6 +463,17 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   getplugins: function(event, callback){
     var instance = this;
     callback(instance._plugins);
+  },
+  _checkForMathText : function(content, questionData) {
+    if(typeof (questionData) != "undefined"){
+      var qsData = JSON.stringify(questionData);
+      if(!((ecEditor._.isEmpty(qsData.match(/data-math/g))) && (ecEditor._.isEmpty(qsData.match(/math-text/g))))) {
+      if(_.isEmpty(content.theme['plugin-manifest'].plugin.filter(data => data.id == "org.ekstep.mathfunction"))){
+        content.theme['plugin-manifest'].plugin.push(this.katexTemplate.pluginManifest);
+        }
+      }
+    }
+    return content;
   }
 });
 //# sourceURL=questionsetPlugin.js
