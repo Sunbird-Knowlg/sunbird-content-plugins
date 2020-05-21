@@ -264,6 +264,7 @@ angular.module('createquestionapp', [])
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
+        $scope.questionSetConfigObj['show_feedback'] =  ($scope.contentType == 'SelfAssess')? false : true;
         $scope.isQuestionTab = false;
         $scope.isQuestionSetConfig = true;
         $scope.createTotalItemRange();
