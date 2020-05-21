@@ -82,6 +82,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
       var contentType = contentMeta.contentType;
       if(_.toLower(contentType) === 'selfassess') {
         instance.manifest.editor.configManifest =  _.remove(instance.manifest.editor.configManifest, function(o){ return o.title != 'Display'})
+        instance.config['show_feedback'] = false;
       }
     }
     return instance;
