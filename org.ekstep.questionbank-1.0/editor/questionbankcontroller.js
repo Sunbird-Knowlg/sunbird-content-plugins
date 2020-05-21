@@ -77,6 +77,7 @@ angular.module('createquestionapp', [])
       "shuffle_options": false,
       "total_items": 1
     };
+    $scope.questionSetConfigObj['show_feedback'] =  ($scope.contentType == 'SelfAssess')? false : true;
 
     $scope._constants = {
       previewPlugin: 'org.ekstep.questionset.preview',
