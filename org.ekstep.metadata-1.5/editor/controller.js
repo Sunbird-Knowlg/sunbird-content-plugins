@@ -136,6 +136,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 $scope.getParentAssociations(object.field, associations, data, function(commonAssociations){
                     $scope.applyDependencyRules(object.field, commonAssociations, true, '#'+object.target.tempalteName);
                 })
+                if(data)
+                {
+                    $scope.filterButtonVisibility = 1;
+                }
             });
         }
         $scope.$safeApply();
@@ -411,6 +415,25 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     /**
+     * @description      -   Clears AdvancedcFilters
+     */
+    $scope.clearFilters = function(){
+        setTimeout(function(){
+            var topic = _.find($scope.fields, ['code', 'topic']);
+            var concepts = _.find($scope.fields, ['code', 'concepts']);
+            $('.dropdown').dropdown('clear');
+            if(!_.isUndefined(topic)) {
+                ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
+            }
+            if(!_.isUndefined(concepts)) {
+                ecEditor.dispatchEvent('editor.concept.change', {key: 'concepts', value: []});
+            }
+            $scope.filterButtonVisibility= 0;
+            $scope.$safeApply();
+        }, 0)
+    }
+
+    /**
      * @description          - Fires ImpressionEvent right after popoup loads 
      *  
      */    
@@ -471,6 +494,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
+        $scope.filterButtonVisibility= 0;
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
