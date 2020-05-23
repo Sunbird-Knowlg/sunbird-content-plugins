@@ -96,7 +96,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       correctAnswersCount = _.intersection(answerArray, this._question.data.answer).length;
     }
     else { // eslint-disable-line no-undef
-      correctAnswer = (_.isEqual(answerArray, this._question.data.answer));
+      correctAnswer = (_.isEqual(answerArray.toString().replace(/\s\s+/g, ' '), this._question.data.answer.toString().replace(/\s\s+/g, ' ')))
       correctAnswersCount = _.reduce(_.map(this._question.data.answer, function(ans, index){
         return (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) ? 1 : 0;
       }), function (score, s) { return score + s; }, 0);
