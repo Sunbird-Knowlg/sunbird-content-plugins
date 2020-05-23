@@ -113,7 +113,7 @@ org.ekstep.contenteditor.questionUnitPlugin = org.ekstep.contenteditor.basePlugi
             data.text = $(element).prop('outerHTML');
           }
           return data.text;
-      }else if(index == -1){
+      }else{
         return data.text.replace(/<p>/g, "<p style='font-size:1.285em;'>");
       }
   }
