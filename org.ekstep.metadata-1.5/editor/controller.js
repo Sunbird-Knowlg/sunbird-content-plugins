@@ -67,6 +67,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.validationErrorMessage = 'Please provide all required details';
 
     /**
+     * 
+     */
+    $scope.filterButtonVisibility = 0;
+
+    /**
      * @description          - Which is used to dispatch an event.
      * 
      * @param {String} event - Name of the event.
@@ -415,7 +420,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     /**
-     * @description      -   Clears AdvancedcFilters
+     * @description      -   Clears Advanced Filters
      */
     $scope.clearFilters = function(){
         setTimeout(function(){
