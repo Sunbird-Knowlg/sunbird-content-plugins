@@ -561,10 +561,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             }
 
-            if(_.isUndefined($scope.originalContentMeta['board']) && ecEditor.getContext('board')){
-                $scope.contentMeta['board'] = ecEditor.getContext('board').toString();
-            }
-            
             if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] === 'Resource'){  
                 $scope.contentMeta['contentType'] = '';
             }
