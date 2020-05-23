@@ -67,7 +67,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.validationErrorMessage = 'Please provide all required details';
 
     /**
-     * 
+     * @property        - Set the visibility of clear filter button to hidden.
      */
     $scope.filterButtonVisibility = 0;
 
