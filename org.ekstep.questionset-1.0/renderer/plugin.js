@@ -491,22 +491,24 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
    },
   stopAudio: function(){
     var instance = this;
-    var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
-    //Question title audio stop
-    if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
-      HTMLAudioPlayer.stop(instance.getAssetUrl(questionAudio.audio));
-    }
-    //Question options audio stop
-    var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
-    if((category).toLowerCase() == 'mtf'){
-      var lhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsLHS;
-      var rhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsRHS;
-      this.optionsAudioStop(lhsOptions);
-      this.optionsAudioStop(rhsOptions);
-    } else {
-      var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
-      if(questionOptions){
-        this.optionsAudioStop(questionOptions);
+    if(!_.isUndefined(instance._currentQuestion.data.__cdata)){
+      var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
+      //Question title audio stop
+      if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
+        HTMLAudioPlayer.stop(instance.getAssetUrl(questionAudio.audio));
+      }
+      //Question options audio stop
+      var category = JSON.parse(instance._currentQuestion.config.__cdata).metadata.category;
+      if((category).toLowerCase() == 'mtf'){
+       var lhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsLHS;
+       var rhsOptions = JSON.parse(instance._currentQuestion.data.__cdata).option.optionsRHS;
+       this.optionsAudioStop(lhsOptions);
+       this.optionsAudioStop(rhsOptions);
+      } else {
+       var questionOptions = JSON.parse(instance._currentQuestion.data.__cdata).options;
+       if(questionOptions){
+         this.optionsAudioStop(questionOptions);
+       }
       }
     }
   },
