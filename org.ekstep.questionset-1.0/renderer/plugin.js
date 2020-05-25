@@ -491,6 +491,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
    },
   stopAudio: function(){
     var instance = this;
+    if(!_.isUndefined(instance._currentQuestion.data.__cdata)){
     var questionAudio = JSON.parse(instance._currentQuestion.data.__cdata).question;
     //Question title audio stop
     if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
@@ -509,6 +510,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
         this.optionsAudioStop(questionOptions);
       }
     }
+  }
   },
   optionsAudioStop: function(options){
     var instance = this;
