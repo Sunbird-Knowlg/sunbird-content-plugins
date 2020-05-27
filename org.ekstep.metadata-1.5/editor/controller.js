@@ -488,6 +488,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
+            $('label .tooltip-text')
+            .popup({
+                inline: true
+            })
+            ;
             // $('.ui.checkbox').checkbox();
             // _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
             $scope.$safeApply();
