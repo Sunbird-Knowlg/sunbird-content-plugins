@@ -77,7 +77,7 @@
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}
                                                     " ng-if="(dynamicField.inputType=='text') ">
                                             <label>{{dynamicField.label | uppercase}}
-                                                <span ng-show="{{dynamicField.tooltip}}" class="ui icon" data-tooltip="{{dynamicField.tooltip}}" data-position="top left">
+                                                <span ng-show="{{dynamicField.tooltip}}" data-content="{{dynamicField.tooltip}}" class="tooltip-text">
                                                     <i style="cursor: pointer;color: #007aff;" class="large question circle icon link"></i>
                                                 </span>
                                             </label>

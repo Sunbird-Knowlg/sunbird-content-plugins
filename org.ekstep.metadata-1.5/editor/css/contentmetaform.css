@@ -113,6 +113,10 @@ and collection is using 16 grid layout so
     margin: 0 0 .28571429rem;
 }
 
+#content-meta-form label div{
+    text-transform: none;
+}
+
 #content-meta-form input::placeholder,
 #content-meta-form .ui.dropdown .default.text {
     color: #4a4a4a;
