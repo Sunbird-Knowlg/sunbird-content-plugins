@@ -426,6 +426,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         setTimeout(function(){
             $('.dropdown').dropdown('clear');
             $scope.filterButtonVisibility= 0;
+            $scope.$safeApply();
         }, 0)
     }
 
