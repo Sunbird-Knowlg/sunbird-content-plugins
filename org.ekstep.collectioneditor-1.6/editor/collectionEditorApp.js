@@ -196,7 +196,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             $scope.readExistingQrCode();
         }
         $scope.isNewCollection = data.data.root ? true : false;
-        $scope.isResourceCollection = ((data.data.objectType === "Course" || data.data.objectType === "Resource") && !data.data.root) ? true : false;
+        $scope.isResourceCollection = (data.data.metadata.status && data.data.metadata.status === "Live") ? true : false;
     };
 
     /**
