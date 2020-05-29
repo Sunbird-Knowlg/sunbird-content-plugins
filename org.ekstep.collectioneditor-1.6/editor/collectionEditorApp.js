@@ -18,6 +18,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.collectionCache = [];
     $scope.isChildren = false;
     $scope.setVerifiedCode = true;
+    isResourceCollection = false;
     $scope.CONSTANTS = {
         tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
         tocUploadDescription: 'Please upload the CSV file in the required format',
@@ -194,6 +195,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             $scope.setVerifiedCode = false;
             $scope.readExistingQrCode();
         }
+        $scope.isNewCollection = data.data.root ? true : false;
+        $scope.isResourceCollection = ((data.data.objectType === "Course" || data.data.objectType === "Resource") && !data.data.root) ? true : false;
     };
 
     /**
