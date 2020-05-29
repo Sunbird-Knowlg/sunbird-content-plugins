@@ -424,17 +424,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.clearFilters = function(){
         setTimeout(function(){
-            var topic = _.find($scope.fields, ['code', 'topic']);
-            var concepts = _.find($scope.fields, ['code', 'concepts']);
             $('.dropdown').dropdown('clear');
-            if(!_.isUndefined(topic)) {
-                ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
-            }
-            if(!_.isUndefined(concepts)) {
-                ecEditor.dispatchEvent('editor.concept.change', {key: 'concepts', value: []});
-            }
             $scope.filterButtonVisibility= 0;
-            $scope.$safeApply();
         }, 0)
     }
 
