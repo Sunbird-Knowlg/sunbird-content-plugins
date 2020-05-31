@@ -18,7 +18,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.collectionCache = [];
     $scope.isChildren = false;
     $scope.setVerifiedCode = true;
-    isResourceCollection = false;
+    $scope.isResourceCollection = false;
     $scope.CONSTANTS = {
         tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
         tocUploadDescription: 'Please upload the CSV file in the required format',
