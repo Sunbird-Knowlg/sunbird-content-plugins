@@ -70,6 +70,13 @@
   text-align: center;
 }
 
+.math-symbols img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  border-style: none;
+}
+
 .math-symbol {
   padding: 5px 10px;
   cursor: pointer;
