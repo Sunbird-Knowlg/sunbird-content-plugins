@@ -72,7 +72,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.filterButtonVisibility = 0;
 
     /**
-    * @property         - Flag for checking clear fliter is clicked or not.
+    * @property         - Flag to check filter status.
     */
     $scope.clearFilter = false;
 
