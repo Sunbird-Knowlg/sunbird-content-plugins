@@ -74,7 +74,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     /**
     * @property         - Flag for checking clear fliter is clicked or not.
     */
-    $scope.clearFilterClick = false;
+    $scope.clearFilter = false;
 
     /**
      * @description          - Which is used to dispatch an event.
@@ -131,12 +131,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.contentMeta[object.field.code] = (object.value === 'false') ? false : true;
         }
 
-        if($scope.clearFilterClick)
+        if($scope.clearFilter)
         {
              _.forEach($scope.contentMeta, function(value, key) {
-                if (JSON.stringify(value) === JSON.stringify([""])) {
-                    $scope.contentMeta[key] = [];
-                }
+                $scope.contentMeta[key] = (_.size(_.filter(value)) > 0) ? $scope.contentMeta[key] : []
             });
         }
         
@@ -439,7 +437,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.clearFilters = function(){
         setTimeout(function(){
-            $scope.clearFilterClick = true;
+            $scope.clearFilter = true;
             $('.dropdown').dropdown('clear');
             $scope.filterButtonVisibility= 0;
             $scope.$safeApply();
