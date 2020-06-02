@@ -123,8 +123,7 @@ angular.module('createquestionapp', [])
       if (filterData) {
         $scope.filterObj = filterData;
       }
-      savedFilters = $scope.filterObj;
-      
+      savedFilters = $scope.filterObj;   
       if ($scope.filterObj.myQuestions) {
         var userId = $scope.currentUserId;
         data.request.filters.createdBy = userId;
