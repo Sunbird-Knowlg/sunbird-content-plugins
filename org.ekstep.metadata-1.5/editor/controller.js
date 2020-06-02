@@ -72,6 +72,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.filterButtonVisibility = 0;
 
     /**
+    * @property         - Flag to check filter status.
+    */
+    $scope.clearFilter = false;
+
+    /**
      * @description          - Which is used to dispatch an event.
      * 
      * @param {String} event - Name of the event.
@@ -125,6 +130,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if(object.field && object.field.inputType == 'select' && object.field.dataType === 'boolean'){
             $scope.contentMeta[object.field.code] = (object.value === 'false') ? false : true;
         }
+
+        if($scope.clearFilter)
+        {
+             _.forEach($scope.contentMeta, function(value, key) {
+                $scope.contentMeta[key] = (_.size(_.filter(value)) > 0) ? $scope.contentMeta[key] : []
+            });
+        }
+        
         $scope.updateForm(object);
         
     }
@@ -424,6 +437,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.clearFilters = function(){
         setTimeout(function(){
+            $scope.clearFilter = true;
             $('.dropdown').dropdown('clear');
             $scope.filterButtonVisibility= 0;
             $scope.$safeApply();
