@@ -124,6 +124,17 @@ angular.module('createquestionapp', [])
         $scope.filterObj = filterData;
       }
       savedFilters = $scope.filterObj;
+      if($scope.filterObj.gradeLevel)
+      {
+        if($scope.filterObj.gradeLevel[0] == "")
+          $scope.filterObj.gradeLevel = [];
+      }
+      if($scope.filterObj.questionType)
+      {
+        if($scope.filterObj.questionType[0] == "")
+          $scope.filterObj.questionType = [];
+      }
+      
       if ($scope.filterObj.myQuestions) {
         var userId = $scope.currentUserId;
         data.request.filters.createdBy = userId;
