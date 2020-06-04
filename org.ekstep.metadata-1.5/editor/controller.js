@@ -416,25 +416,22 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     {
         setTimeout(function(){
         $($element.target).closest("div").find('.dropdown').dropdown('clear');
-        // $($element.target).closest("div").find('.remove-icon').hide();
         $scope.$safeApply();
         }, 0)
     }
 
+    /**
+     * @description      -   Which is used to hide/show remove icon inside single select.
+     */
     $scope.hideShowRemoveIcon = function(dynamicCode)
     {
-        var id = '_select';
-        var code = dynamicCode;
-        var selector = id.concat(code);
+        var selector = '_select'.concat(dynamicCode);
         _.forEach($scope.contentMeta, function(value, key) {
-                if(key == dynamicCode)
-                {
-                    if(_.size(_.filter(value)) > 0){
+                if(key == dynamicCode) {
+                    if(_.size(_.filter(value)) > 0)
                         $('#'+selector).parent().next('.remove-icon').show();
-                    }
-                    else{
-                    $('#'+selector).parent().next('.remove-icon').hide();
-                    }
+                    else
+                        $('#'+selector).parent().next('.remove-icon').hide();
                 }
             });
     }
