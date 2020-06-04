@@ -208,35 +208,25 @@ form .ui.grid.form-bottom-allign{
 .togglecheckboxlbl{
     width: 100%;
 }
-.sb-btn-outline-primary {
-    background-color: #fff !important;
-    color: #024F9D !important;
-    border-color: #024F9D !important;
+
+.remove-icon-select {
+    width: 100%;
+    position: relative;
 }
-.sb-btn-normal {
-    height: 2rem !important;
-    padding: .5rem 1rem !important;
-    font-size: .75rem !important;
-}
-.sb-btn {
-    white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    outline: 0;
-    border: .0625rem solid !important;
+
+.remove-icon-select .remove-icon {
+    position: absolute;
+    right: 24px;
+    top:50%;
+    transform: translateY(-50%);
+    height: auto;
     cursor: pointer;
-    min-width: 4rem;
-    border-radius: .125rem !important;
-    -webkit-border-radius: .125rem;
-    -moz-border-radius: .125rem;
-    line-height: 1.15 !important;
-    text-transform: capitalize;
-    text-decoration: none;
 }
-.sb-btn-outline-primary.active, .sb-btn-outline-primary:active, .sb-btn-outline-primary:hover {
-    color: #002e50 !important;
-    background-color: #edf4f9 !important;
-}
+
+/*.field.dropdownvalue input[value='']  .remove-icon{
+    display: none;
+    }
+
+.field.dropdownvalue input:not([value])  .remove-icon {
+  display: block;
+}*/

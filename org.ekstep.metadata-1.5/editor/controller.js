@@ -67,16 +67,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.validationErrorMessage = 'Please provide all required details';
 
     /**
-     * @property        - Set the visibility of clear filter button to hidden.
-     */
-    $scope.filterButtonVisibility = 0;
-
-    /**
-    * @property         - Flag to check filter status.
-    */
-    $scope.clearFilter = false;
-
-    /**
      * @description          - Which is used to dispatch an event.
      * 
      * @param {String} event - Name of the event.
@@ -113,7 +103,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(object) {
-        
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
@@ -130,14 +119,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if(object.field && object.field.inputType == 'select' && object.field.dataType === 'boolean'){
             $scope.contentMeta[object.field.code] = (object.value === 'false') ? false : true;
         }
-
-        if($scope.clearFilter)
-        {
-             _.forEach($scope.contentMeta, function(value, key) {
-                $scope.contentMeta[key] = (_.size(_.filter(value)) > 0) ? $scope.contentMeta[key] : []
-            });
-        }
-        
         $scope.updateForm(object);
         
     }
@@ -154,10 +135,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 $scope.getParentAssociations(object.field, associations, data, function(commonAssociations){
                     $scope.applyDependencyRules(object.field, commonAssociations, true, '#'+object.target.tempalteName);
                 })
-                if(data)
-                {
-                    $scope.filterButtonVisibility = 1;
-                }
             });
         }
         $scope.$safeApply();
@@ -433,14 +410,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     /**
-     * @description      -   Clears Advanced Filters
+     * @description      -   Clears Single Dropdown.
      */
-    $scope.clearFilters = function(){
+    $scope.clearSingleSelect = function($element)
+    {
         setTimeout(function(){
-            $scope.clearFilter = true;
-            $('.dropdown').dropdown('clear');
-            $scope.filterButtonVisibility= 0;
-            $scope.$safeApply();
+        $($element.target).closest("div").find('.dropdown').dropdown('clear');
+        // $($element.target).closest("div").find('.remove-icon').hide();
+        $scope.$safeApply();
         }, 0)
     }
 
