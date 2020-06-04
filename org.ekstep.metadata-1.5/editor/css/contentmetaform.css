@@ -221,6 +221,7 @@ form .ui.grid.form-bottom-allign{
     transform: translateY(-50%);
     height: auto;
     cursor: pointer;
+    display: none;
 }
 
 /*.field.dropdownvalue input[value='']  .remove-icon{

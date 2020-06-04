@@ -421,6 +421,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         }, 0)
     }
 
+    $scope.hideShowRemoveIcon = function(dynamicCode)
+    {
+        var id = '_select';
+        var code = dynamicCode;
+        var selector = id.concat(code);
+        _.forEach($scope.contentMeta, function(value, key) {
+                if(key == dynamicCode)
+                {
+                    if(_.size(_.filter(value)) > 0){
+                        $('#'+selector).parent().next('.remove-icon').show();
+                    }
+                    else{
+                    $('#'+selector).parent().next('.remove-icon').hide();
+                    }
+                }
+            });
+    }
+
     /**
      * @description          - Fires ImpressionEvent right after popoup loads 
      *  
