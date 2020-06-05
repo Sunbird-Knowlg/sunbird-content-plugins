@@ -410,7 +410,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     /**
-     * @description      -   Clears Single Dropdown.
+     * @description      -   Which is used to clear single select.
      */
     $scope.clearSingleSelect = function($element)
     {
