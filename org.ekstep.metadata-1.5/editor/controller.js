@@ -423,11 +423,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     /**
      * @description      -   Which is used to hide/show remove icon inside single select.
      */
-    $scope.hideShowRemoveIcon = function(dynamicCode)
+    $scope.hideShowRemoveIcon = function(code)
     {
-        var selector = '_select'.concat(dynamicCode);
+        var selector = '_select'.concat(code);
         _.forEach($scope.contentMeta, function(value, key) {
-                if(key == dynamicCode) {
+                if(key == code) {
                     if(_.size(_.filter(value)) > 0)
                         $('#'+selector).parent().next('.remove-icon').show();
                     else
