@@ -222,11 +222,3 @@ form .ui.grid.form-bottom-allign{
     cursor: pointer;
     display: none;
 }
-
-/*.field.dropdownvalue input[value='']  .remove-icon{
-    display: none;
-    }
-
-.field.dropdownvalue input:not([value])  .remove-icon {
-  display: block;
-}*/
