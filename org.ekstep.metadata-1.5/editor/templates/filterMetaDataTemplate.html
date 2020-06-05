@@ -17,13 +17,10 @@
                                             {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}} </div>
                                     </div>
                                 </div>
-                                <div class="floated twelve wide column">
-                                    <span class="ui button right floated sb-btn sb-btn-outline-primary sb-btn-normal" ng-show="showAdvancedFilter" ng-click="clearFilters()" ng-style="{'visibility': filterButtonVisibility ? 'visible' : 'hidden'}">Clear Filters</span>
                                     <div class="advanceFilterDiv" ng-click="showAdvancedFilter = !showAdvancedFilter">
                                         <i class="dropdown icon" ng-if="showAdvancedFilter"></i> <i class="dropdown icon" ng-if="!showAdvancedFilter" style="transform: rotate(270deg);"></i>
                                         Advanced Filters
                                     </div>
-                                </div>
                                     <div class="filter-column" ng-class="(dynamicField.code == 'searchText')? 'twelve wide column': 'four wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations" ng-show="showAdvancedFilter">
                                     <!-- SEARCH INPUT FIELD -->
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid), 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="(dynamicField.inputType=='text') " ng-show="(dynamicField.code != 'searchText')">
@@ -52,10 +49,13 @@
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
                                         <div class="ui fluid labeled input">
                                             <div class="ui label filter-input-label">{{dynamicField.label | uppercase}}</div>
-                                            <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterMetaDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.searchQuestions(contentMeta);" ng-required="{{dynamicField.required}} ">
-                                                <option value="">{{dynamicField.placeholder}}</option>
-                                                <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code] track by $index" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
-                                            </select>
+                                            <div class="remove-icon-select">
+                                                <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterMetaDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.searchQuestions(contentMeta); hideShowRemoveIcon(dynamicField.code);" ng-required="{{dynamicField.required}}" >
+                                                    <option value="">{{dynamicField.placeholder}}</option>
+                                                    <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code] track by $index" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                                </select>
+                                                <i ng-click="clearSingleSelect($event)" class="close icon remove-icon"></i>
+                                            </div>
                                         </div>
                                         <div ng-show="!metaForm[dynamicField.code].$valid  " class="ui pointing red basic label ">
                                             Please Select
