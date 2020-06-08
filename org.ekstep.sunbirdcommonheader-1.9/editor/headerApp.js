@@ -563,8 +563,17 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.updateTitle = function (event, data) {
         $scope.contentDetails.contentTitle = data;
         document.title = data;
+        $scope.updateNodeTitle(data);
         $scope.$safeApply();
         $('.popup-item').popup();
+    };
+
+    $scope.updateNodeTitle = function (data) {
+        var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild()
+        if (rootNode.data.root) {
+            rootNode.setActive()
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle(data);
+        }
     };
 
     $scope.updateIcon = function (event, data) {
