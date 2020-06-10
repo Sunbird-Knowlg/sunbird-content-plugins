@@ -569,10 +569,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.updateNodeTitle = function (data) {
-        var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild()
-        if (rootNode.data.root) {
-            rootNode.setActive()
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle(data);
+        if ($scope.editorEnv == "COLLECTION") {
+            var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild()
+            if (rootNode.data.root) {
+                rootNode.setActive()
+                org.ekstep.collectioneditor.api.getService('collection').setNodeTitle(data);
+            }
         }
     };
 
