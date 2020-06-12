@@ -85,6 +85,8 @@ angular.module('createquestionapp', [])
       questionsetPlugin: 'org.ekstep.questionset',
       questionbankPlugin: 'org.ekstep.questionbank'
     };
+    $scope.showMoreQuestions = 1;
+    $scope.checkedQuestions = new Map();
 
     ecEditor.addEventListener('editor:form:change', function (event, data) {
       if (data.templateId == "filterMetaDataTemplate") {
@@ -103,8 +105,34 @@ angular.module('createquestionapp', [])
       }
     });
 
+    // Loads more questions on click of show more questions button
+    $scope.loadMoreQuestion = function()
+    {
+      $scope.showMoreQuestions++;
+       setTimeout(function() {
+        for (const [key, value] of $scope.checkedQuestions.entries()) {
+          if(value == true)
+          {
+            $("#"+key).prop("checked", true);
+          }
+        }
+      }, 3000);
+      $scope.searchQuestions();
+    }
+
     $scope.searchQuestions = function (filterData, callback) {
       $scope.itemsLoading = true;
+      if(filterData == undefined)
+      {
+        $scope.questionlimit = 50;
+        if($scope.showMoreQuestions > 1)
+        {
+          $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
+        }
+      }
+      else {
+        $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
+      }
       var data = {
         request: {
           "filters": {
@@ -117,7 +145,7 @@ angular.module('createquestionapp', [])
           "sort_by": {
             "lastUpdatedOn": "desc"
           },
-          "limit": 200
+          "limit": $scope.questionlimit
         }
       };
       if (filterData) {
@@ -369,7 +397,8 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      *  @param {Object} selQuestion Selected question object
      */
-    $scope.selectQuestion = function (selQuestion) {
+    $scope.selectQuestion = function (selQuestion,$event) {
+      $scope.checkedQuestions.set(selQuestion.node_id, $event.target.checked);
       //play preview
       $scope.previewItem(selQuestion, true);
       var isQuestionSelected = selQuestion.isSelected;
