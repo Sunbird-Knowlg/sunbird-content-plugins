@@ -85,8 +85,11 @@ angular.module('createquestionapp', [])
       questionsetPlugin: 'org.ekstep.questionset',
       questionbankPlugin: 'org.ekstep.questionbank'
     };
+    $scope.questionlimit = 50;
     $scope.showMoreQuestions = 1;
     $scope.checkedQuestions = new Map();
+    $scope.totalQuestionsCount;
+    $scope.showMoreVisibility = true;
 
     ecEditor.addEventListener('editor:form:change', function (event, data) {
       if (data.templateId == "filterMetaDataTemplate") {
@@ -108,7 +111,9 @@ angular.module('createquestionapp', [])
     // Loads more questions on click of show more questions button
     $scope.loadMoreQuestion = function()
     {
+      $scope.questionlimit = 50;
       $scope.showMoreQuestions++;
+      $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
        setTimeout(function() {
         for (const [key, value] of $scope.checkedQuestions.entries()) {
           if(value == true)
@@ -122,17 +127,6 @@ angular.module('createquestionapp', [])
 
     $scope.searchQuestions = function (filterData, callback) {
       $scope.itemsLoading = true;
-      if(filterData == undefined)
-      {
-        $scope.questionlimit = 50;
-        if($scope.showMoreQuestions > 1)
-        {
-          $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
-        }
-      }
-      else {
-        $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
-      }
       var data = {
         request: {
           "filters": {
@@ -207,7 +201,9 @@ angular.module('createquestionapp', [])
       // get Questions from questions api
       ecEditor.getService('assessment').getQuestions(data, function (err, resp) {
         if (!err) {
+          $scope.totalQuestionsCount = resp.data.result.count;
           if (resp.data.result.count > 0) {
+            $scope.showMoreVisibility = ($scope.questionlimit > $scope.totalQuestionsCount) ? false : true;
             $scope.questions = resp.data.result.items;
             savedQuestions = $scope.questions;
             $scope.resultNotFound = resp.data.result.count;
