@@ -85,6 +85,11 @@ angular.module('createquestionapp', [])
       questionsetPlugin: 'org.ekstep.questionset',
       questionbankPlugin: 'org.ekstep.questionbank'
     };
+    $scope.questionlimit = 50;
+    $scope.showMoreQuestions = 1;
+    $scope.checkedQuestions = new Map();
+    $scope.totalQuestionsCount;
+    $scope.showMoreVisibility = true;
 
     ecEditor.addEventListener('editor:form:change', function (event, data) {
       if (data.templateId == "filterMetaDataTemplate") {
@@ -103,6 +108,18 @@ angular.module('createquestionapp', [])
       }
     });
 
+    // Loads more questions on click of show more questions button
+    $scope.loadMoreQuestion = function()
+    {
+      $scope.questionlimit = 50;
+      $scope.showMoreQuestions++;
+      $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
+        for (const [key] of $scope.checkedQuestions.entries()) {
+            $("#"+key).prop("checked", true);
+        }
+      $scope.searchQuestions();
+    }
+
     $scope.searchQuestions = function (filterData, callback) {
       $scope.itemsLoading = true;
       var data = {
@@ -117,7 +134,7 @@ angular.module('createquestionapp', [])
           "sort_by": {
             "lastUpdatedOn": "desc"
           },
-          "limit": 200
+          "limit": $scope.questionlimit
         }
       };
       if (filterData) {
@@ -179,6 +196,7 @@ angular.module('createquestionapp', [])
       // get Questions from questions api
       ecEditor.getService('assessment').getQuestions(data, function (err, resp) {
         if (!err) {
+          $scope.totalQuestionsCount = resp.data.result.count;
           if (resp.data.result.count > 0) {
             $scope.questions = resp.data.result.items;
             savedQuestions = $scope.questions;
@@ -194,6 +212,7 @@ angular.module('createquestionapp', [])
             $scope.resultNotFound = resp.data.result.count;
             $scope.questions = [];
           }
+          $scope.showMoreVisibility = ($scope.questionlimit > $scope.totalQuestionsCount) ? false : true;
           $scope.itemsLoading = false;
           $scope.$safeApply();
           if (_.isFunction(callback)) {
@@ -369,7 +388,12 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      *  @param {Object} selQuestion Selected question object
      */
-    $scope.selectQuestion = function (selQuestion) {
+    $scope.selectQuestion = function (selQuestion,$event) {
+      if($event.target.checked == true)
+      $scope.checkedQuestions.set($event.currentTarget.id, $event.target.checked);
+      if($event.target.checked == false)
+        $scope.checkedQuestions.delete($event.currentTarget.id);
+    
       //play preview
       $scope.previewItem(selQuestion, true);
       var isQuestionSelected = selQuestion.isSelected;
