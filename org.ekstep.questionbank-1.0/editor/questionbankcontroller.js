@@ -203,7 +203,6 @@ angular.module('createquestionapp', [])
         if (!err) {
           $scope.totalQuestionsCount = resp.data.result.count;
           if (resp.data.result.count > 0) {
-            $scope.showMoreVisibility = ($scope.questionlimit > $scope.totalQuestionsCount) ? false : true;
             $scope.questions = resp.data.result.items;
             savedQuestions = $scope.questions;
             $scope.resultNotFound = resp.data.result.count;
@@ -218,6 +217,7 @@ angular.module('createquestionapp', [])
             $scope.resultNotFound = resp.data.result.count;
             $scope.questions = [];
           }
+          $scope.showMoreVisibility = ($scope.questionlimit > $scope.totalQuestionsCount) ? false : true;
           $scope.itemsLoading = false;
           $scope.$safeApply();
           if (_.isFunction(callback)) {
