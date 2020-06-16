@@ -101,9 +101,9 @@
                   </div>
                 </div>
                 <div class="endpage" ng-style="{'visibility': showMoreVisibility ? 'visible' : 'hidden'}">
-                  <button class="ui blue button" ng-click="loadMoreQuestion();"> Show More Questions</button>
+                  <button class="ui blue button" ng-click="loadMoreQuestion();">Show More Questions</button>
                 </div>
-                <div class="load-more-assets-warning-msg endpage" ng-show="questions.length == 50 || resultNotFound == 0">
+                <div class="load-more-assets-warning-msg endpage" ng-show="resultNotFound == 0">
                   <img class="ui centered tiny image" src="{{noQuestionFound}}">
                   <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
                   </p>
