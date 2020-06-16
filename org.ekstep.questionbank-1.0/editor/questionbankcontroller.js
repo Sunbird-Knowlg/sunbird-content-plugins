@@ -114,14 +114,9 @@ angular.module('createquestionapp', [])
       $scope.questionlimit = 50;
       $scope.showMoreQuestions++;
       $scope.questionlimit = $scope.questionlimit * $scope.showMoreQuestions;
-       setTimeout(function() {
-        for (const [key, value] of $scope.checkedQuestions.entries()) {
-          if(value == true)
-          {
+        for (const [key] of $scope.checkedQuestions.entries()) {
             $("#"+key).prop("checked", true);
-          }
         }
-      }, 3000);
       $scope.searchQuestions();
     }
 
@@ -394,7 +389,11 @@ angular.module('createquestionapp', [])
      *  @param {Object} selQuestion Selected question object
      */
     $scope.selectQuestion = function (selQuestion,$event) {
-      $scope.checkedQuestions.set(selQuestion.node_id, $event.target.checked);
+      if($event.target.checked == true)
+      $scope.checkedQuestions.set($event.currentTarget.id, $event.target.checked);
+      if($event.target.checked == false)
+        $scope.checkedQuestions.delete($event.currentTarget.id);
+    
       //play preview
       $scope.previewItem(selQuestion, true);
       var isQuestionSelected = selQuestion.isSelected;
