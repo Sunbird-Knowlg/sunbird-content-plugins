@@ -52,7 +52,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             messages: {
                 sizeError: "{file} is too large, maximum file size is " + $scope.humanReadableFileSize($scope.maxUploadSize),
                 minSizeError: "{file} is too small, minimum file size is " + $scope.humanReadableFileSize($scope.minUploadSize),
-                typeError: "{file} has an invalid extension. Valid extension(s): {extensions}.",
+                typeError: "{file} invalid file type. You can upload only {extensions} files",
                 onLeave: "{file} is being uploaded, if you leave now the upload will be cancelled"
             },
             callbacks: {
