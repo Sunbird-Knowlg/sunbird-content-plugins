@@ -28,7 +28,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.retryChunkUploadLimit = 10; // total retry on any chunk upload failure 
     $scope.delayBetweenRetryCalls = 2000; // time difference between chunk upload retry call 2sec
     $scope.maxUploadSize = $scope.uploadInfo ? Number($scope.uploadInfo.maxAllowedContentSize)*1024*1024 : 16106127360; // falback is 15 GB
-    $scope.minUploadSize = 1 //52428800;  // 50 MB
+    $scope.minUploadSize = 1; //52428800;  // 50 MB
     $scope.allowedContentType = $scope.uploadInfo ? $scope.uploadInfo.allowedContentType : ['mp4', 'webm']; // falback mp4 and webm
     
     $scope.$on('ngDialog.opened', function () {
@@ -50,9 +50,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 minSizeLimit: $scope.minUploadSize 
             },
             messages: {
-                sizeError: "{file} is too large, maximum file size is " + $scope.humanReadableFileSize($scope.maxUploadSize),
+                sizeError: "{file} You are trying to upload a file that exceeds the maximum size allowed : " + $scope.humanReadableFileSize($scope.maxUploadSize),
                 minSizeError: "{file} is too small, minimum file size is " + $scope.humanReadableFileSize($scope.minUploadSize),
-                typeError: "{file} invalid file type. You can upload only {extensions} files",
+                typeError: "{file} The format of the file you are uploading is not supported. You can upload only {extensions} files formats",
                 onLeave: "{file} is being uploaded, if you leave now the upload will be cancelled"
             },
             callbacks: {
@@ -198,7 +198,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             $('.progress').progress({
                 percent: $scope.percentComplete,
                 text: {
-                    active: "Please wait for final processing",
+                    active: "Do not close this window until the upload is complete",
                 },
             });
             setTimeout(() => {
@@ -236,7 +236,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 $scope.updateContentWithURL($scope.submitUri.split('?')[0]);
             }).catch(function () {
                 $scope.failOnBlock = true
-                $scope.toasterMsgHandler("error", "unknown error please try again")
+                $scope.toasterMsgHandler("error", "The upload seems to have failed. Click Retry to resume uploading the video.")
                 $('#retryUploadButton').show();
             });
     }
@@ -288,7 +288,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                         throw new Error('failed no response from cloud storage'); // no response from cloud storage
                     }
                 }).catch(function () {
-                    $scope.toasterMsgHandler("error", "unknown error please try again")
+                    $scope.toasterMsgHandler("error", "The upload seems to have failed. Click Retry to resume uploading the video.")
                     // preparing for retry from where it failed
                     $scope.blockIds.pop();
                     $scope.currentBlockId = $scope.blockIds[$scope.blockIds.length - 1];
