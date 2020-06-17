@@ -92,7 +92,8 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.sunbird.questionunit.quml-1.1"
                 "org.ekstep.mathfunction-1.0"
                 "org.ekstep.questionunit-1.2"
-                "org.ekstep.questionset.preview-1.1");
+                "org.ekstep.questionset.preview-1.1"
+                "org.ekstep.uploadlargecontent-1.0");
 
 for i in "${coreplugins[@]}"
 do
