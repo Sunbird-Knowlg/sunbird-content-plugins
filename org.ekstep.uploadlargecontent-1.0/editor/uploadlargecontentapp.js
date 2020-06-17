@@ -488,6 +488,10 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     }
 
+    $scope.uploadFormClose = function() {
+        ecEditor.getContext('contentId') ? $scope.closeThisDialog() : ecEditor.dispatchEvent("org.ekstep:sunbirdcommonheader:close:editor");
+    }
+
 }]);
 
 //# sourceURL=uploadLargeContentApp.js
