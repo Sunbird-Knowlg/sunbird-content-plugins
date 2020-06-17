@@ -8,7 +8,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
     var dialCodeController = ['$scope', '$controller', '$filter', function ($scope, $controller, $filter) {
         $scope.mode = ecEditor.getConfig('editorConfig').mode;
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-        $scope.maxChar = 6;
+        $scope.maxChar = 2;
         $scope.minChar = 0;
         $scope.editFlag = false;
         $scope.errorMessage = "";
@@ -186,7 +186,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 if(_.isArray($scope.dialcodes)){
                     $scope.dialcodes = $scope.dialcodes[0];
                 }
-                $scope.editFlag = ($scope.dialcodes && ($scope.dialcodes.length == $scope.maxChar)) ? true : false;
+                $scope.editFlag = ($scope.dialcodes && ($scope.dialcodes.length >= $scope.maxChar)) ? true : false;
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) != -1) {
                     $scope.status = true;
                 }else{
