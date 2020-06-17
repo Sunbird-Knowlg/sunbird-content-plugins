@@ -606,8 +606,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
         if (!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
             console.log('trigger upload form');
+            if(ecEditor.getContext('uploadInfo') && (ecEditor.getContext('uploadInfo').isLargeFileUpload)) { 
+                ecEditor.dispatchEvent('org.ekstep.uploadlargecontent:show');
+                $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadLargeFileForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            } else {
             ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
             $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            }
         }
         $scope.$safeApply();
     };
@@ -616,8 +621,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     $scope.upload = function () {
         $scope.uploadFormStart = new Date();
+        if(ecEditor.getContext('uploadInfo') && (ecEditor.getContext('uploadInfo').isLargeFileUpload)) { 
+                ecEditor.dispatchEvent('org.ekstep.uploadlargecontent:show');
+                $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadLargeFileForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            } else {
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
         $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            }
     };
 
     $scope.download = function () {
