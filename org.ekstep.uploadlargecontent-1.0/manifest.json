@@ -3,7 +3,7 @@
     "ver": "1.0",
     "author": "Rahul Shukla",
     "title": "Upload Plugin for larger file using chunk and retry",
-    "description": "",
+    "description": "Plugin to support large content in chunk and retry on network disconnection",
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
