@@ -159,12 +159,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
         var previewIframe = document.getElementById('previewContentIframe');
         previewIframe.style.display = "block";
-        if (!previewIframe.src) {
-            previewIframe.src = (ecEditor.getConfig('previewURL') || '/content/preview/preview.html') + '?webview=true';
-            previewIframe.onload = function() {
-                initializeRenderer();
-            }
-        } else {
+        previewIframe.src = (ecEditor.getConfig('previewURL') || '/content/preview/preview.html') + '?webview=true';
+        previewIframe.onload = function() {
             initializeRenderer();
         }
     }
