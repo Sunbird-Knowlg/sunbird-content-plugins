@@ -53,10 +53,16 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var attemptedQ = summaryTemplate._QSSummary.attempted.length;
     var nonAttemptedQ = summaryTemplate._QSSummary.nonAttempted.length;
     var summary = {};
+    var origin = "";
     summary.totalQuestions = attemptedQ + nonAttemptedQ;
     summary.attemptedQuestions = attemptedQ;
     summary.nonAttemptedQuestions = nonAttemptedQ;
-    window.postMessage('renderer:question:submitscore');
+    if (!window.location.origin) {
+      origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+    } else {
+      origin = window.location.origin
+    }
+    window.postMessage('renderer:question:submitscore',origin);
     EventBus.dispatch("actionNavigateNext", "next");
     EventBus.dispatch("nextClick");
   },
