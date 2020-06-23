@@ -113,6 +113,14 @@ and collection is using 16 grid layout so
     margin: 0 0 .28571429rem;
 }
 
+#content-meta-form div.ui.checkbox label {
+    color: rgba(27, 28, 29, 0.75);
+    text-transform: none;
+    margin: 0 0 .28571429rem;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
 #content-meta-form label div{
     text-transform: none;
 }

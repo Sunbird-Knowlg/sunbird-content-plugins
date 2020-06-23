@@ -161,6 +161,18 @@
                                         && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
                                             <dialcode ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})"></dialcode>
                                         </div>
+                                        <!-- TNC BUTTON START-->
+                                        <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="(dynamicField.inputType=='terms') ">
+                                            <div class="ui checkbox">
+                                                <input type="checkbox" ng-change="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})" ng-true-value="'{{licenseText}}'" ng-false-value="''" ng-model="contentMeta[dynamicField.code]" ng-checked="contentMeta[dynamicField.code] ? 'checked' : ''">
+                                                <label>{{licenseText}} </label>
+                                            </div>
+                                            <div ng-show="!contentMeta[dynamicField.code].length && dynamicField.required && isSubmit"  class="ui pointing red basic label ">
+                                                {{dynamicField.errorMessage || DEFAULT_ERROR_MESSAGE}}
+                                            </div>
+                                        </div>
+                                        <!-- TNC BUTTON END-->
+
                                         <!-- TOGGLE BUTTON START-->
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!contentMeta[dynamicField.code].length && fixedField.required  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="(dynamicField.inputType=='checkbox') ">
                                             <div class="ui fluid labeled input">
