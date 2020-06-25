@@ -558,7 +558,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var licenseterms = _.filter(config.fields, { 'code': 'licenseterms' })[0];
             if(licenseterms){
                 $scope.licenseText = licenseterms.defaultValue;
-                $scope.contentMeta['licenseterms'] = $scope.licenseText;
+                if (licenseterms.inputType === "label") $scope.contentMeta['licenseterms'] = $scope.licenseText;
                 if(!_.isUndefined(licenseterms.renderingHints.value) && !_.isUndefined(licenseterms.renderingHints.value[$scope.contentMimeType])){
                     $scope.licenseText = licenseterms.renderingHints.value[$scope.contentMimeType];
                 }
@@ -629,6 +629,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var appIconConfig = _.filter(scope.fields, { 'code': 'appicon' })[0];
         var conceptSelector = _.filter(scope.fields, { 'code': 'concepts' })[0]
         var topicSelector = _.filter(scope.fields, { 'code': 'topic' })[0];
+        var licenseTerms = _.filter(scope.fields, { 'code': 'licenseterms' })[0];
         if (appIconConfig && appIconConfig.visible && appIconConfig.required && !scope.contentMeta['appIcon']) {
             isValid = false;
         };
@@ -636,6 +637,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             isValid = false
         }
         if (topicSelector && topicSelector.required && !_.size(scope.contentMeta['topic'])) {
+            isValid = false
+        }
+        if (licenseTerms && licenseTerms.required && !_.size(scope.contentMeta['licenseterms'])) {
             isValid = false
         }
         return (object.form.$valid && isValid) ? true : false
