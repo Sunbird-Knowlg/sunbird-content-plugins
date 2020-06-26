@@ -119,6 +119,15 @@ org.ekstep.mcq.questionComponent = {
                 $('.expand-button').css('display', 'block');
             }
         })
+
+        var questionData = MCQController.pluginInstance._question;
+        if(questionData.data.question.image == '') {
+            $('.hiding-container').css('padding-left','10%');
+        }
+
+        if ($('.question-container .hiding-container .expand-container p').height() > $('.hiding-container').height()/2) {
+            $('.question-container .hiding-container .expand-container p').css('margin-top', '2%');
+        }
     },
     toggleQuestionText: function (option) {
         if(option && option.layout == "qcontainer-big"){
