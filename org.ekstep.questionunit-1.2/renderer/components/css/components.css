@@ -161,7 +161,7 @@ body {
 }
 
 .question-container .hiding-container .expand-container p {
-    margin-top: 5%;
+    margin-top: 0;
 }
 
 .question-container .expand-button {
