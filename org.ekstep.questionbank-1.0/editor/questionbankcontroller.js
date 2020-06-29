@@ -790,7 +790,6 @@ angular.module('createquestionapp', [])
           if (selObjindex > -1) {
             $scope.questions[selObjindex] = questionData;
           }
-          //$scope.$safeApply();
           $scope.showPreview(questionData);
         });
       } else {
