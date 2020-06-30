@@ -1,0 +1,17 @@
+{
+    "id": "org.ekstep.uploadlargecontent",
+    "ver": "1.0",
+    "author": "Rahul Shukla",
+    "title": "Upload Plugin for larger file using chunk and retry",
+    "description": "Plugin to support large content in chunk and retry on network disconnection",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "css", "src": "editor/libs/fine-uploader-new.min.css" },
+            { "type": "css", "src": "editor/styles/uploadcontent.css" },
+            { "type": "js", "src": "editor/libs/jquery.fine-uploader.min.js" },
+            { "type": "plugin", "plugin": "org.ekstep.toaster", "ver":"1.0"}
+        ]
+    }
+}
