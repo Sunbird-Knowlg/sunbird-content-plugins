@@ -110,13 +110,6 @@ org.ekstep.mcq.questionComponent = {
             } else {
                 $('.expand-button').css('display', 'block');
             }
-            if ($('.question-container .hiding-container .expand-container p').height() > $('.hiding-container').height()/2) {
-            $('.question-container .hiding-container .expand-container p').css('margin-top', '2%');
-            }
-            else{
-                $('.question-container .hiding-container .expand-container p').css('margin-top', '5%');
-            }
-            $('.question-container .hiding-container .expand-container p').css('visibility', 'visible');
         })
 
         $('.question-container-big .exp-button').on("load", function(){
