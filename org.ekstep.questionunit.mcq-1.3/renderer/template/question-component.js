@@ -103,6 +103,13 @@ org.ekstep.mcq.questionComponent = {
     },
     isQuestionTextOverflow: function () {
         $('.exp-button').on("load", function () {
+            if ($('.question-container .hiding-container .expand-container p').height() > $('.hiding-container').height()/2) {
+            $('.question-container .hiding-container .expand-container p').css('margin-top', '2%');
+            }
+            else{
+                $('.question-container .hiding-container .expand-container p').css('margin-top', '5%');
+            }
+            $('.question-container .hiding-container .expand-container p').css('visibility', 'visible');
             if ($('.hiding-container').height() > $('.expand-container').height()) {
                 $('.expand-button').css('display', 'none');
                 // $('.hiding-container').addClass('absolute-center');
@@ -119,6 +126,11 @@ org.ekstep.mcq.questionComponent = {
                 $('.expand-button').css('display', 'block');
             }
         })
+
+        var questionData = MCQController.pluginInstance._question;
+        if(questionData.data.question.image == '') {
+            $('.hiding-container').css('padding-left','10%');
+        }
     },
     toggleQuestionText: function (option) {
         if(option && option.layout == "qcontainer-big"){
