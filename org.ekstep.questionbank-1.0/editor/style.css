@@ -119,6 +119,7 @@
     height: calc(81vh - 185px);
     padding-bottom: 10px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .qb-selected-question-list-container {
@@ -298,3 +299,8 @@
 .qc-selected-quescount{
        float: right;
     }
+.ui.checkbox input[type=checkbox]{
+    width: 17px;
+    height: 18px;
+    top: 6px;
+}
