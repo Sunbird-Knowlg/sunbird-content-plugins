@@ -103,13 +103,6 @@ org.ekstep.mcq.questionComponent = {
     },
     isQuestionTextOverflow: function () {
         $('.exp-button').on("load", function () {
-            if ($('.question-container .hiding-container .expand-container p').height() > $('.hiding-container').height()/2) {
-            $('.question-container .hiding-container .expand-container p').css('margin-top', '2%');
-            }
-            else{
-                $('.question-container .hiding-container .expand-container p').css('margin-top', '5%');
-            }
-            $('.question-container .hiding-container .expand-container p').css('visibility', 'visible');
             if ($('.hiding-container').height() > $('.expand-container').height()) {
                 $('.expand-button').css('display', 'none');
                 // $('.hiding-container').addClass('absolute-center');
@@ -117,6 +110,13 @@ org.ekstep.mcq.questionComponent = {
             } else {
                 $('.expand-button').css('display', 'block');
             }
+            if ($('.question-container .hiding-container .expand-container p').height() > $('.hiding-container').height()/2) {
+            $('.question-container .hiding-container .expand-container p').css('margin-top', '2%');
+            }
+            else{
+                $('.question-container .hiding-container .expand-container p').css('margin-top', '5%');
+            }
+            $('.question-container .hiding-container .expand-container p').css('visibility', 'visible');
         })
 
         $('.question-container-big .exp-button').on("load", function(){
