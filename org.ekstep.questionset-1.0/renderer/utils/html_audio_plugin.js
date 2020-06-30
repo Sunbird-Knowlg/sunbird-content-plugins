@@ -46,6 +46,8 @@ var HTMLAudioPlayer = {
         if(audioIns) {
             audioIns.pause();
             audioIns.currentTime = 0;
+            audioIns.removeAttribute('src');
+            audioIns.load();
         }
     },
     pauseAll: function() {
