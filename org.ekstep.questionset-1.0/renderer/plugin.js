@@ -499,8 +499,8 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
       HTMLAudioPlayer.stop(instance.getAssetUrl(questionAudio.audio));
     }
     //Question options audio stop
-    var category = JSON.parse(questionConfig).metadata.category;
-    if((category).toLowerCase() == 'mtf'){
+    var questionPluginType = instance._currentQuestion.pluginId;
+    if((questionPluginType) == "org.ekstep.questionunit.mtf"){
       var lhsOptions = JSON.parse(questionData).option.optionsLHS;
       var rhsOptions = JSON.parse(questionData).option.optionsRHS;
       this.optionsAudioStop(lhsOptions);
