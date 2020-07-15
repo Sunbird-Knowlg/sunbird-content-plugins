@@ -492,15 +492,14 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
   stopAudio: function(){
     var instance = this;
     var questionData = (_.has(instance._currentQuestion.data,'__cdata') ? instance._currentQuestion.data.__cdata : instance._currentQuestion.data);
-    var questionConfig = (_.has(instance._currentQuestion.config,'__cdata') ? instance._currentQuestion.config.__cdata : instance._currentQuestion.config);
-    var questionAudio = JSON.parse(questionData).question;
+    var question = JSON.parse(questionData).question;
     //Question title audio stop
-    if((_.has(questionAudio,'audio') ) && (!_.isEmpty(questionAudio.audio))){
-      HTMLAudioPlayer.stop(instance.getAssetUrl(questionAudio.audio));
+    if((_.has(question,'audio') ) && (!_.isEmpty(question.audio))){
+      HTMLAudioPlayer.stop(instance.getAssetUrl(question.audio));
     }
     //Question options audio stop
     var questionPluginId = instance._currentQuestion.pluginId;
-    if((questionPluginId) == "org.ekstep.questionunit.mtf"){
+    if(questionPluginId == "org.ekstep.questionunit.mtf"){
       var lhsOptions = JSON.parse(questionData).option.optionsLHS;
       var rhsOptions = JSON.parse(questionData).option.optionsRHS;
       this.optionsAudioStop(lhsOptions);
