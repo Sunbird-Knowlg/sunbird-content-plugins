@@ -299,8 +299,8 @@
 .qc-selected-quescount{
        float: right;
     }
-.ui.checkbox input[type=checkbox]{
-    width: 17px;
-    height: 18px;
-    top: 6px;
+.question-select{
+    width: 17px !important;
+    height: 18px !important;
+    top: 6px !important;
 }
