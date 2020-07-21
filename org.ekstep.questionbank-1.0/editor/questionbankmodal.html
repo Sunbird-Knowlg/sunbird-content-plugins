@@ -86,7 +86,7 @@
                   </div>
                   <div class="qb-question-action three wide column">
                     <div class="ui checkbox action-btn-checkbox" ng-class="question.isSelected ? 'checked' : '' " data-tooltip="select question" data-inverted="">
-                      <input type="checkbox" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question,$event);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" id="question_{{question.node_id}}">
+                      <input type="checkbox" class="question-select" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question,$event);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" id="question_{{question.node_id}}">
                       <label></label>
                     </div>
                     <span class="action-btn" ng-if="(currentUserId == question.createdBy) && (question.version != '1')" data-tooltip="delete question" data-inverted="">
