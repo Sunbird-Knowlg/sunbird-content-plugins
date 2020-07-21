@@ -94,7 +94,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
 
 for i in "${coreplugins[@]}"
 do
-   aws s3 --region $3 rm s3://$1/content-plugins/$i/ --recursive
+   #aws s3 --region $3 rm s3://$1/content-plugins/$i/ --recursive
    aws s3 --region $3 cp $2/$i s3://$1/content-plugins/$i --recursive --acl public-read
 done
 
