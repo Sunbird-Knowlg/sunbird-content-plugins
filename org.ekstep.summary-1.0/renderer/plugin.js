@@ -74,6 +74,12 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     });
     const allStagesList = EkstepRendererAPI.getAllStages();
     const firstContentStage = EkstepRendererAPI.getContentData();
+    var latestquestionsetID = '';
+     _.find(firstContentStage.stage, (obj) => {
+      var questionsetData = _.first(obj['org.ekstep.questionset']);
+      latestquestionsetID = questionsetData ? questionsetData.id : '';
+      return !!(questionsetData);
+    });
 
     /* Check the getAllStages ID equal to the firstContentStage ID,
      * GOTO the first Assessment Slide 
@@ -81,7 +87,7 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
      allStagesList.forEach((stageItem) => {
        if(firstContentStage.startStage === stageItem.id) {
         $(".popup").remove();
-        EkstepRendererAPI.dispatchEvent('renderer:plugin:reset',{"data":'true'});
+        EkstepRendererAPI.dispatchEvent('renderer:plugin:reset',{"data":'true',"questionsetId": latestquestionsetID});
         //GOTO the First Slide using ID
         Renderer.theme.invokeStage(stageItem.id);
        }
