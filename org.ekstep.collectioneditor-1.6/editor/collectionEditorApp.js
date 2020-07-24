@@ -309,7 +309,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
-                if(showToc && res.data.result.content.contentType === 'TextBook' || _.isEmpty(res.data.result.content.children) || !(res.data.result.content.children)){ 
+                if(showToc && res.data.result.content.contentType === 'TextBook' && (!res.data.result.content.children || _.isEmpty(res.data.result.content.children))){ 
                     $scope.createToc();
                 }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
