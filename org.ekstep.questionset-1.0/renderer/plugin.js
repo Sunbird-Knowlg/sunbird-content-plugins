@@ -71,6 +71,12 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
           instance.stopAudio();
           instance.resetQS();
         }, instance);
+
+        // On timer ends, stop all audios playing in questionset.
+        EkstepRendererAPI.addEventListener('renderer:content:stopAudioOnTimerEnd',function(){
+          instance.stopAudio();
+        });
+
         // add mute and unmute events
         this.addMuteUnmuteEvents(instance)
         // Remove duplicate event listener
