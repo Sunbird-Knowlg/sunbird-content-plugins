@@ -289,7 +289,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         var metadataObj = $scope.questionMetaData;    
         metadataObj.category = $scope.category;
         // TODO: questionCount should be sent from unit template controllers. Currently it is hardcoded to 1.
-        data.config = { "metadata": metadataObj, "max_time": 0, "max_score": $scope.questionData.max_score, "partial_scoring": $scope.questionData.isPartialScore, "layout": $scope.questionData.templateType, "isShuffleOption" : $scope.questionData.isShuffleOption, "questionCount": 1, "evalUnordered": $scope.questionData.evalUnordered};
+        data.config = { "metadata": metadataObj, "max_time": 0, "max_score": $scope.questionMetaData.max_score, "partial_scoring": $scope.questionData.isPartialScore, "layout": $scope.questionData.templateType, "isShuffleOption" : $scope.questionData.isShuffleOption, "questionCount": 1, "evalUnordered": $scope.questionData.evalUnordered};
         data.media = $scope.questionCreationFormData.media;
         questionFormData.data = data;
         var metadata = {
