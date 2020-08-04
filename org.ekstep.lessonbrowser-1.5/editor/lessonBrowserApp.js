@@ -19,6 +19,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         ctrl.searchRes = { count: 0, content: [] };
 
         $scope.mainTemplate = '';
+        $scope.defaultTemplate = false;
         $scope.isLoading = true;
         $scope.isCardSearching = false;
         $scope.sortOption = '';
@@ -242,7 +243,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
 
         // Sidebar - filters
-        $scope.applyFilters = function() {
+        $scope.applyFilters = function(data) {
             ctrl.generateTelemetry({ id:'button', type: 'click', subtype: 'submit', target: 'filter', targetid: 'button-filter-apply' });
             searchBody = {
                 "request": {
@@ -255,7 +256,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     "sort_by":{"lastUpdatedOn":"desc"}
                 }
             };
-            $scope.getFiltersValue(); /** Get filters values**/
+            if(data){
+                $scope.getFiltersValue(data); /** Get filters values**/
+            }else{
+                $scope.getFiltersValue(); /** Get filters values**/
+            }
+            
             $scope.isCardSearching = true;
             ctrl.searchLessons(function(res) {
                 $scope.isCardSearching = false;
@@ -664,8 +670,28 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 $scope.invokeFacetsPage();
             }
             ecEditor.addEventListener('editor:template:loaded', function(event, object) {
+                var formConfig = {
+                    templateLayout : object.config.formConfig.templateLayout, // form template
+                    fields: object.config.formConfig.fields, // form fields
+                    formData: object.config.framework.categories, // framework data
+                }
                 if(object.formAction == 'resource-filters') {
                     $scope.filterForm = object.templatePath;
+                    jQuery('#dynamicFormDiv').SBdynamicForm({
+                        id: "dynamicFormDiv",
+                        config: formConfig,
+                        data: $scope.contentMeta,
+                        submitId: "apply-lesson-filter-button",
+                        showSelectedCount: true,
+                        getFormData : function(data){
+                            $scope.applyFilters(data);
+                        },
+                        error: function(error){
+                            if (error){
+                                $scope.defaultTemplate = true;
+                            }
+                        }
+                    });
                 }
             });
             ecEditor.addEventListener('editor:form:change', function(event, data) {

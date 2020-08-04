@@ -12,6 +12,8 @@
             { "plugin": "org.ekstep.topicselector", "ver": "1.1", "type": "plugin" },
             { "type": "js", "src": "editor/libs/ng-tags-input.js" },
             { "type": "css", "src": "editor/libs/ng-tags-input.css" },
+            { "type": "css", "src": "editor/css/style.css" },
+            { "type": "js", "src": "editor/libs/bundle.js" },
             { "type": "js", "src": "editor/directives/keywords/keyword.js" },
             { "type": "js", "src": "editor/directives/conceptselector/conceptselector.js" },
             { "type": "js", "src": "editor/directives/topicselector/topicselector.js" },

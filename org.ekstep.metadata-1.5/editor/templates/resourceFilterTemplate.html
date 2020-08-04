@@ -26,7 +26,8 @@
                                 FILTERS</p>
                             <a class="ui right floated blueColor" ng-click="resetAllFilters(); $parent.$parent.resetFilters();">Clear All</a>
                         </div>
-                        <div class="filter-column" ng-class="(dynamicField.code == 'searchText')? 'twelve wide column': 'four wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations">
+                        <div ng-if="!$parent.$parent.defaultTemplate" class="filter-column" ng-class="(dynamicField.code == 'searchText')? 'twelve wide column': 'four wide column'" id="dynamicFormDiv"></div>
+                        <div ng-if="$parent.$parent.defaultTemplate" class="filter-column" ng-class="(dynamicField.code == 'searchText')? 'twelve wide column': 'four wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations">
                             <!-- MULTIPLE SELECT INPUT FIELD -->
                             <div class="filterMetaDetails">
                                 <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiselect' ">
