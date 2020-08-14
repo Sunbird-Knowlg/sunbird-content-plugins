@@ -346,7 +346,12 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
      * @returns {String} url.
      */
     replaceAssetWithBaseURL: function(questionData) {
-        return  (questionData) && questionData.split('/assets/public/').join(EkstepRendererAPI.getBaseURL() + 'assets/public/');
+        if(!questionData.includes(EkstepRendererAPI.getBaseURL())){
+            return (questionData) && questionData.split('/assets/public/').join(EkstepRendererAPI.getBaseURL() + 'assets/public/');
+        }
+        else{
+            return questionData;
+        }
     },
     logTelemetryInteract: function(event) {
         if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { // eslint-disable-line no-undef
