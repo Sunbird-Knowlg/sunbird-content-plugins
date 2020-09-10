@@ -40,12 +40,12 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     $(FTBController.constant.qsFtbElement).on('click', '.ans-field', FTBController.invokeKeyboard); // eslint-disable-line no-undef
 
     $('.ans-field').focusin(function() {
-      if (!(isbrowserpreview && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
+      if (_.isUndefined(isbrowserpreview) && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device")) { // eslint-disable-line no-undef
         $(FTBController.constant.qsFtbContainer).addClass("align-question");
       }
     }).add('.ans-field').focusout(function(){
         if ( !$('.ans-field').is(':focus') ) {
-          if (!(isbrowserpreview && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
+          if (_.isUndefined(isbrowserpreview) && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device")) { // eslint-disable-line no-undef
             $(FTBController.constant.qsFtbContainer).removeClass("align-question");
           }
         }
