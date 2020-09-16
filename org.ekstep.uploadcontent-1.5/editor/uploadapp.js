@@ -13,7 +13,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.primaryCategoryList = [];
 
     $scope.getCategoryList = function(){
-        const contextPrimaryCategory = window.context.primaryCategories;
+        const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
         if(!_.isUndefined(contextPrimaryCategory)){
             $scope.primaryCategoryList = contextPrimaryCategory;
         }

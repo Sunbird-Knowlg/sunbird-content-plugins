@@ -35,7 +35,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.primaryCategoryList = [];
     
     $scope.getCategoryList = function(){
-        const contextPrimaryCategory = window.context.primaryCategories;
+        const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
         if(!_.isUndefined(contextPrimaryCategory)) {
             $scope.primaryCategoryList = contextPrimaryCategory;
         }
