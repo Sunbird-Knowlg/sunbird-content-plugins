@@ -30,8 +30,32 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.maxUploadSize = $scope.uploadInfo ? Number($scope.uploadInfo.maxAllowedContentSize)*1024*1024 : 16106127360; // falback is 15 GB
     $scope.minUploadSize = 1; //52428800;  // 50 MB
     $scope.allowedContentType = $scope.uploadInfo ? $scope.uploadInfo.allowedContentType : ['mp4', 'webm']; // falback mp4 and webm
+    $scope.selectedPrimaryCategory = '';
+    $scope.disableDropdown = false;
+    $scope.primaryCategoryList = [];
     
+    $scope.getCategoryList = function(){
+        const contextPrimaryCategory = window.context.primaryCategories;
+        if(!_.isUndefined(contextPrimaryCategory)) {
+            $scope.primaryCategoryList = contextPrimaryCategory;
+        }
+    }
+    $scope.onPrimaryCategoryChange = function() {
+        if ($scope.selectedPrimaryCategory == '') {
+            $('#dragDropArea').css("visibility", "hidden");
+            $('input[name="qqfile"]').attr('disabled', true);
+            $('#browseButton').css("opacity", "0.5");
+        } else {
+            $('#dragDropArea').css("visibility", "visible");
+            $('input[name="qqfile"]').attr('disabled', false);
+            $('#browseButton').css("opacity", "1");
+        }
+    }
+
     $scope.$on('ngDialog.opened', function () {
+        $('#dragDropArea').css("visibility", "hidden");
+        $('#browseButton').css("opacity", "0.5");
+        $scope.getCategoryList();
         $('#progressElement').hide(); // Progress element for UI
         $('#retryUploadButton').hide(); // Retry on network outage for UI
         $('.progress').progress("reset") // reset progress on each upload
@@ -79,11 +103,13 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             }
         });
         $('#qq-template-validation').remove();
+        $('input[name="qqfile"]').attr('disabled', true);
         fileUploader = $scope.uploader;
     });
     
     
     $scope.fileValidation = function () {
+        $scope.disableDropdown = true;
         $scope.generateTelemetry({
             id: "button",
             type: "click",
@@ -120,7 +146,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                         "resourceType": "Learn",
                         "creator": ecEditor.getContext('user').name,
                         "framework": ecEditor.getContext('framework'),
-                        "organisation": ecEditor._.values(ecEditor.getContext('user').organisations)
+                        "organisation": ecEditor._.values(ecEditor.getContext('user').organisations),
+                        "primaryCategory": $scope.selectedPrimaryCategory
                     }
                 }
             }
