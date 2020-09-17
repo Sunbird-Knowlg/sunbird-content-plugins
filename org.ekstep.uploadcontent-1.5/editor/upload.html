@@ -73,18 +73,17 @@
         </div>
     </div>
     <div class="content">
-        <div class="field required">
-                <label>Content Type</label>
-                <span class="pr-3" style="color: red;">*</span>
-                <span class="field">
-                    <select id="_selectPrimaryCategory" class="ui search dropdown"
+        <div class="ui form">
+            <div class="field required">
+                <label class="d-inline-block">Content Type</label>
+                    <select id="_selectPrimaryCategory" class="ui search dropdown w-40 d-inline-block"
                     ng-model="selectedPrimaryCategory"
                     ng-change="onPrimaryCategoryChange()"
-                    ng-disabled="disableDropdown">
-                    <option value="" selected>select</option>
+                    >
+                    <option value="" selected>Select one</option>
                     <option data-value="{{primaryCategory}}" ng-repeat="primaryCategory in primaryCategoryList" ng-selected="">{{primaryCategory}}</option>
                     </select>
-                </span>
+            </div>
         </div>
         <div class="field" id='url-upload'>
             <label>URL</label>
