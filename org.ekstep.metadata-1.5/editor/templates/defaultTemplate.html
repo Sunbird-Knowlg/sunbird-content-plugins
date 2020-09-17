@@ -82,7 +82,7 @@
                                                 </span>
                                             </label>
                                             <div>
-                                                <div class="ui input " ng-class="{ 'disabled':isEditMode || !dynamicField.editable } ">
+                                                <div class="ui input " ng-class="{ 'disabled':isEditMode || !dynamicField.editable || (dynamicField.code === 'primaryCategory' && dynamicField.editable) } ">
                                                     <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="text " ng-required="{{dynamicField.required}} " ng-pattern="dynamicField.validation.regex['value']"
                                                         ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="onConfigChange({target: '#metadataForm',form:metaForm})" ng-click="onConfigChange({target: '#metadataForm',field:dynamicField, form:metaForm})">
                                                 </div>
