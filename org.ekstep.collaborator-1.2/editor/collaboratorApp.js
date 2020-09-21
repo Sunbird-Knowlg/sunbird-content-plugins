@@ -3,10 +3,11 @@ angular.module('collaboratorApp', ['angular-inview'])
     .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', function ($scope, $timeout, instance) {
         $scope.inViewLogs = [];
         $scope.searchRes = { count: 0, content: [], isEmptyResponse: false, errorMessage: '', searchStatus: 'start' };
-        $scope.isAddCollaboratorTab = false;
+        $scope.isAddCollaboratorTab = false
         $scope.isLoading = true;
         $scope.defaultLimit = 200;
         $scope.isContentOwner = false;
+        $scope.isRootOrgAdmin = _.has(ecEditor.getContext('user'),'isRootOrgAdmin') ?  ecEditor.getContext('user').isRootOrgAdmin : false;
         $scope.users = [];
         $scope.collaborators = [];
         $scope.currentCollaborators = []; //existingCollaborators
@@ -64,7 +65,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
-                    if ($scope.isContentOwner) {
+                    if ($scope.isContentOwner || $scope.isRootOrgAdmin) {
                         $scope.loadAllUsers();
                     } else {
                         $scope.fetchCollaborators();
@@ -178,7 +179,8 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.updateCollaborators = function (newCollaborators) {
             $scope.updateCollaboratorRequest.request.content.collaborators = newCollaborators;
-            $scope.userService.updateCollaborators(ecEditor.getContext('contentId'), $scope.updateCollaboratorRequest, function (err, res) {
+            if($scope.isRootOrgAdmin){
+                $scope.userService.updateCollaboratorsFromAdmin(ecEditor.getContext('contentId'), $scope.updateCollaboratorRequest, function (err, res) {
                 if (err) {
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                         message: 'Unable to update collaborator',
@@ -202,6 +204,34 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.closePopup();
                 }
             });
+
+            }
+            else {
+                $scope.userService.updateCollaborators(ecEditor.getContext('contentId'), $scope.updateCollaboratorRequest, function (err, res) {
+                if (err) {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to update collaborator',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                } else {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                        message: 'Collaborators updated successfully',
+                        position: 'topCenter',
+                        icon: 'fa fa-check-circle'
+                    });
+                    let metaData = $scope.contentService.getContentMeta(ecEditor.getContext('contentId'));
+
+                    /* istanbul ignore else */
+                    if (res.data.result && res.data.result.versionKey) {
+                        metaData.versionKey = res.data.result.versionKey;
+                    }
+                    $scope.contentService._setContentMeta(ecEditor.getContext('contentId'), metaData);
+                    $scope.isLoading = false;
+                    $scope.closePopup();
+                }
+            });
+            }
         }
 
         /**
