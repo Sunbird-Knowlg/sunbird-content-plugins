@@ -120,7 +120,9 @@
                                             <div>
                                                 <span ng-hide="true">{{user.phone}}</span>
                                                 <button class="right floated clear-btn color-danger" style="padding-right:0;" ng-if="!user.isSelected  && (isContentOwner || isRootOrgAdmin)" ng-click="toggleSelectionUser(user, $index, 'collaborators')"><strong>REMOVE</strong></button>
+
                                                 <div class="ui right floated compact segment" style="padding:0; border: 0;margin:0;" ng-if="user.isSelected  && (isContentOwner || isRootOrgAdmin)" ng-click="toggleSelectionUser(user, $index, 'collaborators')">
+
                                                     <div class="ui mini fitted toggle checkbox" style="transform:scale(0.7)">
                                                         <input type="checkbox" checked><label></label>
                                                     </div>
@@ -146,8 +148,10 @@
             <div class="ui clearing segment">
                 <div class="ui grid">
                     <div class="twelve wide column">
+
                         <button ng-if="isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!users.selectedCount" ng-click="addCollaborators()">Done</button>
-                        <button ng-if="!isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!collaborators.selectedCount || !isContentOwner" ng-click="removeCollaborators()">Done</button>
+
+                        <button ng-if="!isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!collaborators.selectedCount || ! (isContentOwner || isRootOrgAdmin)" ng-click="removeCollaborators()">Done</button>
                     </div>
                 </div>
             </div>
