@@ -39,9 +39,9 @@
         <!--BODY-->
         <div class="ui pointing secondary menu tab-bar">
             <a class="item active" ng-if="(isContentOwner || isRootOrgAdmin)" style="padding-left:20px;padding-top: 15px;padding-bottom: 15px;" data-tab="addCollaboratorTab" ng-click="selectTab($event)">Add Collaborators</a>
-            <a class="item" ng-class="isContentOwner ? '' : 'active'" data-tab="userListTab" ng-click="selectTab($event)">Manage Collaborators</a>
+            <a class="item" ng-class="(isContentOwner || isRootOrgAdmin ) ? '' : 'active'" data-tab="userListTab" ng-click="selectTab($event)">Manage Collaborators</a>
         </div>
-        <div class="ui tab segment height-100 body-content" ng-class="isContentOwner ? 'active' : ''" data-tab="addCollaboratorTab">
+        <div class="ui tab segment height-100 body-content" ng-class="(isContentOwner || isRootOrgAdmin ) ? 'active' : ''" data-tab="addCollaboratorTab">
             <div class="ui active inverted dimmer" ng-if="isLoading"><div class="ui large text loader">Loading</div></div>
             <!-- FOR ADD COLLABORATORS -->
             <div ng-if="isAddCollaboratorTab">
