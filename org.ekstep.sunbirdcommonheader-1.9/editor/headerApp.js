@@ -94,6 +94,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.contentLockExpired = false;
     $scope.hideCollaboratorBtn = false;
     $scope.collaboratorTooltip = 'Add Collaborator';
+    $scope.isRootOrgAdmin = _.has(ecEditor.getContext('user'),'isRootOrgAdmin') ?  ecEditor.getContext('user').isRootOrgAdmin : false;
     /*
      * Update ownership list when adding and removing the content.
      */
@@ -184,8 +185,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.isReviewCommentsPresent = true;
             $scope.$safeApply();
         }
-        $scope.collaboratorTooltip = (ecEditor.getContext('uid') === meta.createdBy) ? 'Add Collaborator' : 'View Collaborator';
-        $scope.hideCollaboratorBtn = (meta.status === 'Draft')  ? true : false;
+        $scope.collaboratorTooltip = ((ecEditor.getContext('uid') === meta.createdBy) || isRootOrgAdmin ) ? 'Add Collaborator' : 'View Collaborator';
+        $scope.hideCollaboratorBtn = ((meta.status === 'Draft') || isRootOrgAdmin )  ? true : false;
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
