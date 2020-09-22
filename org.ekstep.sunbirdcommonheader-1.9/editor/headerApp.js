@@ -185,8 +185,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.isReviewCommentsPresent = true;
             $scope.$safeApply();
         }
-        $scope.collaboratorTooltip = ((ecEditor.getContext('uid') === meta.createdBy) || isRootOrgAdmin ) ? 'Add Collaborator' : 'View Collaborator';
-        $scope.hideCollaboratorBtn = ((meta.status === 'Draft') || isRootOrgAdmin )  ? true : false;
+        $scope.collaboratorTooltip = ((ecEditor.getContext('uid') === meta.createdBy) || $scope.isRootOrgAdmin ) ? 'Add Collaborator' : 'View Collaborator';
+        $scope.hideCollaboratorBtn = ((meta.status === 'Draft') || $scope.isRootOrgAdmin )  ? true : false;
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
