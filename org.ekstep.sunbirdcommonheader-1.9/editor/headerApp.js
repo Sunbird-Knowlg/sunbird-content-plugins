@@ -65,7 +65,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
-    $scope.hideReviewBtn = false;
+    $scope.hideReviewBtn = _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').sendforreview))? false: !(ecEditor.getConfig('headerConfig').sendforreview);
     $scope.publishMode = false;
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
@@ -93,6 +93,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.previewMode = false;
     $scope.contentLockExpired = false;
     $scope.hideCollaboratorBtn = false;
+    $scope.hidePreviewBtn =  _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').showPreview))? true: (ecEditor.getConfig('headerConfig').showPreview);
+    $scope.hideLimitedSharingBtn = _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').limitedsharing))? true: (ecEditor.getConfig('headerConfig').limitedsharing);
+    $scope.showEditDetailsOption = _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').showEditDetails)) ? true : (ecEditor.getConfig('headerConfig').showEditDetails);
     $scope.collaboratorTooltip = 'Add Collaborator';
     /*
      * Update ownership list when adding and removing the content.
@@ -185,7 +188,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.$safeApply();
         }
         $scope.collaboratorTooltip = (ecEditor.getContext('uid') === meta.createdBy) ? 'Add Collaborator' : 'View Collaborator';
-        $scope.hideCollaboratorBtn = (meta.status === 'Draft')  ? true : false;
+        $scope.hideCollaboratorBtn = (_.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').managecollaborator)))? true: ((ecEditor.getConfig('headerConfig').managecollaborator && (meta.status === 'Draft'))  ? true : ecEditor.getConfig('headerConfig').managecollaborator);
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
