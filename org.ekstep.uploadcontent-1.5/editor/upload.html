@@ -1,8 +1,8 @@
 <script type="text/ng-template" ng-app="org.ekstep.uploadcontent-1.4" ng-controller="uploadController as $ctrl" id="partials_org.ekstep.uploadcontent.html">
 <div type="text/template" id="qq-template-validation" style="display: none">
-    <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:188px;">
+    <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:180px;">
 
-        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone id="dragDropArea">
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
         
@@ -31,7 +31,7 @@
                 <strong>Drag &amp; Drop</strong><br>
                 <span>your files here, or</span>
             </div>
-            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;">
+            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;" id="browseButton">
                 <div>Browse</div>
             </div>
         </div>
@@ -61,7 +61,7 @@
         </dialog>
     </div>
 </div>
-<div class="ui modal active" style="top: 6% !important">
+<div class="ui modal active" style="top: 2% !important;">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
@@ -73,10 +73,22 @@
         </div>
     </div>
     <div class="content">
+        <div class="ui form">
+            <div class="field required">
+                <label class="d-inline-block">Content Type</label>
+                    <select id="_selectPrimaryCategory" class="ui search dropdown w-40 d-inline-block"
+                    ng-model="selectedPrimaryCategory"
+                    ng-change="onPrimaryCategoryChange()"
+                    >
+                    <option value="" selected>Select one</option>
+                    <option data-value="{{primaryCategory}}" ng-repeat="primaryCategory in primaryCategoryList" ng-selected="">{{primaryCategory}}</option>
+                    </select>
+            </div>
+        </div>
         <div class="field" id='url-upload'>
             <label>URL</label>
             <div class="ui fluid transparent input">
-                <input type="text" placeholder="https://" ng-model="contentURL">
+                <input type="text" placeholder="https://" ng-model="contentURL" ng-disabled="(selectedPrimaryCategory == '')">
             </div>
         </div>
         <div id="upload-content-div" style="margin-top: 15px"></div>
@@ -95,7 +107,7 @@
         <div class="ui buttons">
             <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({id:'button',type:'click',subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="uploadCancelLabel"></button>
             <div class="or"></div>
-            <button class="ui blue button" ng-click="upload(); generateTelemetry({id:'button',type:'click',subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">Upload</button>
+            <button class="ui blue button" ng-click="upload(); generateTelemetry({id:'button',type:'click',subtype:'upload',target:'uploadButton'}) " ng-disabled="(selectedPrimaryCategory == '')">Upload</button>
         </div>
     </div>
 </div>

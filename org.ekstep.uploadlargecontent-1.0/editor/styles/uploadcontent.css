@@ -48,3 +48,9 @@
 	font-size: 1.1em;
 	font-weight: bold;
 }
+.d-inline-block {
+ display: inline-block !important;
+}
+.w-40 {
+	width: 40% !important;
+}

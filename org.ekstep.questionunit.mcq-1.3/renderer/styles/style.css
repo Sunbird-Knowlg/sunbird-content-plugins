@@ -921,7 +921,7 @@ span.qc-option-txt {
 }
 
 .mcq-grid-question-container {
-    width: 100vw;
+    width: 100% !important;
     height: 23.5%;
     position: relative;
     font-size: 14px;

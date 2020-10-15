@@ -2,7 +2,7 @@
 <div type="text/template" id="qq-template-validation" style="display: none">
     <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:188px;">
 
-        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone id="dragDropArea">
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
         
@@ -32,7 +32,7 @@
                 <strong>Drag &amp; Drop</strong><br>
                 <span>your files here, or</span>
             </div>
-            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;">
+            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;" id="browseButton">
                 <div>Browse</div>
             </div>
         </div>
@@ -55,7 +55,7 @@
         </dialog>
     </div>
 </div>
-<div class="ui modal active" style="top: 6% !important">
+<div class="ui modal active" style="top: 2% !important">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
@@ -73,6 +73,18 @@
         </div>
     </div>
     <div class="content">
+        <div class="ui form">
+            <div class="field required">
+                <label class="d-inline-block">Content Type</label>
+                    <select id="_selectPrimaryCategory" class="ui search dropdown w-40 d-inline-block"
+                    ng-model="selectedPrimaryCategory"
+                    ng-change="onPrimaryCategoryChange()"
+                    >
+                    <option value="" selected>Select one</option>
+                    <option data-value="{{primaryCategory}}" ng-repeat="primaryCategory in primaryCategoryList" ng-selected="">{{primaryCategory}}</option>
+                    </select>
+            </div>
+        </div>
         <div id="progressElement">
         <div class="ui orange message">Please do not close this window until the upload is complete</div>
         <div class="ui info message">
