@@ -247,7 +247,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                     $scope.pendingChanges = false;
                     $scope.disableQRGenerateBtn = true;
-                    $scope.hideCollaboratorBtn = true;
+                    $scope.hideCollaboratorBtn = ecEditor.getConfig('headerConfig') && !_.isUndefined(ecEditor.getConfig('headerConfig').managecollaborator) ? ecEditor.getConfig('headerConfig').managecollaborator : true;
                 } else {
                     if(res.responseJSON.responseCode == 'CLIENT_ERROR' && !_.isUndefined(res.responseJSON.result.messages)){
                         ecEditor.dispatchEvent('org.ekstep.toaster:error', {
