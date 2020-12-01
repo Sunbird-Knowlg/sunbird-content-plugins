@@ -332,13 +332,13 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                     });
                     $scope.showLoader(false);
                 } else {
-                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                        title: 'content uploaded successfully!',
-                        position: 'topCenter',
-                        icon: 'fa fa-check-circle'
-                    });
-                    ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
-                    $scope.closeThisDialog();
+                    if (mimeType === 'application/vnd.ekstep.h5p-archive') {
+                        var timeout = Number(ecEditor.getConfig('uploadDelayTimeout'));
+                        setTimeout($scope.handleSuccessfulUpload, timeout || 25000);
+                    } else {
+                        $scope.handleSuccessfulUpload();
+                    }
+                    
                 }
             })
         }
@@ -347,6 +347,16 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         } else {
             cb($scope.contentURL);
         }
+    }
+
+    $scope.handleSuccessfulUpload = function() {
+        ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+            title: 'content uploaded successfully!',
+            position: 'topCenter',
+            icon: 'fa fa-check-circle'
+        });
+        ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+        $scope.closeThisDialog();
     }
 
     $scope.uploadFile = function(mimeType, cb) {
