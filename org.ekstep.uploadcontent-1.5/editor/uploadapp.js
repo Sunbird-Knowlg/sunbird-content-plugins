@@ -1,6 +1,7 @@
 'use strict';
 var fileUploader;
 angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+    var plugin = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadcontent");
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.contentURL = undefined;
