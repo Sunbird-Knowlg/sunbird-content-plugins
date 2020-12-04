@@ -1,6 +1,6 @@
 <script type="text/ng-template" ng-app="org.ekstep.uploadcontent-1.4" ng-controller="uploadController as $ctrl" id="partials_org.ekstep.uploadcontent.html">
 <div type="text/template" id="qq-template-validation" style="display: none">
-    <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:180px;">
+    <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:150px;">
 
         <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone id="dragDropArea">
             <span class="qq-upload-drop-area-text-selector"></span>
@@ -26,12 +26,12 @@
             </li>
         </ul>
         <div id="qq-upload-actions">
-            <div style="position: absolute;bottom: 45%;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
+            <div style="position: absolute;bottom: 44%;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
                 <i class="upload huge icon" style="font-size: 3em"></i><br>
                 <strong>Drag &amp; Drop</strong><br>
                 <span>your files here, or</span>
             </div>
-            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;" id="browseButton">
+            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 10%;" id="browseButton">
                 <div>Browse</div>
             </div>
         </div>
@@ -97,6 +97,8 @@
             <ul class="list">
                 <li>File accepted - pdf, mp4, webm, epub, youtube, h5p and html zip</li>
                 <li>Max file size - 50 Mb</li>
+                <li>Please note that H5P files will take more time to upload. If you are unable to see the preview after uploading the file, please refresh the editor after a minute</i>
+                <li>Please refer to this document to get the details of supported H5P content types: <a href="{{H5PGuidanceDoc}}" target="_blank">H5P Guidelines document</a></i>
                 <p>By uploading content on DIKSHA, you confirm that you are publishing it under a Creative Commons license that is compatible with the copyright license of the original work and are giving appropriate credit to the original author of the content.</p>
             </ul>
 
