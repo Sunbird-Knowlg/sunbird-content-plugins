@@ -31,9 +31,9 @@ QSTelemetryLogger.logInteract = function(data) {
 QSTelemetryLogger.logResponse = function(data) {
   var edata = {
     "target": {
-      "id": this._plugin._manifest.id ? this._plugin._manifest.id : "",
-      "ver": this._plugin._manifest.ver ? this._plugin._manifest.ver : "1.0",
-      "type": this._plugin._manifest.type ? this._plugin._manifest.type : "plugin"
+      "id": this._qConfig.metadata.identifier ? this._qConfig.metadata.identifier : (this._question.id || ""),
+      "ver": this._qConfig.metadata.version ? this._qConfig.metadata.version.toString() : "1.0",
+      "type": "AssessmentItem"
     },
     "optionTag": data.type,
     "res": data.values

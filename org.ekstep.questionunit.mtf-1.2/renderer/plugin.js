@@ -10,6 +10,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
   _type: 'org.ekstep.questionunit.mtf',
   _isContainer: true,
   _render: true,
+  _attempted:false,
   _selectedAnswers: [],
   _dragulaContainers: [],
   _drake: undefined,
@@ -25,6 +26,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
   preQuestionShow: function (event) {
     this._super(event);
     var inst = this;
+    this._attempted = false;
 
     // If the any of the lhs or rhs had a image then the layout is vertical
     _.each(this._question.data.option.optionsLHS, function (lhs) {
@@ -110,7 +112,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       score: questionScore,
       max_score: this._question.config.max_score,
       params: instance.getTelemetryParams(),
-      values: instance.getTelemetryResValues(),
+      values: (questionScore > 0 || instance._attempted) ? instance.getTelemetryResValues() : [],
       noOfCorrectAns: correctAnswersCount,
       totalAns: totalLHS,
       type: "mtf"

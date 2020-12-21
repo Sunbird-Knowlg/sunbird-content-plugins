@@ -19,8 +19,8 @@
             <div class="table-of-contents-fixed-btns" ng-show="{{mode == 'Edit'}}">
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a class="blueColor"><i class="plus icon"></i>New Sibling</button>
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a class="blueColor"> <i class="level up icon clockwise rotated table-of-contents-child-icon "></i>New Child</a></button>  
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection || isRootNode"><a class="blueColor"><i class="plus icon"></i>New Sibling</button>
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')" ng-disabled="isResourceCollection"><a class="blueColor"> <i class="level up icon clockwise rotated table-of-contents-child-icon "></i>New Child</a></button>  
                     </div>
                 </div>    
             </div>

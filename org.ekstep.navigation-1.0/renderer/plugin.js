@@ -33,6 +33,10 @@
       }
     });
 
+    EkstepRendererAPI.addEventListener("renderer:navigation:deregister:timeout",function(event){
+      instance._customNavigationPlugins = [];
+    });
+
     //If register call plugin next method
     EkstepRendererAPI.addEventListener("renderer:navigation:next",function(event){
       var registered = _.isEmpty(instance._customNavigationPlugins);

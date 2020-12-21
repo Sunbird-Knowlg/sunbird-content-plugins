@@ -1,6 +1,7 @@
 'use strict';
 var fileUploader;
 angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+    var plugin = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadcontent");
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.contentURL = undefined;
@@ -8,8 +9,32 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.showLoaderIcon = false;
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.5", "editor/loader.gif");
     $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
+    $scope.selectedPrimaryCategory = '';
+    $scope.disableDropdown = false;
+    $scope.primaryCategoryList = [];
+    $scope.H5PGuidanceDoc = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/h5pcontentguidelines.pdf');
 
+    $scope.getCategoryList = function(){
+        const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
+        if(!_.isUndefined(contextPrimaryCategory)){
+            $scope.primaryCategoryList = contextPrimaryCategory;
+        }
+    }
+    $scope.onPrimaryCategoryChange = function() {
+        if ($scope.selectedPrimaryCategory == '') {
+            $('#dragDropArea').css("visibility", "hidden");
+            $('input[name="qqfile"]').attr('disabled', true);
+            $('#browseButton').css("opacity", "0.5");
+        } else {
+            $('#dragDropArea').css("visibility", "visible");
+            $('input[name="qqfile"]').attr('disabled', false);
+            $('#browseButton').css("opacity", "1");
+        }
+    }
     $scope.$on('ngDialog.opened', function() {
+        $scope.getCategoryList();
+        $('#dragDropArea').css("visibility", "hidden");
+        $('#browseButton').css("opacity", "0.5");
         $scope.uploader = new qq.FineUploader({
             element: document.getElementById("upload-content-div"),
             template: 'qq-template-validation',
@@ -76,6 +101,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                 console.info(" hiding the alert messages from fine uploader");                
             }
         });
+        $('input[name="qqfile"]').attr('disabled', true);
         $('#qq-template-validation').remove();
         fileUploader = $scope.uploader;
     });
@@ -230,12 +256,12 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                         "resourceType": "Learn",
                         "creator": ecEditor.getContext('user').name,
                         "framework": ecEditor.getContext('framework'),
-                        "organisation":ecEditor._.values(ecEditor.getContext('user').organisations)
+                        "organisation":ecEditor._.values(ecEditor.getContext('user').organisations),
+                        "primaryCategory": $scope.selectedPrimaryCategory
 
                     }
                 }
             }
-
             $scope.contentService.createContent(data, function(err, res) {
                 if (err) {
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -308,13 +334,13 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                     });
                     $scope.showLoader(false);
                 } else {
-                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                        title: 'content uploaded successfully!',
-                        position: 'topCenter',
-                        icon: 'fa fa-check-circle'
-                    });
-                    ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
-                    $scope.closeThisDialog();
+                    if (mimeType === 'application/vnd.ekstep.h5p-archive') {
+                        var timeout = Number(ecEditor.getConfig('uploadDelayTimeout'));
+                        setTimeout($scope.handleSuccessfulUpload, timeout || 25000);
+                    } else {
+                        $scope.handleSuccessfulUpload();
+                    }
+                    
                 }
             })
         }
@@ -323,6 +349,16 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         } else {
             cb($scope.contentURL);
         }
+    }
+
+    $scope.handleSuccessfulUpload = function() {
+        ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+            title: 'content uploaded successfully!',
+            position: 'topCenter',
+            icon: 'fa fa-check-circle'
+        });
+        ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+        $scope.closeThisDialog();
     }
 
     $scope.uploadFile = function(mimeType, cb) {

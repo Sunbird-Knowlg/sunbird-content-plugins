@@ -1,0 +1,55 @@
+@Library('deploy-conf') _ 
+node() {
+    try {
+        String ANSI_GREEN = "\u001B[32m"
+        String ANSI_NORMAL = "\u001B[0m"
+        String ANSI_BOLD = "\u001B[1m"
+        String ANSI_RED = "\u001B[31m"
+        String ANSI_YELLOW = "\u001B[33m"
+
+
+       tag_name = env.JOB_NAME.split("/")[-1]
+       pre_checks()
+        ansiColor('xterm') {
+            stage('Checkout') {
+                cleanWs()
+                dir('content-plugins'){
+                    def scmVars = checkout scm
+                    checkout scm: [$class: 'GitSCM', branches: [[name: "refs/tags/$tag_name"]], userRemoteConfigs: [[url: scmVars.GIT_URL]]]
+                    artifact_version = tag_name 
+                }
+            }   
+                echo "artifact_version: " + artifact_version
+
+         //       stage Build
+                    sh """
+                        zip -r content-plugins.zip content-plugins                     
+                    """
+         
+         //        stage archive artifacts
+                    sh """
+                        mkdir content-plugins-artifacts
+                        cp content-plugins.zip content-plugins-artifacts
+                        zip -j  content-plugins-artifacts.zip:${artifact_version}  content-plugins-artifacts/*                      
+                    """
+                    archiveArtifacts "content-plugins-artifacts.zip:${artifact_version}"
+                    sh """echo {\\"artifact_name\\" : \\"content-plugins-artifacts.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
+                    archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
+                    currentBuild.description = "${artifact_version}"
+                
+            } 
+        currentBuild.result = "SUCCESS"    
+        slack_notify(currentBuild.result, tag_name)
+        email_notify()  
+        auto_build_deploy()        
+        }
+
+    catch (err) {
+        currentBuild.result = "FAILURE"
+        slack_notify(currentBuild.result, tag_name)
+        email_notify()
+        throw err
+    }
+    
+
+}

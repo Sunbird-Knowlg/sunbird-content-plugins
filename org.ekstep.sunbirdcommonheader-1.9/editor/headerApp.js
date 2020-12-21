@@ -65,7 +65,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
-    $scope.hideReviewBtn = false;
+    $scope.hideReviewBtn = _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').sendforreview))? false: !(ecEditor.getConfig('headerConfig').sendforreview);
     $scope.publishMode = false;
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
@@ -93,7 +93,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.previewMode = false;
     $scope.contentLockExpired = false;
     $scope.hideCollaboratorBtn = false;
+    $scope.hidePreviewBtn =  _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').showPreview))? true: (ecEditor.getConfig('headerConfig').showPreview);
+    $scope.hideLimitedSharingBtn = _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').limitedsharing))? true: (ecEditor.getConfig('headerConfig').limitedsharing);
+    $scope.showEditDetailsOption = _.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').showEditDetails)) ? true : (ecEditor.getConfig('headerConfig').showEditDetails);
     $scope.collaboratorTooltip = 'Add Collaborator';
+    $scope.isRootOrgAdmin = _.has(ecEditor.getContext('user'),'isRootOrgAdmin') ?  ecEditor.getContext('user').isRootOrgAdmin : false;
     /*
      * Update ownership list when adding and removing the content.
      */
@@ -184,8 +188,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.isReviewCommentsPresent = true;
             $scope.$safeApply();
         }
-        $scope.collaboratorTooltip = (ecEditor.getContext('uid') === meta.createdBy) ? 'Add Collaborator' : 'View Collaborator';
-        $scope.hideCollaboratorBtn = (meta.status === 'Draft')  ? true : false;
+        $scope.collaboratorTooltip = ((ecEditor.getContext('uid') === meta.createdBy) || $scope.isRootOrgAdmin ) ? 'Add Collaborator' : 'View Collaborator';
+        $scope.hideCollaboratorBtn = (_.isUndefined(ecEditor.getConfig('headerConfig') && (ecEditor.getConfig('headerConfig').managecollaborator)))? true: ((ecEditor.getConfig('headerConfig').managecollaborator && ((meta.status === 'Draft') || $scope.isRootOrgAdmin ))  ? true : ecEditor.getConfig('headerConfig').managecollaborator);
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
@@ -243,7 +247,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                     $scope.pendingChanges = false;
                     $scope.disableQRGenerateBtn = true;
-                    $scope.hideCollaboratorBtn = true;
+                    $scope.hideCollaboratorBtn = ecEditor.getConfig('headerConfig') && !_.isUndefined(ecEditor.getConfig('headerConfig').managecollaborator) ? ecEditor.getConfig('headerConfig').managecollaborator : true;
                 } else {
                     if(res.responseJSON.responseCode == 'CLIENT_ERROR' && !_.isUndefined(res.responseJSON.result.messages)){
                         ecEditor.dispatchEvent('org.ekstep.toaster:error', {
@@ -307,7 +311,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
             var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-            return rootNodeConfig.type
+            return (rootNodeConfig.type == "Course" && meta.courseType && meta.courseType.toLowerCase() == "curriculumcourse") ?  "CurriculumCourse" : rootNodeConfig.type;
         } else {
             return 'resource'
         }
@@ -376,7 +380,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             }else if (iterateNodes.data.metadata.dialcodeRequired == 'Yes' && (_.isUndefined(iterateNodes.data.metadata.dialcodes) || iterateNodes.data.metadata.dialcodes == "")) {
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
-            }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes) && iterateNodes.data.metadata.dialcodes != "")){
+            }else if(iterateNodes.data.metadata.dialcodeRequired === 'No' && (!_.isUndefined(iterateNodes.data.metadata.dialcodes) && iterateNodes.data.metadata.dialcodes != "") && iterateNodes.folder){
                 dialCodeMisssing = true;
                 org.ekstep.services.collectionService.highlightNode(iterateNodes.data.id)
             }
@@ -563,8 +567,19 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.updateTitle = function (event, data) {
         $scope.contentDetails.contentTitle = data;
         document.title = data;
+        $scope.updateNodeTitle(data);
         $scope.$safeApply();
         $('.popup-item').popup();
+    };
+
+    $scope.updateNodeTitle = function (data) {
+        if ($scope.editorEnv == "COLLECTION") {
+            var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild()
+            if (rootNode.data.root) {
+                rootNode.setActive()
+                org.ekstep.collectioneditor.api.getService('collection').setNodeTitle(data);
+            }
+        }
     };
 
     $scope.updateIcon = function (event, data) {
@@ -595,8 +610,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
         if (!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
             console.log('trigger upload form');
+            if(ecEditor.getContext('uploadInfo') && (ecEditor.getContext('uploadInfo').isLargeFileUpload)) { 
+                ecEditor.dispatchEvent('org.ekstep.uploadlargecontent:show');
+                $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadLargeFileForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            } else {
             ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
             $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            }
         }
         $scope.$safeApply();
     };
@@ -605,8 +625,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     $scope.upload = function () {
         $scope.uploadFormStart = new Date();
+        if(ecEditor.getContext('uploadInfo') && (ecEditor.getContext('uploadInfo').isLargeFileUpload)) { 
+                ecEditor.dispatchEvent('org.ekstep.uploadlargecontent:show');
+                $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadLargeFileForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            } else {
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
         $scope.generateImpression({type:"view",subtype:"popup-open",pageid:"uploadForm",duration:(new Date() - $scope.uploadFormStart).toString()})
+            }
     };
 
     $scope.download = function () {

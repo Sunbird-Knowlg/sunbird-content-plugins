@@ -1,0 +1,12 @@
+<div ng-hide="{{toggleLicenseDetails}}">
+        <label>{{config.label | uppercase}}</label>
+        <div class="field">
+            <select id="_selectlicenses" class="ui search license dropdown  placeholder-padding" 
+            ng-required="{{fieldConfig.required}}" 
+            ng-disabled="{{isDisableSelection}}" 
+            ng-model="contentMeta.license" 
+            ng-change="OnLicenseChange()">
+             <option data-value="{{license.name}}" ng-repeat="license in licenseList" ng-selected="license.name && contentMeta[license] == license.name">{{license.name}}</option>
+            </select>
+        </div>
+     </div>

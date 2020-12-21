@@ -44,8 +44,8 @@
             <div class="ui buttons ">
                 <button id="closePopUp " class="ui orange button " type="button " ng-click="closeThisDialog() ">{{checklistItems.buttons.cancel}}</button>
                 <div class="or "></div>
-                <button ng-show="checklistItems.buttons.proceed=='Publish' " class="ui blue button " type="button " ng-disabled="enableBtn !='Publish' " ng-click="publishContent() ">{{checklistItems.buttons.proceed}}</button>
-                <button ng-show="checklistItems.buttons.proceed=='Request changes' " class="ui blue button " type="button " ng-disabled="enableBtn !='Reject' " ng-click="requestChanges() ">{{checklistItems.buttons.proceed}}</button>
+                <button ng-show="checklistItems.buttons.proceed=='Publish' " class="ui blue button " type="button " ng-disabled="enableBtn !='Publish' " ng-click="publishContent(); generateTelemetry({ id:'button',subtype: 'publish', target: 'contentPublishButton'});">{{checklistItems.buttons.proceed}}</button>
+                <button ng-show="checklistItems.buttons.proceed=='Request changes' " class="ui blue button " type="button " ng-disabled="enableBtn !='Reject' " ng-click="requestChanges(); generateTelemetry({ id:'button',subtype: 'request-changes', target: 'changesRequestedButton'}); ">{{checklistItems.buttons.proceed}}</button>
             </div>
         </div>
     </div>

@@ -6,6 +6,7 @@ var SEQController = SEQController || {};
  */
 SEQController.initTemplate = function (pluginInstance) {
   SEQController.pluginInstance = pluginInstance;
+  SEQController.pluginInstance._attempted = false;
 };
 
 /**
@@ -80,6 +81,7 @@ SEQController.onDomReady = function () {
     $(".option-block-container").sortable({
       stop: function(evt,ui){
         SEQController.logTelemetryInteract(evt);
+        SEQController.pluginInstance._attempted = true;
       }
     });
     $(".option-block-container").disableSelection();

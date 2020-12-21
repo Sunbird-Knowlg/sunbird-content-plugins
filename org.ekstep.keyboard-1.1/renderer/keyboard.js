@@ -29,7 +29,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
             </div>\
             <div id="thirdRow">\
                 <div class="key_barakhadi" onclick="Keyboard.changeToNumeric()"><span>123</span></div>\
-                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);"><span>&nbsp </span></div>\
+                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);"><pre> </pre></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
                 <div class="erase-icon">\
@@ -72,7 +72,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div style="width: 10%; padding:1%">\
                   <img src=<%= Keyboard.pluginInstance.getDefaultAsset("language_icon.png")%> class="" onclick="Keyboard.changeToAlphabet()" style="width: 50%; height=100%;"/>\
                 </div>\
-                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);" ><span>&nbsp</span></div>\
+                <div class="key_barakhadi spaceBar" onclick="Keyboard.addLetter(event);" ><pre> </pre></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="key_barakhadi" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
                 <div class="erase-icon">\

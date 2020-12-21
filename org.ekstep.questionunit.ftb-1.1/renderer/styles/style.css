@@ -98,9 +98,11 @@
 }
 
 .align-question {
-  margin: 13px 0px 0px 2px;
-  height: 30vh;
+  margin-top: 15% !important;
+  margin-left: 2px;
+  /* height: 30vh; */
   overflow-y: auto;
+  padding-bottom: 220px;
 }
 
 input#answer {
@@ -126,7 +128,7 @@ input.ans-field.highlightInput {
   .qs-ftb-container {
     margin-top: 20%;
   }
-}
+} 
 
 .image-model-popup{
   position: fixed;

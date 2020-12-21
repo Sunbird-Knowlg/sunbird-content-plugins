@@ -119,6 +119,11 @@ org.ekstep.mcq.questionComponent = {
                 $('.expand-button').css('display', 'block');
             }
         })
+
+        var questionData = MCQController.pluginInstance._question;
+        if(questionData.data.question.image == '') {
+            $('.hiding-container').css('padding-left','10%');
+        }
     },
     toggleQuestionText: function (option) {
         if(option && option.layout == "qcontainer-big"){

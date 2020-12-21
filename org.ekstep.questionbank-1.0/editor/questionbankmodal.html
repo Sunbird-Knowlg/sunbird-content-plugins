@@ -41,10 +41,10 @@
                 <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" ng-disabled="true" />
               </div>
             </div>
-            <div class="field">
+            <div class="field" ng-if="contentType != 'SelfAssess' ">
               <div class="ui fluid labeled input displayCount">
                 <div class="ui label">Display</div>
-                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
+                <select class="ui fluid dropdown questionCount" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
                 </select>
               </div>
             </div>
@@ -86,7 +86,7 @@
                   </div>
                   <div class="qb-question-action three wide column">
                     <div class="ui checkbox action-btn-checkbox" ng-class="question.isSelected ? 'checked' : '' " data-tooltip="select question" data-inverted="">
-                      <input type="checkbox" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+                      <input type="checkbox" class="question-select" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question,$event);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" id="question_{{question.node_id}}">
                       <label></label>
                     </div>
                     <span class="action-btn" ng-if="(currentUserId == question.createdBy) && (question.version != '1')" data-tooltip="delete question" data-inverted="">
@@ -100,9 +100,12 @@
                     </span>
                   </div>
                 </div>
-                <div class="load-more-assets-warning-msg endpage" ng-show="questions.length == 200 || resultNotFound == 0">
+                <div class="endpage" ng-style="{'visibility': showMoreVisibility ? 'visible' : 'hidden'}">
+                  <button class="ui blue button" ng-click="loadMoreQuestion();">Show More Questions</button>
+                </div>
+                <div class="load-more-assets-warning-msg endpage" ng-show="resultNotFound == 0">
                   <img class="ui centered tiny image" src="{{noQuestionFound}}">
-                  <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
+                  <p>Didn’t find what you were looking for? Try search for something more specific.
                   </p>
                 </div>
               </div>
