@@ -90,7 +90,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
  },
   newInstance: function () {
     var instance = this;
-    instance = this.checkContentType(instance);
+    // instance = this.checkContentType(instance);
     delete this.configManifest;
     instance.config.btn_edit = "Edit";
     var _parent = this.parent;
