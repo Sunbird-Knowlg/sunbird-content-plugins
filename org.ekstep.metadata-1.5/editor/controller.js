@@ -569,7 +569,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }
             if(!_.isUndefined($scope.originalContentMeta['contentType']) && !_.isEmpty($scope.originalContentMeta['contentType']) && $scope.originalContentMeta['contentType'] !== 'SelfAssess'){
                 config.fields = config.fields.filter(function( obj ) {
-                    return obj.code !== 'displayScore';
+                    return obj.code !== 'displayScore' && obj.code !== 'maxAttempts';
                 });
                 $scope.fields = config.fields;
             } else if($scope.tempalteName === 'defaultTemplate'){
