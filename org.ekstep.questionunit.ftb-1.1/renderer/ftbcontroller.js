@@ -72,7 +72,7 @@ FTBController.invokeKeyboard = function (event) { // eslint-disable-line no-unus
     targetInput: event.target
   };
   /*istanbul ignore else*/
-  if (_.isUndefined(isbrowserpreview) && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device")) { // eslint-disable-line no-undef
+  if (window.cordova && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device")) { // eslint-disable-line no-undef
     $(FTBController.constant.qsFtbContainer).addClass("align-question");
     setTimeout(function(){
       document.querySelector('.highlightInput').scrollIntoView({ behavior: 'smooth' });
