@@ -72,6 +72,14 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
       stageId: Renderer.theme._currentStage,
       subtype: ''
     });
+    if (!window.location.origin) {
+      origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+    } else {
+      origin = window.location.origin
+    }
+
+    window.postMessage('renderer:question:reviewAssessment',origin);
+    
     const allStagesList = EkstepRendererAPI.getAllStages();
     const firstContentStage = EkstepRendererAPI.getContentData();
 
