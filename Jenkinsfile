@@ -10,9 +10,12 @@ node() {
             stage('Checkout') {
                 cleanWs()
 
-                checkout scm
-                commit_hash = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-                artifact_version = sh(script: "echo " + params.github_release_tag.split('/')[-1] + "_" + commit_hash + "_" + env.BUILD_NUMBER, returnStdout: true).trim()
+                dir('content-plugins'){
+                    checkout scm
+                    commit_hash = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    artifact_version = sh(script: "echo " + params.github_release_tag.split('/')[-1] + "_" + commit_hash + "_" + env.BUILD_NUMBER, returnStdout: true).trim()
+                }
+
 
 
                 echo "artifact_version: " + artifact_version
