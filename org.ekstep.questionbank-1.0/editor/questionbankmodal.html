@@ -76,8 +76,8 @@
               <span class="ui label qc-selected-quescount">Selected Question : {{selectedQuestions.length}}</span>
             <div class="row qb-question-list-container qs-scrollbar">
               <div class="ui large divided items">
-                 
-                <div class="item select list-items ui grid" ng-repeat="question in questions" ng-class="{quesSelector: $index === selectedQueIndex}">
+
+                <div class="item select list-items ui grid" ng-repeat="question in questions track by $index" ng-class="{quesSelector: $index === selectedQueIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(question, true); showSelectedQue($index);">
                     <div class="header" style="display: -webkit-box;">{{ question.title}}</div>
                     <div class="meta">{{question.medium}} | {{ question.type}} | {{ question.qlevel }}
@@ -115,7 +115,7 @@
               <span class="ui label">Total Question in Question Set : {{selectedQuestions.length}}</span>
             <div class="column qb-selected-question-list-container qs-scrollbar" ng-show="isQuestionSetConfig">
               <div class="ui large divided items">
-                <div class="item select list-items ui grid" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
+                <div class="item select list-items ui grid" ng-repeat="selQuestion in selectedQuestions track by $index" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">
                     <div class="header" style="display: -webkit-box;">{{selQuestion.title }}</div>
                     <div class="meta">{{selQuestion.medium}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}
