@@ -29,11 +29,11 @@
                 <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
                     <div class="ui grid form-bottom-allign">
                         <div class="row">
-                            <div class="two wide field" ng-hide="!appIconConfig.visible">
+                            <div class="three wide field" ng-hide="!appIconConfig.visible">
                                 <app-icon></app-icon>
                             </div>
                             <!--FIXED SECTION LAYOUT-->
-                            <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
+                            <div class="{{!appIconConfig.visible ? 'sixteen wide field' : 'thirteen wide field'}}">
                                 <div ng-repeat="fixedField in fixedLayoutConfigurations">
                                     <div id="{{fixedField.code}}" class="field" ng-class="{'error': (!contentMeta[fixedField.code] && fixedField.required && isSubmit), 'required': fixedField.required}" name="{{fixedField.code}}" ng-if="(fixedField.inputType =='text' && fixedField.visible)">
                                         <label>{{fixedField.label | uppercase}}</label>
@@ -69,9 +69,9 @@
                         </div>
                         <div class="row ">
                             <!--DYNAMIC SECTION LAYOUT-->
-                            <div class="two wide field " ng-hide="!appIconConfig.visible ">
+                            <div class="three wide field " ng-hide="!appIconConfig.visible ">
                             </div>
-                            <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
+                            <div class="{{!appIconConfig.visible ? 'sixteen wide field' : 'thirteen wide field'}}">
                                 <div class="ui grid ">
                                     <div class="{{dynamicField.renderingHints.class ? dynamicField.renderingHints.class : 'six wide field'}}" ng-repeat="dynamicField in dynamicLayoutConfigurations ">
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}
@@ -210,10 +210,10 @@
             </div>
             <!-- View template -->
             <div class="ui grid readMode" ng-if="!editMode">
-                <div class="two wide column view-details-app-icon" ng-hide="!appIconConfig.visible">
+                <div class="three wide column view-details-app-icon" ng-hide="!appIconConfig.visible">
                     <app-icon></app-icon>
                 </div>
-                <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
+                <div class="{{!appIconConfig.visible ? 'sixteen wide field' : 'thirteen wide field'}}">
                     <table class="ui very basic table contentDetails">
                         <tbody>
                             <tr class="top aligned" ng-repeat="fixedField in fixedLayoutConfigurations" ng-hide="fixedField.code == 'appicon'">
