@@ -259,6 +259,7 @@ body {
 }
 
 .urdu-text{
+    text-align: right;
     font-family: NotoNastaliqUrdu;
     font-size: 12px;
     padding: 3px;
