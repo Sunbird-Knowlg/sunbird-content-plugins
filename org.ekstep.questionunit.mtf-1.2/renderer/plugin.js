@@ -91,7 +91,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       }
     })
     var questionScore;
-    if (this._question.config.partial_scoring) {
+    if (this._question.config.partial_scoring && !QSTelemetryLogger.qsConfig.shuffle_questions) {
       questionScore = (correctAnswersCount / totalLHS) * this._question.config.max_score;
     } else {
       if ((correctAnswersCount / totalLHS) == 1) {
