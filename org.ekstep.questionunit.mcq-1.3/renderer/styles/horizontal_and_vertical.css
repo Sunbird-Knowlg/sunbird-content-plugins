@@ -237,9 +237,9 @@
     margin-bottom: 1.5625%;
     border-radius: 4px;
     background-color: #FFFFFF;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
     position: relative;
-    display: table;
+    display: flex;
 }
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 {
     width: 48%;
@@ -301,7 +301,7 @@
     float: left;
     position: relative;
     display: table-cell;
-    cursor: default
+    cursor: default;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container.no-image {
@@ -309,8 +309,8 @@
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container .mcq-option-img {
-    height: 40px;
-    width: 40px;
+    max-height: 100%;
+    max-width: 100%;
     position: relative;
     border-radius: 2px;
     margin: auto;
@@ -321,7 +321,13 @@
 }
 .zoom-icon-set{
     position: relative;
+    top: 0;
+    transform: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block img.tick {
