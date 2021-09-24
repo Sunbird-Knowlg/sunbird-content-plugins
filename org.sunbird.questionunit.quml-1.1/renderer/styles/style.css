@@ -464,7 +464,12 @@ ol {
 }
 #questionset .mcq-horizontal .mcq-options .mcq-option, 
 #questionset .mcq-vertical .mcq-options .mcq-option, 
-#questionset .mcq-grid .mcq-options .mcq-option,
+#questionset .mcq-grid .mcq-options .mcq-option{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #questionset .mcq-vertical .mcq-title, 
 #questionset .mcq-grid .mcq-title{
   display: flex;
