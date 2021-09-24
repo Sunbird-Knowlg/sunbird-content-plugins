@@ -468,6 +468,7 @@ ol {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 #questionset .mcq-vertical .mcq-title, 
