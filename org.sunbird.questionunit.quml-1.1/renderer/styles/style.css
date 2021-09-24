@@ -469,7 +469,8 @@ ol {
 #questionset .mcq-grid .mcq-title{
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 @media screen and (max-width:768px) {
@@ -496,8 +497,6 @@ ol {
   .sb-question-dsp-container .sb-question-content .sb-question,
   .sb-question-dsp-container .sb-question-content .sb-answer, #questionset .mcq-horizontal .mcq-title, #questionset .mcq-vertical .mcq-title, #questionset .mcq-grid .mcq-title {
       font-size:var(--fontXL);
-      display: flex;
-      align-items: center;
   }
   .sb-question-dsp-container .sb-question-content .sb-question-content-card, #questionset .mcq-horizontal .mcq-options .mcq-option p, #questionset .mcq-vertical .mcq-options .mcq-option p, #questionset .mcq-grid .mcq-options .mcq-option p {
       font-size:var(--fontL);
