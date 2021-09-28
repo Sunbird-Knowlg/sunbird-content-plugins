@@ -62,8 +62,8 @@ QuMLFeedbackPopup.showTryAgain = function() {
   $("#qs-feedback-model-popup").show();
   QuMLFeedbackPopup.createSolutionPopUpElement();
 }
-QuMLFeedbackPopup.getHtmlAsSolutionTemplate = function(){
-  return '<div class="feedback-content"><div class="close-btn"> <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('feedback-close.svg') + '" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-content-questions">'+ QuMLFeedbackPopup._questionData.solutions[0].value  +'</div>    <div class="feedback-action-buttons"> <button class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> Done </button> </div> </div>';
+QuMLFeedbackPopup.getHtmlAsSolutionTemplate = function(solutionData){
+  return '<div class="feedback-content"><div class="close-btn"> <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('feedback-close.svg') + '" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-content-questions">'+ solutionData  +'</div>    <div class="feedback-action-buttons"> <button class="sb-btn sb-btn-primary sb-btn-normal sb-btn-responsive" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> Done </button> </div> </div>';
 }
 QuMLFeedbackPopup.getVideoAsSolutionTemplate = function(videoPath){
   return '<div class="feedback-gallery-view"> <div class="close-btn"> <img src="' + QuMLFeedbackPopup.pluginInstance.getDefaultAsset('feedback-close.svg') + '" alt="close" class="w-100" onclick="QuMLFeedbackPopup.hideSolutionPopup();"> </div> <div class="feedback-gallery"> <video class="w-100 video-section" controls="" id="solutionVideo"> <source src="'+ videoPath +'" type="video/mp4"> </video> </div> </div>';
@@ -76,7 +76,8 @@ QuMLFeedbackPopup.showSolution = function() {
   QuMLFeedbackPopup.logTelemetry('solution_btn');
   var template;
   if(QuMLFeedbackPopup._questionData.solutions[0].type == 'html'){
-    template = QuMLFeedbackPopup.getHtmlAsSolutionTemplate();
+    var solutionData = QuMLFeedbackPopup.replaceAssetWithBaseURL(QuMLFeedbackPopup._questionData.solutions[0].value);
+    template = QuMLFeedbackPopup.getHtmlAsSolutionTemplate(solutionData);
   }else if(QuMLFeedbackPopup._questionData.solutions[0].type == 'video'){
     var index = _.findIndex(QuMLFeedbackPopup._questionData.media, function(o) { return o.type == 'video' && o.id === QuMLFeedbackPopup._questionData.solutions[0].value; });
     if(index >= 0){
