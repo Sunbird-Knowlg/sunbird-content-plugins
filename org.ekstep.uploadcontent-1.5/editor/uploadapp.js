@@ -10,7 +10,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.5", "editor/loader.gif");
     $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
     $scope.selectedPrimaryCategory = '';
-    $scope.defaultContentFileSize = ecEditor.getContext('defaultContentFileSize') ? ecEditor.getContext('defaultContentFileSize') : 150;
+    $scope.defaultContentFileSize = ecEditor.getContext('defaultContentFileSize') ? ecEditor.getContext('defaultContentFileSize') : 157286400;
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
     $scope.H5PGuidanceDoc = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/h5pcontentguidelines.pdf');
