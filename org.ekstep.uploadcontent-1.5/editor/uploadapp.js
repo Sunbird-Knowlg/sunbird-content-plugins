@@ -10,6 +10,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.5", "editor/loader.gif");
     $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
     $scope.selectedPrimaryCategory = '';
+    $scope.defaultContentFileSize = ecEditor.getContext('defaultContentFileSize') ? ecEditor.getContext('defaultContentFileSize') : 150;
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
     $scope.H5PGuidanceDoc = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/h5pcontentguidelines.pdf');
@@ -46,10 +47,10 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             validation: {
                 allowedExtensions: ['pdf', 'epub', 'mp4', 'h5p', 'zip', 'webm'],
                 itemLimit: 1,
-                sizeLimit: 52428800 // 50 MB = 50 * 1024 * 1024 bytes
+                sizeLimit: $scope.defaultFileSize // 150 MB = 150 * 1024 * 1024 bytes
             },
             messages:{
-                sizeError: "{file} is too large, maximum file size is 50MB."
+                sizeError: "{file} is too large, maximum file size is"  + $scope.defaultFileSize + "MB."
             },
             callbacks: {
                 onStatusChange: function(id, oldStatus, newStatus) {
