@@ -50,7 +50,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                 sizeLimit: $scope.defaultContentFileSize * 1024 * 1024 // 150 MB = 150 * 1024 * 1024 bytes
             },
             messages:{
-                sizeError: "{file} is too large, maximum file size is"  + $scope.defaultContentFileSize + "MB."
+                sizeError: "{file} is too large, maximum file size is "  + $scope.defaultContentFileSize + "MB."
             },
             callbacks: {
                 onStatusChange: function(id, oldStatus, newStatus) {
