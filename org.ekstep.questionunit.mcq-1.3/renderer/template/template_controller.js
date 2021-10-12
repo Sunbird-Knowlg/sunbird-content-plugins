@@ -54,11 +54,11 @@ MCQController.renderTemplateLayout = function (question) {
 */
 MCQController.showImageModel = function () {
   var eventData = event.target.src;
-  var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
+  var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' tabindex='0' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
     <div class='popup-full-body'> \
       <div class='font-lato assess-popup assess-goodjob-popup'> \
         <img class='qc-question-fullimage' src=<%= src %> /> \
-        <div onclick='MCQController.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
+        <div tabindex='0' onclick='MCQController.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
       </div>\
     </div>";
   var template = _.template(modelTemplate);
@@ -69,11 +69,11 @@ MCQController.showImageModel = function () {
 };
 MCQController.zoomImage = function (img) {
   var eventData = MCQController.pluginInstance.getAssetUrl(img);
-  var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
+  var modelTemplate = "<div class='popup image-model-popup' id='image-model-popup' tabindex='0' onclick='MCQController.hideImageModel()'><div class='popup-overlay' onclick='MCQController.hideImageModel()'></div> \
     <div class='popup-full-body'> \
       <div class='font-lato assess-popup assess-goodjob-popup'> \
         <img class='qc-question-fullimage' src=<%= src %> /> \
-        <div onclick='MCQController.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
+        <div tabindex='0' onclick='MCQController.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
       </div>\
     </div>";
   var template = _.template(modelTemplate);
@@ -127,7 +127,7 @@ MCQController.openPopup = function (id) {
         <%}%>\
         <%if(!_.isEmpty(data.audio)){%> \
           <div class ='mcq-popup-audio'>\
-            <img src='<%=MCQController.pluginInstance.getDefaultAsset('audio-icon.png') %>' onclick=MCQController.pluginInstance.playAudio('<%= data.audio %>')>\
+            <img src='<%=MCQController.pluginInstance.getDefaultAsset('audio-icon.png') %>' tabindex='0' onclick=MCQController.pluginInstance.playAudio('<%= data.audio %>')>\
           </div>\
         <%}%>\
         <div class='mcq-popup-text-content'>\
@@ -135,7 +135,7 @@ MCQController.openPopup = function (id) {
         </div>\
         </div>\
       <div class = 'mcq-popup-actions'>\
-        <button class = 'mcq-popup-back-button' onclick=MCQController.closePopup();><%= (MCQController.currentPopUp == 'question') ? 'Answer' : 'Back' %></button>\
+        <button class = 'mcq-popup-back-button' tabindex='0' onclick=MCQController.closePopup();><%= (MCQController.currentPopUp == 'question') ? 'Answer' : 'Back' %></button>\
        </div>\
     </div>\
      </div>\

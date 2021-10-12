@@ -89,14 +89,14 @@ MCQController.grid.getOptionTemplate = function (option, index) {
   <div class="mcq-grid-option-outer">\
     <% if (false && option.audio){ %> \
       <div class="mcq-grid-option-audio">\
-        <img src="<%= MCQController.pluginInstance.getDefaultAsset("audio-icon3.png") %>"  onclick=MCQController.pluginInstance.playAudio({src:\'<%= option.audio %>\'}) />\
+        <img src="<%= MCQController.pluginInstance.getDefaultAsset("audio-icon3.png") %>"  tabindex="0" onclick=MCQController.pluginInstance.playAudio({src:\'<%= option.audio %>\'}) />\
       </div>\
     <% } %> \
-    <div class="org-ekstep-questionunit-mcq-option-element mcq-grid-option" onclick="MCQController.grid.onOptionSelected(event, <%= index %>)">\
+    <div class="org-ekstep-questionunit-mcq-option-element mcq-grid-option" tabindex="0" onclick="MCQController.grid.onOptionSelected(event, <%= index %>)">\
     <% if (option.image){ %> \
       <div class="mcq-grid-option-image-container">\
       <div class="border-solid position-relative mcq-grid"><img class="mcq-grid-option-image mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(option.image) %>"/>\
-      <img onclick=MCQController.zoomImage("<%=option.image%>") class="grid-option-image-zoom-icon"  src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
+      <img tabindex="0" onclick=MCQController.zoomImage("<%=option.image%>") class="grid-option-image-zoom-icon"  src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
      </div> </div>\
     <% } %> \
     <% if (option.text && option.image){ %> \
@@ -232,25 +232,25 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
             <div class="option-container ' + layout + '">\
             <div class="option-block-container">\
             <% _.each(question.data.options,function(val,key){ %>\
-                <div class="option-block org-ekstep-questionunit-mcq-option-element<% if(val.isCorrect) { %> mcq-correct-answer<% } %>" onclick="MCQController.horizontal.onSelectOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
+                <div class="option-block org-ekstep-questionunit-mcq-option-element<% if(val.isCorrect) { %> mcq-correct-answer<% } %>" tabindex="0" onclick="MCQController.horizontal.onSelectOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
                     <div class="option-image-container <% if(!val.image) { %> no-image<% } %> <% if(!val.text) { %> image-only<% } %>" \>\
                   <%  if(val.image) { %>\
                     <%  if(MCQController.horizontal.isVerticalLayout) { %>\
                         <div class="border-solid position-relative mcq-'+layout+'">\
                             <img class="mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>"/>\
-                            <img onclick=MCQController.zoomImage("<%=val.image%>") class="option-image-zoom-icon" src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
+                            <img tabindex="0" onclick=MCQController.zoomImage("<%=val.image%>") class="option-image-zoom-icon" src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
                         </div>\
                   <% } %>\
                   <%  if(!MCQController.horizontal.isVerticalLayout) { %>\
                     <div class="zoom-icon-set">\
                     <img class="mcq-option-img" src="<%= MCQController.pluginInstance.getAssetUrl(val.image) %>" />\
-                    <img onclick=MCQController.zoomImage("<%=val.image%>") class="option-image-zoom-icon"  src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
+                    <img tabindex="0" onclick=MCQController.zoomImage("<%=val.image%>") class="option-image-zoom-icon"  src="<%= MCQController.pluginInstance.getDefaultAsset("' + zoomIcon + '") %>"/>\
                     </div>\
                     <% } %>\
                   <% } %>\
                     </div>\
                     <%  if(val.audio) { %>\
-                      <img src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioIcon + '") %>" class="audio <% if(val.image) { %>with-image<% } %>" onclick=MCQController.imagehorizontal.playAudioHorizontal(<%=key+1%>,"play",{src:\'<%= val.audio %>\'})  />\
+                      <img src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioIcon + '") %>" class="audio <% if(val.image) { %>with-image<% } %>" tabindex="0" onclick=MCQController.imagehorizontal.playAudioHorizontal(<%=key+1%>,"play",{src:\'<%= val.audio %>\'})  />\
                     <% } %>\
                     <div class="option-text-container<% if(val.audio) { %> with-audio <% } %> <% if(val.image) { %>with-image<% } if (val.text && !val.image) { %>text-only<% }%>">\
                   <%  if(val.text) { %>\
@@ -320,15 +320,15 @@ MCQController.vertical2.getQuestionTemplate = function (question) {
     <div class='mcq-question-image'>\
                 <% if(question.data.question.image){%>\
                 <div class='image-container mcq-qleft-img-container'>\
-                <img class='q-image' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
-                <img onclick=MCQController.zoomImage('<%=question.data.question.image%>') class='zoom-image' src=<%= MCQController.pluginInstance.getDefaultAsset('"+zoomIcon+"') %>>\
+                <img class='q-image' tabindex='0' onclick='MCQController.showImageModel(event, <%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>)'\ src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %> />\
+                <img tabindex='0' onclick=MCQController.zoomImage('<%=question.data.question.image%>') class='zoom-image' src=<%= MCQController.pluginInstance.getDefaultAsset('"+zoomIcon+"') %>>\
                 </div>\
                 <%}%>\
                 <% if(question.data.question.text){%>\
                     <div class='question-text'\><%= question.data.question.text %></div>\
                     <%}%>\
                 <% if ( question.data.question.audio.length > 0 ){ %> \
-                <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
+                <img class='audio-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png')%> tabindex='0' onclick=MCQController.pluginInstance.playAudio({src:'<%= question.data.question.audio %>'}) />\
                 <% } %> \
               </div>\
               </div>\
@@ -365,10 +365,10 @@ MCQController.vertical2.getOption = function (option, key) {
     var optTemplate = "<div class='outer-option-block'>\
     <div class='audio-option-image-container'>\
     <% if ( option.audio.length > 0 ){ %> \
-    <img class='audio-option-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png')%> onclick=MCQController.pluginInstance.playAudio({src:'<%= option.audio %>'}) />\
+    <img class='audio-option-image' src=<%= MCQController.pluginInstance.getDefaultAsset('audio-icon3.png')%> tabindex='0' onclick=MCQController.pluginInstance.playAudio({src:'<%= option.audio %>'}) />\
     <% } %> \
     </div>\
-    <div class='org-ekstep-questionunit-mcq-option-element text-option option-background' onClick=MCQController.vertical2.onOptionSelected(event,<%= key %>)>\
+    <div class='org-ekstep-questionunit-mcq-option-element text-option option-background' tabindex='0' onClick=MCQController.vertical2.onOptionSelected(event,<%= key %>)>\
     <div class='text-content'>\
     <span>\
     <%= option.text %>\
@@ -515,11 +515,11 @@ MCQController.grid2.getOptionsTemplate = function (options) {
  * @param {size} maxHeight and width for layout
  */
 MCQController.grid2.getOption = function (option, key) {
-    var optTemplate = " <div class='org-ekstep-questionunit-mcq-option-element mcq2-2-option mcq2-2-option<%=key+1%>' onClick=MCQController.grid2.onOptionSelected(event,<%= key %>)>\
+    var optTemplate = " <div class='org-ekstep-questionunit-mcq-option-element mcq2-2-option mcq2-2-option<%=key+1%>' tabindex='0' onClick=MCQController.grid2.onOptionSelected(event,<%= key %>)>\
   <%if(option.image){%>\
      <div class='border-solid position-relative center-aligned'><img class='mcq2-2-option-image mcq-option-img'\
       src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
-      <img class='zoom-image-horizontal' src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> onclick=MCQController.zoomImage('<%=option.image%>') />\
+      <img class='zoom-image-horizontal' src=<%= MCQController.pluginInstance.getDefaultAsset('zoom.png') %> tabindex='0' onclick=MCQController.zoomImage('<%=option.image%>') />\
       </div>\
   <%}%>\
   <%if(!option.image && option.text){%>\
@@ -684,7 +684,7 @@ MCQController.imagegrid.getOptionsTemplate = function (question) {
     <div class="option-container ' + layout + '">\
     <div class="option-block-container">\
     <% _.each(question.data.options,function(val,key){ %>\
-        <div class="option-width-50 option-block org-ekstep-questionunit-mcq-option-element<% if(val.isCorrect) { %> mcq-correct-answer<% } %>" onclick="MCQController.onSelectingOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
+        <div class="option-width-50 option-block org-ekstep-questionunit-mcq-option-element<% if(val.isCorrect) { %> mcq-correct-answer<% } %>" tabindex="0" onclick="MCQController.onSelectingOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
             <%  if(val.audio) { %>\
               <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioIcon + '") %>" class="audio-icon" id="mcq-imagegird-audio-play<%=key+1%>" style="display:block"/>\
               <img  src="<%= MCQController.pluginInstance.getDefaultAsset("' + audioStop + '") %>" class="audio-icon" id="mcq-imagegird-audio-stop<%=key+1%>" style="display:none" />\
@@ -727,7 +727,7 @@ MCQController.imagegrid.getOption = function (option, key) {
     var optTemplate = '<div class="outer-option-container-horizontal">\
     <div class="option-container-horizontal">\
     <div class="option-block-container">\
-        <div class="option-block option-width-50 org-ekstep-questionunit-mcq-option-element<% if(option.isCorrect) { %> mcq-correct-answer<% } %>" onclick="MCQController.horizontal.onSelectOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
+        <div class="option-block option-width-50 org-ekstep-questionunit-mcq-option-element<% if(option.isCorrect) { %> mcq-correct-answer<% } %>" tabindex="0" onclick="MCQController.horizontal.onSelectOption(this, <%= key %>);MCQController.horizontal.onOptionSelected(event,<%= key %>)">\
             <div class="option-image-container <% if(!option.image) { %> no-image<% } %>" \>\
             </div>\
             <%  if(option.audio) { %>\
