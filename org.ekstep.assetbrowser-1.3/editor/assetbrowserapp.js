@@ -119,6 +119,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.showLoadMoreWarningMsg = false;
     ctrl.plugin = instance.mediaType;
     ctrl.upload = instance.mediaType == 'image' ? true : false;
+    ctrl.defaultContentFileSize = ecEditor.getContext('defaultContentFileSize') ? ecEditor.getContext('defaultContentFileSize'): 150;
     function setAssetRules(){
         if (instance.mediaType == 'image') {
             ctrl.allowedFileSize = (1 * 1024 * 1024);
@@ -126,14 +127,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.fileSize = '1 MB';
             ctrl.fileTypes = "jpeg, jpg, png";
         } else if (instance.mediaType == 'audio') {
-            ctrl.allowedFileSize = (6 * 1024 * 1024);
+            ctrl.allowedFileSize = (ctrl.defaultContentFileSize * 1024 * 1024);
             ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
-            ctrl.fileSize = '6 MB';
+            ctrl.fileSize = ctrl.defaultContentFileSize + ' MB';
             ctrl.fileTypes = "mp3, mp4, mpeg, ogg, wav, webm";
         } else if(instance.mediaType == 'video'){
-            ctrl.allowedFileSize = (50 * 1024 * 1024);
+            ctrl.allowedFileSize = (ctrl.defaultContentFileSize * 1024 * 1024);
             ctrl.allowedMimeTypes = ['video/mp4', 'video/webm'];
-            ctrl.fileSize = '50 MB';
+            ctrl.fileSize = ctrl.defaultContentFileSize + ' MB';
             ctrl.fileTypes = "mp4, webm";
         }
     }
