@@ -3,7 +3,7 @@
 angular.module('genie-canvas').directive('customNextNavigation', function ($rootScope, $timeout) {
   return {
     restrict: 'E',
-    template: '<div><a class="nav-icon nav-next" tabindex="-1" ng-show="showCustomNext !== state_off" href="javascript:void(0);"><img ng-src="{{customNextIcon}}" alt="Next button image" tabindex="0" ng-keydown="$event.keyCode === 13 && navigate(\'next\')" ng-click="navigate(\'next\')"></a></div>',
+    template: '<div><a class="nav-icon nav-next" tabindex="-1" ng-show="showCustomNext !== state_off" href="javascript:void(0);"><img ng-src="{{customNextIcon}}" alt="Next button" tabindex="0" ng-click="navigate(\'next\')"></a></div>',
     link: function (scope) {
       scope.customNextIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/next.png");
       var events = ["overlayNext", "renderer:next:hide", "renderer:next:show"];
@@ -54,7 +54,7 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
 }).directive('customPreviousNavigation', function ($rootScope, $timeout) {
   return {
     restrict: 'E',
-    template: '<div><a class="nav-icon nav-previous" tabindex="-1" ng-show="showCustomPrevious !== state_off" ng-class="{\'nav-disable\': showCustomPrevious == state_disable}" href="javascript:void(0);"><img ng-src="{{customePreviousIcon}}" alt="Previous button image" tabindex="0" ng-keydown="$event.keyCode === 13 && navigate(\'previous\')" ng-click="navigate(\'previous\')"></a></div>',
+    template: '<div><a class="nav-icon nav-previous" tabindex="-1" ng-show="showCustomPrevious !== state_off" ng-class="{\'nav-disable\': showCustomPrevious == state_disable}" href="javascript:void(0);"><img ng-src="{{customePreviousIcon}}" alt="Previous button image" tabindex="0" ng-click="navigate(\'previous\')"></a></div>',
     link: function (scope) {
       var events = ["overlayPrevious", "renderer:previous:hide", "renderer:previous:show", "renderer:previous:disable", "renderer:previous:enable"];
       scope.customePreviousIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/back.png");
