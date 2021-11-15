@@ -4,9 +4,12 @@ var QSFeedbackPopup = {};
  * @memberof org.ekstep.questionset.qs_feedback_popup#
  */
 QSFeedbackPopup.showGoodJob = function() {
-  var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-goodjob-popup"> <div class="correct-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner1.png"> </div> <div class="sign-board"> <img id="correctButton" alt="Correct Icon" width="40%" src="assets/icons/check.png"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();"  tabindex="0" role="button" aria-label="Next" class="primary center button">Next</div> </div> </div> </div> </div>');
+  var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-goodjob-popup"> <div class="correct-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner1.png"> </div> <div class="sign-board"> <img id="correctButton" width="40%" src="assets/icons/check.png" alt="Correct Icon"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" ng-keydown="$event.keyCode === 13 && QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" tabindex="0" role="button" aria-label="Next" class="primary center button">Next</div> </div> </div> </div> </div>');
   $("#qs-feedback-model-popup").html(goodJobTemplate);
   $("#qs-feedback-model-popup").show();
+  setTimeout(function() {
+    $("#correctButton").focus();
+  }, 1000);
 }
 /**
  * Hide the model popup on navigation
@@ -14,6 +17,7 @@ QSFeedbackPopup.showGoodJob = function() {
  */
 QSFeedbackPopup.hidePopup = function() {
   $("#qs-feedback-model-popup").hide();
+  $("#gameArea").focus();
 }
 /**
  * move to next stage or next question
@@ -23,15 +27,19 @@ QSFeedbackPopup.moveToNextStage = function() {
   EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: 'button-next' });
   QSFeedbackPopup.hidePopup();
+  $("#gameArea").focus();
 }
 /**
  * show try again model popup on navigation
  * @memberof org.ekstep.questionset.qs_feedback_popup#
  */
 QSFeedbackPopup.showTryAgain = function() {
-  var tryAgainTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><img width="40%" alt="Incorrect Icon" id="incorrectButton" src="assets/icons/incorrect.png"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" tabindex="0" role="button" aria-label="Next" class="left button">Next</div> <div onclick="QSFeedbackPopup.showRetry();" role="button"  tabindex="0" aria-label="Try Again" class="right primary button">Try Again</div> </div> </div> </div> </div>');
+  var tryAgainTemplate = _.template('<div tabindex="0" class="popup" role="dialog" aria-labelledby="dialog1Title" aria-describedby="dialog1Desc" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><img width="40%" id="incorrectButton" alt="Incorrect Icon" src="assets/icons/incorrect.png" tabindex="0"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" ng-keydown="$event.keyCode === 13 && QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" tabindex="0" role="button" aria-label="Next" class="left button">Next</div> <div onclick="QSFeedbackPopup.showRetry();" ng-keydown="$event.keyCode === 13 && QSFeedbackPopup.showRetry();" tabindex="0" role="button" aria-label="Try Again" class="right primary button">Try Again</div> </div> </div> </div> </div>');
   $("#qs-feedback-model-popup").html(tryAgainTemplate);
   $("#qs-feedback-model-popup").show();
+  setTimeout(function() {
+    $("#incorrectButton").focus();
+  }, 1000);
 }
 /**
  * hide try again model popup on navigation
@@ -41,6 +49,7 @@ QSFeedbackPopup.showRetry = function() {
   EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: 'button-retry' });
   QSFeedbackPopup.hidePopup();
+  $("#gameArea").focus();
 }
 /*
  * Show partialscore model popup
@@ -48,9 +57,12 @@ QSFeedbackPopup.showRetry = function() {
  * @param { string } partialScoreRes.
  */
 QSFeedbackPopup.qsPartialCorrect = function(partialScoreRes) {
-  var partialTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><span width="40%" style="font-size: 1.8em;color: #7d7d7d;font-family:noto-sans;font-weight: 900;" id="incorrectButton"> <%= score %> </span> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" tabindex="0" role="button" aria-label="Next" class="left button">Next</div> <div onclick="QSFeedbackPopup.showRetry();" tabindex="0" role="button" aria-label="Try Again" class="right primary button">Try Again</div> </div> </div> </div> </div>');
+  var partialTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><span width="40%" style="font-size: 1.8em;color: #7d7d7d;font-family:noto-sans;font-weight: 900;" id="incorrectButton"> <%= score %> </span> </div> </div> <div id="popup-buttons-container"> <div ng-keydown="$event.keyCode === 13 && QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" onclick="QSFeedbackPopup.hidePopup();QSFeedbackPopup.moveToNextStage();" tabindex="0" role="button" aria-label="Next" class="left button">Next</div> <div onclick="QSFeedbackPopup.showRetry();" ng-keydown="$event.keyCode === 13 && QSFeedbackPopup.showRetry();" tabindex="0" role="button" aria-label="Try Again" class="right primary button">Try Again</div> </div> </div> </div> </div>');
   var partialelement = partialTemplate({ score: partialScoreRes });
   $("#qs-feedback-model-popup").html(partialelement);
   $("#qs-feedback-model-popup").show();
+  setTimeout(function() {
+    $("#incorrectButton").focus();
+  }, 1000);
 }
 //# sourceURL=goodJob.js
