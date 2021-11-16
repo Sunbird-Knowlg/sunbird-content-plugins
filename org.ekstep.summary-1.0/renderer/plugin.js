@@ -18,6 +18,14 @@ org.ekstep.summaryRenderer = Plugin.extend({ // eslint-disable-line no-undef
     var summaryElement = summaryTemplate.showTemplate();
     summaryTemplate.pluginInstance = instance;
     $("#gameArea").append(summaryElement);
+    $("#gameArea").css({
+      left: "0px",
+      top: "0px",
+      width: "100%",
+      height: "100%",
+      marginTop: 0,
+      marginLeft: 0
+    });
   },
   addSummary: function(){
     var instance = this;
