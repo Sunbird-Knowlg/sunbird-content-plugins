@@ -183,7 +183,7 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
       jQuery("#nav-next").hide();
       jQuery("#nav-previous").hide();
       EkstepRendererAPI.dispatchEvent("renderer:previous:disable");
-    }, 50);
+    }, 100);
   };
 
   $scope.hideCustomNavigation = function () {
