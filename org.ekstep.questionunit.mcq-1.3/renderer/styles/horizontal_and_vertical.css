@@ -234,6 +234,7 @@
     cursor: pointer;
     width: 100%;
     height: 15vh;
+    line-height: 15vh;
     margin-bottom: 1.5625%;
     border-radius: 4px;
     background-color: #FFFFFF;
