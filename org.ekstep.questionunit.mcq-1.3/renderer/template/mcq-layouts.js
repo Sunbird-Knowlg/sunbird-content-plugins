@@ -57,8 +57,12 @@ MCQController.grid.getRowCount = function (optsCount) {
 
 MCQController.grid.optionStyleUponClick = function (element) {
     $('.mcq-grid-option').removeClass('selected');
+    $('.mcq-grid-option').attr('aria-checked', false);
     var optElt = $(element).closest('.mcq-grid-option');
-    if (optElt) optElt.addClass('selected');
+    if (optElt) {   
+        optElt.addClass('selected');
+        optElt.attr('aria-checked', true); 
+    } 
 }
 
 /**
@@ -266,7 +270,9 @@ MCQController.horizontal.getOptionLayout = function (layout, question) {
 }
 MCQController.horizontal.optionStyleUponClick = function (element) {
     $('.option-block').removeClass('selected');
+    $('.option-block').attr('aria-checked', false);
     $(element).addClass('selected');
+    $(element).attr('aria-checked', true); 
 }
 /**
  * called when the option in `horizontal` or `vertical` layout is selected
