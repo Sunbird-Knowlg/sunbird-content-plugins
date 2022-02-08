@@ -401,6 +401,8 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    line-height: initial;
+    padding-top: 5px;
 }
 .mcq-content-container .option-container.horizontal .option-block:last-child {
     margin-bottom: 0%;
