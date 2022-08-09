@@ -705,11 +705,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 var signedURL = res.data.result.pre_signed_url;
                 var config = {
                     processData: false,
-                    contentType : ctrl.mimeType,
-                    headers: {
-                        'x-ms-blob-type': 'BlockBlob'
-                    }
+                    contentType : ctrl.mimeType
                 }
+                config = $scope.contentService.appendCloudStorageHeaders(config);
                 ctrl.uploadToSignedURL(signedURL, file, config, nodeID)
             }
         })
