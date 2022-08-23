@@ -383,11 +383,8 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                 var config = {
                     processData: false,
                     contentType: contentType,
-                    headers: {
-                        'x-ms-blob-type': 'BlockBlob'
-                    }
                 }
-
+                config = $scope.contentService.appendCloudStorageHeaders(config);
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
                     if (err) {
                         $scope.showLoader(false);
