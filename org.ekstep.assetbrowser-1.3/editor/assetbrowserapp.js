@@ -707,7 +707,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     processData: false,
                     contentType : ctrl.mimeType
                 }
-                config = $scope.contentService.appendCloudStorageHeaders(config);
+                config = $scope.contentService.appendCloudStorageHeaders(config); // this function will append the CSP headers
                 ctrl.uploadToSignedURL(signedURL, file, config, nodeID)
             }
         })
