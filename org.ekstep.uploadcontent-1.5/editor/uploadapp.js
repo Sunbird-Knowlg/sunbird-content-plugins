@@ -384,7 +384,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                     processData: false,
                     contentType: contentType,
                 }
-                config = $scope.contentService.appendCloudStorageHeaders(config);
+                config = $scope.contentService.appendCloudStorageHeaders(config); // this function will append the CSP headers
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
                     if (err) {
                         $scope.showLoader(false);
