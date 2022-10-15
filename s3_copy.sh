@@ -98,7 +98,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
 
 for i in "${coreplugins[@]}"
 do
-   aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/$i/ --recursive
-   aws s3 --region ap-south-1 cp ansible/content-plugins/$i s3://ekstep-public-$1/content-plugins/$i --recursive --acl public-read
+   aws s3 rm s3://$3/$1/content-plugins/$i/ --recursive
+   aws s3 cp $2/$i s3://$3/$1/content-plugins/$i --recursive --acl public-read
 done
 
