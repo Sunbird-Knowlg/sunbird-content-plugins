@@ -195,6 +195,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.generatePreSignedUrl = function () {
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function (err, res) {
+            console.log('getPresignedURL res..'+res)
             if (err) {
                 $scope.toasterMsgHandler("error", "error while generating presigned URL")
             } else {
@@ -279,8 +280,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             contentType: false,
             cache: false
         }
-        
+        console.log('config..'+config)
         $scope.contentService.uploadContent(ecEditor.getContext('contentId'), data, config, function (err, res) {
+            console.log('res..'+res)
             if (err) {
                 $scope.toasterMsgHandler("error", "Unable to upload content!")
             } else {
@@ -457,6 +459,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             }
             
             function fetchUrl() {
+                console.log('fetchUrl url..'+url)
+                console.log('fetchUrl fetchOptions..'+fetchOptions)
                 return fetch(url, fetchOptions)
                     .then(success)
                     .catch(failure)
