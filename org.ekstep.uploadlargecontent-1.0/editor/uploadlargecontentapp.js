@@ -253,8 +253,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
         const blockListPromise = $scope.fetchRetry(uri, {
             "headers": {
                 "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                "x-ms-blob-content-type": $scope.selectedFile.type,
-                "opc-multipart": true
+                "x-ms-blob-content-type": $scope.selectedFile.type
             },
             "body": requestBody,
             "method": "PUT",
@@ -311,7 +310,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             const fetchPromise = $scope.fetchRetry(uri, {
                 "headers": {
                     "Content-Type": $scope.mimeType,
-                    "x-ms-blob-type": "BlockBlob"
+                    "x-ms-blob-type": "BlockBlob",
+                    "opc-multipart": true
                 },
                 "body": requestData,
                 "method": "PUT",
