@@ -195,11 +195,12 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.generatePreSignedUrl = function () {
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function (err, res) {
-            console.log('getPresignedURL res..'+res)
+            console.log('getPresignedURL res..'+res.data)
             if (err) {
                 $scope.toasterMsgHandler("error", "error while generating presigned URL")
             } else {
                 $scope.submitUri = res.data.result.pre_signed_url;
+                console.log('getPresignedURL pre_signed_url..'+res.data.result.pre_signed_url)
                 $scope.uploadFileInBlocks();
             }
         })
@@ -212,17 +213,21 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.uploadFileInBlocks = function () {
         $('#retryUploadButton').hide(); // clicked on retry
         $scope.timeStarted = (!$scope.timeStarted) ? new Date() : $scope.timeStarted
+        console.log('start time..'+$scope.timeStarted)
         if ($scope.totalBytesRemaining > 0) {
             var fileContent = $scope.selectedFile.slice($scope.currentFilePointer, $scope.currentFilePointer + $scope.maxBlockSize);
             var blockId = $scope.blockIdPrefix + $scope.pad($scope.blockIds.length, 6);
+            console.log('blockId..'+blockId)
             $scope.blockIds.push(btoa(blockId));
             $scope.reader.readAsArrayBuffer(fileContent);
             $scope.currentFilePointer += $scope.maxBlockSize;
             $scope.totalBytesRemaining -= $scope.maxBlockSize;
             if ($scope.totalBytesRemaining < $scope.maxBlockSize) {
                 $scope.maxBlockSize = $scope.totalBytesRemaining;
+                console.log('maxBlockSize..'+$scope.maxBlockSize)
             }
         } else {
+            console.log('...else block..')
             $('.progress').progress({
                 percent: $scope.percentComplete,
                 text: {
@@ -238,15 +243,18 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.commitBlockList = function () {
         var uri = $scope.submitUri + '&comp=blocklist';
+        console.log('uri..'+uri)
         var requestBody = '<?xml version="1.0" encoding="utf-8"?><BlockList>';
         for (var i = 0; i < $scope.blockIds.length; i++) {
             requestBody += '<Latest>' + $scope.blockIds[i] + '</Latest>';
         }
         requestBody += '</BlockList>';
+        console.log('requestBody..'+requestBody)
         const blockListPromise = $scope.fetchRetry(uri, {
             "headers": {
                 "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                "x-ms-blob-content-type": $scope.selectedFile.type
+                "x-ms-blob-content-type": $scope.selectedFile.type,
+                "opc-multipart": true
             },
             "body": requestBody,
             "method": "PUT",
@@ -272,6 +280,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.updateContentWithURL = function (fileURL) {
         var data = new FormData();
+        console.log('fileURL in updateContentWithURL..'+fileURL)
+        console.log('data in updateContentWithURL..'+data)
+        console.log('mimeType in updateContentWithURL..'+$scope.mimeType)
         data.append("fileUrl", fileURL);
         data.append("mimeType", $scope.mimeType);
         var config = {
@@ -459,8 +470,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             }
             
             function fetchUrl() {
-                console.log('fetchUrl url..'+url)
-                console.log('fetchUrl fetchOptions..'+fetchOptions)
+                console.log("  fetchUrl()  url: "+url)
+                console.log("  fetchUrl()  fetchOptions: "+fetchOptions)
                 return fetch(url, fetchOptions)
                     .then(success)
                     .catch(failure)
