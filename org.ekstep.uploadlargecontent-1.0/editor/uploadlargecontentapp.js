@@ -33,7 +33,10 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
-    
+    S3_ENDPOINT = 'https://bmzbbujw9kal.compat.objectstorage.ap-mumbai-1.oraclecloud.com';
+    S3_KEY = 'f480b0299cca10cedb55209873c18d6b5fa18cbc';
+    S3_SECRET = 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=';
+
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
         if(!_.isUndefined(contextPrimaryCategory)) {
@@ -211,127 +214,48 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 }
                 else
                 {
-                    // Create a new S3 client
-                    const s3 = new AWS.S3({
-                        accessKeyId: 'f480b0299cca10cedb55209873c18d6b5fa18cbc',
-                        secretAccessKey: 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=',
-                        endpoint: 'https://bmzbbujw9kal.compat.objectstorage.ap-mumbai-1.oraclecloud.com',
-                        s3ForcePathStyle: true, // Required for S3 compatible endpoints
+                    const endpoint = new AWS.Endpoint(S3_ENDPOINT);
+
+                    const S3 = new AWS.S3({
+                        endpoint: endpoint,
+                        accessKeyId: S3_KEY,
+                        secretAccessKey: S3_SECRET,
+                        maxRetries: 10
                     });
+                    print('FILEPATH-------',$scope.uploader.getFile(0))
+                    const stream = fs.createReadStream($scope.uploader.getFile(0));
+                    const contentType = mime.lookup($scope.uploader.getFile(0))
                     
-                    // Set the bucket and object key
-                    const bucketName = 'odev-dev-diksha-contents';
-                    const objectKey = 'assets/do_12345/l1933-relations-and-functions_part-2.mp4';
-                    
-                    // Create a new multipart upload
                     const params = {
-                        Bucket: bucketName,
-                        Key: objectKey,
+                        Bucket: 'odev-dev-diksha-contents',
+                        Key: 'assets/do_12345/l1933-relations-and-functions_part-2.mp4',
+                        Body: stream,
+                        ACL: 'public-read',
+                        ContentType: contentType
                     };
-                    s3.createMultipartUpload(params, (err, data) => {
+                    
+                    const options = {
+                        partSize: 10 * 1024 * 1024,
+                            // how many concurrent uploads
+                        queueSize: 5
+                    };
+                    
+                    S3.upload(params, options, function (err, data) {
                         if (err) {
-                        console.log(err);
-                        } else {
-                        const uploadId = data.UploadId;
-                        const fileStream = fs.createReadStream($scope.uploader.getFile(0));
-                    
-                        // Upload the file in parts
-                        const parts = [];
-                        let partNumber = 0;
-                        let bytesUploaded = 0;
-                        const PART_SIZE = 5 * 1024 * 1024; // 5 MB
-                    
-                        fileStream.on('readable', () => {
-                            let chunk;
-                            while ((chunk = fileStream.read(PART_SIZE))) {
-                            partNumber++;
-                            const params = {
-                                Body: chunk,
-                                Bucket: bucketName,
-                                Key: objectKey,
-                                PartNumber: String(partNumber),
-                                UploadId: uploadId,
-                            };
-                            s3.uploadPart(params, (err, data) => {
-                                if (err) {
-                                console.log(err);
-                                } else {
-                                parts.push({
-                                    ETag: data.ETag,
-                                    PartNumber: partNumber,
-                                });
-                                bytesUploaded += chunk.length;
-                                console.log(`Uploaded part ${partNumber}`);
-                                }
-                            });
-                            }
-                        });
-                    
-                        fileStream.on('end', () => {
-                            // Complete the upload
-                            const params = {
-                            Bucket: bucketName,
-                            Key: objectKey,
-                            MultipartUpload: {
-                                Parts: parts,
-                            },
-                            UploadId: uploadId,
-                            };
-                            s3.completeMultipartUpload(params, (err, data) => {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                console.log(`Upload completed. Uploaded ${bytesUploaded} bytes`);
-                            }
-                            });
-                        });
+                          reject("error");
                         }
-                    });
-                    // $scope.initiateMultipartUpload();
+                        alert("Successfully Uploaded!");
+                      }).on("httpUploadProgress", (progress) => {
+                        let uploaded = parseInt((progress.loaded * 100) / progress.total);
+                        this.setState({
+                          progress: uploaded,
+                          uploadText: "Uploading...",
+                          uploading: true,
+                        });
+                      });
                 }
-                    
-                //     input : presignedurl
-                //     initializeUpload - uploadId - POST
-                //     slice the content - add uploadID to each content - PUT for each chunk
-                //     commit the entire content - POST
-                // else
-                // $scope.uploadFileInBlocks();
             }
         })
-    }
-
-    $scope.initiateMultipartUpload = function() {
-        const s3 = new AWS.S3({
-        accessKeyId: 'f480b0299cca10cedb55209873c18d6b5fa18cbc',
-        secretAccessKey: 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=',
-        sessionToken: `session-${cuid()}`
-        })
-      
-        const params = {
-          Bucket: 'odev-dev-diksha-contents',
-          Key: 'assets/do_12345/l1933-relations-and-functions_part-2.mp4'
-        }      
-        const res = s3.createMultipartUpload(params).promise()      
-        return res.UploadId
-      }
-
-    $scope.initiateFileUpload = function () {
-        var uri = $scope.submitUri.split('?')[0] + '?uploads'
-        console.log('url in initiateFileUpload...',uri)
-        const fetchPromise = $scope.fetchRetry(uri, {
-            "method": "POST",
-        }, $scope.delayBetweenRetryCalls, $scope.retryChunkUploadLimit);
-        
-        fetchPromise.then($scope.handleErrors)
-            .then(function (response) {
-                if (response.ok) {
-                    print('response....',response)
-                } else {
-                    throw new Error('failed no response from cloud storage'); // no response from cloud storage
-                }
-            }).catch(function () {
-                $scope.toasterMsgHandler("error", "Error initiating file upload.")
-            });
     }
     
     /**
