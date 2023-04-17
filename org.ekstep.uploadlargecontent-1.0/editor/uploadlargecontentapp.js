@@ -214,15 +214,15 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 // }
                 // else
                 // {
-                    const endpoint = new AWS.Endpoint($scope.S3_ENDPOINT);
+                    const endpoint = new window.AWS.Endpoint($scope.S3_ENDPOINT);
 
-                    const S3 = new AWS.S3({
+                    const S3 = new window.AWS.S3({
                         endpoint: endpoint,
                         accessKeyId: $scope.S3_KEY,
                         secretAccessKey: $scope.S3_SECRET,
                         maxRetries: 10
                     });
-                    print('FILEPATH-------',$scope.uploader.getFile(0))
+                    console.log('FILEPATH-------',$scope.uploader.getFile(0))
                     const stream = fs.createReadStream($scope.uploader.getFile(0));
                     const contentType = mime.lookup($scope.uploader.getFile(0))
                     
