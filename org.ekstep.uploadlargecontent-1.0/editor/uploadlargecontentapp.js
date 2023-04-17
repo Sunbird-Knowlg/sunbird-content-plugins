@@ -194,6 +194,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     }
     
     $scope.generatePreSignedUrl = function () {
+        console.log("contentId.....",ecEditor.getContext('contentId'))
+        console.log("name.....",$scope.uploader.getName(0))
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function (err, res) {
             console.log('getPresignedURL res..'+res.data)
             if (err) {
@@ -201,9 +203,135 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             } else {
                 $scope.submitUri = res.data.result.pre_signed_url;
                 console.log('getPresignedURL pre_signed_url..'+res.data.result.pre_signed_url)
-                $scope.uploadFileInBlocks();
+                var cloudstorage = ecEditor.getConfig('cloudStorage.provider');
+                console.log('cloudstorage..'+cloudstorage)
+                if (cloudstorage.equal("azure"))
+                {                    
+                    $scope.uploadFileInBlocks();
+                }
+                else
+                {
+                    // Create a new S3 client
+                    const s3 = new AWS.S3({
+                        accessKeyId: 'f480b0299cca10cedb55209873c18d6b5fa18cbc',
+                        secretAccessKey: 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=',
+                        endpoint: 'https://bmzbbujw9kal.compat.objectstorage.ap-mumbai-1.oraclecloud.com',
+                        s3ForcePathStyle: true, // Required for S3 compatible endpoints
+                    });
+                    
+                    // Set the bucket and object key
+                    const bucketName = 'odev-dev-diksha-contents';
+                    const objectKey = 'assets/do_12345/l1933-relations-and-functions_part-2.mp4';
+                    
+                    // Create a new multipart upload
+                    const params = {
+                        Bucket: bucketName,
+                        Key: objectKey,
+                    };
+                    s3.createMultipartUpload(params, (err, data) => {
+                        if (err) {
+                        console.log(err);
+                        } else {
+                        const uploadId = data.UploadId;
+                        const fileStream = fs.createReadStream($scope.uploader.getFile(0));
+                    
+                        // Upload the file in parts
+                        const parts = [];
+                        let partNumber = 0;
+                        let bytesUploaded = 0;
+                        const PART_SIZE = 5 * 1024 * 1024; // 5 MB
+                    
+                        fileStream.on('readable', () => {
+                            let chunk;
+                            while ((chunk = fileStream.read(PART_SIZE))) {
+                            partNumber++;
+                            const params = {
+                                Body: chunk,
+                                Bucket: bucketName,
+                                Key: objectKey,
+                                PartNumber: String(partNumber),
+                                UploadId: uploadId,
+                            };
+                            s3.uploadPart(params, (err, data) => {
+                                if (err) {
+                                console.log(err);
+                                } else {
+                                parts.push({
+                                    ETag: data.ETag,
+                                    PartNumber: partNumber,
+                                });
+                                bytesUploaded += chunk.length;
+                                console.log(`Uploaded part ${partNumber}`);
+                                }
+                            });
+                            }
+                        });
+                    
+                        fileStream.on('end', () => {
+                            // Complete the upload
+                            const params = {
+                            Bucket: bucketName,
+                            Key: objectKey,
+                            MultipartUpload: {
+                                Parts: parts,
+                            },
+                            UploadId: uploadId,
+                            };
+                            s3.completeMultipartUpload(params, (err, data) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log(`Upload completed. Uploaded ${bytesUploaded} bytes`);
+                            }
+                            });
+                        });
+                        }
+                    });
+                    // $scope.initiateMultipartUpload();
+                }
+                    
+                //     input : presignedurl
+                //     initializeUpload - uploadId - POST
+                //     slice the content - add uploadID to each content - PUT for each chunk
+                //     commit the entire content - POST
+                // else
+                // $scope.uploadFileInBlocks();
             }
         })
+    }
+
+    $scope.initiateMultipartUpload = function() {
+        const s3 = new AWS.S3({
+        accessKeyId: 'f480b0299cca10cedb55209873c18d6b5fa18cbc',
+        secretAccessKey: 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=',
+        sessionToken: `session-${cuid()}`
+        })
+      
+        const params = {
+          Bucket: 'odev-dev-diksha-contents',
+          Key: 'assets/do_12345/l1933-relations-and-functions_part-2.mp4'
+        }      
+        const res = s3.createMultipartUpload(params).promise()      
+        return res.UploadId
+      }
+
+    $scope.initiateFileUpload = function () {
+        var uri = $scope.submitUri.split('?')[0] + '?uploads'
+        console.log('url in initiateFileUpload...',uri)
+        const fetchPromise = $scope.fetchRetry(uri, {
+            "method": "POST",
+        }, $scope.delayBetweenRetryCalls, $scope.retryChunkUploadLimit);
+        
+        fetchPromise.then($scope.handleErrors)
+            .then(function (response) {
+                if (response.ok) {
+                    print('response....',response)
+                } else {
+                    throw new Error('failed no response from cloud storage'); // no response from cloud storage
+                }
+            }).catch(function () {
+                $scope.toasterMsgHandler("error", "Error initiating file upload.")
+            });
     }
     
     /**
@@ -305,13 +433,16 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.reader.onloadend = function (evt) {
         if (evt.target.readyState == FileReader.DONE) {
-            var uri = $scope.submitUri + '&comp=block&blockid=' + $scope.blockIds[$scope.blockIds.length - 1];
+            var uri = $scope.submitUri + '&uploadid=' + upload + "&id=<>";
+
+            // var uri = $scope.submitUri + '&comp=block&blockid=' + $scope.blockIds[$scope.blockIds.length - 1];
+            var uri = $scope.submitUri;
             var requestData = new Uint8Array(evt.target.result);
             const fetchPromise = $scope.fetchRetry(uri, {
                 "headers": {
                     "Content-Type": $scope.mimeType,
-                    "x-ms-blob-type": "BlockBlob",
-                    "opc-multipart": true
+                    //  "x-ms-blob-type": "BlockBlob"
+                    // "opc-multipart": true
                 },
                 "body": requestData,
                 "method": "PUT",
@@ -319,6 +450,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             
             fetchPromise.then($scope.handleErrors)
                 .then(function (response) {
+                    console.log("statusCode: ", response.statusCode); 
+                    console.log("response.ok ", response.ok);
+                    console.log("response.created ", response.created);
                     if (response.ok) {
                         $scope.bytesUploaded += requestData.length;
                         $scope.percentComplete = ((parseFloat($scope.bytesUploaded) / parseFloat($scope.selectedFile.size)) * 100).toFixed(2);
@@ -407,6 +541,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     }
     
     $scope.handleErrors = function (response) {
+        console.log("statusCode: ", response.statusCode); 
+        console.log("response.ok ", response.ok);
+        console.log("response.created ", response.created);
         if (!response.ok) {
             throw Error(response.statusText);
         }
