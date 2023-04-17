@@ -12,7 +12,6 @@
             { "type": "css", "src": "editor/styles/uploadcontent.css" },
             { "type": "js", "src": "editor/libs/jquery.fine-uploader.min.js" },
             { "type": "js", "src": "editor/libs/cuid.js" },
-            { "type": "js", "src": "editor/libs/aws-sdk.js" },
             { "type": "js", "src": "editor/libs/aws-sdk.min.js" },
             { "type": "plugin", "plugin": "org.ekstep.toaster", "ver":"1.0"}
         ]
