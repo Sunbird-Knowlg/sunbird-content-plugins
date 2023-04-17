@@ -33,9 +33,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
-    S3_ENDPOINT = 'https://bmzbbujw9kal.compat.objectstorage.ap-mumbai-1.oraclecloud.com';
-    S3_KEY = 'f480b0299cca10cedb55209873c18d6b5fa18cbc';
-    S3_SECRET = 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=';
+    $scope.S3_ENDPOINT = 'https://bmzbbujw9kal.compat.objectstorage.ap-mumbai-1.oraclecloud.com';
+    $scope.S3_KEY = 'f480b0299cca10cedb55209873c18d6b5fa18cbc';
+    $scope.S3_SECRET = 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=';
 
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
@@ -214,12 +214,12 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 // }
                 // else
                 // {
-                    const endpoint = new AWS.Endpoint(S3_ENDPOINT);
+                    const endpoint = new AWS.Endpoint($scope.S3_ENDPOINT);
 
                     const S3 = new AWS.S3({
                         endpoint: endpoint,
-                        accessKeyId: S3_KEY,
-                        secretAccessKey: S3_SECRET,
+                        accessKeyId: $scope.S3_KEY,
+                        secretAccessKey: $scope.S3_SECRET,
                         maxRetries: 10
                     });
                     print('FILEPATH-------',$scope.uploader.getFile(0))
