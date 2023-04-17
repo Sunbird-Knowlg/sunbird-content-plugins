@@ -208,12 +208,12 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 console.log('getPresignedURL pre_signed_url..'+res.data.result.pre_signed_url)
                 var cloudstorage = ecEditor.getConfig('cloudStorage.provider');
                 console.log('cloudstorage..'+cloudstorage)
-                if (cloudstorage.equal("azure"))
-                {                    
-                    $scope.uploadFileInBlocks();
-                }
-                else
-                {
+                // if (cloudstorage.equal("azure"))
+                // {                    
+                //     $scope.uploadFileInBlocks();
+                // }
+                // else
+                // {
                     const endpoint = new AWS.Endpoint(S3_ENDPOINT);
 
                     const S3 = new AWS.S3({
@@ -253,7 +253,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                           uploading: true,
                         });
                       });
-                }
+                // }
             }
         })
     }
