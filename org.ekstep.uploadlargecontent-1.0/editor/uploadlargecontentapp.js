@@ -223,13 +223,14 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                         maxRetries: 10
                     });
                     console.log('FILEPATH-------',$scope.uploader.getFile(0))
-                    const stream = fs.createReadStream($scope.uploader.getFile(0));
-                    const contentType = mime.lookup($scope.uploader.getFile(0))
-                    
+                    console.log('FILEPATH-------',$scope.uploader.getName(0))
+                    // const stream = fs.createReadStream($scope.uploader.getFile(0));
+                    // const contentType = mime.lookup($scope.uploader.getFile(0))
+                    const contentType = ($scope.uploader.getFile(0) != null) ? $scope.detectMimeType($scope.uploader.getName(0)) : '';
                     const params = {
                         Bucket: 'odev-dev-diksha-contents',
-                        Key: 'assets/do_12345/l1933-relations-and-functions_part-2.mp4',
-                        Body: stream,
+                        Key: 'content/assets/'+ecEditor.getContext('contentId')+'/'+$scope.uploader.getName(0),
+                        Body: $scope.uploader.getFile(0),
                         ACL: 'public-read',
                         ContentType: contentType
                     };
@@ -242,7 +243,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                     
                     S3.upload(params, options, function (err, data) {
                         if (err) {
-                          reject("error");
+                          console.log('err......',err);
                         }
                         alert("Successfully Uploaded!");
                       }).on("httpUploadProgress", (progress) => {
