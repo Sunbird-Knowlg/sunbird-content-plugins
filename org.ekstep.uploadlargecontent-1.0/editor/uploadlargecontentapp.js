@@ -33,10 +33,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
-    $scope.S3_ENDPOINT = 'https://bmzbbujw9kal.compat.objectstorage.ap-mumbai-1.oraclecloud.com';
-    $scope.S3_KEY = 'f480b0299cca10cedb55209873c18d6b5fa18cbc';
-    $scope.S3_SECRET = 'jNdtlzkO+GzYGcfzjKUxXTwSF6yCa4TpiRZCq71aqBE=';
-
+    
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
         if(!_.isUndefined(contextPrimaryCategory)) {
@@ -197,64 +194,13 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     }
     
     $scope.generatePreSignedUrl = function () {
-        console.log("contentId.....",ecEditor.getContext('contentId'))
-        console.log("name.....",$scope.uploader.getName(0))
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function (err, res) {
-            console.log('getPresignedURL res..'+res.data)
+            console.log('getPresignedURL res..'+res)
             if (err) {
                 $scope.toasterMsgHandler("error", "error while generating presigned URL")
             } else {
                 $scope.submitUri = res.data.result.pre_signed_url;
-                console.log('getPresignedURL pre_signed_url..'+res.data.result.pre_signed_url)
-                var cloudstorage = ecEditor.getConfig('cloudStorage.provider');
-                console.log('cloudstorage..'+cloudstorage)
-                // if (cloudstorage.equal("azure"))
-                // {                    
-                //     $scope.uploadFileInBlocks();
-                // }
-                // else
-                // {
-                    const endpoint = new window.AWS.Endpoint($scope.S3_ENDPOINT);
-
-                    const S3 = new window.AWS.S3({
-                        endpoint: endpoint,
-                        accessKeyId: $scope.S3_KEY,
-                        secretAccessKey: $scope.S3_SECRET,
-                        maxRetries: 10
-                    });
-                    console.log('FILEPATH-------',$scope.uploader.getFile(0))
-                    console.log('FILEPATH-------',$scope.uploader.getName(0))
-                    // const stream = fs.createReadStream($scope.uploader.getFile(0));
-                    // const contentType = mime.lookup($scope.uploader.getFile(0))
-                    const contentType = ($scope.uploader.getFile(0) != null) ? $scope.detectMimeType($scope.uploader.getName(0)) : '';
-                    const params = {
-                        Bucket: 'odev-dev-diksha-contents',
-                        Key: 'content/assets/'+ecEditor.getContext('contentId')+'/'+$scope.uploader.getName(0),
-                        Body: $scope.uploader.getFile(0),
-                        ACL: 'public-read',
-                        ContentType: contentType
-                    };
-                    
-                    const options = {
-                        partSize: 10 * 1024 * 1024,
-                            // how many concurrent uploads
-                        queueSize: 5
-                    };
-                    
-                    S3.upload(params, options, function (err, data) {
-                        if (err) {
-                          console.log('err......',err);
-                        }
-                        alert("Successfully Uploaded!");
-                      }).on("httpUploadProgress", (progress) => {
-                        let uploaded = parseInt((progress.loaded * 100) / progress.total);
-                        this.setState({
-                          progress: uploaded,
-                          uploadText: "Uploading...",
-                          uploading: true,
-                        });
-                      });
-                // }
+                $scope.uploadFileInBlocks();
             }
         })
     }
@@ -266,21 +212,17 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.uploadFileInBlocks = function () {
         $('#retryUploadButton').hide(); // clicked on retry
         $scope.timeStarted = (!$scope.timeStarted) ? new Date() : $scope.timeStarted
-        console.log('start time..'+$scope.timeStarted)
         if ($scope.totalBytesRemaining > 0) {
             var fileContent = $scope.selectedFile.slice($scope.currentFilePointer, $scope.currentFilePointer + $scope.maxBlockSize);
             var blockId = $scope.blockIdPrefix + $scope.pad($scope.blockIds.length, 6);
-            console.log('blockId..'+blockId)
             $scope.blockIds.push(btoa(blockId));
             $scope.reader.readAsArrayBuffer(fileContent);
             $scope.currentFilePointer += $scope.maxBlockSize;
             $scope.totalBytesRemaining -= $scope.maxBlockSize;
             if ($scope.totalBytesRemaining < $scope.maxBlockSize) {
                 $scope.maxBlockSize = $scope.totalBytesRemaining;
-                console.log('maxBlockSize..'+$scope.maxBlockSize)
             }
         } else {
-            console.log('...else block..')
             $('.progress').progress({
                 percent: $scope.percentComplete,
                 text: {
@@ -296,13 +238,11 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.commitBlockList = function () {
         var uri = $scope.submitUri + '&comp=blocklist';
-        console.log('uri..'+uri)
         var requestBody = '<?xml version="1.0" encoding="utf-8"?><BlockList>';
         for (var i = 0; i < $scope.blockIds.length; i++) {
             requestBody += '<Latest>' + $scope.blockIds[i] + '</Latest>';
         }
         requestBody += '</BlockList>';
-        console.log('requestBody..'+requestBody)
         const blockListPromise = $scope.fetchRetry(uri, {
             "headers": {
                 "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -332,9 +272,6 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.updateContentWithURL = function (fileURL) {
         var data = new FormData();
-        console.log('fileURL in updateContentWithURL..'+fileURL)
-        console.log('data in updateContentWithURL..'+data)
-        console.log('mimeType in updateContentWithURL..'+$scope.mimeType)
         data.append("fileUrl", fileURL);
         data.append("mimeType", $scope.mimeType);
         var config = {
@@ -358,16 +295,12 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.reader.onloadend = function (evt) {
         if (evt.target.readyState == FileReader.DONE) {
-            var uri = $scope.submitUri + '&uploadid=' + upload + "&id=<>";
-
-            // var uri = $scope.submitUri + '&comp=block&blockid=' + $scope.blockIds[$scope.blockIds.length - 1];
-            var uri = $scope.submitUri;
+            var uri = $scope.submitUri + '&comp=block&blockid=' + $scope.blockIds[$scope.blockIds.length - 1];
             var requestData = new Uint8Array(evt.target.result);
             const fetchPromise = $scope.fetchRetry(uri, {
                 "headers": {
                     "Content-Type": $scope.mimeType,
-                    //  "x-ms-blob-type": "BlockBlob"
-                    // "opc-multipart": true
+                    "x-ms-blob-type": "BlockBlob"
                 },
                 "body": requestData,
                 "method": "PUT",
@@ -375,9 +308,6 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             
             fetchPromise.then($scope.handleErrors)
                 .then(function (response) {
-                    console.log("statusCode: ", response.statusCode); 
-                    console.log("response.ok ", response.ok);
-                    console.log("response.created ", response.created);
                     if (response.ok) {
                         $scope.bytesUploaded += requestData.length;
                         $scope.percentComplete = ((parseFloat($scope.bytesUploaded) / parseFloat($scope.selectedFile.size)) * 100).toFixed(2);
@@ -466,9 +396,6 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     }
     
     $scope.handleErrors = function (response) {
-        console.log("statusCode: ", response.statusCode); 
-        console.log("response.ok ", response.ok);
-        console.log("response.created ", response.created);
         if (!response.ok) {
             throw Error(response.statusText);
         }
@@ -532,8 +459,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             }
             
             function fetchUrl() {
-                console.log("  fetchUrl()  url: "+url)
-                console.log("  fetchUrl()  fetchOptions: "+fetchOptions)
+                console.log('fetchUrl url..'+url)
+                console.log('fetchUrl fetchOptions..'+fetchOptions)
                 return fetch(url, fetchOptions)
                     .then(success)
                     .catch(failure)
