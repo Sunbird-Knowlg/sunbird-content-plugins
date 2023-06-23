@@ -203,7 +203,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 console.log('getPresignedURL pre_signed_url..' + res.data.result.pre_signed_url)
                 var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
                 console.log('cloudstorage..' + cloudstorage);
-                if (typeof cloudstorage !== "undefined" && cloudstorage.localeCompare("azure") == 0) {
+                if (cloudstorage == null || typeof cloudstorage == "undefined") {
                     $scope.uploadFileInBlocks();
                 }
                 else 
