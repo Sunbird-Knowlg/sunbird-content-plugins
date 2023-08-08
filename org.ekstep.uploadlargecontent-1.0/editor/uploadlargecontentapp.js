@@ -33,6 +33,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
+    $scope.uploaderLib =  new sunbirdFileUploadLib.FileUploader()
     
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
@@ -204,10 +205,40 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
                 console.log('cloudstorage..' + cloudstorage);
                 if (cloudstorage == null || typeof cloudstorage == "undefined") {
-                    $scope.uploadFileInBlocks();
-                }
-                else 
-                {
+                    // $scope.uploadFileInBlocks();
+                    $('#retryUploadButton').hide();
+                    const file = $scope.selectedFile
+                    const url = $scope.submitUri                    
+                    $scope.uploaderLib.upload({url, file, csp: "azure", maxFileSizeForChunking: 50})
+                    .on("error", (error) => {
+                        console.log(error)
+                        $scope.failOnBlock = true
+                        $scope.toasterMsgHandler("error", "The upload seems to have failed. Click Retry to resume uploading the video.")
+                        $('#retryUploadButton').show();
+                    }).on("progress", (progress) => {
+                        console.log(progress)
+                        $('.progress').progress({
+                            percent: progress.progress,
+                            text: {
+                                active: "Do not close this window until the upload is complete",
+                            },
+                        });
+                        if(progress.estimated){
+                            $scope.percentComplete = progress.progress
+                            $scope.countdownTimer(progress.estimated, 'seconds');
+                        }
+                    }).on("completed", (completed) => {
+                        console.log(completed)
+                        $('.progress').progress({
+                            percent: 100,
+                            text: {
+                                active: "File Uploaded",
+                            },
+                        });
+                        $('.progress').progress("complete")
+                        $scope.updateContentWithURL($scope.submitUri.split('?')[0]);
+                    })
+                } else {
                     const contentType = ($scope.uploader.getFile(0) != null) ? $scope.detectMimeType($scope.uploader.getName(0)) : '';
                     var config = {
                         processData: false,

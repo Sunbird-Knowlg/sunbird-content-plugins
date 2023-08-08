@@ -14,6 +14,7 @@
             { "type": "js", "src": "editor/libs/cuid.js" },
             { "type": "js", "src": "editor/libs/aws-sdk.min.js" },
             { "type": "js", "src": "editor/libs/fs.js" },
+            { "type": "js", "src": "editor/libs/sunbird-file-upload-library.js" },
             { "type": "plugin", "plugin": "org.ekstep.toaster", "ver":"1.0"}
         ]
     }
