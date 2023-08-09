@@ -33,7 +33,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
-    $scope.uploaderLib =  new sunbirdFileUploadLib.FileUploader()
+    $scope.uploaderLib =  new SunbirdFileUploadLib.FileUploader()
     
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
@@ -209,7 +209,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                     $('#retryUploadButton').hide();
                     const file = $scope.selectedFile
                     const url = $scope.submitUri                    
-                    $scope.uploaderLib.upload({url, file, csp: "azure", maxFileSizeForChunking: 50})
+                    $scope.uploaderLib.upload({url: $scope.submitUri, file: $scope.selectedFile, csp: "azure"})
                     .on("error", (error) => {
                         console.log(error)
                         $scope.failOnBlock = true
