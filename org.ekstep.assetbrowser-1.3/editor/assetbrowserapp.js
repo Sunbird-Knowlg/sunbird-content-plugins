@@ -44,6 +44,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.inViewLogs = [];
         $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     var $sce = $injector.get('$sce');
+    var uploaderLib =  new SunbirdFileUploadLib.FileUploader()
     ctrl.file = {
         "infoShow": false,
         "name": "",
@@ -708,7 +709,27 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     contentType : ctrl.mimeType
                 }
                 config = $scope.contentService.appendCloudStorageHeaders(config);
-                ctrl.uploadToSignedURL(signedURL, file, config, nodeID)
+                var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
+                console.log('cloudstorage..' + cloudstorage);
+                if (cloudstorage != null || typeof cloudstorage != "undefined") {
+                    uploaderLib.upload({url: signedURL, file: $scope.uploader.getFile(0), csp: cloudstorage})
+                    .on("error", (error) => {
+                        console.log(error)
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'error while uploading!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                        uploadIndicator('hide')
+                    }).on("progress", (progress) => {
+                        console.log(progress)
+                    }).on("completed", (completed) => {
+                        console.log(completed)
+                        ctrl.uploadVideoAsset(signedURL.split('?')[0], nodeID);
+                    })
+                } else {
+                    ctrl.uploadToSignedURL(signedURL, file, config, nodeID)
+                }
             }
         })
     }

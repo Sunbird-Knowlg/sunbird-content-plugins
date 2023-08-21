@@ -204,12 +204,12 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 console.log('getPresignedURL pre_signed_url..' + res.data.result.pre_signed_url)
                 var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
                 console.log('cloudstorage..' + cloudstorage);
-                if (cloudstorage == null || typeof cloudstorage == "undefined") {
+                if (cloudstorage != null || typeof cloudstorage != "undefined") {
                     // $scope.uploadFileInBlocks();
                     $('#retryUploadButton').hide();
                     const file = $scope.selectedFile
                     const url = $scope.submitUri                    
-                    $scope.uploaderLib.upload({url: $scope.submitUri, file: $scope.selectedFile, csp: "azure"})
+                    $scope.uploaderLib.upload({url: $scope.submitUri, file: $scope.selectedFile, csp: cloudstorage})
                     .on("error", (error) => {
                         console.log(error)
                         $scope.failOnBlock = true

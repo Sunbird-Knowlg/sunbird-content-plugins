@@ -14,6 +14,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
     $scope.H5PGuidanceDoc = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/h5pcontentguidelines.pdf');
+    $scope.uploaderLib =  new SunbirdFileUploadLib.FileUploader()
 
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
@@ -385,18 +386,38 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                     contentType: contentType,
                 }
                 config = $scope.contentService.appendCloudStorageHeaders(config);
-                $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
-                    if (err) {
+                var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
+                console.log('cloudstorage..' + cloudstorage);
+                if (cloudstorage != null || typeof cloudstorage != "undefined") {
+                    $scope.uploaderLib.upload({url: signedURL, file: $scope.uploader.getFile(0), csp: cloudstorage})
+                    .on("error", (error) => {
+                        console.log(error)
                         $scope.showLoader(false);
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                             message: 'error while uploading!',
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                    } else {
+                    }).on("progress", (progress) => {
+                        console.log(progress)
+                    }).on("completed", (completed) => {
+                        console.log(completed)
                         cb(signedURL.split('?')[0]);
-                    }
-                })
+                    })
+                } else {
+                    $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
+                        if (err) {
+                            $scope.showLoader(false);
+                            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                message: 'error while uploading!',
+                                position: 'topCenter',
+                                icon: 'fa fa-warning'
+                            });
+                        } else {
+                            cb(signedURL.split('?')[0]);
+                        }
+                    })
+                }
             }
         })
     }

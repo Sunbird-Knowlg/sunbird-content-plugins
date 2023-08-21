@@ -9,6 +9,7 @@
         "main": "editor/plugin.js",
         "dependencies": [
             {"type": "css", "src": "editor/plugin.css"},
+            { "type": "js", "src": "editor/libs/sunbird-file-upload-library.js" },
             {"type": "js","src": "editor/libs/angular-inview.js"},
             {"type": "js", "src": "editor/camelize.js"}
         ],
