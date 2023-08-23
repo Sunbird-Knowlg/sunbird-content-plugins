@@ -712,7 +712,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
                 console.log('cloudstorage..' + cloudstorage);
                 if (cloudstorage != null || typeof cloudstorage != "undefined") {
-                    uploaderLib.upload({url: signedURL, file: $scope.uploader.getFile(0), csp: cloudstorage})
+                    uploaderLib.upload({url: signedURL, file: file, csp: cloudstorage})
                     .on("error", (error) => {
                         console.log(error)
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
