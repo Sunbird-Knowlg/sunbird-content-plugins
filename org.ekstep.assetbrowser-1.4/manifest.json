@@ -9,6 +9,7 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
+            { "type": "js", "src": "editor/libs/sunbird-file-upload-library.js" },
             {"type": "js", "src": "editor/recorder/wave/wavesurfer.min.js"},
             {"type": "js", "src": "editor/recorder/angular-audio-recorder.js"},
             { "type": "js", "src": "editor/libs/ng-tags-input.js" },
