@@ -26,7 +26,7 @@
         { "type": "js", "src": "editor/libs/video.js" },
         { "type": "js", "src": "editor/libs/videoyoutube.js" },
         {"type": "css", "src": "editor/libs/videojs.css"},
-        { "type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.3" }],
+        { "type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.4" }],
         "views":[
             {"template":"./video.html", "controller":"./videoapp.js"}
         ],
