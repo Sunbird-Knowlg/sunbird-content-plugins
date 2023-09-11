@@ -39,6 +39,17 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     $(FTBController.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
     $(FTBController.constant.qsFtbElement).on('click', '.ans-field', FTBController.invokeKeyboard); // eslint-disable-line no-undef
 
+    $('.ans-field').focusin(function() {
+      if (window.cordova && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device")) { // eslint-disable-line no-undef
+        $(FTBController.constant.qsFtbContainer).addClass("align-question");
+      }
+    }).add('.ans-field').focusout(function(){
+        if ( !$('.ans-field').is(':focus') ) {
+          if (window.cordova && (_.isUndefined(FTBController.question.data.question.keyboardConfig) || FTBController.question.data.question.keyboardConfig.keyboardType == "Device")) { // eslint-disable-line no-undef
+            $(FTBController.constant.qsFtbContainer).removeClass("align-question");
+          }
+        }
+    });
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
     /*istanbul ignore else*/
     if (this._question.state && this._question.state.val) {
@@ -85,7 +96,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       correctAnswersCount = _.intersection(answerArray, this._question.data.answer).length;
     }
     else { // eslint-disable-line no-undef
-      correctAnswer = (_.isEqual(answerArray, this._question.data.answer));
+      correctAnswer = (_.isEqual(answerArray.toString().replace(/\s\s+/g, ' '), this._question.data.answer.toString().replace(/\s\s+/g, ' ')))
       correctAnswersCount = _.reduce(_.map(this._question.data.answer, function(ans, index){
         return (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) ? 1 : 0;
       }), function (score, s) { return score + s; }, 0);

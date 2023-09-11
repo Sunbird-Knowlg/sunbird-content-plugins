@@ -818,19 +818,20 @@
 						<div class="clearfix">&nbsp;</div>
 						<div class="grouped required fields">
 							<label for="ccByContribution" >Copyright & License:</label>
-							<p class="licenseMessage">I understand and confirm that all resources and assets created through the content editor or uploaded on the platform shall be available for free and public use without limitations on the platform (web portal, applications and any other end user interface that the platform would enable) and will be licensed under terms & conditions and policy guidelines of the platform.</p>
-							  <div class="field">
+							<p class="licenseMessage">I understand and confirm that all resources and assets created through the content editor or uploaded on the platform shall be available for free and public use without limitations on the platform (web portal, applications and any other end user interface that the platform would enable) and will be licensed under terms & conditions and policy guidelines of the platform. In doing so, the copyright and license of the original author is not infringed. </p> 
+							<!-- <input name="ccByContribution" type="hidden"  value="{{$ctrl.DefaultTanantLicense}}"> -->
+							<!-- <div class="field">
 								<div class="ui radio checkbox">
 									<input id="ccByContribution1"  ng-disabled="$ctrl.hideLicenseField" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">
 									<label for="ccByContribution1" ng-click="$ctrl.setPublic(); $ctrl.generateTelemetry({id: 'ccByContribution1', type: 'click', subtype: 'select', target: 'selectCCBYproperty'});">Yes, make it available to everyone</label>
 								</div>
-							</div>
-							<div class="field">
+							</div> -->
+							<!-- <div class="field">
 								<div class="ui radio checkbox">
 									<input id="ccByContribution2" ng-disabled="$ctrl.hideLicenseField" name="ccByContribution" type="radio" ng-click="$ctrl.setPrivate()" value="">
 									<label for="ccByContribution2"  ng-click="$ctrl.setPrivate(); $ctrl.generateTelemetry({id: 'ccByContribution2', type: 'click', subtype: 'select', target: 'unselectCCBYproperty'});">No, don't share with anyone</label>
 								</div>
-							  </div>
+							  </div> -->
 						</div>
 					</div>
 					<div class="column" id="hideShowFields">

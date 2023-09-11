@@ -44,7 +44,7 @@
             <div class="field">
               <div class="ui fluid labeled input displayCount">
                 <div class="ui label">Display</div>
-                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
+                <select class="ui fluid dropdown questionCount" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
                 </select>
               </div>
             </div>
@@ -76,8 +76,8 @@
               <span class="ui label qc-selected-quescount">Selected Question : {{selectedQuestions.length}}</span>
             <div class="row qb-question-list-container qs-scrollbar">
               <div class="ui large divided items">
-                 
-                <div class="item select list-items ui grid" ng-repeat="question in questions" ng-class="{quesSelector: $index === selectedQueIndex}">
+
+                <div class="item select list-items ui grid" ng-repeat="question in questions track by $index" ng-class="{quesSelector: $index === selectedQueIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(question, true); showSelectedQue($index);">
                     <div class="header" style="display: -webkit-box;">{{ question.title}}</div>
                     <div class="meta">{{question.medium}} | {{ question.type}} | {{ question.qlevel }}
@@ -86,7 +86,7 @@
                   </div>
                   <div class="qb-question-action three wide column">
                     <div class="ui checkbox action-btn-checkbox" ng-class="question.isSelected ? 'checked' : '' " data-tooltip="select question" data-inverted="">
-                      <input type="checkbox" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+                      <input type="checkbox" class="question-select" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question,$event);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" id="question_{{question.node_id}}">
                       <label></label>
                     </div>
                     <span class="action-btn" ng-if="(currentUserId == question.createdBy) && (question.version != '1')" data-tooltip="delete question" data-inverted="">
@@ -100,9 +100,12 @@
                     </span>
                   </div>
                 </div>
-                <div class="load-more-assets-warning-msg endpage" ng-show="questions.length == 200 || resultNotFound == 0">
+                <div class="endpage" ng-style="{'visibility': showMoreVisibility ? 'visible' : 'hidden'}">
+                  <button class="ui blue button" ng-click="loadMoreQuestion();">Show More Questions</button>
+                </div>
+                <div class="load-more-assets-warning-msg endpage" ng-show="resultNotFound == 0">
                   <img class="ui centered tiny image" src="{{noQuestionFound}}">
-                  <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
+                  <p>Didn’t find what you were looking for? Try search for something more specific.
                   </p>
                 </div>
               </div>
@@ -112,7 +115,7 @@
               <span class="ui label">Total Question in Question Set : {{selectedQuestions.length}}</span>
             <div class="column qb-selected-question-list-container qs-scrollbar" ng-show="isQuestionSetConfig">
               <div class="ui large divided items">
-                <div class="item select list-items ui grid" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
+                <div class="item select list-items ui grid" ng-repeat="selQuestion in selectedQuestions track by $index" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">
                     <div class="header" style="display: -webkit-box;">{{selQuestion.title }}</div>
                     <div class="meta">{{selQuestion.medium}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}

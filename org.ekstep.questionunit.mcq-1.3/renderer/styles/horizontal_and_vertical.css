@@ -237,9 +237,9 @@
     margin-bottom: 1.5625%;
     border-radius: 4px;
     background-color: #FFFFFF;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
     position: relative;
-    display: table;
+    display: flex;
 }
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 {
     width: 48%;
@@ -254,7 +254,9 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    top: 26%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .audio-icon {
@@ -299,7 +301,7 @@
     float: left;
     position: relative;
     display: table-cell;
-    cursor: default
+    cursor: default;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-image-container.no-image {
@@ -319,9 +321,13 @@
 }
 .zoom-icon-set{
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
+    transform: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block img.tick {
@@ -386,7 +392,9 @@ mcq-content-container .option-container.horizontal .option-block-container .opti
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    top: 26%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 .mcq-content-container .option-container.horizontal .option-block-container .option-width-50 .option-text-container-mcq>span>p{
     overflow: hidden;

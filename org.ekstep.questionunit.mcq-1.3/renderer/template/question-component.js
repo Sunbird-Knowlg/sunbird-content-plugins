@@ -20,11 +20,11 @@ org.ekstep.mcq.baseComponent = {
         });
     },
     generateModelTemplate: function () {
-        return "<div class='popup' id='image-model-popup' onclick='org.ekstep.mcq.questionComponent.hideImageModel()'><div class='popup-overlay' onclick='org.ekstep.mcq.questionComponent.hideImageModel()'></div> \
+        return "<div class='popup' id='image-model-popup' tabindex='0' onclick='org.ekstep.mcq.questionComponent.hideImageModel()'><div class='popup-overlay' onclick='org.ekstep.mcq.questionComponent.hideImageModel()'></div> \
         <div class='popup-full-body'> \
             <div class='font-lato assess-popup assess-goodjob-popup'> \
                 <img class='qc-question-fullimage' src=<%= src %> /> \
-                <div onclick='org.ekstep.mcq.questionComponent.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
+                <div tabindex='0' onclick='org.ekstep.mcq.questionComponent.hideImageModel()' class='qc-popup-close-button'>&times;</div> \
             </div>\
         </div>"
     },
@@ -58,20 +58,20 @@ org.ekstep.mcq.questionComponent = {
                         <div class="expand-container">\
                             <%= question.data.question.text %>\
                         </div>\
-                        <div class="expand-button" onclick="org.ekstep.mcq.questionComponent.toggleQuestionText({layout:\'qcontainer-big\'})">\
+                        <div class="expand-button" tabindex="0" onclick="org.ekstep.mcq.questionComponent.toggleQuestionText({layout:\'qcontainer-big\'})">\
                             <img \ class="exp-button" src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-downArwImg"" /> \
                         </div> \
                     </div> \
                     <% if(question.data.question.image) { %>\
                         <div  class="image-container <% if(!question.data.question.text){ %> no-text <% } %> \ "> \
                             <img  data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage" class="qimage" src="" /> \
-                            <img class="zoom-icon" onclick="org.ekstep.mcq.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')" class="image-container <% if(!question.data.question.text){ %> no-text <% } %> \ " src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg"> \
+                            <img class="zoom-icon" tabindex="0" onclick="org.ekstep.mcq.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')" class="image-container <% if(!question.data.question.text){ %> no-text <% } %> \ " src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg"> \
                         </div> \
                     <% } %>\
                 </div> \
                 <% if(question.data.question.audio) { %>\
                     <div class="audio-container"> \
-                        <img onclick="org.ekstep.mcq.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg"/> \
+                        <img tabindex="0" onclick="org.ekstep.mcq.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg"/> \
                     </div> \
                 <% } %>\
             </div><script>org.ekstep.mcq.questionComponent.onDomReady();</script>'
@@ -80,12 +80,12 @@ org.ekstep.mcq.questionComponent = {
         <div class="question-container">\
         <% if(question.data.question.image || question.data.question.audio){ %> \
             <% if(question.data.question.audio){ %> \
-                <img onclick="org.ekstep.mcq.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" class="audio" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg" />\
+                <img tabindex="0" onclick="org.ekstep.mcq.questionComponent.playAudio({src:\'<%= question.data.question.audio %>\'})" class="audio" src=""  id="org-ekstep-contentrenderer-questionunit-questionComponent-AudioImg" />\
                 <% } %>\
             <div class="image-container">\
             <% if(question.data.question.image){ %> \
                 <img data-image="<%= question.data.question.image %>" id="org-ekstep-questionunit-questionComponent-qimage"  class="q-image" src="" />\
-                <img src="" class="question-zoom-img" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg" onclick="org.ekstep.mcq.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')"/>\
+                <img src="" class="question-zoom-img" id="org-ekstep-contentrenderer-questionunit-questionComponent-ZoomImg" tabindex="0" onclick="org.ekstep.mcq.questionComponent.showImageModel(event, undefined, \'org-ekstep-questionunit-questionComponent-qimage\')"/>\
                 <% }%>\
             </div>\
         <% } %>\
@@ -94,7 +94,7 @@ org.ekstep.mcq.questionComponent = {
                 <%= question.data.question.text %>\
                 </div>\
             </div>\
-            <div class="expand-button" onclick="org.ekstep.mcq.questionComponent.toggleQuestionText()">\
+            <div class="expand-button" tabindex="0" onclick="org.ekstep.mcq.questionComponent.toggleQuestionText()">\
                 <img class="exp-button" src="" id="org-ekstep-contentrenderer-questionunit-questionComponent-downArwImg"/>\
             </div>\
         </div><script>org.ekstep.mcq.questionComponent.onDomReady();</script>\
@@ -119,6 +119,11 @@ org.ekstep.mcq.questionComponent = {
                 $('.expand-button').css('display', 'block');
             }
         })
+
+        var questionData = MCQController.pluginInstance._question;
+        if(questionData.data.question.image == '') {
+            $('.hiding-container').css('padding-left','10%');
+        }
     },
     toggleQuestionText: function (option) {
         if(option && option.layout == "qcontainer-big"){

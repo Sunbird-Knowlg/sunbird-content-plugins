@@ -18,6 +18,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.collectionCache = [];
     $scope.isChildren = false;
     $scope.setVerifiedCode = true;
+    $scope.isResourceCollection = false;
+    $scope.isRootNode = false;
     $scope.CONSTANTS = {
         tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
         tocUploadDescription: 'Please upload the CSV file in the required format',
@@ -194,6 +196,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             $scope.setVerifiedCode = false;
             $scope.readExistingQrCode();
         }
+        $scope.isRootNode = data.data.root ? true : false;
+        $scope.isResourceCollection = (data.data.metadata.status && data.data.metadata.status === "Live") ? true : false;
     };
 
     /**
@@ -305,7 +309,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
-                if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
+                if(showToc && res.data.result.content.contentType === 'TextBook' && (!res.data.result.content.children || _.isEmpty(res.data.result.content.children))){ 
                     $scope.createToc();
                 }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
@@ -407,6 +411,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             org.ekstep.services.collectionService.fromCollection(res.data.result.content);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
             $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
+            $scope.setVerifiedCode = true;
             setTimeout(function() {
                 ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                 ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);

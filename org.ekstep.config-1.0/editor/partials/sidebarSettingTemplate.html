@@ -88,7 +88,7 @@ a.item.at-menu-item.popup-item.active {
                 <div class="ui form" ng-switch-when="input">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
-                        <input type="{{config.valueType || text}}" placeholder="{{config.placeholder}}" ng-model="configData[config.propertyName]" min="{{config.minimumValue}}" max="{{config.maximumValue}}" id="{{config.propertyName}}" ng-show="config.valueType == 'number'" onkeypress="return event.charCode>= 48" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
+                        <input type="{{config.valueType || text}}" ng-disabled="{{config.propertyName == 'max_score'}}?true:false" placeholder="{{config.placeholder}}" ng-model="configData[config.propertyName]" min="{{config.minimumValue}}" max="{{config.maximumValue}}" id="{{config.propertyName}}" ng-show="config.valueType == 'number'" onkeypress="return event.charCode>= 48" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
                         <input type="{{config.valueType || text}}" placeholder="{{config.placeholder}}" ng-model="configData[config.propertyName]" id="{{config.propertyName}}" ng-show="config.valueType != 'number'" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
                     </div>
                 </div>

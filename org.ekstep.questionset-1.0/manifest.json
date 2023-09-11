@@ -16,7 +16,7 @@
       {
         "type": "plugin",
         "plugin": "org.ekstep.questionunit",
-        "ver": "1.1"
+        "ver": "1.2"
       },
       {
         "type": "plugin",
@@ -31,7 +31,7 @@
       {
         "type": "plugin",
         "plugin": "org.ekstep.questionset.preview",
-        "ver": "1.0"
+        "ver": "1.1"
       },{
         "type":"css",
         "src":"editor/style/style.css"

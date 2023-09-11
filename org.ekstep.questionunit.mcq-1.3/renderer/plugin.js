@@ -115,9 +115,11 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     var resValues = [];
     var selectedIndex = MCQController.pluginInstance._selectedIndex;
     var value = {};
-    if (!_.isUndefined(selectedIndex))
+    if (!_.isUndefined(selectedIndex)){
       value[selectedIndex + 1] = this.getTelemetryParamsValue(MCQController.pluginInstance._question.data.options[selectedIndex]);
-    resValues.push(value);
+      resValues.push(value);
+    }
+      
     return resValues;
   },
   /**
@@ -160,7 +162,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     var value, telValues = {};
     value = this._question.data.options[index];
     this._selectedIndex = index; // eslint-disable-line no-undef
-    telValues['option' + index] = value.image.length > 0 ? value.image : value.text;
+    telValues['option' + index] = value.image.length > 0 ? value.image : value.text.replace( /(<([^>]+)>)/ig, '').replace(/\n/g, '').trim();
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { // eslint-disable-line no-undef
       "type": "MCQ",
       "values": [telValues]

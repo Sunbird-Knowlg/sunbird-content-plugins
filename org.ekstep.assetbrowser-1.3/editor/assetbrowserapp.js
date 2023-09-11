@@ -192,7 +192,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
+                      //  license: obj.license,
                         contentType: obj.contentType
                     });
                 }
@@ -523,14 +523,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         }
     });
 
-    ctrl.setPublic = function(task) {
-        ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
-        ctrl.asset.requiredField = 'required';
-        ctrl.optional = false;
-        if(task == 'hide') {
-            ctrl.hideLicenseField = true;
-        }
-    }
+    // ctrl.DefaultTanantLicense = ((ecEditor.getContext("defaultLicense")) ? ecEditor.getContext("defaultLicense") : "");
+    // ctrl.assetMeta.license = ctrl.DefaultTanantLicense;
+
+    // ctrl.setPublic = function(task) {
+    //     ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
+    //     ctrl.asset.requiredField = 'required';
+    //     ctrl.optional = false;
+    //     if(task == 'hide') {
+    //         ctrl.hideLicenseField = true;
+    //     }
+    // }
 
     ctrl.viewMore = function() {
         ecEditor.jQuery('.removeError').each(function() {
@@ -539,11 +542,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.hideField = false;
     }
 
-    ctrl.setPrivate = function() {
-        delete ctrl.assetMeta.license;
-        ctrl.asset.requiredField = '';
-        ctrl.optional = true;
-    }
+    // ctrl.setPrivate = function() {
+    //     delete ctrl.assetMeta.license;
+    //     ctrl.asset.requiredField = '';
+    //     ctrl.optional = true;
+    // }
 
     ctrl.showFileInfo = function() {
         var file;
@@ -647,8 +650,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         "createdFor": ecEditor._.keys(ecEditor.getContext('user').organisations),
                         "contentType": "Asset",
                         "osId": "org.ekstep.quiz.app",
-                        "language": content.language,
-                        "license": content.license
+                        "language": content.language
+                        // "license": content.license
                     }
                 }
             }
@@ -702,11 +705,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 var signedURL = res.data.result.pre_signed_url;
                 var config = {
                     processData: false,
-                    contentType : ctrl.mimeType,
-                    headers: {
-                        'x-ms-blob-type': 'BlockBlob'
-                    }
+                    contentType : ctrl.mimeType
                 }
+                config = $scope.contentService.appendCloudStorageHeaders(config);
                 ctrl.uploadToSignedURL(signedURL, file, config, nodeID)
             }
         })
@@ -982,7 +983,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
+                        //license: obj.license,
                         contentType: obj.contentType
                     });
                 }else if(mediaType == 'video'){
@@ -991,7 +992,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
+                        // license: obj.license,
                         contentType: obj.contentType
                     });
                 }
@@ -1184,7 +1185,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 });
             } else if(res.data.result.license.valid){
                 ctrl.previewVideo(request.url, ctrl.plugin, request.provider)
-                ctrl.setPublic('hide');
+                // ctrl.setPublic('hide');
                 $scope.$safeApply();
             }else{
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -1240,7 +1241,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
         ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
         ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
-        ecEditor.jQuery("#ccByContribution1").click();
+        // ecEditor.jQuery("#ccByContribution1").click();
 
         ecEditor.jQuery(document).one('change', '#assetName, #assetfile', function() {
             ctrl.uploadBtnDisabled = false;

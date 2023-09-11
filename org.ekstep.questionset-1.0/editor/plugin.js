@@ -15,9 +15,11 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   _questionPlugin: 'org.ekstep.question',
   _constants: {
     v1PluginId: "org.ekstep.questionset.quiz",
-    templateId: "horizontalMCQ"
+    templateId: "horizontalMCQ",
+    questionUnitId: "org.ekstep.questionunit"
   },
   _dependencyPlugin: "org.ekstep.questionbank",
+  katexTemplate: {"manifest":{"media":[{"id":"org.ekstep.mathfunction.renderer.katex_min_js","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/katex.min.js"},{"id":"org.ekstep.mathfunction.renderer.katex_min_css","plugin":"org.ekstep.mathfunction","type":"css","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/katex.min.css"},{"id":"org.ekstep.mathfunction.renderer.katex_main_bold","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-bold.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_main_bolditalic","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-bolditalic.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_main_italic","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-italic.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_main_regular","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_main-regular.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_math_bolditalic","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-bolditalic.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_math_italic","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-italic.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_math_regular","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_math-regular.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_size1_regular","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size1-regular.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_size2_regular","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size2-regular.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_size3_regular","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size3-regular.ttf"},{"id":"org.ekstep.mathfunction.renderer.katex_size4_regular","plugin":"org.ekstep.mathfunction","type":"js","src":"/content-plugins/org.ekstep.mathfunction-1.0/renderer/libs/katex/fonts/katex_size4-regular.ttf"}]},"pluginManifest":{"id":"org.ekstep.mathfunction","type":"plugin","ver":"1.0","depends":""}},
   /**
    * Register events.
    * @memberof questionset
@@ -74,8 +76,21 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
     ];
     instance.pluginsRespHandler(pluginsData);
   },
+  checkContentType : function(instance)
+  {
+    var contentMeta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+    if(contentMeta) {
+      var contentType = contentMeta.contentType;
+      if(_.toLower(contentType) === 'selfassess') {
+        instance.manifest.editor.configManifest =  _.remove(instance.manifest.editor.configManifest, function(o){ return o.title != 'Display'})
+        instance.config['show_feedback'] = false;
+      }
+    }
+    return instance;
+ },
   newInstance: function () {
     var instance = this;
+    // instance = this.checkContentType(instance);
     delete this.configManifest;
     instance.config.btn_edit = "Edit";
     var _parent = this.parent;
@@ -243,6 +258,19 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
 
         } else {
           var questionBody = JSON.parse(question.body);
+
+          // Verify question and options font size, And change font-size if requires while Republishing content
+          if(questionBody && questionBody.data && questionBody.data.data){
+            try {
+              // Dispatch event to quetion Unit to change font style
+              ecEditor.dispatchEvent(instance._constants.questionUnitId + ":changeFontSize",function(data){
+                questionBody = data;
+              },questionBody);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
           // Build Question ECML for each question that is added.
           questionECML = {
             id: _.isUndefined(question.identifier) ? UUID() : question.identifier,
@@ -448,6 +476,20 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   getplugins: function(event, callback){
     var instance = this;
     callback(instance._plugins);
+  },
+  _checkForMathText : function(content, questionData) {
+    if(typeof (questionData) != "undefined"){
+      var qsData = JSON.stringify(questionData);
+      if(!((ecEditor._.isEmpty(qsData.match(/data-math/g))) && (ecEditor._.isEmpty(qsData.match(/math-text/g))))) {
+      if(_.isEmpty(content.theme['plugin-manifest'].plugin.filter(data => data.id == "org.ekstep.mathfunction"))){
+        content.theme['plugin-manifest'].plugin.push(this.katexTemplate.pluginManifest);
+        this.katexTemplate.manifest.media.forEach(function(katexMedia) {
+          content.theme['manifest'].media.push(katexMedia);
+        });
+        }
+      }
+    }
+    return content;
   }
 });
 //# sourceURL=questionsetPlugin.js

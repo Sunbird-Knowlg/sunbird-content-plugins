@@ -263,11 +263,17 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
      	if(object.isValid){
         var metaDataObject = object.formData.metaData;
         _.extend(metaDataObject, {'title': metaDataObject.name});
+
         for (var property in object.formData.metaData) {
-          if (metaDataObject[property]) {
-            $scope.questionMetaData[property] = metaDataObject[property];
+          if (!_.isUndefined(metaDataObject[property])) {
+            if(property !== 'data' && property !== 'questionTitle' && property !== 'topicData'){
+              $scope.questionMetaData[property] = metaDataObject[property];
+            } else {
+              delete $scope.questionMetaData[property];
+            }
           }
         }
+
         delete $scope.questionMetaData.level;
         var questionFormData = {};
         var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
@@ -283,7 +289,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         var metadataObj = $scope.questionMetaData;    
         metadataObj.category = $scope.category;
         // TODO: questionCount should be sent from unit template controllers. Currently it is hardcoded to 1.
-        data.config = { "metadata": metadataObj, "max_time": 0, "max_score": $scope.questionData.max_score, "partial_scoring": $scope.questionData.isPartialScore, "layout": $scope.questionData.templateType, "isShuffleOption" : $scope.questionData.isShuffleOption, "questionCount": 1, "evalUnordered": $scope.questionData.evalUnordered};
+        data.config = { "metadata": metadataObj, "max_time": 0, "max_score": $scope.questionMetaData.max_score, "partial_scoring": $scope.questionData.isPartialScore, "layout": $scope.questionData.templateType, "isShuffleOption" : $scope.questionData.isShuffleOption, "questionCount": 1, "evalUnordered": $scope.questionData.evalUnordered};
         data.media = $scope.questionCreationFormData.media;
         questionFormData.data = data;
         var metadata = {
@@ -301,7 +307,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
           "framework": ecEditor.getContext('framework')
         };
         for (var key in $scope.questionMetaData) {
-          metadata[key] = $scope.questionMetaData[key];
+          // metadata[key] = $scope.questionMetaData[key];
+          (key !== 'data') ? (metadata[key] = $scope.questionMetaData[key]) : '';
+
         }
         var dynamicOptions = [{"answer": true, "value": {"type": "text", "asset": "1"}}];
         var mtfoptions = [{
@@ -413,7 +421,8 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	$scope.questionData.description = questionData1.data.config.metadata.description;
   	$scope.questionData.max_score = questionData1.data.config.metadata.max_score;
   	$scope.conceptsCheck = true;
-  	$scope.topicsCheck = true;
+    $scope.topicsCheck = true;
+    $scope.questionData.questionType = qData.questionType ? qData.questionType : undefined;
   	var pluginID = questionData1.data.plugin.id;
   	var pluginTemplateId = questionData1.data.plugin.templateId;
   	var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);

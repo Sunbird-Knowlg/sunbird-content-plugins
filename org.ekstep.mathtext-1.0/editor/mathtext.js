@@ -499,33 +499,40 @@ angular.module('org.ekstep.mathtext', [])
     };
     $scope.advancedSymbols = [
       {
-        latexText: "\\begin{vmatrix} a&b\\\\ c&d\\\\ \\end{vmatrix}"
+        latexText: "\\begin{vmatrix} a&b\\\\ c&d\\\\ \\end{vmatrix}",
+        customImage: 'assets/advance_tab_equations/vmatrix.png'
       },
       {
-        latexText: "\\begin{matrix} a&b\\\\ c&d\\\\ \\end{matrix}"
+        latexText: "\\begin{matrix} a&b\\\\ c&d\\\\ \\end{matrix}",
+        customImage: 'assets/advance_tab_equations/matrix.png'
       },
       {
-        latexText: "\\begin{bmatrix} a&b\\\\ c&d\\\\ \\end{bmatrix}"
+        latexText: "\\begin{bmatrix} a&b\\\\ c&d\\\\ \\end{bmatrix}",
+        customImage: 'assets/advance_tab_equations/bmatrix.png'
       },
       {
-        latexText: "\\xrightarrow{\\Delta}"
+        latexText: "\\xrightarrow{\\Delta}",
+        customImage: 'assets/advance_tab_equations/delta.png'
       },
       {
-        latexText: "\\sphericalangle"
+        latexText: "\\sphericalangle",
+        customImage: 'assets/advance_tab_equations/sphericalangle.png'
       },
       {
         latexText: "\\xleftrightharpoons{abc}",
-        customImage: 'assets/equilibrium.png'
+        customImage: 'assets/advance_tab_equations/abc.png'
       },
       {
-        latexText: "\\leftrightarrows"
+        latexText: "\\leftrightarrows",
+        customImage: 'assets/advance_tab_equations/leftrightarrows.png'
       },
       {
-        latexText: "\\widetilde{a}"
+        latexText: "\\widetilde{a}",
+        customImage: 'assets/advance_tab_equations/a.png'
       },
       {
         latexText: "\\overgroup{AB}",
-        customImage: 'assets/arc.png'
+        customImage: 'assets/advance_tab_equations/ab.png'
       }];
     $scope.equationGroup = 'all';
     $scope.advanceField = false;

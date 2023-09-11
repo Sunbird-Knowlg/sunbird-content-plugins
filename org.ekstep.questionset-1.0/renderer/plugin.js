@@ -47,82 +47,105 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
   _questionUnitPlugins: [],
   initPlugin: function(data) {
     var instance = this;
+    try {
+        
+        /**
+        * TODO: Remove the following FIX.
+        * The following fix is applied to remove duplicate naviagtion registrations by questionset plugin.
+        * This can be removed after https://github.com/ekstep/CE-Core-Plugins/pull/1262 is deployed.
+        */
+  
+        org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins = org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins.filter(function(p) {
+          return p && (p.id != instance._data.id);
+        });
+  
+        /**
+        * End of FIX
+        */
+  
+        // De-Register for any existing navigation hooks (replay scenario)
+        this.deregisterNavigation(instance);
+        
+        // On content replay, reset all question set information.
+        EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
+          instance.stopAudio();
+          instance.resetQS();
+        }, instance);
 
-    /**
-     * TODO: Remove the following FIX.
-     * The following fix is applied to remove duplicate naviagtion registrations by questionset plugin.
-     * This can be removed after https://github.com/ekstep/CE-Core-Plugins/pull/1262 is deployed.
-     */
+        // On timer ends, stop all audios playing in questionset.
+        EkstepRendererAPI.addEventListener('renderer:content:stopAudioOnTimerEnd',function(){
+          instance.stopAudio();
+        });
 
-    org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins = org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins.filter(function(p) {
-      return p && (p.id != instance._data.id);
-    });
-
-    /**
-     * End of FIX
-     */
-
-    // De-Register for any existing navigation hooks (replay scenario)
-    this.deregisterNavigation(instance);
-
-    // On content replay, reset all question set information.
-    EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
-      instance.resetQS();
-    }, instance);
-    // Remove duplicate event listener
-    EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
-    EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function() {
-      this._displayedPopup = false;
-    }, instance);
-    // Event handler to save question state
-    EventBus.listeners['org.ekstep.questionset:saveQuestionState'] = undefined;
-    /*EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
-      var state = event.target;
-      if (instance._currentQuestion) {
-        instance.saveQuestionState(instance._currentQuestion.id, state);
-      }
-    }, this);*/
-    // Load the DOM container that houses the unit templates
-    this.loadTemplateContainer();
-    this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
-    if(this._questionSetConfig.shuffle_questions){
-      this._questionSetConfig.max_score = this._questionSetConfig.total_items;
+        // add mute and unmute events
+        this.addMuteUnmuteEvents(instance)
+        // Remove duplicate event listener
+        EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
+        EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function() {
+         this._displayedPopup = false;
+        }, instance);
+        // Event handler to save question state
+        EventBus.listeners['org.ekstep.questionset:saveQuestionState'] = undefined;
+        /*EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
+         var state = event.target;
+         if (instance._currentQuestion) {
+           instance.saveQuestionState(instance._currentQuestion.id, state);
+         }
+        }, this);*/
+        // Load the DOM container that houses the unit templates
+        this.loadTemplateContainer();
+        this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
+        if(this._questionSetConfig.shuffle_questions){
+         this._questionSetConfig.max_score = this._questionSetConfig.total_items;
+        }
+        QSTelemetryLogger.qsConfig = this._questionSetConfig;
+        if(data.isQuestionPreview){
+         // get navigation plugin instance & empty all customNavigation object of it
+         org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins=[]
+        }
+        // this.setupNavigation();
+        // Get all questions in the question set
+        var quesArray = JSON.parse(JSON.stringify(data[this._constants.questionPluginId]));
+        //if question set have one question then convert from object to array for device issue
+        this._masterQuestionSet = _.isArray(quesArray) ? quesArray : [quesArray];
+        // If this isn't the first time the question set is being rendered, restore its earlier state
+        this._questionStates = {};
+        this._renderedQuestions = [];
+        var question = undefined;
+        var savedQSState = this.getQuestionSetState();
+  
+        EkstepRendererAPI.addEventListener("renderer:plugin:reset", function(e) {
+         this.reInstateQuestionsOnReview(e.target.data);
+        }, this);
+      
+        var savedCurrentQuestion = this.questionExistInQS(savedQSState);
+        if (savedQSState && savedCurrentQuestion) {
+         this._renderedQuestions = savedQSState.renderedQuestions;
+         question = savedQSState.currentQuestion;
+         this._questionStates = savedQSState.questionStates;
+         this._currentQuestionState = this.getQuestionState(question.id);
+         this._itemIndex = savedQSState.itemIndex >= 0 ? savedQSState.itemIndex : -1;
+        } else {
+         question = this.getNextQuestion();
+        }
+        if(this._itemIndex > 0){
+           EventBus.dispatch("renderer:previous:enable");
+        }
+  
+        // Register for navigation hooks
+        this.registerNavigation(instance);
+  
+        this.saveQuestionSetState();
+        // Render the question
+        this.renderQuestion(question);
+    } 
+    catch(err) {
+      var pluginManifest = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance._type);
+      var plugin = {'id':pluginManifest.id,'ver': pluginManifest.ver};
+      TelemetryService.error({ 'err': err, 'errtype': 'SYSTEM', 'stacktrace': err, 'plugin': plugin }); 
+      org.ekstep.pluginframework.eventManager.dispatchEvent('plugin:error', { 'plugin': plugin, 'action': 'load', 'err': err })
+      
     }
-    QSTelemetryLogger.qsConfig = this._questionSetConfig;
-    if(data.isQuestionPreview){
-      // get navigation plugin instance & empty all customNavigation object of it
-      org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.navigation'].p.prototype._customNavigationPlugins=[]
-    }
-    // this.setupNavigation();
-    // Get all questions in the question set
-    var quesArray = JSON.parse(JSON.stringify(data[this._constants.questionPluginId]));
-    //if question set have one question then convert from object to array for device issue
-    this._masterQuestionSet = _.isArray(quesArray) ? quesArray : [quesArray];
-    // If this isn't the first time the question set is being rendered, restore its earlier state
-    this._questionStates = {};
-    this._renderedQuestions = [];
-    var question = undefined;
-    var savedQSState = this.getQuestionSetState();
-    var savedCurrentQuestion = this.questionExistInQS(savedQSState);
-    if (savedQSState && savedCurrentQuestion) {
-      this._renderedQuestions = savedQSState.renderedQuestions;
-      question = savedQSState.currentQuestion;
-      this._questionStates = savedQSState.questionStates;
-      this._currentQuestionState = this.getQuestionState(question.id);
-      this._itemIndex = savedQSState.itemIndex >= 0 ? savedQSState.itemIndex : -1;
-    } else {
-      question = this.getNextQuestion();
-    }
-    if(this._itemIndex > 0){
-        EventBus.dispatch("renderer:previous:enable");
-    }
-
-    // Register for navigation hooks
-    this.registerNavigation(instance);
-
-    this.saveQuestionSetState();
-    // Render the question
-    this.renderQuestion(question);
   },
   renderQuestion: function(question) {
     var instance = this;
@@ -189,23 +212,28 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     var instance = this;
     if (!this._displayedPopup) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
+        var pluginInstance = org.ekstep.pluginframework.pluginManager.pluginObjs[instance._currentQuestion.pluginId];
         if(!result.eval && !_.isUndefined(result.evalRequired) && !result.evalRequired){
           instance.renderNextQuestion();
         }else{
-          QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
+          if(!pluginInstance._question.overrideFeedbackPopUp){
+            QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
+            // instance._displayedPopup = true;
+          }
           if(instance._currentQuestionState && _.isEqual(instance._currentQuestionState.val, result.state.val)){
             instance.renderNextQuestion();
-          }
-          else {
-            instance.saveQuestionState(instance._currentQuestion.id, result.state);
-            if (instance._questionSetConfig.show_feedback == true) {
-              // Display feedback popup (tryagain or goodjob)
-              // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
-              instance.displayFeedback(result);
-            } else {
-              // If show_feedback is set to false, move to next question without displaying feedback popup
-              instance.renderNextQuestion();
-            }
+          } else {
+              instance.saveQuestionState(instance._currentQuestion.id, result.state);
+              if(pluginInstance._question.overrideFeedbackPopUp){
+                instance.renderNextQuestion();
+              }else if (instance._questionSetConfig.show_feedback == true) {
+                  // Display feedback popup (tryagain or goodjob)
+                  // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
+                  instance.displayFeedback(result);
+              } else {
+                  // If show_feedback is set to false, move to next question without displaying feedback popup
+                  instance.renderNextQuestion();
+              }
           }
         }
       }, this);
@@ -386,6 +414,13 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     };
     Renderer.theme.setParam(this._data.id, JSON.parse(JSON.stringify(qsState)));
   },
+  reInstateQuestionsOnReview: function(param) {
+    if(param) {
+      var qssState = Renderer.theme.getParam(this._data.id);
+      qssState.currentQuestion = this._renderedQuestions[0];
+      Renderer.theme.setParam(this._data.id, qssState);
+    }
+  },
   resetTemplates: function() {
     // Remove all templates loaded for the question set
     jQuery(this._constants.qsElement).remove();
@@ -436,18 +471,22 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     TelemetryService.navigate(stageid, stageTo, data); // eslint-disable-line no-undef
   },
   handleNext: function() {
+    this.stopAudio();
     this.nextQuestion();
   },
   handlePrevious: function() {
+    this.stopAudio();
     this.prevQuestion();
   },
   removeDuplicateEventListeners: function(event, id) {
-    EventBus.listeners[event] = EventBus.listeners[event].filter(function(e) {
-      if(e.scope && e.scope.id) {
-        return e.scope.id != id;
+    var indexVal = EventBus.listeners[event].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === id;
       }
-      return true;
     });
+    if(indexVal > -1){
+      EventBus.listeners[event].splice(indexVal, 1);
+    }
   },
   questionExistInQS: function(savedQSState){
     if(savedQSState) {
@@ -455,6 +494,90 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     } else {
       return false;
     }
-   }
+   },
+  stopAudio: function(){
+    var instance = this;
+    var questionData = (_.has(instance._currentQuestion.data,'__cdata') ? instance._currentQuestion.data.__cdata : instance._currentQuestion.data);
+    var question = JSON.parse(questionData).question;
+    //Question title audio stop
+    if((_.has(question,'audio') ) && (!_.isEmpty(question.audio))){
+      HTMLAudioPlayer.stop(instance.getAssetUrl(question.audio));
+    }
+    //Question options audio stop
+    var questionPluginId = instance._currentQuestion.pluginId;
+    if(questionPluginId == "org.ekstep.questionunit.mtf"){
+      var lhsOptions = JSON.parse(questionData).option.optionsLHS;
+      var rhsOptions = JSON.parse(questionData).option.optionsRHS;
+      this.optionsAudioStop(lhsOptions);
+      this.optionsAudioStop(rhsOptions);
+    } else {
+      var questionOptions = JSON.parse(questionData).options;
+      if(questionOptions){
+        this.optionsAudioStop(questionOptions);
+      }
+    }
+  },
+  optionsAudioStop: function(options){
+    var instance = this;
+    options.forEach(function(optAudio) {
+      if( (_.has(optAudio,'audio') ) && (!_.isEmpty(optAudio.audio))) {
+        HTMLAudioPlayer.stop(instance.getAssetUrl(optAudio.audio));
+      }
+    })
+  },
+  addMuteUnmuteEvents: function(instance){
+    var muteIndex = EventBus.listeners['renderer:overlay:mute'].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === instance._data.id;
+      }
+    });
+    if(muteIndex === -1){
+      EkstepRendererAPI.addEventListener('renderer:overlay:mute', function() {
+        HTMLAudioPlayer.mute();
+      }, instance);
+    }
+    var unmuteIndex = EventBus.listeners['renderer:overlay:unmute'].findIndex(function(e) {
+      if(e.scope && e.scope.id){
+        return  e.scope.id === instance._data.id;
+      }
+    });
+    if(muteIndex === -1){
+      EkstepRendererAPI.addEventListener('renderer:overlay:unmute', function() {
+        HTMLAudioPlayer.unmute();
+      }, instance);
+    }
+  },
+  getAssetUrl: function (url) {
+    if (isbrowserpreview) {
+      return this.validateUrl(url);
+    } else if (EkstepRendererAPI.isStreamingContent()) {
+            // mobile online streaming
+          if(url)
+          return this.validateUrl(EkstepRendererAPI.getBaseURL() + url.substring(1, url.length));
+    } else {
+          // Loading content from mobile storage ( OFFLINE )
+          return this.validateUrl(EkstepRendererAPI.getBaseURL() + url);
+    }
+  },
+  validateUrl: function(url){
+    if(!url){
+        return
+    }
+    var regex = new RegExp("^(http|https)://", "i");
+    if(regex.test(url)){
+        var tempUrl = url.split("://")
+        if (tempUrl.length > 1){
+            var validString = tempUrl[1].split("//").join("/");
+            return [tempUrl[0], validString].join("://");
+        }
+    }else{
+        var tempUrl = url.split(":///")
+        if (tempUrl.length > 1){
+            var validString = tempUrl[1].split("//").join("/");;
+            return [tempUrl[0], validString].join(":///");
+        }
+    }
+    return url.split("//").join("/");
+  }
 });
 //# sourceURL=questionSetRenderer.js

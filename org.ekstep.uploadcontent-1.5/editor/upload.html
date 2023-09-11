@@ -1,8 +1,8 @@
 <script type="text/ng-template" ng-app="org.ekstep.uploadcontent-1.4" ng-controller="uploadController as $ctrl" id="partials_org.ekstep.uploadcontent.html">
 <div type="text/template" id="qq-template-validation" style="display: none">
-    <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:250px;">
+    <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:150px;">
 
-        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone id="dragDropArea">
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
         
@@ -26,12 +26,12 @@
             </li>
         </ul>
         <div id="qq-upload-actions">
-            <div style="position: absolute;bottom: 45%;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
+            <div style="position: absolute;bottom: 44%;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
                 <i class="upload huge icon" style="font-size: 3em"></i><br>
                 <strong>Drag &amp; Drop</strong><br>
                 <span>your files here, or</span>
             </div>
-            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;">
+            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 10%;" id="browseButton">
                 <div>Browse</div>
             </div>
         </div>
@@ -61,7 +61,7 @@
         </dialog>
     </div>
 </div>
-<div class="ui modal active" style="top: 10% !important">
+<div class="ui modal active" style="top: 2% !important;">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
@@ -73,10 +73,22 @@
         </div>
     </div>
     <div class="content">
+        <div class="ui form">
+            <div class="field required">
+                <label class="d-inline-block">Content Type</label>
+                    <select id="_selectPrimaryCategory" class="ui search dropdown w-40 d-inline-block"
+                    ng-model="selectedPrimaryCategory"
+                    ng-change="onPrimaryCategoryChange()"
+                    >
+                    <option value="" selected>Select one</option>
+                    <option data-value="{{primaryCategory}}" ng-repeat="primaryCategory in primaryCategoryList" ng-selected="">{{primaryCategory}}</option>
+                    </select>
+            </div>
+        </div>
         <div class="field" id='url-upload'>
             <label>URL</label>
             <div class="ui fluid transparent input">
-                <input type="text" placeholder="https://" ng-model="contentURL">
+                <input type="text" placeholder="https://" ng-model="contentURL" ng-disabled="(selectedPrimaryCategory == '')">
             </div>
         </div>
         <div id="upload-content-div" style="margin-top: 15px"></div>
@@ -84,15 +96,20 @@
         <div class="ui message">
             <ul class="list">
                 <li>File accepted - pdf, mp4, webm, epub, youtube, h5p and html zip</li>
-                <li>Max file size - 50 Mb</li>
+                <li>Max file size - {{defaultContentFileSize}} Mb</li>
+                <li>Please note that H5P files will take more time to upload. If you are unable to see the preview after uploading the file, please refresh the editor after a minute</i>
+                <li>Please refer to this document to get the details of supported H5P content types: <a href="{{H5PGuidanceDoc}}" target="_blank">H5P Guidelines document</a></i>
+                <p>By uploading content on DIKSHA, you confirm that you are publishing it under a Creative Commons license that is compatible with the copyright license of the original work and are giving appropriate credit to the original author of the content.</p>
             </ul>
+
+            
         </div>
     </div>
     <div class="actions">
         <div class="ui buttons">
             <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({id:'button',type:'click',subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="uploadCancelLabel"></button>
             <div class="or"></div>
-            <button class="ui blue button" ng-click="upload(); generateTelemetry({id:'button',type:'click',subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">Upload</button>
+            <button class="ui blue button" ng-click="upload(); generateTelemetry({id:'button',type:'click',subtype:'upload',target:'uploadButton'}) " ng-disabled="(selectedPrimaryCategory == '')">Upload</button>
         </div>
     </div>
 </div>

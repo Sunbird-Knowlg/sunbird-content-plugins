@@ -100,6 +100,12 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
                     scrollTop: $('#answer').offset().top
                 });
                 instance.logTelemetryInteract({target : { id : 'answerBtn' }});
+                QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { // eslint-disable-line no-undef
+                    "type": "SELECT",
+                    "values": [{
+                        "option": "solution"
+                      }]
+                });
             }
             document.getElementById('questionBtn').onclick = function() {
                 $('.sb-question-content').animate({
@@ -182,10 +188,15 @@ org.ekstep.questionunit.quml.RendererPlugin = org.ekstep.contentrenderer.questio
      * @returns {String} url.
      */
     replaceAssetWithBaseURL: function(questionData) {
-        if (isbrowserpreview || _.isUndefined(isbrowserpreview)) { // eslint-disable-line no-undef
-            return questionData.split('/assets/').join(EkstepRendererAPI.getBaseURL() + 'assets/');
-        } else {
-            return questionData.split('/assets/').join('file:///' + EkstepRendererAPI.getBaseURL() + 'assets/');
+        if (!questionData.includes(EkstepRendererAPI.getBaseURL())){
+            if (isbrowserpreview || _.isUndefined(isbrowserpreview)) { // eslint-disable-line no-undef
+                return questionData.split('/assets/').join(EkstepRendererAPI.getBaseURL() + 'assets/');
+            } else {
+                return questionData.split('/assets/').join('file:///' + EkstepRendererAPI.getBaseURL() + 'assets/');
+            }
+        }
+        else{
+            return questionData
         }
     },
     logTelemetryInteract: function(event) {
