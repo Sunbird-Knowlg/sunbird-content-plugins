@@ -16,8 +16,6 @@ node() {
                     artifact_version = sh(script: "echo " + params.github_release_tag.split('/')[-1] + "_" + commit_hash + "_" + env.BUILD_NUMBER, returnStdout: true).trim()
                 }
 
-
-
                 echo "artifact_version: " + artifact_version
 
                 stage('Build') {
@@ -25,8 +23,6 @@ node() {
                         zip -r content-plugins.zip content-plugins
                     """
                 }
-
-
 
                 stage('ArchiveArtifacts') {
                     sh """
