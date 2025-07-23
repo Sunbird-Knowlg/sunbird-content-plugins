@@ -1,0 +1,58 @@
+name: Upload Content-Plugin to Blob
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  GCP_BUCKET: ${{ vars.GCP_BUCKET }}
+  CLOUD_PROVIDER: ${{ vars.CLOUD_PROVIDER }}
+  AZURE_CONTAINER: ${{ vars.AZURE_CONTAINER }}
+
+jobs:
+  upload-blob:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    
+    - name: Authenticate and Upload to Google Cloud Storage
+      if: env.CLOUD_PROVIDER == 'gcp'
+      run: |
+        echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 -d > /tmp/service-account-key.json
+        gcloud auth activate-service-account --key-file=/tmp/service-account-key.json
+        gsutil -m cp -r . gs://${{ env.GCP_BUCKET }}/content-plugins/
+        rm -f /tmp/service-account-key.json
+
+    - name: Upload to Azure Blob Storage
+      if: env.CLOUD_PROVIDER == 'azure'
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+            az storage blob upload-batch \
+            --account-name "${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
+            --account-key "${{ secrets.AZURE_STORAGE_KEY }}" \
+            --destination "${{ env.AZURE_CONTAINER }}/content-plugins" \
+            --source . \
+            --overwrite
+
+    # Note: Publish to AWS S3 is not tested
+
+      # - name: Configure AWS credentials
+      #   if: env.CLOUD_PROVIDER == 'aws'
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      # - name: Upload to Amazon S3
+      #   if: env.CLOUD_PROVIDER == 'aws'
+      #   env:
+      #     S3_BUCKET: ${{ vars.S3_BUCKET }}
+      #   run: |
+      #     aws s3 sync . s3://${{ env.S3_BUCKET }}/content-plugins/
