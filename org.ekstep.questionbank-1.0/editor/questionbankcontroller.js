@@ -195,7 +195,6 @@ angular.module('createquestionapp', [])
               if($scope.contentFields.includes(key)) {
                  data.request.filters[key] = value;
               }
-              break;
           }
         }
       });
