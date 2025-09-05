@@ -90,6 +90,21 @@ angular.module('createquestionapp', [])
     $scope.checkedQuestions = new Map();
     $scope.totalQuestionsCount;
     $scope.showMoreVisibility = true;
+    $scope.frameworkCategories = [];
+    $scope.contentFields = [];
+
+    $scope.getFrameworkData = function() {
+      try {
+        $scope.frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
+        ecEditor._.forEach($scope.frameworkCategories, function(category) {
+          $scope.contentFields = $scope.contentFields.concat(category.code);
+        });
+        $scope.$safeApply();
+      } catch (e) {
+        $scope.frameworkCategories = [];
+        console.error('Error in getFrameworkData:', e);
+      }
+    };
 
     ecEditor.addEventListener('editor:form:change', function (event, data) {
       if (data.templateId == "filterMetaDataTemplate") {
@@ -152,22 +167,8 @@ angular.module('createquestionapp', [])
             case "searchText":
               data.request.query = value;
               break;
-            case "gradeLevel":
-              if (value.length) {
-                data.request.filters.gradeLevel = value;
-              }
-              break;
-            case "medium":
-              data.request.filters.medium = value;
-              break;
             case "level":
               data.request.filters.qlevel = value;
-              break;
-            case "board":
-              data.request.filters.board = value;
-              break;
-            case "subject":
-              data.request.filters.subject = value;
               break;
             case "questionType":
               data.request.filters.type = [];
@@ -189,6 +190,11 @@ angular.module('createquestionapp', [])
               break;
             case "topics":
               data.request.filters.topic = value;
+              break;
+            default:
+              if($scope.contentFields.includes(key)) {
+                 data.request.filters[key] = value;
+              }
               break;
           }
         }
@@ -230,6 +236,7 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.init = function () {
+      $scope.getFrameworkData();
       $scope.searchQuestions();
       $scope.selectedIndex = undefined;
       ecEditor.addEventListener('editor:template:loaded', function (event, object) {
@@ -618,11 +625,7 @@ angular.module('createquestionapp', [])
           "code": "NA",
           "name": "Copy of - " + questionBody.data.config.metadata.name,
           "title": "Copy of - " + questionBody.data.config.metadata.name,
-          "medium": questionBody.data.config.metadata.medium,
           "max_score": questionBody.data.config.metadata.max_score,
-          "gradeLevel": questionBody.data.config.metadata.gradeLevel,
-          "subject": questionBody.data.config.metadata.subject,
-          "board": questionBody.data.config.metadata.board,
           "qlevel": questionBody.data.config.metadata.level,
           "question": questionBody.data.data.question.text,
           "isShuffleOption": questionBody.data.config.isShuffleOption,
@@ -639,6 +642,15 @@ angular.module('createquestionapp', [])
           "topic": questionBody.data.config.metadata.topic,
           "framework": ecEditor.getContext('framework')
         };
+        
+        // Add dynamic framework categories
+        if ($scope.frameworkCategories) {
+          ecEditor._.forEach($scope.frameworkCategories, function(category) {
+            if (category.code && questionBody.data.config.metadata[category.code]) {
+              metadata[category.code] = questionBody.data.config.metadata[category.code];
+            }
+          });
+        }
         var dynamicOptions = [{
           "answer": true,
           "value": {

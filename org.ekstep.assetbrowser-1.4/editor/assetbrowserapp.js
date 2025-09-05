@@ -76,6 +76,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.selected_audios = {};
     ctrl.selected_videos = {};
     ctrl.searchFilter  = {};
+    $scope.frameworkCategories = []; // Dynamic categories from framework
     ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/contentNotFound.jpg");
     ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default_image.png");
     ctrl.selectBtnDisable = true;
@@ -215,7 +216,31 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         return $sce.trustAsResourceUrl(src);
     }
 
+    // Get framework categories dynamically
+    ctrl.getFrameworkData = function(callback) {
+        try {
+            var frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
+            $scope.frameworkCategories = [];
+            ecEditor._.forEach(frameworkCategories, function(category) {
+                var label = category.code.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); });
+                $scope.frameworkCategories.push({
+                    code: category.code,
+                    label: label
+                });
+            });
+            $scope.$safeApply();
+            if (callback) callback();
+        } catch (e) {
+            console.error("Error getting framework categories:", e);
+            $scope.frameworkCategories = [];
+            $scope.$safeApply();
+            if (callback) callback();
+        }
+    };
+
     //load image on opening window
+    ctrl.getFrameworkData();
+    
     if (instance.mediaType == 'image') {
         instance.getAsset(undefined, new Array(instance.mediaType), 'image', new Array('Asset'), ctrl.createdBy, ctrl.offset, imageAssetCb);
     } else if (instance.mediaType == 'audio') {

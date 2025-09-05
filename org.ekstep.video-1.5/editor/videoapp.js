@@ -27,6 +27,17 @@ angular.module('videoApp', [])
             fileExceed: 'Video file size is exceeded'
         }
         ctrl.isPreviewPlaying = false;
+        ctrl.frameworkCategories = [];
+
+        ctrl.getFrameworkData = function() {
+            try {
+                ctrl.frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
+                $scope.$safeApply();
+            } catch (e) {
+                ctrl.frameworkCategories = [];
+                console.error('Error in getFrameworkData:', e);
+            }
+        };
         function hideLoader() {
             ctrl.loading = '';
         }
@@ -292,6 +303,7 @@ angular.module('videoApp', [])
             })
         };
         setTimeout(function () {
+            ctrl.getFrameworkData();
             ctrl.generateImpression({ type: 'view', subtype: 'popup-open', pageid: 'VideoBrowser', duration: (new Date()) - instance.pluginLoadStartTime });
             ctrl.videoLibraryTabElement = "video-library-tab";
             ecEditor.jQuery('.video-modal .menu .item').tab();

@@ -375,19 +375,10 @@
 										 <div class="ui inverted dimmer">
 												 <div class="content">
 														 <div class="ui list cardDetails-list">
-																 <div class="item">
-																		 <div class="right floated content contentMetaDetail">{{videoItem.board}}</div>
-																		 <div class="content contentTitle">Board</div>
-																 </div>
-																 <div class="item">
-																		 <div class="right floated content contentMetaDetail">{{(videoItem.gradeLevel.toString())}}
+																 <div class="item" ng-repeat="category in frameworkCategories" ng-if="videoItem[category.code]">
+																		 <div class="right floated content contentMetaDetail">{{videoItem[category.code]}}
 																		 </div>
-																		 <div class="content contentTitle">Class</div>
-																 </div>
-																 <div class="item">
-																		 <div class="right floated content contentMetaDetail">{{(videoItem.subject)}}
-																		 </div>
-																		 <div class="content contentTitle">Subject</div>
+																		 <div class="content contentTitle">{{category.label}}</div>
 																 </div>
 														 </div>
 												 </div>
@@ -580,19 +571,10 @@
 									 <div class="ui inverted dimmer">
 											 <div class="content">
 													 <div class="ui list cardDetails-list">
-															 <div class="item">
-																	 <div class="right floated content contentMetaDetail">{{videoItem.board}}</div>
-																	 <div class="content contentTitle">Board</div>
-															 </div>
-															 <div class="item">
-																	 <div class="right floated content contentMetaDetail">{{(videoItem.gradeLevel.toString())}}
+															 <div class="item" ng-repeat="category in frameworkCategories" ng-if="videoItem[category.code]">
+																	 <div class="right floated content contentMetaDetail">{{videoItem[category.code]}}
 																	 </div>
-																	 <div class="content contentTitle">Class</div>
-															 </div>
-															 <div class="item">
-																	 <div class="right floated content contentMetaDetail">{{(videoItem.subject)}}
-																	 </div>
-																	 <div class="content contentTitle">Subject</div>
+																	 <div class="content contentTitle">{{category.label}}</div>
 															 </div>
 													 </div>
 											 </div>

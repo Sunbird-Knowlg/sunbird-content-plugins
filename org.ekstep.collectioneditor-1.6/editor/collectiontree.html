@@ -65,8 +65,7 @@
                                                         </div>
                                                         <div class="extra">
                                                             <p class="elipses">
-                                                                <span ng-show="content.data.metadata.board">{{content.data.metadata.board}} &nbsp;</span>
-                                                                <span ng-repeat="grade in child.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                                                <span ng-repeat="category in frameworkCategories" ng-if="child.data.metadata[category.code]">{{child.data.metadata[category.code]}} &nbsp;</span>
                                                                 <span ng-repeat="domain in child.data.metadata.domain | limitTo: 2">{{domain}} &nbsp;</span>
                                                             </p>
                                                         </div>
@@ -99,7 +98,7 @@
                                         <div class="footer">
                                             <span ng-show="selectedContent.data.metadata.owner">{{selectedContent.data.metadata.owner}}</span>
                                             <span class="content-grade">
-                                                <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                                <span ng-repeat="category in frameworkCategories" ng-if="selectedContent.data.metadata[category.code]">{{selectedContent.data.metadata[category.code]}} &nbsp;</span>
                                                 <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
                                             </span>
                                         </div>

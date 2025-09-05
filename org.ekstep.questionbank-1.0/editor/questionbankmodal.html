@@ -80,7 +80,7 @@
                 <div class="item select list-items ui grid" ng-repeat="question in questions track by $index" ng-class="{quesSelector: $index === selectedQueIndex}">
                   <div class="middle aligned content nine wide column" ng-click="previewItem(question, true); showSelectedQue($index);">
                     <div class="header" style="display: -webkit-box;">{{ question.title}}</div>
-                    <div class="meta">{{question.medium}} | {{ question.type}} | {{ question.qlevel }}
+                    <div class="meta">{{ question.type}} | {{ question.qlevel }}
                     </div>
                     <div class="description">{{ question.description }}</div>
                   </div>
