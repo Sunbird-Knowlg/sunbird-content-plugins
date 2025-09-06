@@ -31,7 +31,7 @@ angular.module('videoApp', [])
 
         ctrl.getFrameworkData = function() {
             try {
-                ctrl.frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
+                ctrl.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
                 $scope.$safeApply();
             } catch (e) {
                 ctrl.frameworkCategories = [];

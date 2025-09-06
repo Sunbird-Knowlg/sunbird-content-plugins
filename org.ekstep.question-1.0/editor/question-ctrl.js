@@ -46,13 +46,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   };
   $scope.getFrameworkData = function(callback) {
     try {
-      var frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
-      $scope.frameworkCategories = [];
-      ecEditor._.forEach(frameworkCategories, function(category) {
-          $scope.frameworkCategories.push({
-            code: category.code
-          });
-      });
+      $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
       $scope.$safeApply();
       if (callback) callback();
     } catch (e) {

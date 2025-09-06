@@ -137,16 +137,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Get framework categories dynamically
         ctrl.getFrameworkData = function(callback) {
             try {
-                var frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
-                $scope.frameworkCategories = [];
-                $scope.categories = []; // Dynamic categories from framework
-                ecEditor._.forEach(frameworkCategories, function(category) {
-                    var label = category.code.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); });
-                    $scope.frameworkCategories.push({
-                        code: category.code,
-                        label: label
-                    });
-                    $scope.categories.push(category.code);
+                $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
+                $scope.categories = $scope.frameworkCategories.map(function(category) {
+                    return category.code;
                 });
                 $scope.$safeApply();
                 if (callback) callback();

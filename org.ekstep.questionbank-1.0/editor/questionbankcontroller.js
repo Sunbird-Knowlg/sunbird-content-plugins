@@ -95,9 +95,9 @@ angular.module('createquestionapp', [])
 
     $scope.getFrameworkData = function() {
       try {
-        $scope.frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
-        ecEditor._.forEach($scope.frameworkCategories, function(category) {
-          $scope.contentFields = $scope.contentFields.concat(category.code);
+        $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];
+        $scope.contentFields = $scope.frameworkCategories.map(function(category) {
+          return category.code;
         });
         $scope.$safeApply();
       } catch (e) {

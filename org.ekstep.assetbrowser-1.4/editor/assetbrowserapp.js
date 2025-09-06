@@ -219,15 +219,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     // Get framework categories dynamically
     ctrl.getFrameworkData = function(callback) {
         try {
-            var frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
-            $scope.frameworkCategories = [];
-            ecEditor._.forEach(frameworkCategories, function(category) {
-                var label = category.code.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); });
-                $scope.frameworkCategories.push({
-                    code: category.code,
-                    label: label
-                });
-            });
+            $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];
             $scope.$safeApply();
             if (callback) callback();
         } catch (e) {

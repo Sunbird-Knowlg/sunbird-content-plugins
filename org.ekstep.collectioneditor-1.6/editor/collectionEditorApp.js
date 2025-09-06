@@ -25,7 +25,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     // Get framework categories dynamically
     $scope.getFrameworkData = function() {
         try {
-            $scope.frameworkCategories = ecEditor.getConfig("frameworkCategories") || [];
+            $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
             $scope.$safeApply();
         } catch (e) {
             $scope.frameworkCategories = [];
