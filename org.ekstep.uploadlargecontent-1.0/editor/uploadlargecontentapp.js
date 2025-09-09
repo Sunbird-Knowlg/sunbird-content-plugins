@@ -34,6 +34,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
     $scope.uploaderLib =  new SunbirdFileUploadLib.FileUploader()
+    $scope.instanceName = ecEditor.getContext('instance') || 'SUNBIRD';
     
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');

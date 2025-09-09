@@ -15,6 +15,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.primaryCategoryList = [];
     $scope.H5PGuidanceDoc = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(plugin.id, plugin.ver, 'assets/h5pcontentguidelines.pdf');
     $scope.uploaderLib =  new SunbirdFileUploadLib.FileUploader()
+    $scope.instanceName = ecEditor.getContext('instance') || 'SUNBIRD';
 
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
