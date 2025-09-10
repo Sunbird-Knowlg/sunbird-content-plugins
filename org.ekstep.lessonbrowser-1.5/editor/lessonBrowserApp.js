@@ -29,8 +29,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.noResultFound = false;
         $scope.glued = false;
         $scope.filterForm = '';
-        $scope.categories = []; // Dynamic categories from framework - will be populated by getFrameworkData
-        $scope.frameworkCategories = []; // Dynamic categories from framework
+        $scope.categories = ["board", "gradeLevel", "subject", "medium"];
         $scope.rootNodeFilter = {};
         $scope.contentId = org.ekstep.contenteditor.api.getContext('contentId');
         $scope.contentMeta = ecEditor.getService('content').getContentMeta($scope.contentId)
@@ -133,25 +132,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 return cb();
             });
         }
-
-        // Get framework categories dynamically
-        ctrl.getFrameworkData = function(callback) {
-            try {
-                $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
-                $scope.categories = $scope.frameworkCategories.map(function(category) {
-                    return category.code;
-                });
-                $scope.$safeApply();
-                if (callback) callback();
-            } catch (e) {
-                console.error("Error getting framework categories:", e);
-                // Set to empty array if there is error
-                $scope.frameworkCategories = [];
-                $scope.categories = [];
-                $scope.$safeApply();
-                if (callback) callback();
-            }
-        };
 
         // Search API Integration
         var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
@@ -678,14 +658,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // initial configuration
         $scope.init = function() {
             $scope.messages = Messages;
-            // Load framework categories first
-            ctrl.getFrameworkData(function() {
-                if (instance.client) {
-                    $scope.viewAll(instance.query);
-                } else {
-                    $scope.invokeFacetsPage();
-                }
-            });
+            if (instance.client) {
+                $scope.viewAll(instance.query);
+            } else {
+                $scope.invokeFacetsPage();
+            }
             ecEditor.addEventListener('editor:template:loaded', function(event, object) {
                 if(object.formAction == 'resource-filters') {
                     $scope.filterForm = object.templatePath;

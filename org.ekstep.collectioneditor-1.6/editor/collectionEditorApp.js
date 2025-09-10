@@ -21,21 +21,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.isResourceCollection = false;
     $scope.isRootNode = false;
     $scope.frameworkCategories = [];
-    
-    // Get framework categories dynamically
-    $scope.getFrameworkData = function() {
-        try {
-            $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
-            $scope.$safeApply();
-        } catch (e) {
-            $scope.frameworkCategories = [];
-            console.error('Error getting framework categories:', e);
-        }
-    };
-    
-    // Initialize framework categories
-    $scope.getFrameworkData();
-    
     $scope.CONSTANTS = {
         tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
         tocUploadDescription: 'Please upload the CSV file in the required format',

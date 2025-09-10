@@ -22,11 +22,21 @@
                         <div class="content">
 
                             <div class="ui list">
-                                <div class="item" ng-repeat="category in frameworkCategories" ng-if="lesson[category.code]">
-                                    <div class="right floated content contentMetaDetail">{{lesson[category.code]}}</div>
-                                    <div class="content contentTitle">{{category.label}}</div>
+                                <div class="item">
+                                    <div class="right floated content contentMetaDetail">{{lesson.board}}</div>
+                                    <div class="content contentTitle">Board</div>
                                 </div>
-                                <div class="item" ng-if="lesson.concepts">
+                                <div class="item">
+                                    <div class="right floated content contentMetaDetail">{{lesson.gradeLevel.toString()}}
+                                    </div>
+                                    <div class="content contentTitle">Class</div>
+                                </div>
+                                <div class="item">
+                                    <div class="right floated content contentMetaDetail">{{(lesson.subject)}}
+                                    </div>
+                                    <div class="content contentTitle">Subject</div>
+                                </div>
+                                <div class="item">
                                     <div class="right floated content contentMetaDetail">
                                         <span ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
                                     </div>

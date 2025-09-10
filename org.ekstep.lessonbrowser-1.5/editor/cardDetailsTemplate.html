@@ -7,11 +7,21 @@
             </div>
             <div class="meta">
                 <div class="ui list cardDetails-list">
-                    <div class="item" ng-repeat="category in frameworkCategories" ng-if="lessonView[category.code]">
-                        <div class="right floated content breakWord cardSidePanel">{{lessonView[category.code]}}</div>
-                        <div class="content cardSidePanel">{{category.label}}</div>
+                    <div class="item">
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.board}}</div>
+                        <div class="content cardSidePanel">Board</div>
                     </div>
-                    <div class="item" ng-if="lessonView.concepts">
+                    <div class="item">
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.gradeLevel.toString()}}
+                        </div>
+                        <div class="content cardSidePanel">Class</div>
+                    </div>
+                    <div class="item">
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.subject}}
+                        </div>
+                        <div class="content cardSidePanel">Subject</div>
+                    </div>
+                    <div class="item">
                         <div class="right floated content breakWord cardSidePanel">
                             <span ng-repeat="concept in lessonView.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
                         </div>
