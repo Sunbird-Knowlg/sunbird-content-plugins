@@ -144,7 +144,8 @@ angular.module('createquestionapp', [])
               "AssessmentItem"
             ],
             "version": [1,2],
-            "status": ["Live"]
+            "status": ["Live"],
+            "channel": ecEditor.getContext('channel')
           },
           "sort_by": {
             "lastUpdatedOn": "desc"
