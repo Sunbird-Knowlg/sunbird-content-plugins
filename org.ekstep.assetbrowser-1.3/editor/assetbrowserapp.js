@@ -213,7 +213,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     function trustResource(src) {
         return $sce.trustAsResourceUrl(src);
     }
-    
+
     //load image on opening window
     if (instance.mediaType == 'image') {
         instance.getAsset(undefined, new Array(instance.mediaType), 'image', new Array('Asset'), ctrl.createdBy, ctrl.offset, imageAssetCb);
