@@ -3,6 +3,7 @@ org.ekstep.assessmentbrowser-1.1
 org.ekstep.assetbrowser-1.1
 org.ekstep.assetbrowser-1.2
 org.ekstep.assetbrowser-1.3
+org.ekstep.assetbrowser-1.4
 org.ekstep.audio-1.0
 org.ekstep.audio-1.1
 org.ekstep.breadcrumb-1.1

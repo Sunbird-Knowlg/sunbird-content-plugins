@@ -28,6 +28,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     isPartialScore: true,
     evalUnordered: false
   };
+  $scope.frameworkCategories = []; // Dynamic categories from framework
   $scope.templateIcons = [];
   _.each($scope.templatesType, function(template, key){
     var templateIconName = template.toLowerCase();
@@ -43,7 +44,23 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     formulaLimitMsg: 'Preview the question and split long formulae to ensure they are displayed correctly.',
     layoutChangeMsg: 'Please check preview before saving. Entire question might not fit in the layout selected.'
   };
+  $scope.getFrameworkData = function(callback) {
+    try {
+      $scope.frameworkCategories = ecEditor.getConfig("fwCategoryDetails") || [];;
+      $scope.$safeApply();
+      if (callback) callback();
+    } catch (e) {
+      console.error("Error getting framework categories:", e);
+      $scope.frameworkCategories = [];
+      $scope.$safeApply();
+      if (callback) callback();
+    }
+  };
+
 	$scope.init = function () {
+		// Load framework categories first
+		$scope.getFrameworkData();
+		
 		ecEditor.addEventListener('editor:template:loaded', function (event, object) {
 			if(object.formAction == 'question-meta-save') {
         ecEditor.dispatchEvent('metadata:controller:init');
@@ -391,15 +408,15 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	$scope.questionData.questionTitle = questionData.title;
   	$scope.questionData.qlevel = questionData.qlevel || questionData.level;
       if(!questionData.identifier){
-        $scope.questionData.board = "";
-        $scope.questionData.gradeLevel = "";
-        $scope.questionData.subject = "";
-        $scope.questionData.medium = "";
+        // Initialize dynamic framework categories with empty values
+        ecEditor._.forEach($scope.frameworkCategories, function(category) {
+          $scope.questionData[category.code] = "";
+        });
       }else{
-        $scope.questionData.board = questionData1.data.config.metadata.board;
-        $scope.questionData.gradeLevel = questionData1.data.config.metadata.gradeLevel;
-        $scope.questionData.medium = questionData1.data.config.metadata.medium;
-        $scope.questionData.subject = questionData1.data.config.metadata.subject;
+        // Set dynamic framework categories from existing data
+        ecEditor._.forEach($scope.frameworkCategories, function(category) {
+          $scope.questionData[category.code] = questionData1.data.config.metadata[category.code];
+        });
         if(questionData1.data.config.metadata.learningOutcome)
           $scope.questionData.learningOutcome = questionData1.data.config.metadata.learningOutcome;
       }

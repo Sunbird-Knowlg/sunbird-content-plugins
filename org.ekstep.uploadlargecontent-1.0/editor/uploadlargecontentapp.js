@@ -33,6 +33,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
+    $scope.uploaderLib =  new SunbirdFileUploadLib.FileUploader()
+    $scope.instanceName = ecEditor.getContext('instance') || 'SUNBIRD';
     
     $scope.getCategoryList = function(){
         const contextPrimaryCategory = ecEditor.getContext('primaryCategories');
@@ -87,7 +89,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 },
                 onSubmit: function (id, name) {
                     $('#qq-upload-actions').hide();
-                    $('#progressElement').show();
+                    // $('#progressElement').show();
                     $scope.selectedFile = $scope.uploader.getFile(0)
                     $scope.totalBytesRemaining = $scope.selectedFile.size;
                     $scope.fileValidation()
@@ -195,11 +197,73 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     
     $scope.generatePreSignedUrl = function () {
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function (err, res) {
+            console.log('getPresignedURL res..'+res)
             if (err) {
                 $scope.toasterMsgHandler("error", "error while generating presigned URL")
             } else {
                 $scope.submitUri = res.data.result.pre_signed_url;
-                $scope.uploadFileInBlocks();
+                console.log('getPresignedURL pre_signed_url..' + res.data.result.pre_signed_url)
+                var cloudstorage = _.get(ecEditor.getConfig('cloudStorage'), 'provider');
+                console.log('cloudstorage..' + cloudstorage);
+                if (cloudstorage != null || typeof cloudstorage != "undefined") {
+                    // $scope.uploadFileInBlocks();
+                    $('#retryUploadButton').hide();
+                    const file = $scope.selectedFile
+                    const url = $scope.submitUri                    
+                    $scope.uploaderLib.upload({url: $scope.submitUri, file: $scope.selectedFile, csp: cloudstorage})
+                    .on("error", (error) => {
+                        console.log(error)
+                        $scope.failOnBlock = true
+                        $scope.toasterMsgHandler("error", "The upload seems to have failed. Click Retry to resume uploading the video.")
+                        $('#retryUploadButton').show();
+                    }).on("progress", (progress) => {
+                        console.log(progress)
+                        $('.progress').progress({
+                            percent: progress.progress,
+                            text: {
+                                active: "Do not close this window until the upload is complete",
+                            },
+                        });
+                        if(progress.estimated){
+                            $scope.percentComplete = progress.progress
+                            $scope.countdownTimer(progress.estimated, 'seconds');
+                        }
+                    }).on("completed", (completed) => {
+                        console.log(completed)
+                        $('.progress').progress({
+                            percent: 100,
+                            text: {
+                                active: "File Uploaded",
+                            },
+                        });
+                        $('.progress').progress("complete")
+                        $scope.updateContentWithURL($scope.submitUri.split('?')[0]);
+                    })
+                } else {
+                    const contentType = ($scope.uploader.getFile(0) != null) ? $scope.detectMimeType($scope.uploader.getName(0)) : '';
+                    var config = {
+                        processData: false,
+                        contentType: contentType,
+                    }
+                    config = $scope.contentService.appendCloudStorageHeaders(config);
+                    $scope.contentService.uploadDataToSignedURL($scope.submitUri, $scope.uploader.getFile(0), config, function(err, res) {
+                        if (err) {
+                            $scope.showLoader(false);
+                            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                message: 'error while uploading!',
+                                position: 'topCenter',
+                                icon: 'fa fa-warning'
+                            });
+                        } else {
+                            $scope.updateContentWithURL($scope.submitUri.split('?')[0]);            
+                            var delta = (new Date() - $scope.startTime) / 1000;
+                            console.log('Completed upload in', delta, 'seconds');
+                            // $scope.toasterMsgHandler("success", "content uploaded successfully!")
+                            ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+                            $scope.closeThisDialog();
+                        }
+                    })
+                }
             }
         })
     }
@@ -279,8 +343,9 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             contentType: false,
             cache: false
         }
-        
+        console.log('config..'+config)
         $scope.contentService.uploadContent(ecEditor.getContext('contentId'), data, config, function (err, res) {
+            console.log('res..'+res)
             if (err) {
                 $scope.toasterMsgHandler("error", "Unable to upload content!")
             } else {
@@ -457,6 +522,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             }
             
             function fetchUrl() {
+                console.log('fetchUrl url..'+url)
+                console.log('fetchUrl fetchOptions..'+fetchOptions)
                 return fetch(url, fetchOptions)
                     .then(success)
                     .catch(failure)
