@@ -14,12 +14,12 @@
 	margin: 0;
 	padding: 0;
 	height: calc( 100% - 55px );
-	background: #f9f9f9;
-	border-top: 1px solid #d8d8d8;
+	background: #E9E8D9;
+	border-top: 1px solid #E5E7EB;
 }
 
 #genericEditorPreviewContainer{
-	border-right: 1px solid #d8d8d8;
+	border-right: 1px solid #E5E7EB;
 }
 
 // #genericEditorSideBar{

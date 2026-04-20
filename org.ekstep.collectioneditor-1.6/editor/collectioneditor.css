@@ -8,7 +8,7 @@ body.pg-loaded>.inner {
 
 body {
     min-width: 800px;
-    color: #9b9b9b !important;
+    color: #757575 !important;
 }
 
 #collectionMasterhead {
@@ -21,7 +21,7 @@ body {
     height: calc(100vh - 60px);
     margin-bottom: 0;
     margin-top: 0em;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #E5E7EB;
 }
 
 .ui-fancytree:focus {
@@ -75,12 +75,12 @@ body {
 }
 
 #collection-tree span {
-    color: #4a4a4a;
+    color: #333333;
     outline: none;
 }
 
 #collection-tree i {
-    color: #4a4a4a;
+    color: #333333;
 }
 
 #collection-tree span.fancytree-active span.fancytree-title,
@@ -96,7 +96,7 @@ body {
 }
 
 .primary.button-overrides {
-    background: #2E9FD9;
+    background: #AC5139;
 }
 
 .tree-access-tools .ui.search,
@@ -107,7 +107,7 @@ body {
 
 #treeWrapper {
     height: calc(100vh - 100px);
-    border-right: 1px solid rgb(224, 225, 226);
+    border-right: 1px solid #E5E7EB;
     border-left: 0;
     border-top: 0;
     border-bottom: 0;
@@ -119,12 +119,12 @@ body {
 }
 
 .book-image-container i.icon {
-    color: #9b9b9b;
+    color: #757575;
 }
 
 .icon-container {
     margin-left: 18px;
-    color: #9b9b9b;
+    color: #757575;
 }
 
 .icon-container i:hover,
@@ -183,15 +183,15 @@ body {
 }
 
 #treeAccessToolsSegment .ui.button i {
-    color: #007AFF;
+    color: #AC5139;
 }
 
 #treeExpandCollapseButtonsContainer .ui.button:hover {
-    background: #ddd;
+    background: #E5E7EB;
 }
 
 .icon-container {
-    color: #9b9b9b;
+    color: #757575;
     float: right;
 }
 
@@ -201,13 +201,13 @@ body {
 }
 
 #collection-tree span.fancytree-node:hover {
-    background: #f5f5f5;
+    background: #FAFAFA;
     width: 23.5vw;
     font-size: 14px;
     border-radius: 3px;
-    color: #434343;
-    background-color: rgba(0, 122, 255, 0.05);
-    border: solid 1px rgba(0, 122, 255, 0.4);
+    color: #333333;
+    background-color: rgba(172, 81, 57, 0.05);
+    border: solid 1px rgba(172, 81, 57, 0.4);
 }
 
 #collection-tree span i:hover {
@@ -252,7 +252,7 @@ ul.fancytree-container {
 }
 
 .ui.segment.content-editor-segment {
-    background: #F8F8F8;
+    background: #FAFAFA;
     box-shadow: none;
     border-radius: 0;
     padding: 0.68em;
@@ -288,7 +288,7 @@ ul.fancytree-container {
 
 .ui.two.buttons.table-of-contents-btn>.ui.basic.button {
     border-radius: 0;
-    border: 1px solid #ddd;
+    border: 1px solid #E5E7EB;
 }
 
 .table-of-contents-child-icon {
@@ -313,10 +313,10 @@ span.fancytree-expander {
 #collection-tree span.fancytree-active {
     width: 23.5vw;
     font-weight: bold;
-    color: #434343;
+    color: #333333;
     border-radius: 3px;
-    border: 0.8px solid rgba(0, 122, 255, 0.3);
-    background: rgba(0, 122, 255, 0.2)
+    border: 0.8px solid rgba(172, 81, 57, 0.3);
+    background: rgba(172, 81, 57, 0.2)
 }
 
 .ui-contextmenu.ui-menu.ui-widget.ui-widget-content {
@@ -326,14 +326,14 @@ span.fancytree-expander {
     font-size: 1em !important;
     border: solid 1px #dedede;
     line-height: 1.3;
-    color: #434343;
+    color: #333333;
     z-index: 999;
 }
 
 .ui-menu.ui-widget.ui-widget-content kbd {
     font-size: 0.9em;
     opacity: 0.6;
-    color: #434343;
+    color: #333333;
 }
 
 .padding-none {
@@ -342,7 +342,7 @@ span.fancytree-expander {
 
 .suggest-content-pane {
     height: auto;
-    border-left: solid 1px #e0e1e2;
+    border-left: solid 1px #E5E7EB;
     position: relative;
 }
 
@@ -356,7 +356,7 @@ span.fancytree-expander {
 /**/
 
 .ui.segment.content-editor-segment {
-    background: #F8F8F8;
+    background: #FAFAFA;
     box-shadow: none;
     border-radius: 0;
     padding: 0.68em;
@@ -391,7 +391,7 @@ span.fancytree-expander {
 
 .ui.two.buttons.table-of-contents-btn>.ui.basic.button {
     border-radius: 0;
-    border: 1px solid #ddd;
+    border: 1px solid #E5E7EB;
 }
 
 .table-of-contents-child-icon {
@@ -415,10 +415,10 @@ span.fancytree-expander {
 
 #collection-tree span.fancytree-active {
     font-weight: bold;
-    color: #434343;
+    color: #333333;
     border-radius: 3px;
-    border: 0.8px solid rgba(0, 122, 255, 0.3);
-    background: rgba(0, 122, 255, 0.2)
+    border: 0.8px solid rgba(172, 81, 57, 0.3);
+    background: rgba(172, 81, 57, 0.2)
 }
 
 .ui-contextmenu.ui-menu.ui-widget.ui-widget-content {
@@ -428,13 +428,13 @@ span.fancytree-expander {
     font-size: 1em !important;
     border: solid 1px #dedede;
     line-height: 1.3;
-    color: #434343;
+    color: #333333;
 }
 
 .ui-menu.ui-widget.ui-widget-content kbd {
     font-size: 0.9em;
     opacity: 0.6;
-    color: #434343;
+    color: #333333;
 }
 
 
@@ -470,7 +470,7 @@ switched to Github for the search after API changes
 
 .ui.items>.item.custom-segment>.content>.meta {
     font-size: 1.17em;
-    color: #434343;
+    color: #333333;
 }
 
 .ui.items>.item.custom-segment>.content>.extra {
@@ -484,7 +484,7 @@ switched to Github for the search after API changes
 /* Content tree css */
 
 .list-container {
-    background-color: #f8f8f8 !important;
+    background-color: #FAFAFA !important;
     padding-bottom: 20px;
     padding-left: 18px !important;
 }
@@ -502,10 +502,10 @@ switched to Github for the search after API changes
     font-stretch: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #979797 !important;
+    color: #757575 !important;
     padding-left: 1px!important;
     font-size: 0.9em!important;
-    background-color: #f8f8f8 !important;
+    background-color: #FAFAFA !important;
 }
 
 .content-image {
@@ -548,13 +548,13 @@ padding: 1% 15% 1% 15%;
     height: 34px;
     font-size: 17px;
     font-weight: 600;
-    color: #4a4a4a;
+    color: #333333;
 }
 
 .custom-modal-content {
     padding-top: 10px;
     font-size: 13px;
-    color: #4a4a4a;
+    color: #333333;
 }
 
 
@@ -599,7 +599,7 @@ padding: 1% 15% 1% 15%;
 }
 
 .blue-color {
-    color: #066fff!important;
+    color: #AC5139!important;
     cursor: pointer;
 }
 
