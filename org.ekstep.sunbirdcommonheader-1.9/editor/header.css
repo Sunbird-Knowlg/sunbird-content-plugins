@@ -55,7 +55,7 @@ body {
 }
 
 .icon-box:hover {
-    background-color: #E5E7EB;
+    background-color: #E0E1E2;
 }
 
 .custom-icon {
@@ -67,7 +67,7 @@ body {
 .custom-container {
     margin-top: 0 !important;
     margin-bottom: 1rem !important;
-    border-bottom: 1px solid #E5E7EB;
+    border-bottom: 1px solid #d8d8d8;
 }
 
 .custom-container .one.wide.column {
@@ -124,7 +124,7 @@ body {
     position: relative;
     margin: 0;
     bottom: -4px;
-    color: #AC5139;
+    color: #007aff;
 }
 .custom-5-wide .close {
     position: relative;
@@ -140,11 +140,11 @@ body {
 }
 
 .custom-5-wide .close a {
-    color: #757575;
+    color: #9B9B9B;
 }
 
 .custom-5-wide .close a .remove.icon:hover {
-    color: #FF6B6B;
+    color: #D92B2F;
 }
 
 .custom-5-wide .header-icon-container {
@@ -164,7 +164,7 @@ body {
 .custom-5-wide .custom-row-2 .fa,
 .custom-5-wide .custom-row-2 .icon-save{
     font-size: 14px !important;
-    color: #757575;
+    color: #9B9B9B;
     height: 14px;
     width: 16px;
     margin-right: 10px;
@@ -189,7 +189,7 @@ body {
     line-height: 2;
     float: right;
     margin-left: 5px;
-    color: #757575!important;
+    color: #9B9B9B!important;
 }
 
 .label-icon-box-text {
@@ -197,7 +197,7 @@ body {
     left: -10px;
     cursor: pointer;
     font-size: 11px;
-    color: #757575!important;
+    color: #9B9B9B!important;
     font-weight: bold !important;
 }
 
@@ -222,7 +222,7 @@ body {
 .preview-dropdown{
     width: auto;
     position: relative;
-    color: #757575!important;
+    color: #9b9b9b!important;
     height: 30px!important;
     right: -11px !important;
     vertical-align: text-bottom!important;
@@ -234,7 +234,7 @@ body {
 .preview-dropdown .ui.button.text-part{
     padding-top:7px; background: transparent; padding-left: 1em; padding-right: 1em; height:30px;
     width: 31.2px;
-    color: #757575!important;
+    color: #9b9b9b!important;
     border: 1px solid transparent!important;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -269,13 +269,13 @@ body {
     font-size: 11px !important;
     line-height: 11px;
     padding: 9px 10px !important;
-    color: #757575!important;
+    color: #9b9b9b!important;
     font-weight: normal!important;
 }
 
 .preview-dropdown:hover >.ui.button.text-part,
 .preview-dropdown:hover >.ui.button.dropdown{
-    background-color: #E5E7EB;
+    background-color: #E0E1E2;
 }
 
 .ui.grid.toolbar{
@@ -290,7 +290,7 @@ body {
 #commonHeader .icon-box.popup-item.disabled .icon-save,
 #commonHeader .icon-box.popup-item.disabled .label-icon-box-text,
 #commonHeader .preview-dropdown.popup-item.disabled .ui.button .icon{
-    color: #B2B2B2 !important;
+    color: #D7D7D7 !important;
 }
 .last-saved-label{
     display: inline-block;
@@ -298,7 +298,7 @@ body {
     position: relative;
     bottom: -7px;
     font-size: 13px;
-    color: #757575;
+    color: #9b9b9b;
 }
 
 .content-title-container {
@@ -366,7 +366,7 @@ body {
 }
 
 .content-contributors .addcolor, .content-contributors .addcolor .users.icon {
-    color: #AC5139;
+    color: blue;
 }
 
 .content-contributors .removecolor, .content-contributors .removecolor .users.icon {
@@ -382,7 +382,7 @@ body {
     padding: 0.5em 0 0.25em 0.5em;
 }
 .toc-dropdown .active i.icon.dropdown:before{
-    color: #AC5139;
+    color: blue;
 }
 .toc-dropdown.ui.button {
     padding-left: 0.5em;
@@ -391,7 +391,7 @@ body {
 .spinner {
     width: 18px;
     height: 18px;
-    background-color: #FF6B6B;
+    background-color: #ff0c00;
     border-radius: 100%;
     display: inline-block;
     position: relative;
@@ -431,7 +431,7 @@ body {
     position: relative;
     margin: 0;
     bottom: -4px;
-    color: #FF6B6B;
+    color: #ff0c00;
 }
 
 .reviewer-comment-box::-webkit-scrollbar-thumb{
