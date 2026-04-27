@@ -1,0 +1,32 @@
+name: Dependency Submission
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'          # 03:00 UTC every Monday — runs before Dependabot (03:30)
+  push:
+    branches: [master]
+    paths:
+      - 'package.json'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  submit-npm-root:
+    name: Submit npm (root)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # No lock file at root — generate one without installing node_modules
+      - run: npm install --package-lock-only
+      - uses: advanced-security/npm-dependency-submission-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
