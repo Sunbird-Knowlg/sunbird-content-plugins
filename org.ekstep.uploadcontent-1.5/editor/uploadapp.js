@@ -68,7 +68,23 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                     $('#qq-upload-actions').hide();
                     $("#url-upload").hide();
                     $("#orLabel").hide();
-                    $scope.upload();
+                    
+                    var file = $scope.uploader.getFile(id);
+                    if (name.split('.').pop() === 'zip') {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            JSZip.loadAsync(e.target.result).then(function(zip) {
+                                if (zip.file("imsmanifest.xml")) {
+                                    $scope.isScorm = true;
+                                }
+                                $scope.upload();
+                            });
+                        };
+                        reader.readAsArrayBuffer(file);
+                    } else {
+                        $scope.isScorm = false;
+                        $scope.upload();
+                    }
                 },
                 onError: function(id, name, errorReason) {
                     console.error("Unable to upload due to:", errorReason);
@@ -208,6 +224,9 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             fileUpload = true;
         }
         var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.detectMimeType($scope.contentURL);
+        if ($scope.isScorm) {
+            mimeType = 'application/vnd.ekstep.scorm-archive';
+        }
         if (!mimeType) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                 message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm, whitelisted-domain)',
@@ -367,7 +386,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.uploadFile = function(mimeType, cb) {
 
         var contentType = mimeType;
-        if (mimeType === 'application/vnd.ekstep.h5p-archive' || mimeType === 'application/vnd.ekstep.html-archive') {
+        if (mimeType === 'application/vnd.ekstep.h5p-archive' || mimeType === 'application/vnd.ekstep.html-archive' || mimeType === 'application/vnd.ekstep.scorm-archive') {
             contentType = 'application/octet-stream';
         }
         // 1. Get presigned URL
