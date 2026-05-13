@@ -29,7 +29,8 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
     $scope.delayBetweenRetryCalls = 2000; // time difference between chunk upload retry call 2sec
     $scope.maxUploadSize = $scope.uploadInfo ? Number($scope.uploadInfo.maxAllowedContentSize)*1024*1024 : 16106127360; // falback is 15 GB
     $scope.minUploadSize = 1; //52428800;  // 50 MB
-    $scope.allowedContentType = $scope.uploadInfo ? $scope.uploadInfo.allowedContentType : ['mp4', 'webm']; // falback mp4 and webm
+    $scope.allowedContentType = $scope.uploadInfo ? $scope.uploadInfo.allowedContentType : ['mp4', 'webm', 'zip']; // falback mp4 and webm
+    $scope.isScorm = false;
     $scope.selectedPrimaryCategory = '';
     $scope.disableDropdown = false;
     $scope.primaryCategoryList = [];
@@ -89,10 +90,24 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                 },
                 onSubmit: function (id, name) {
                     $('#qq-upload-actions').hide();
-                    // $('#progressElement').show();
-                    $scope.selectedFile = $scope.uploader.getFile(0)
+                    $scope.selectedFile = $scope.uploader.getFile(0);
                     $scope.totalBytesRemaining = $scope.selectedFile.size;
-                    $scope.fileValidation()
+                    var file = $scope.uploader.getFile(id);
+                    if (name.split('.').pop() === 'zip') {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            JSZip.loadAsync(e.target.result).then(function(zip) {
+                                if (zip.file("imsmanifest.xml")) {
+                                    $scope.isScorm = true;
+                                }
+                                $scope.fileValidation();
+                            });
+                        };
+                        reader.readAsArrayBuffer(file);
+                    } else {
+                        $scope.isScorm = false;
+                        $scope.fileValidation();
+                    }
                 },
                 onError: function (id, name, errorReason) {
                     $scope.toasterMsgHandler("error", errorReason)
@@ -125,8 +140,11 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             return;
         }
         $scope.mimeType = ($scope.uploader.getFile(0) != null) ? $scope.detectMimeType($scope.uploader.getName(0)) : '';
+        if ($scope.isScorm) {
+            $scope.mimeType = 'application/vnd.ekstep.scorm-archive';
+        }
         if (!$scope.mimeType) {
-            $scope.toasterMsgHandler("error", "Invalid content type (supported type: mp4, webm)")
+            $scope.toasterMsgHandler("error", "Invalid content type (supported type: mp4, webm, zip)")
             return;
         } else {
             $scope.createContent();
@@ -241,9 +259,13 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                     })
                 } else {
                     const contentType = ($scope.uploader.getFile(0) != null) ? $scope.detectMimeType($scope.uploader.getName(0)) : '';
+                    var uploadContentType = contentType;
+                    if (contentType === 'application/vnd.ekstep.h5p-archive' || contentType === 'application/vnd.ekstep.html-archive' || contentType === 'application/vnd.ekstep.scorm-archive') {
+                        uploadContentType = 'application/octet-stream';
+                    }
                     var config = {
                         processData: false,
-                        contentType: contentType,
+                        contentType: uploadContentType,
                     }
                     config = $scope.contentService.appendCloudStorageHeaders(config);
                     $scope.contentService.uploadDataToSignedURL($scope.submitUri, $scope.uploader.getFile(0), config, function(err, res) {
@@ -472,7 +494,10 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
             return 'video/mp4';
         case 'webm':
             return 'video/webm';
+        case 'zip':
+            return 'application/vnd.ekstep.html-archive';
         default:
+            $scope.toasterMsgHandler("error", "Invalid content type");
         }
     }
     
