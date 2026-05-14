@@ -74,10 +74,19 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                         var reader = new FileReader();
                         reader.onload = function(e) {
                             JSZip.loadAsync(e.target.result).then(function(zip) {
-                                if (zip.file("imsmanifest.xml")) {
-                                    $scope.isScorm = true;
-                                }
+                                $scope.isScorm = zip.file("imsmanifest.xml") !== null;
                                 $scope.upload();
+                            }).catch(function(err) {
+                                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                    message: 'Unable to read zip file. Please try again.',
+                                    position: 'topCenter',
+                                    icon: 'fa fa-warning'
+                                });
+                                $scope.uploader.reset();
+                                $scope.showLoader(false);
+                                $('#qq-upload-actions').show();
+                                $("#url-upload").show();
+                                $("#orLabel").show();
                             });
                         };
                         reader.readAsArrayBuffer(file);

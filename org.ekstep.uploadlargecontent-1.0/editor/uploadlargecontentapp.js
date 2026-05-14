@@ -97,14 +97,18 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                         var reader = new FileReader();
                         reader.onload = function(e) {
                             JSZip.loadAsync(e.target.result).then(function(zip) {
-                                if (zip.file("imsmanifest.xml")) {
-                                    $scope.isScorm = true;
+                                $scope.isScorm = zip.file("imsmanifest.xml") !== null;
+                                if ($scope.isScorm) {
                                     $scope.fileValidation();
                                 } else {
                                     $scope.toasterMsgHandler("error", "Invalid content type (supported type: mp4, webm and scorm)");
                                     $scope.showLoader(false);
                                     $scope.uploader.reset();
                                 }
+                            }).catch(function(err) {
+                                $scope.toasterMsgHandler('error', 'Unable to read zip file. Please try again.');
+                                $scope.uploader.reset();
+                                $scope.showLoader(false);
                             });
                         };
                         reader.readAsArrayBuffer(file);
