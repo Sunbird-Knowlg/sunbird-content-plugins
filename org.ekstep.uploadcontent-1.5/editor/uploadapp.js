@@ -74,8 +74,10 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                         var reader = new FileReader();
                         reader.onload = function(e) {
                             JSZip.loadAsync(e.target.result).then(function(zip) {
-                                $scope.isScorm = zip.file("imsmanifest.xml") !== null;
-                                $scope.upload();
+                                $scope.$safeApply(function() {
+                                    $scope.isScorm = zip.file("imsmanifest.xml") !== null;
+                                    $scope.upload();
+                                });
                             }).catch(function(err) {
                                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                                     message: 'Unable to read zip file. Please try again.',
@@ -134,7 +136,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         fileUploader = $scope.uploader;
     });
 
-    $scope.detectMimeType = function(fileName) {
+    $scope.detectMimeType = function(fileName, isScorm) {
         var extn = fileName.split('.').pop()
         switch (extn) {
             case 'pdf':
@@ -144,7 +146,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             case 'h5p':
                 return 'application/vnd.ekstep.h5p-archive';
             case 'zip':
-                return 'application/vnd.ekstep.html-archive';
+                return isScorm ? 'application/vnd.ekstep.scorm-archive' : 'application/vnd.ekstep.html-archive';
             case 'epub':
                 return 'application/epub';
             case 'webm':
@@ -232,10 +234,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         if ($scope.uploader.getFile(0) != null) {
             fileUpload = true;
         }
-        var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.detectMimeType($scope.contentURL);
-        if ($scope.isScorm) {
-            mimeType = 'application/vnd.ekstep.scorm-archive';
-        }
+        var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0), $scope.isScorm) : $scope.detectMimeType($scope.contentURL);
         if (!mimeType) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                 message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm, whitelisted-domain)',
