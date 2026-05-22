@@ -96,20 +96,31 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                     if (name.split('.').pop() === 'zip') {
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            JSZip.loadAsync(e.target.result).then(function(zip) {
-                                $scope.isScorm = zip.file("imsmanifest.xml") !== null;
-                                if ($scope.isScorm) {
-                                    $scope.fileValidation();
+                            function loadZipWithRetry(attempt) {
+                                if (typeof JSZip !== 'undefined') {
+                                    JSZip.loadAsync(e.target.result).then(function(zip) {
+                                        $scope.isScorm = zip.file("imsmanifest.xml") !== null;
+                                        if ($scope.isScorm) {
+                                            $scope.fileValidation();
+                                        } else {
+                                            $scope.toasterMsgHandler("error", "Invalid content type. Supported types: mp4, webm, or a SCORM-compliant zip (containing imsmanifest.xml)");
+                                            $scope.showLoader(false);
+                                            $scope.uploader.reset();
+                                        }
+                                    }).catch(function(err) {
+                                        $scope.toasterMsgHandler('error', 'Unable to read zip file. Please try again.');
+                                        $scope.uploader.reset();
+                                        $scope.showLoader(false);
+                                    });
+                                } else if (attempt < 5) {
+                                    setTimeout(function() { loadZipWithRetry(attempt + 1); }, 500);
                                 } else {
-                                    $scope.toasterMsgHandler("error", "Invalid content type. Supported types: mp4, webm, or a SCORM-compliant zip (containing imsmanifest.xml)");
-                                    $scope.showLoader(false);
+                                    $scope.toasterMsgHandler('error', 'JSZip library not loaded. Please refresh the page.');
                                     $scope.uploader.reset();
+                                    $scope.showLoader(false);
                                 }
-                            }).catch(function(err) {
-                                $scope.toasterMsgHandler('error', 'Unable to read zip file. Please try again.');
-                                $scope.uploader.reset();
-                                $scope.showLoader(false);
-                            });
+                            }
+                            loadZipWithRetry(0);
                         };
                         reader.readAsArrayBuffer(file);
                     } else {
