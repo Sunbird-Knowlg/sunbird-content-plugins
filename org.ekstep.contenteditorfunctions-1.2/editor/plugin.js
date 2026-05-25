@@ -67,6 +67,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.saveCollectionContent(event, data);
                 break;
             case "application/vnd.ekstep.html-archive":
+            case "application/vnd.ekstep.scorm-archive":
             case "application/vnd.ekstep.h5p-archive":
             case "application/epub":
             case "video/mp4":
