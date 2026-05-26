@@ -28,6 +28,9 @@ angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarControl
             case 'video/webm':
                 $scope.sidebarTemplate = $scope.videoTemplate;
                 break;
+            case 'application/vnd.ekstep.scorm-archive':
+                $scope.sidebarTemplate = $scope.html_h5pTemplate;
+                break;
             default:
                 $scope.sidebarTemplate = $scope.html_h5pTemplate;
         }
