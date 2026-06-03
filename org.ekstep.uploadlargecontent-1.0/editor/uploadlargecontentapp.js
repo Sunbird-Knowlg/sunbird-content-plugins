@@ -1,6 +1,6 @@
 'use strict';
 var fileUploader;
-angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadController', ['$scope', '$injector', 'instance', function ($scope, $injector, instance) {
+angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadController', ['$scope', '$injector', 'instance', '$timeout', function ($scope, $injector, instance, $timeout) {
     
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.showLoaderIcon = false;
@@ -99,18 +99,23 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
                             function loadZipWithRetry(attempt) {
                                 if (typeof JSZip !== 'undefined') {
                                     JSZip.loadAsync(e.target.result).then(function(zip) {
-                                        $scope.isScorm = zip.file("imsmanifest.xml") !== null;
-                                        if ($scope.isScorm) {
-                                            $scope.fileValidation();
-                                        } else {
-                                            $scope.toasterMsgHandler("error", "Invalid content type. Supported types: mp4, webm, or a SCORM-compliant zip (containing imsmanifest.xml)");
-                                            $scope.showLoader(false);
-                                            $scope.uploader.reset();
-                                        }
+                                        $scope.$apply(function() {
+                                            $scope.isScorm = zip.file("imsmanifest.xml") !== null;
+                                            if ($scope.isScorm) {
+                                                $scope.fileValidation();
+                                            } else {
+                                                $scope.toasterMsgHandler("error", "Invalid content type. Supported types: mp4, webm, or a SCORM-compliant zip (containing imsmanifest.xml)");
+                                                $scope.showLoader(false);
+                                                $('#qq-upload-actions').show();
+                                                $scope.uploader.reset();
+                                            }
+                                        });
                                     }).catch(function(err) {
-                                        $scope.toasterMsgHandler('error', 'Unable to read zip file. Please try again.');
-                                        $scope.uploader.reset();
-                                        $scope.showLoader(false);
+                                        $scope.$apply(function() {
+                                            $scope.toasterMsgHandler('error', 'Unable to read zip file. Please try again.');
+                                            $scope.uploader.reset();
+                                            $scope.showLoader(false);
+                                        });
                                     });
                                 } else if (attempt < 5) {
                                     setTimeout(function() { loadZipWithRetry(attempt + 1); }, 500);
@@ -511,7 +516,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
         case 'zip':
             return isScorm ? 'application/vnd.ekstep.scorm-archive' : 'application/vnd.ekstep.html-archive';
         default:
-            $scope.toasterMsgHandler("error", "Invalid content type");
+            return;
         }
     }
     
@@ -522,7 +527,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
         } else {
             $('#qq-upload-actions').show();
         }
-        $scope.$safeApply();
+        $timeout(function() {});
     }
     
     $scope.generateTelemetry = function (data) {

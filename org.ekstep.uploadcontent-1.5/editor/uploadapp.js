@@ -1,6 +1,6 @@
 'use strict';
 var fileUploader;
-angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController', ['$scope', '$injector', 'instance', '$timeout', function($scope, $injector, instance, $timeout) {
     var plugin = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadcontent");
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
@@ -76,21 +76,23 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                             function loadZipWithRetry(attempt) {
                                 if (typeof JSZip !== 'undefined') {
                                     JSZip.loadAsync(e.target.result).then(function(zip) {
-                                        $scope.$safeApply(function() {
+                                        $timeout(function() {
                                             $scope.isScorm = zip.file("imsmanifest.xml") !== null;
                                             $scope.upload();
                                         });
                                     }).catch(function(err) {
-                                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                                            message: 'Unable to read zip file. Please try again.',
-                                            position: 'topCenter',
-                                            icon: 'fa fa-warning'
+                                        $timeout(function() {
+                                            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                                message: 'Unable to read zip file. Please try again.',
+                                                position: 'topCenter',
+                                                icon: 'fa fa-warning'
+                                            });
+                                            $scope.uploader.reset();
+                                            $scope.showLoader(false);
+                                            $('#qq-upload-actions').show();
+                                            $("#url-upload").show();
+                                            $("#orLabel").show();
                                         });
-                                        $scope.uploader.reset();
-                                        $scope.showLoader(false);
-                                        $('#qq-upload-actions').show();
-                                        $("#url-upload").show();
-                                        $("#orLabel").show();
                                     });
                                 } else if (attempt < 5) {
                                     setTimeout(function() { loadZipWithRetry(attempt + 1); }, 500);
@@ -472,7 +474,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
 
     $scope.showLoader = function(flag) {
         $scope.showLoaderIcon = flag;
-        $scope.$safeApply();
+        $timeout(function() {});
         if (flag) {
             $('#qq-upload-actions').hide();
         } else {
