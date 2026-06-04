@@ -491,11 +491,15 @@ function X2JS(config) {
             try {
                 xmlDoc = parser.parseFromString(xmlDocStr, "text/xml");
                 if (parsererrorNS != null && xmlDoc.getElementsByTagNameNS(parsererrorNS, "parsererror").length > 0) {
-                    //throw new Error('Error parsing XML: '+xmlDocStr);
-                    xmlDoc = null;
+                     //throw new Error('Error parsing XML: '+xmlDocStr);
+                    xmlDoc = parser.parseFromString(xmlDocStr, "text/html");
                 }
             } catch (err) {
-                xmlDoc = null;
+                try {
+                    xmlDoc = parser.parseFromString(xmlDocStr, "text/html");
+                } catch (err2) {
+                    xmlDoc = null;
+                }
             }
         } else {
             // IE :(
