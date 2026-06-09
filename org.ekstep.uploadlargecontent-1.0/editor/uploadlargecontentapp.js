@@ -1,6 +1,6 @@
 'use strict';
 var fileUploader;
-angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadController', ['$scope', '$injector', 'instance', '$timeout', function ($scope, $injector, instance, $timeout) {
+angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadController', ['$scope', '$injector', 'instance', function ($scope, $injector, instance) {
     
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.showLoaderIcon = false;
@@ -527,7 +527,7 @@ angular.module('org.ekstep.uploadlargecontent-1.0', []).controller('largeUploadC
         } else {
             $('#qq-upload-actions').show();
         }
-        $timeout(function() {});
+        $scope.$safeApply();
     }
     
     $scope.generateTelemetry = function (data) {
