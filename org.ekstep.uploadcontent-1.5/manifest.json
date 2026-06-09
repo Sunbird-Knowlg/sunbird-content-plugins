@@ -12,6 +12,7 @@
             { "type": "css", "src": "editor/styles/uploadcontent.css" },
             { "type": "js", "src": "editor/libs/sunbird-file-upload-library.js" },
             { "type": "js", "src": "editor/libs/jquery.fine-uploader.min.js" },
+            { "type": "js", "src": "editor/libs/jszip.min.js" },
             { "type": "plugin", "plugin": "org.ekstep.toaster", "ver":"1.0"}
         ]
     }

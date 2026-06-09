@@ -10,7 +10,7 @@ formApp.directive('licenses', function() {
         $scope.licenseData= "";
         $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.defaultLicense = (ecEditor.getContext("defaultLicense")) ? ecEditor.getContext("defaultLicense") : "";
-        $scope.contentMimeType = ["application/pdf", "video/mp4", "application/epub", "video/webm", "application/vnd.ekstep.h5p-archive", "application/vnd.ekstep.html-archive", "application/vnd.ekstep.ecml-archive"]
+        $scope.contentMimeType = ["application/pdf", "video/mp4", "application/epub", "video/webm", "application/vnd.ekstep.h5p-archive", "application/vnd.ekstep.html-archive", "application/vnd.ekstep.ecml-archive","application/vnd.ekstep.scorm-archive"]
         $scope.isDisableSelection = false;
         $scope.toggleLicenseDetails = false;
         $scope.isCopiedContent = false;

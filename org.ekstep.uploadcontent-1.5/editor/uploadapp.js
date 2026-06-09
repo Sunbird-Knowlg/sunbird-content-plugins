@@ -68,7 +68,52 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
                     $('#qq-upload-actions').hide();
                     $("#url-upload").hide();
                     $("#orLabel").hide();
-                    $scope.upload();
+                    
+                    var file = $scope.uploader.getFile(id);
+                    if (name.split('.').pop() === 'zip') {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            function loadZipWithRetry(attempt) {
+                                if (typeof JSZip !== 'undefined') {
+                                    JSZip.loadAsync(e.target.result).then(function(zip) {
+                                         $scope.$safeApply(function() {
+                                                $scope.isScorm = zip.file("imsmanifest.xml") !== null;
+                                                $scope.upload();
+                                            });
+                                    }).catch(function(err) {
+                                         $scope.$safeApply(function() {
+                                                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                                        message: 'Unable to read zip file. Please try again.',
+                                                        position: 'topCenter',
+                                                        icon: 'fa fa-warning'
+                                                    });
+                                                    $scope.uploader.reset();
+                                                    $scope.showLoader(false);
+                                                    $('#qq-upload-actions').show();
+                                                    $("#url-upload").show();
+                                                    $("#orLabel").show();
+                                                });
+                                    });
+                                } else if (attempt < 5) {
+                                    setTimeout(function() { loadZipWithRetry(attempt + 1); }, 500);
+                                } else {
+                                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                        message: 'JSZip library not loaded. Please refresh the page.',
+                                        position: 'topCenter',
+                                        icon: 'fa fa-warning'
+                                    });
+                                    $scope.uploader.reset();
+                                    $scope.showLoader(false);
+                                    $('#qq-upload-actions').show();
+                                }
+                            }
+                            loadZipWithRetry(0);
+                        };
+                        reader.readAsArrayBuffer(file);
+                    } else {
+                        $scope.isScorm = false;
+                        $scope.upload();
+                    }
                 },
                 onError: function(id, name, errorReason) {
                     console.error("Unable to upload due to:", errorReason);
@@ -109,7 +154,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         fileUploader = $scope.uploader;
     });
 
-    $scope.detectMimeType = function(fileName) {
+    $scope.detectMimeType = function(fileName, isScorm) {
         var extn = fileName.split('.').pop()
         switch (extn) {
             case 'pdf':
@@ -119,7 +164,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
             case 'h5p':
                 return 'application/vnd.ekstep.h5p-archive';
             case 'zip':
-                return 'application/vnd.ekstep.html-archive';
+                return isScorm ? 'application/vnd.ekstep.scorm-archive' : 'application/vnd.ekstep.html-archive';
             case 'epub':
                 return 'application/epub';
             case 'webm':
@@ -207,7 +252,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
         if ($scope.uploader.getFile(0) != null) {
             fileUpload = true;
         }
-        var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.detectMimeType($scope.contentURL);
+        var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0), $scope.isScorm) : $scope.detectMimeType($scope.contentURL);
         if (!mimeType) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                 message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm, whitelisted-domain)',
@@ -367,7 +412,7 @@ angular.module('org.ekstep.uploadcontent-1.5', []).controller('uploadController'
     $scope.uploadFile = function(mimeType, cb) {
 
         var contentType = mimeType;
-        if (mimeType === 'application/vnd.ekstep.h5p-archive' || mimeType === 'application/vnd.ekstep.html-archive') {
+        if (mimeType === 'application/vnd.ekstep.h5p-archive' || mimeType === 'application/vnd.ekstep.html-archive' || mimeType === 'application/vnd.ekstep.scorm-archive') {
             contentType = 'application/octet-stream';
         }
         // 1. Get presigned URL
